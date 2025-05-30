@@ -1,0 +1,10 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      /*  테스트용 : 2025-12-31 까지만 모든 read + list 허용  */
+      allow read, list: if request.time < timestamp.date(2025, 12, 31);
+      allow write:      if request.time < timestamp.date(2025, 12, 31);
+    }
+  }
+}

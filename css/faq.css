@@ -1,0 +1,406 @@
+/* FAQ 페이지 스타일 - 브랜드 디자인 시스템 적용 */
+
+/* === 기본 변수 (common.css와 일관성 유지) === */
+:root {
+    --color-primary: #3EB489;
+    --color-primary-hover: #2A9D74;
+    --color-accent: #A8E6CE;
+    --color-neutral-dark: #0C0C0C;
+    --color-neutral-light: #F0FFF0;
+    --color-surface: #FFFFFF;
+    --color-border: #2A9D74;
+    --color-text-light: #F0FFF0;
+    --color-text-dark: #0C0C0C;
+    --color-text-gray: #A7D3C9;
+    
+    --dark-bg: #000000;
+    --bg-glass: rgba(12, 12, 12, 0.7);
+    --border-glass: rgba(168, 230, 206, 0.2);
+    
+    --font-primary: 'Pretendard', 'Inter', sans-serif;
+    --container-width: 1400px;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2.5rem;
+    --spacing-xl: 4rem;
+    --spacing-xxl: 6rem;
+    
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --nav-height: 84px;
+}
+
+/* === FAQ 헤더 섹션 === */
+.faq-hero {
+    background: var(--dark-bg);
+    padding: calc(var(--nav-height) + 4rem) 0 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.faq-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 20%, rgba(62, 180, 137, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.faq-hero-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.faq-subtitle {
+    display: inline-block;
+    background: rgba(62, 180, 137, 0.15);
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 0 25px rgba(62, 180, 137, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(62, 180, 137, 0.15);
+    transition: all 0.3s ease;
+}
+
+.faq-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--color-text-light) 0%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.faq-description {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* === FAQ 콘텐츠 섹션 === */
+.faq-content {
+    background: var(--dark-bg);
+    padding: 4rem 0 6rem 0;
+    position: relative;
+}
+
+.faq-section {
+    margin-bottom: 4rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.faq-section.animate-fade-up {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.faq-section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(62, 180, 137, 0.2);
+    position: relative;
+}
+
+.faq-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    border-radius: 2px;
+}
+
+.section-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 0 10px rgba(62, 180, 137, 0.3));
+}
+
+/* === FAQ 리스트 === */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.faq-item {
+    background: var(--bg-glass);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-glass);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-card);
+}
+
+.faq-item:hover {
+    border-color: rgba(62, 180, 137, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.faq-item.active {
+    border-color: var(--color-primary);
+    background: rgba(62, 180, 137, 0.05);
+}
+
+.faq-item.active .faq-question {
+    color: var(--color-primary);
+}
+
+/* === FAQ 질문 버튼 === */
+.faq-question {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.faq-question:hover {
+    color: var(--color-primary);
+}
+
+.faq-question span {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.faq-icon {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    color: var(--color-primary);
+}
+
+.faq-question:hover .faq-icon {
+    transform: scale(1.1);
+}
+
+/* === FAQ 답변 === */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.faq-answer p {
+    padding: 1.5rem 2rem;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.faq-answer strong {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* === 애니메이션 === */
+[data-animate] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+[data-animate].animate-fade-up {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* === 반응형 디자인 === */
+@media (max-width: 1024px) {
+    .faq-hero {
+        padding: calc(var(--nav-height) + 3rem) 0 3rem 0;
+    }
+    
+    .faq-title {
+        font-size: 3rem;
+    }
+    
+    .faq-description {
+        font-size: 1.1rem;
+    }
+    
+    .faq-section-title {
+        font-size: 1.8rem;
+    }
+    
+    .faq-question {
+        padding: 1.25rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .faq-answer p {
+        padding: 1.25rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .faq-hero {
+        padding: calc(var(--nav-height) + 2rem) 0 2rem 0;
+    }
+    
+    .faq-title {
+        font-size: 2.5rem;
+    }
+    
+    .faq-description {
+        font-size: 1rem;
+    }
+    
+    .faq-section {
+        margin-bottom: 3rem;
+    }
+    
+    .faq-section-title {
+        font-size: 1.6rem;
+        gap: 0.8rem;
+    }
+    
+    .section-icon {
+        font-size: 1.5rem;
+    }
+    
+    .faq-question {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+    
+    .faq-answer p {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+    
+    .faq-list {
+        gap: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .faq-hero-content {
+        padding: 0 1rem;
+    }
+    
+    .faq-title {
+        font-size: 2rem;
+    }
+    
+    .faq-subtitle {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .faq-section-title {
+        font-size: 1.4rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .faq-question {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .faq-question span {
+        margin-right: 0;
+    }
+    
+    .faq-icon {
+        align-self: flex-end;
+    }
+    
+    .faq-answer p {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* === 스크롤 애니메이션 개선 === */
+.faq-section:nth-child(1) { animation-delay: 0.1s; }
+.faq-section:nth-child(2) { animation-delay: 0.2s; }
+.faq-section:nth-child(3) { animation-delay: 0.3s; }
+.faq-section:nth-child(4) { animation-delay: 0.4s; }
+.faq-section:nth-child(5) { animation-delay: 0.5s; }
+.faq-section:nth-child(6) { animation-delay: 0.6s; }
+
+/* === 접근성 개선 === */
+.faq-question:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.faq-question:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* === 다크 테마 최적화 === */
+@media (prefers-color-scheme: dark) {
+    .faq-item {
+        background: rgba(12, 12, 12, 0.8);
+        border-color: rgba(168, 230, 206, 0.15);
+    }
+    
+    .faq-answer {
+        background: rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* === 고대비 모드 지원 === */
+@media (prefers-contrast: high) {
+    .faq-item {
+        border-width: 2px;
+    }
+    
+    .faq-question {
+        font-weight: 700;
+    }
+    
+    .faq-answer p {
+        color: var(--color-text-light);
+    }
+} 

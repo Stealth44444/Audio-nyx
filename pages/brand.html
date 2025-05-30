@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audionyx - 브랜드 소개</title>
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/brand.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js 라이브러리 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <!-- Firebase SDK 및 인증 스크립트 -->
+    <script type="module" src="../js/firebase.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+</head>
+<body>
+   
+   <!-- 브랜드 공통 네비게이터 -->
+   <div id="scroll-progress"></div>
+  
+   <header class="navbar">
+     <div class="logo-area">
+       <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+     </div>
+     <nav role="navigation" class="menu-area">
+       <ul>
+         <li><a href="../index.html">홈</a></li>
+         <li class="active"><a href="brand.html">브랜드 소개</a></li>
+         <li><a href="withdraw.html">계좌 등록</a></li>
+         <li><a href="find-music.html">음원 찾기</a></li>
+         <li><a href="channel-management.html">채널 관리</a></li>
+         <li><a href="track-production.html">트랙 제작</a></li>
+       </ul>
+     </nav>
+     <!-- 로그인/회원가입 버튼 -->
+     <div class="auth-buttons">
+       <button id="btn-login" class="btn-login">로그인</button>
+       <button id="btn-signup" class="btn-signup">회원가입</button>
+     </div>
+     
+     <!-- 로그인 후 표시될 프로필 영역 -->
+     <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
+       <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지">
+       <span id="user-name" class="user-name"></span>
+       <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+         <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+       </svg>
+       <div id="dropdown-menu" class="dropdown-menu">
+         <a href="faq.html" class="dropdown-item">
+           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+             <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+           </svg>
+           FAQ
+         </a>
+         <a href="#" class="dropdown-item" id="btn-logout">
+           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+           </svg>
+           로그아웃
+         </a>
+       </div>
+     </div>
+
+     <!-- 모바일용 로그인 상태 표시 -->
+     <div id="mobile-user-profile" class="mobile-user-profile" style="display: none;">
+       <img id="mobile-user-avatar" class="mobile-user-avatar" src="" alt="프로필 이미지">
+       <span id="mobile-user-name" class="mobile-user-name"></span>
+     </div>
+   </header>
+
+   <!-- 모바일 네비게이터 -->
+   <nav class="mobile-nav">
+     <ul class="mobile-nav-list">
+       <li class="mobile-nav-item">
+         <a href="../index.html" class="mobile-nav-link">
+           <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+             <polyline points="9,22 9,12 15,12 15,22"/>
+           </svg>
+           홈
+         </a>
+       </li>
+       <li class="mobile-nav-item">
+         <a href="find-music.html" class="mobile-nav-link">
+           <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <circle cx="11" cy="11" r="8"/>
+             <path d="M21 21l-4.35-4.35"/>
+           </svg>
+           음원
+         </a>
+       </li>
+       <li class="mobile-nav-item">
+         <a href="channel-management.html" class="mobile-nav-link">
+           <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
+             <polygon points="9.75,15.02 15.5,11.75 9.75,8.48"/>
+           </svg>
+           채널
+         </a>
+       </li>
+       <li class="mobile-nav-item">
+         <a href="withdraw.html" class="mobile-nav-link">
+           <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <line x1="12" y1="1" x2="12" y2="23"/>
+             <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+           </svg>
+           정산
+         </a>
+       </li>
+       <li class="mobile-nav-item">
+         <a href="track-production.html" class="mobile-nav-link">
+           <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+             <path d="M9 18V5l12-2v13"/>
+             <circle cx="6" cy="18" r="3"/>
+             <circle cx="18" cy="16" r="3"/>
+           </svg>
+           제작
+         </a>
+       </li>
+     </ul>
+   </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="page-content">
+    
+    <!-- ===== 브랜드 히어로 비디오 배너 ===== -->
+    <section class="brand-hero-banner" data-animate="fade-up">
+      <video class="brand-hero-video" src="../videos/brand_hero.mp4" autoplay loop muted playsinline poster="../images/brand-hero-bg.jpg"></video>
+      <div class="brand-hero-overlay"></div>
+      <div class="container hero-inner">
+        <h1 class="brand-hero-title">브랜드 소개</h1>
+        <p class="brand-hero-subtitle">크리에이터를 위한 음원 수익화 플랫폼 <strong>AUDIONYX</strong></p>
+        <a href="find-music.html" class="btn-primary hero-cta">Go Tracks</a>
+      </div>
+    </section>
+
+    <!-- ===== Audionyx란? 섹션 ===== -->
+    <section class="about-audionyx-section" data-animate="fade-up">
+      <div class="container">
+        <div class="about-audionyx-inner">
+          <div class="about-audionyx-title">Audionyx란?</div>
+          <h2 class="about-audionyx-headline">음원 수익도, 영상 수익도<br>Audionyx 하나로 모두 가져가세요</h2>
+          <p class="about-audionyx-subcopy">
+            YouTube는 쇼츠에서 발생하는 총 수익을<br>"음원 저작권자"와 "영상 크리에이터"에게 따로 나누어 지급합니다.<br>
+              Audionyx 음원을 사용하면, 저작권료의 <strong>80 %</strong>를 Audionyx가 대신 받아
+              <span class="no-break">다시 돌려주기 때문에</span>
+              영상 수익 + 음원 수익을 동시에 챙길 수 있습니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Insights Section ===== -->
+    <section class="insights-v2 audionyx-graphs-section" data-animate="fade-up">
+      <div class="container insights-flex-layout">
+        <div class="insights-left">
+          <div class="insights-title-container">
+            <h2 class="insights-title">Audionyx 트랙으로<br>당신이 <strong>놓친 수익을</strong> 찾아보세요</h2>
+            <p class="insights-subcopy">지금까지 <strong>놓쳤던 모든 수익 기회</strong>를 되돌려 드립니다</p>
+            <div class="insights-cta" style="margin-top:2.5rem;">
+              <a href="#how-it-works" class="btn-primary">3단계 확인하기</a>
+            </div>
+          </div>
+          <div class="glowing-light"></div>
+        </div>
+        <div class="insights-right">
+          <div class="graph-card main-graph-card">
+            <div class="card-accent"></div>
+            <h3 class="graph-title">1 쇼츠 당 조회수별 실수익 비교 (₩)</h3>
+            <canvas id="totalRevenueChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 핵심 기능 섹션을 인사이트 섹션 바로 뒤로 이동 -->
+    <section class="key-features-section" data-animate="fade-up">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Audionyx?</h2>
+                <p class="section-subtitle">Audionyx와 함께 시작하는 새로운 수익 창출의 3가지 핵심</p>
+            </div>
+            <div class="cards-grid">
+                <div class="feature-card glass-card">
+                    <!-- 무료 사용: 네온 민트 사각형+플레이(Free) -->
+                    <svg class="feature-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#3EB489" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="8" y="8" width="32" height="32" rx="8"/>
+                        <path d="M20 18v12l10-6-10-6z"/>
+                    </svg>
+                    <p class="feature-label">FREE TO USE</p>
+                    <h3>All Tracks Free</h3>
+                    <p class="feature-description">최고 프로듀서들의 <br> 하이퀄리티 음원 무료 사용</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <!-- 라이선스: 네온 민트 방패(Shield) -->
+                    <svg class="feature-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#3EB489" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M24 6l16 6v8c0 10-7 18-16 22-9-4-16-12-16-22V12l16-6z"/>
+                        <path d="M24 22v6"/>
+                        <circle cx="24" cy="18" r="2.5"/>
+                    </svg>
+                    <p class="feature-label">100% SECURE</p>
+                    <h3>All Tracks Licensed</h3>
+                    <p class="feature-description">모든 음원<br>저작권/CID 완벽 보장</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <!-- 수익: 네온 민트 동전(코인) -->
+                    <svg class="feature-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#3EB489" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="24" cy="24" r="16"/>
+                        <path d="M24 16v16M16 24h16"/>
+                    </svg>
+                    <p class="feature-label">80% ROYALTY</p>
+                    <h3>80% Royalty is Yours</h3>
+                    <p class="feature-description">음원만 사용하고<br>수익은 80% 가져가세요</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 멀티 플랫폼 수익화 섹션 ===== -->
+    <section class="multiplatform-section" data-animate="fade-up">
+      <div class="container">
+        <div class="about-audionyx-inner">
+          <div class="about-audionyx-title">멀티 플랫폼 수익화</div>
+          <h2 class="about-audionyx-headline">TikTok · Instagram · Facebook<br>모든 플랫폼에서 수익을 누리세요</h2>
+          <p class="about-audionyx-subcopy">
+            Audionyx 음원 하나면 Shorts뿐 아니라 Reels, TikTok, Facebook Video까지<br>
+            <strong>모든 채널에서 동일 비율로 수익을 누릴 수 있습니다.</strong>
+          </p>
+          <div class="platform-logos" style="display:flex; gap:2.5rem; margin-top:2.5rem;">
+            <img src="../images/platform-tiktok.svg" alt="TikTok Logo" width="56" height="56" loading="lazy">
+            <img src="../images/platform-instagram.svg" alt="Instagram Logo" width="56" height="56" loading="lazy">
+            <img src="../images/platform-facebook.svg" alt="Facebook Logo" width="56" height="56" loading="lazy">
+            <img src="../images/platform-youtube.svg" alt="YouTube Logo" width="56" height="56" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-Step 플로우 섹션 -->
+    <section id="how-it-works" class="how-it-works" data-animate="fade-up">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-subtitle">간단한 3단계로 수익화 시작 </p>
+                <h2 class="section-title">How It Works </h2>
+            </div>
+            
+            <div class="flows-container">
+                <div class="flow flow-item glass-card">
+                    <!-- <div class="step-number">1</div> -->
+                    <figure class="flow-image">
+                        <div class="placeholder-image step1-placeholder">
+                            <div class="wave-animation"></div>
+                            <button class="copy-button">Copy CID</button>
+                        </div>
+                        <div class="image-overlay"></div>
+                    </figure>
+                    <div class="flow-text">
+                        <h3>Step 1  ·  음원 고르기</h3>
+                        <p>트랙 감상하고 <b>Copy CID<p></p>
+                    </div>
+                </div>
+                
+                <div class="flows-container">
+                <div class="flow flow-item glass-card">
+                    <!-- <div class="step-number">2</div> -->
+                    <figure class="flow-image">
+                        <div class="placeholder-image step2-placeholder">
+                            <div class="shorts-mockup">
+                                <div class="shorts-header">YouTube Shorts</div>
+                                <div class="shorts-content">
+                                    <div class="shorts-input">CID: Music_12345</div>
+                                </div>
+                                <div class="shorts-footer">
+                                    <span class="check-icon">✔</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image-overlay"></div>
+                    </figure>
+                    <div class="flow-text">
+                        <h3>Step 2  ·  영상 업로드</h3>
+                        <p>Shorts 업로드 시<br><b>음원 CID</b> 붙여넣기</p>
+                    </div>
+                </div>
+                
+                <div class="flows-container">
+                <div class="flow flow-item glass-card">
+                    <!-- <div class="step-number">3</div> -->
+                    <figure class="flow-image">
+                        <div class="placeholder-image step3-placeholder">
+                            <div class="dashboard-mockup">
+                                <div class="dashboard-header">
+                                    <span>AUDIONYX with You</span>
+                                </div>
+                                <div class="dashboard-content">
+                                    <div class="data-card">
+                                        <div class="data-label">조회수</div>
+                                        <div class="data-value">124,589</div>
+                                    </div>
+                                    <div class="data-card">
+                                        <div class="data-label">예상 로열티</div>
+                                        <div class="data-value">₩439,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image-overlay"></div>
+                    </figure>
+                    <div class="flow-text">
+                        <h3>Step 3  ·  자동 입금</h3>
+                        <p>80% 수익 <b>매달 </b> 자동 입금 </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 음원 미리보기 섹션 ===== -->
+    <section class="preview-section" data-animate="fade-up">
+      <div class="container">
+        <div class="section-header">
+          <div class="about-audionyx-title">Right Now</div>
+          <h2 class="about-audionyx-headline">
+            하이퀄리티 음원 트랙 사용하고<br>
+            새로운 수익 파이프라인을 만드세요
+          </h2>
+          <p class="about-audionyx-subcopy">
+            Audionyx의 프리미엄 트랙으로 지금 바로 시작하세요 <strong>모든 음원이 무료이며, 수익의 80%를 가져갈 수 있습니다.</strong>
+          </p>
+        </div>
+
+        <div class="tracks-showcase">
+          <div class="tracks-grid">
+            <div class="track-card glass-card" data-track="1">
+              <div class="track-visual">
+                <div class="track-waveform">
+                  <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
+                    <path d="M0,30 L10,15 L20,45 L30,10 L40,50 L50,20 L60,40 L70,5 L80,55 L90,25 L100,35 L110,12 L120,48 L130,18 L140,42 L150,8 L160,52 L170,22 L180,38 L190,28 L200,30" 
+                          stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="track-overlay">
+                  <button class="track-play-btn">
+                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+                      <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="track-info">
+                <div class="track-meta">
+                  <div class="track-name">Summer Vibes</div>
+                  <div class="track-genre">Pop • Upbeat</div>
+                </div>
+                <div class="track-actions">
+                  <button class="copy-cid-btn">Copy CID</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="track-card glass-card" data-track="2">
+              <div class="track-visual">
+                <div class="track-waveform">
+                  <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
+                    <path d="M0,30 L10,25 L20,35 L30,20 L40,40 L50,15 L60,45 L70,25 L80,35 L90,10 L100,50 L110,30 L120,20 L130,40 L140,25 L150,35 L160,15 L170,45 L180,30 L190,25 L200,30" 
+                          stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="track-overlay">
+                  <button class="track-play-btn">
+                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+                      <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="track-info">
+                <div class="track-meta">
+                  <div class="track-name">Dreamy Night</div>
+                  <div class="track-genre">Lo-Fi • Ambient</div>
+                </div>
+                <div class="track-actions">
+                  <button class="copy-cid-btn">Copy CID</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="track-card glass-card" data-track="3">
+              <div class="track-visual">
+                <div class="track-waveform">
+                  <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
+                    <path d="M0,30 L10,10 L20,50 L30,20 L40,40 L50,5 L60,55 L70,15 L80,45 L90,25 L100,35 L110,8 L120,52 L130,18 L140,42 L150,12 L160,48 L170,28 L180,32 L190,22 L200,30" 
+                          stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="track-overlay">
+                  <button class="track-play-btn">
+                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+                      <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="track-info">
+                <div class="track-meta">
+                  <div class="track-name">Energy Boost</div>
+                  <div class="track-genre">EDM • Dance</div>
+                </div>
+                <div class="track-actions">
+                  <button class="copy-cid-btn">Copy CID</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tracks-cta">
+            <a href="find-music.html" class="btn-primary tracks-cta-btn">
+              <span>무료 음원 찾아보기</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <div class="footer-logo">Audionyx</div>
+            <p class="footer-tagline">쇼츠 음원 수익화 플랫폼</p>
+          </div>
+          
+          <div class="footer-nav-container">
+            <div class="footer-nav-group">
+              <h4 class="footer-heading">서비스</h4>
+              <ul class="footer-nav">
+                <li><a href="find-music.html">음원 찾기</a></li>
+                <li><a href="withdraw.html">계좌 등록</a></li>
+                <li><a href="channel-management.html">채널 관리</a></li>
+                <li><a href="track-production.html">트랙 제작</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-nav-group">
+              <h4 class="footer-heading">회사</h4>
+              <ul class="footer-nav">
+                <li><a href="brand.html">브랜드 소개</a></li>
+                <li><a href="/policy">이용약관</a></li>
+                <li><a href="/privacy">개인정보처리방침</a></li>
+                <li><a href="/contact">문의하기</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-nav-group">
+              <h4 class="footer-heading">연락처</h4>
+              <ul class="footer-nav">
+                <li><a href="mailto:hello@the666music.com">hello@369music.com</a></li>
+                <li class="social-links">
+                  <a href="#" aria-label="YouTube">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                  </a>
+                  <a href="#" aria-label="Instagram">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </a>
+                  <a href="#" aria-label="Twitter">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
+          <p class="footer-location">Seoul, Korea</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- 스크립트 -->
+    <script src="../js/brand.js"></script>
+    
+    <!-- 자체 로그인 모달 -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" id="auth-modal-close">&times;</button>
+            
+            <div class="auth-modal-header">
+                <h2 class="auth-modal-title">로그인</h2>
+                <p class="auth-modal-subtitle">Audionyx의 모든 서비스를 이용하려면<br>로그인이 필요합니다</p>
+            </div>
+            
+            <div class="auth-methods">
+                <button class="auth-method-btn google" id="google-auth-btn">
+                    <svg class="auth-method-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Google 계정으로 로그인
+                </button>
+                
+                <button class="auth-method-btn kakao" id="kakao-auth-btn">
+                    <svg class="auth-method-icon" viewBox="0 0 24 24" fill="#FEE500">
+                        <path d="M12 3C7.03 3 3 6.24 3 10.24c0 2.64 1.74 4.95 4.38 6.32l-.96 3.54c-.09.33.12.63.44.63.14 0 .27-.05.38-.15L10.68 18c.42.05.86.08 1.32.08 4.97 0 9-3.24 9-7.24S16.97 3 12 3z"/>
+                    </svg>
+                    카카오 계정으로 로그인
+                </button>
+                
+                <button class="auth-method-btn naver" id="naver-auth-btn">
+                    <svg class="auth-method-icon" viewBox="0 0 24 24" fill="#03C75A">
+                        <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z"/>
+                    </svg>
+                    네이버 계정으로 로그인
+                </button>
+                
+                <div class="auth-divider">
+                    <span>또는</span>
+                </div>
+                
+                <button class="auth-method-btn email" id="email-auth-btn">
+                    <svg class="auth-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    이메일로 로그인
+                </button>
+                
+                <button class="auth-method-btn phone" id="phone-auth-btn">
+                    <svg class="auth-method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    전화번호로 로그인
+                </button>
+            </div>
+            
+            <div class="auth-modal-footer">
+                <p>로그인 시 <a href="#" onclick="event.preventDefault()">이용약관</a> 및 <a href="#" onclick="event.preventDefault()">개인정보처리방침</a>에 동의하게 됩니다</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

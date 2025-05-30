@@ -1,0 +1,1769 @@
+/* === 음원 찾기 페이지 개별 스타일 === */
+
+body {
+  overflow-x: hidden !important;
+}
+
+.findmusic-container {
+  overflow-x: hidden;
+}
+
+/* 페이지 컨테이너 */
+.findmusic-container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+  padding-bottom: var(--spacing-xl);
+  position: relative;
+  background-color: var(--darker-bg);
+  min-height: calc(100vh - var(--nav-height));
+}
+
+/* 배경 장식 효과 - 더욱 세련되게 개선 */
+.findmusic-container::before {
+  content: '';
+  position: absolute;
+  top: 8%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle at 25% 25%, rgba(62, 180, 137, 0.08) 0%, rgba(168, 230, 206, 0.03) 35%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: -1;
+  animation: float-orb-enhanced 25s ease-in-out infinite alternate;
+}
+
+.findmusic-container::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: -15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle at 75% 75%, rgba(62, 180, 137, 0.06) 0%, rgba(168, 230, 206, 0.02) 40%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: -1;
+  animation: float-orb-enhanced 30s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float-orb-enhanced {
+  0% { 
+    transform: translate(0, 0) rotate(0deg) scale(0.9); 
+    opacity: 0.7;
+  }
+  50% { 
+    transform: translate(40px, -30px) rotate(8deg) scale(1.1); 
+    opacity: 1;
+  }
+  100% { 
+    transform: translate(0, 0) rotate(0deg) scale(0.9); 
+    opacity: 0.7;
+  }
+}
+
+/* 서치 배너 스타일 - 히어로 배너 숨김 */
+.findmusic-search-banner {
+  display: none; /* 히어로 배너 숨김 */
+  background: linear-gradient(to bottom, var(--color-neutral-dark), var(--bg-dark));
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  margin-top: 80px;
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 0;
+  margin-right: 0;
+  border-radius: 0;
+}
+
+/* 스타일 재사용 */
+.feature-card {
+  background: var(--card-bg-gradient);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.icon-container {
+  background: rgba(215, 255, 76, 0.12); /* 대비 개선된 라임 색상 */
+}
+
+.accent-lime {
+  color: var(--lime-color) !important;
+}
+
+/* 내비게이션 호버 애니메이션 */
+.navbar .menu-area ul li a {
+  transition: transform 0.3s ease, color 0.3s ease;
+  display: inline-block;
+  position: relative;
+}
+
+.navbar .menu-area ul li a:hover {
+  transform: scale(1.15);
+  color: var(--lime-color);
+}
+
+        /* 다크/라이트 모드 지원 */
+        @media (prefers-color-scheme: light) {
+          :root {
+              --bg: #fff;
+              --text: #1B1B1F;
+          }
+          
+          /* 라이트 모드 스타일은 필요시 추가 */
+      }
+
+/* 히어로 설명 텍스트 */
+.findmusic-hero-desc {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-gray);
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.findmusic-hero-desc strong {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.highlight-80 {
+  position: relative;
+  display: inline-block;
+  color: var(--color-accent);
+  animation: pulse-scale 2s infinite;
+}
+
+@keyframes pulse-scale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* 하이라이트 알약 모양 요소 */
+.findmusic-highlight-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.highlight-pill {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  border-radius: 50px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+  animation: pill-fade-in 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.highlight-pill:nth-child(1) { animation-delay: 0.1s; }
+.highlight-pill:nth-child(2) { animation-delay: 0.3s; }
+.highlight-pill:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes pill-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.highlight-pill:hover {
+  background: rgba(var(--color-accent-rgb), 0.15); /* Accent 색상 기반 */
+  border-color: rgba(var(--color-accent-rgb), 0.3); /* Accent 색상 기반 */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 하이라이트 아이콘 스타일 개선 */
+.highlight-icon {
+  display: inline-block;
+  margin: 0 5px;
+  animation: highlight-pulse 2s infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes highlight-pulse {
+  0% {
+    transform: scale(1);
+    text-shadow: 0 0 5px rgba(var(--color-accent-rgb), 0.3);
+  }
+  100% {
+    transform: scale(1.3);
+    text-shadow: 0 0 12px rgba(var(--color-accent-rgb), 0.7);
+  }
+}
+
+/* 물결 효과 애니메이션 */
+/* (아래 코드 전체 삭제) */
+
+
+@keyframes text-glow {
+  0% { filter: drop-shadow(0 0 3px rgba(var(--color-accent-rgb), 0.3)); }
+  50% { filter: drop-shadow(0 0 8px rgba(var(--color-accent-rgb), 0.5)); }
+  100% { filter: drop-shadow(0 0 3px rgba(var(--color-accent-rgb), 0.3)); }
+}
+
+/* 통합된 검색 및 필터 영역 - 더욱 세련되게 개선 */
+.findmusic-search-and-filters {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(8, 8, 8, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 24px;
+  padding: 2.5rem;
+  border: 1px solid rgba(62, 180, 137, 0.2);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.2) inset;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 4rem;
+  margin-top: calc(var(--nav-height) + 3rem);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  transition: opacity 1.2s cubic-bezier(.4,0,.2,1), transform 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+.findmusic-search-and-filters.animate-fade-up {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1) !important;
+}
+
+.findmusic-search-and-filters::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(62, 180, 137, 0.08) 0%, 
+    transparent 30%, 
+    transparent 70%, 
+    rgba(168, 230, 206, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.findmusic-search-and-filters:hover {
+  transform: translateY(-8px);
+  border-color: rgba(62, 180, 137, 0.4);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.5),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 0 40px rgba(62, 180, 137, 0.1);
+}
+
+.findmusic-search-and-filters:hover::before {
+  opacity: 1;
+}
+
+/* 검색 섹션 등장 애니메이션 */
+@keyframes search-section-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 검색 박스 개선 */
+.findmusic-search-box {
+  display: flex;
+  width: 100%;
+  margin-bottom: 2rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(8, 8, 8, 0.95);
+  border: 1px solid rgba(62, 180, 137, 0.25);
+  position: relative;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.findmusic-search-box:hover,
+.findmusic-search-box:focus-within {
+  box-shadow: 
+    0 0 0 3px rgba(62, 180, 137, 0.25),
+    0 12px 35px rgba(0, 0, 0, 0.4);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.findmusic-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 18px 24px;
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+  outline: none;
+  font-family: var(--font-primary);
+  font-weight: 400;
+}
+
+.findmusic-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.findmusic-search-btn {
+  width: 68px;
+  background: var(--color-primary);
+  border: none;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.findmusic-search-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.findmusic-search-btn:hover {
+  background: var(--color-primary-hover);
+  transform: scale(1.05);
+  box-shadow: 0 12px 35px rgba(62, 180, 137, 0.6);
+}
+
+.findmusic-search-btn:hover::before {
+  left: 100%;
+}
+
+.findmusic-search-btn svg {
+  width: 22px;
+  height: 22px;
+  position: relative;
+  z-index: 2;
+}
+
+/* 필터 토글 버튼 개선 */
+.findmusic-filters-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(62, 180, 137, 0.12);
+  border: 1px solid rgba(62, 180, 137, 0.35);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.findmusic-filters-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 180, 137, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.findmusic-filters-toggle:hover {
+  background: rgba(62, 180, 137, 0.2);
+  border-color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(62, 180, 137, 0.3);
+}
+
+.findmusic-filters-toggle:hover::before {
+  left: 100%;
+}
+
+.findmusic-filters-toggle.active {
+  background: var(--color-primary);
+  color: #000;
+  box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
+}
+
+/* 필터 컨텐츠 영역 개선 */
+.findmusic-filters-content {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2.5rem;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 2rem;
+}
+
+.findmusic-filters-content.active {
+  display: grid;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 2rem;
+}
+
+.filter-group {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.4s ease;
+  transition-delay: 0.1s;
+  margin-bottom: 2.5rem;
+}
+
+.findmusic-filters-content.active .filter-group {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.findmusic-filters-content.active .filter-group:nth-child(1) { transition-delay: 0.1s; }
+.findmusic-filters-content.active .filter-group:nth-child(2) { transition-delay: 0.2s; }
+.findmusic-filters-content.active .filter-group:nth-child(3) { transition-delay: 0.3s; }
+.findmusic-filters-content.active .filter-group:nth-child(4) { transition-delay: 0.4s; }
+.findmusic-filters-content.active .filter-group:nth-child(5) { transition-delay: 0.5s; }
+
+.filter-group-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: 2px;
+}
+
+/* 장르, 무드, 용도 필터는 태그 스타일로 표시 */
+.filter-group-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.filter-group-tags .filter-group-title {
+  width: 100%;
+  flex-basis: 100%;
+  margin-bottom: 1rem;
+}
+
+.filter-group-tags .filter-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  background: rgba(12, 12, 12, 0.7);
+  border: 1px solid rgba(62, 180, 137, 0.25);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  transform: none;
+}
+
+.filter-group-tags .filter-option::before {
+  display: none;
+}
+
+.filter-group-tags .filter-option:hover {
+  background: rgba(62, 180, 137, 0.15);
+  border-color: rgba(62, 180, 137, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(62, 180, 137, 0.2);
+}
+
+.filter-group-tags .filter-option input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+}
+
+/* BPM과 길이 필터는 기본 세로 배치 유지 */
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 180, 137, 0.08), transparent);
+  transition: left 0.4s ease;
+}
+
+.filter-option:hover {
+  background: rgba(62, 180, 137, 0.12);
+  transform: translateX(8px);
+  box-shadow: 0 4px 15px rgba(62, 180, 137, 0.1);
+}
+
+.filter-option:hover::before {
+  left: 100%;
+}
+
+.filter-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  position: relative;
+}
+
+.filter-option span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.filter-option input[type="checkbox"]:checked + span {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.filter-option input[type="checkbox"]:checked {
+  transform: scale(1.1);
+}
+
+/* 정렬 및 필터 초기화 섹션 */
+.findmusic-sort-container {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.findmusic-sort-select-container {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.findmusic-sort-select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(8, 8, 8, 0.95);
+  border: 1px solid rgba(62, 180, 137, 0.25);
+  border-radius: var(--radius-md);
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.4s ease;
+}
+
+.findmusic-sort-select:hover,
+.findmusic-sort-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(62, 180, 137, 0.2);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.findmusic-sort-select-container::after {
+  content: '▼';
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.findmusic-sort-select:focus + .findmusic-sort-select-container::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.findmusic-reset-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-md);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.findmusic-reset-filters::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  transition: left 0.5s ease;
+}
+
+.findmusic-reset-filters:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+}
+
+.findmusic-reset-filters:hover::before {
+  left: 100%;
+}
+
+/* === 트랙 영역 === */
+.findmusic-tracks-area {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.findmusic-tracks-header {
+  margin-bottom: 2rem;
+}
+
+.findmusic-tracks-title {
+  font-size: clamp(1.8rem, 3vw + 1rem, 2.3rem);
+  font-weight: 300;
+  color: #fff;
+  text-align: left;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.01em;
+  padding-left: 0.2em;
+}
+
+/* 로딩 스피너 */
+.findmusic-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.loading-spinner-large {
+  width: 56px;
+  height: 56px;
+  border: 4px solid rgba(62, 180, 137, 0.1);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === 트랙 그리드 === */
+.findmusic-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* === 현대적 트랙 리스트 아이템 - 가로형 레이아웃 유지하며 세련되게 개선 === */
+.findmusic-track-list-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background: rgba(8, 8, 8, 0.85);
+  border: 1px solid rgba(62, 180, 137, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+.findmusic-track-list-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(62, 180, 137, 0.08) 0%, 
+    transparent 30%, 
+    transparent 70%, 
+    rgba(168, 230, 206, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.findmusic-track-list-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 180, 137, 0.05), transparent);
+  transition: left 0.6s ease;
+}
+
+.findmusic-track-list-item:hover {
+  transform: translateY(-5px);
+  border-color: rgba(62, 180, 137, 0.4);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 0 40px rgba(62, 180, 137, 0.1);
+}
+
+.findmusic-track-list-item:hover::before {
+  opacity: 1;
+}
+
+.findmusic-track-list-item:hover::after {
+  left: 100%;
+}
+
+.findmusic-track-list-item.playing {
+  border-color: var(--color-primary);
+  box-shadow: 
+    0 0 0 2px rgba(62, 180, 137, 0.4),
+    0 20px 50px rgba(62, 180, 137, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  animation: playing-glow-enhanced 2.5s ease-in-out infinite;
+}
+
+@keyframes playing-glow-enhanced {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 2px rgba(62, 180, 137, 0.4),
+      0 20px 50px rgba(62, 180, 137, 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  }
+  50% {
+    box-shadow: 
+      0 0 0 4px rgba(62, 180, 137, 0.6),
+      0 25px 60px rgba(62, 180, 137, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.15) inset;
+  }
+}
+
+/* === 현대적 썸네일 및 웨이브폼 디자인 === */
+.findmusic-item-thumbnail {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  background: rgba(62, 180, 137, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.findmusic-item-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 35px rgba(62, 180, 137, 0.2);
+}
+
+.findmusic-item-cover {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  z-index: 2;
+}
+
+/* 브랜드 페이지 스타일 웨이브폼 - 현대적 SVG 웨이브폼 */
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"] .findmusic-waveform-svg {
+  width: 80%;
+  height: 60px;
+  filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.4));
+  transition: all 0.4s ease;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  aspect-ratio: 200 / 60;
+  box-sizing: inherit;
+  word-spacing: 0.1em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  display: block;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+
+.findmusic-track-list-item:hover .findmusic-waveform-svg {
+  filter: drop-shadow(0 0 16px rgba(62, 180, 137, 0.6));
+  transform: scale(1.05);
+}
+
+.findmusic-waveform-svg path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: drawWaveform 2s ease-out forwards;
+}
+
+@keyframes drawWaveform {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 모든 썸네일 웨이브폼 애니메이션 완전 제거 */
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"] .findmusic-waveform-svg,
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"].playing .findmusic-waveform-svg,
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"]:not(.playing) .findmusic-waveform-svg {
+  animation: none !important;
+  filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.4)) !important;
+  transform: scale(1) !important;
+}
+
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"] .findmusic-waveform-svg path,
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"].playing .findmusic-waveform-svg path,
+.findmusic-thumbnail-waveform[data-findmusic-wave="true"]:not(.playing) .findmusic-waveform-svg path {
+  animation: none !important;
+  stroke-dasharray: none !important;
+  stroke-dashoffset: 0 !important;
+}
+
+/* 재생 버튼 개선 - 브랜드 페이지 스타일 */
+.findmusic-play-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%; 
+  background: var(--color-primary);
+  border: none;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
+}
+
+.findmusic-play-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.findmusic-play-btn:hover {
+  background: var(--color-primary-hover);
+  transform: scale(1.15);
+  box-shadow: 0 12px 35px rgba(62, 180, 137, 0.6);
+}
+
+.findmusic-play-btn:hover::before {
+  left: 100%;
+}
+
+.findmusic-play-btn.playing {
+  background: #ff6b35;
+  animation: playingPulse-enhanced 1.8s ease-in-out infinite;
+}
+
+@keyframes playingPulse-enhanced {
+  0%, 100% {
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 15px 40px rgba(255, 107, 53, 0.7);
+    transform: scale(1.08);
+  }
+}
+
+.findmusic-play-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  transition: all 0.3s ease;
+}
+
+/* 메인 그룹 개선 */
+.findmusic-item-main-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.findmusic-item-title-genre-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.findmusic-item-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.2rem;
+  font-weight: 450;
+  color: #fff;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-title {
+  color: var(--color-primary);
+}
+
+.findmusic-item-genre {
+  flex-shrink: 0;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+  background: rgba(62, 180, 137, 0.15);
+  color: var(--color-primary);
+  border-radius: 25px;
+  border: 1px solid rgba(62, 180, 137, 0.35);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-genre {
+  background: rgba(62, 180, 137, 0.25);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(62, 180, 137, 0.2);
+}
+
+/* 웨이브폼 컨테이너 개선 - 브랜드 소개 페이지 스타일 적용 */
+.findmusic-item-waveform-container {
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border: 1.5px solid rgba(198,255,0,0.08);
+  box-shadow: 0 2px 12px rgba(198,255,0,0.04);
+  height: 50px;
+  padding: 0 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-waveform-container {
+  border-color: rgba(62, 180, 137, 0.15);
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(62, 180, 137, 0.2);
+}
+
+/* 웨이브폼 영역 - 브랜드 카드와 동일한 스타일 */
+.findmusic-track-wave {
+  flex: 1;
+  height: 36px;
+  position: relative;
+  background: linear-gradient(135deg, rgba(12, 12, 12, 0.9) 0%, rgba(18, 18, 24, 0.9) 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  min-width: 0;
+}
+
+.findmusic-track-list-item:hover .findmusic-track-wave {
+  background: linear-gradient(135deg, rgba(12, 12, 12, 0.95) 0%, rgba(18, 18, 24, 0.95) 100%);
+  transform: scale(1.02);
+}
+
+/* 시간 정보 개선 */
+.findmusic-item-duration {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-duration {
+  color: var(--color-primary);
+  border-color: rgba(62, 180, 137, 0.3);
+}
+
+/* BPM 개선 */
+.findmusic-item-bpm {
+  display: none;
+}
+
+/* CID 컨테이너 개선 */
+.findmusic-item-cid-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 12px;
+  min-width: 180px;
+  border: 1px solid rgba(62, 180, 137, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.findmusic-item-cid-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 180, 137, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-cid-container {
+  border-color: rgba(62, 180, 137, 0.4);
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(62, 180, 137, 0.1);
+}
+
+.findmusic-track-list-item:hover .findmusic-item-cid-container::before {
+  left: 100%;
+}
+
+.findmusic-cid-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.findmusic-track-cid-text {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: var(--font-numeric);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-track-cid-text {
+  color: var(--color-primary);
+}
+
+.findmusic-cid-copy-btn {
+  padding: 0.4rem 0.75rem;
+  background: rgba(62, 180, 137, 0.15);
+  border: 1px solid rgba(62, 180, 137, 0.35);
+  border-radius: 6px;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.findmusic-cid-copy-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 180, 137, 0.2), transparent);
+  transition: left 0.4s ease;
+}
+
+.findmusic-cid-copy-btn:hover {
+  background: rgba(62, 180, 137, 0.25);
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(62, 180, 137, 0.2);
+}
+
+.findmusic-cid-copy-btn:hover::before {
+  left: 100%;
+}
+
+.findmusic-cid-copy-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* === 페이지네이션 개선 === */
+.findmusic-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 4rem;
+}
+
+.pagination-btn {
+  padding: 0.75rem 1.25rem;
+  background: rgba(8, 8, 8, 0.8);
+  border: 1px solid rgba(62, 180, 137, 0.3);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.pagination-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(62, 180, 137, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: rgba(62, 180, 137, 0.15);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(62, 180, 137, 0.2);
+}
+
+.pagination-btn:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-btn.active {
+  background: var(--color-primary);
+  color: #000;
+  border-color: var(--color-primary);
+  font-weight: 700;
+  box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
+}
+
+/* === 미니 플레이어 개선 === */
+.mini-player {
+  position: fixed;
+  bottom: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 900px;
+  background: rgba(8, 8, 8, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(62, 180, 137, 0.35);
+  border-radius: 24px;
+  box-shadow: 
+    0 -20px 60px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 40px rgba(62, 180, 137, 0.1);
+  padding: 2rem;
+  z-index: 1000;
+  transition: bottom 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mini-player.active {
+  bottom: 2.5rem;
+}
+
+.mini-player-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  font-size: 20px;
+  line-height: 1;
+  backdrop-filter: blur(10px);
+}
+
+.mini-player-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.mini-player .mini-player-track-list-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.mini-player-progress-container {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.mini-player-progress-container:hover {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mini-player-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.1s linear;
+  position: relative;
+  box-shadow: 0 0 10px rgba(62, 180, 137, 0.3);
+}
+
+.mini-player-progress::after {
+    content: '';
+    position: absolute;
+  right: 0;
+    top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  background: #fff;
+    border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.mini-player-progress-container:hover .mini-player-progress::after {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 4px 15px rgba(62, 180, 137, 0.4);
+}
+
+.mini-player-time,
+.mini-player-duration {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  white-space: nowrap;
+  font-family: var(--font-numeric);
+}
+
+/* === 반응형 디자인 개선 === */
+@media (max-width: 1200px) {
+  .findmusic-search-and-filters {
+    margin-top: calc(var(--nav-height) + 2rem);
+    padding: 2rem;
+  }
+  
+  .findmusic-track-list-item {
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .findmusic-container {
+    padding: 0 1rem;
+  }
+  
+  .findmusic-search-and-filters {
+    padding: 1.5rem;
+    margin-top: calc(var(--nav-height) + 1rem);
+    border-radius: 16px;
+  }
+  
+  .findmusic-track-list-item {
+    padding: 1.25rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-radius: 16px;
+  }
+  
+  .findmusic-item-thumbnail {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+  }
+  
+  .findmusic-thumbnail-waveform {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  .findmusic-waveform-svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+  
+  .findmusic-play-btn {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .findmusic-item-title {
+    font-size: 1.1rem;
+    max-width: 220px;
+  }
+  
+  .findmusic-item-main-group {
+    width: 100%;
+    order: 3;
+  }
+  
+  .findmusic-item-cid-container {
+    min-width: auto;
+    flex: 1;
+  }
+  
+  .mini-player {
+    width: 95%;
+    padding: 1.5rem;
+    border-radius: 20px;
+    bottom: -100%;
+  }
+  
+  .mini-player.active {
+    bottom: 1.5rem;
+  }
+  
+  .findmusic-sort-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* 모바일에서 그리드 레이아웃 최적화 */
+  .findmusic-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+  
+  .findmusic-track-card {
+    padding: 1rem;
+  }
+  
+  .findmusic-track-card-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .findmusic-track-card-thumbnail .findmusic-thumbnail-waveform {
+    display: block !important;
+    opacity: 1 !important;
+  }
+  
+  .findmusic-track-card-thumbnail .findmusic-waveform-svg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  
+  /* 필터 패널 모바일 최적화 */
+  .findmusic-filters-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .filter-group {
+    padding: 1rem;
+  }
+  
+  .filter-group-title {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .filter-option {
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .findmusic-container {
+    padding: 0 0.5rem;
+  }
+  
+  .findmusic-search-and-filters {
+    padding: 1rem;
+    margin-top: calc(var(--nav-height) + 0.5rem);
+  }
+  
+  .findmusic-item-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .findmusic-thumbnail-waveform {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  .findmusic-waveform-svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+  
+  .findmusic-play-btn {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .findmusic-item-title {
+    font-size: 1rem;
+    max-width: 180px;
+  }
+  
+  .mini-player {
+    width: 98%;
+    padding: 1rem;
+    bottom: -100%;
+  }
+  
+  .mini-player.active {
+    bottom: 1rem;
+  }
+  
+  .findmusic-track-card {
+    padding: 0.75rem;
+  }
+  
+  .findmusic-track-card-thumbnail {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .findmusic-track-card-title {
+    font-size: 0.9rem;
+  }
+  
+  .findmusic-track-card-tags {
+    gap: 0.25rem;
+  }
+  
+  .findmusic-track-card-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* 웨이브폼 캔버스 애니메이션 완전 차단 */
+.waveform canvas { 
+  animation: none !important; 
+}
+
+/* CSS로 최종 강제 고정 - WaveSurfer 스크롤 방지 */
+.scroll { 
+  overflow-x: hidden !important; 
+}
+
+.scroll > .wrapper { 
+  width: 100% !important; 
+}
+
+/* 검색어 자동완성 스타일 */
+.findmusic-search-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(8, 8, 8, 0.95);
+  border: 1px solid rgba(62, 180, 137, 0.25);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  margin-top: 4px;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.findmusic-search-autocomplete .autocomplete-item {
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.findmusic-search-autocomplete .autocomplete-item:hover {
+  background: rgba(62, 180, 137, 0.1);
+}
+
+.findmusic-search-autocomplete .autocomplete-item:first-child {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.findmusic-search-autocomplete .autocomplete-item:last-child {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.findmusic-search-autocomplete .suggestion-text {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+}
+
+.findmusic-search-autocomplete .autocomplete-item:hover .suggestion-text {
+  color: var(--color-primary);
+}
+
+/* 검색 박스 위치 조정 */
+.findmusic-search-box {
+  position: relative;
+}
+
+/* 태그 컨테이너 스타일 */
+.findmusic-item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+/* 무드 태그 스타일 */
+.findmusic-item-mood-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.findmusic-item-mood {
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+  background: rgba(255, 107, 53, 0.15);
+  color: #ff6b35;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 107, 53, 0.35);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-mood {
+  background: rgba(255, 107, 53, 0.25);
+  border-color: #ff6b35;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+}
+
+/* 용도 태그 스타일 */
+.findmusic-item-usecase-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.findmusic-item-usecase {
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+  background: rgba(168, 230, 206, 0.15);
+  color: #a8e6ce;
+  border-radius: 25px;
+  border: 1px solid rgba(168, 230, 206, 0.35);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.findmusic-track-list-item:hover .findmusic-item-usecase {
+  background: rgba(168, 230, 206, 0.25);
+  border-color: #a8e6ce;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(168, 230, 206, 0.2);
+}
+
+/* 반응형 디자인 수정 */
+@media (max-width: 768px) {
+  .findmusic-item-tags {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .findmusic-item-mood-tags,
+  .findmusic-item-usecase-tags {
+    width: 100%;
+  }
+  
+  .findmusic-item-mood,
+  .findmusic-item-usecase {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+  }
+}
+
+.mini-player .findmusic-item-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.mini-player .findmusic-item-genre,
+.mini-player .findmusic-item-mood,
+.mini-player .findmusic-item-usecase {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.8rem;
+  background: rgba(62, 180, 137, 0.15);
+  color: var(--color-primary);
+  border-radius: 20px;
+  border: 1px solid rgba(62, 180, 137, 0.35);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.mini-player .findmusic-item-mood {
+  background: rgba(255, 107, 53, 0.15);
+  color: #ff6b35;
+  border-color: rgba(255, 107, 53, 0.35);
+}
+
+.mini-player .findmusic-item-usecase {
+  background: rgba(168, 230, 206, 0.15);
+  color: #a8e6ce;
+  border-color: rgba(168, 230, 206, 0.35);
+}
+
+@media (max-width: 768px) {
+  .mini-player .findmusic-item-tags {
+    flex-direction: row;
+    gap: 0.4rem;
+  }
+  
+  .mini-player .findmusic-item-genre,
+  .mini-player .findmusic-item-mood,
+  .mini-player .findmusic-item-usecase {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+  }
+}

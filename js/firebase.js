@@ -1,0 +1,23 @@
+// js/firebase.js
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
+import { getStorage }    from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js';
+import { getFirestore }  from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
+
+console.log("[firebase.js] Firebase 초기화 시작");
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBP926ULg9wNUNGjQy0fMjRxUeS4XyeG6M",
+  authDomain: "audionyx-a7b2e.firebaseapp.com",
+  projectId: "audionyx-a7b2e",
+  storageBucket: "audionyx-a7b2e.firebasestorage.app",   // ← 중요!
+  messagingSenderId: "1002069862376",
+  appId: "1:1002069862376:web:669c93bca8ab2f1d09665d",
+  measurementId: "G-P6GNNYLJ38"                  // 있어도, 빼도 무방
+};
+
+// Firebase 앱 초기화 및 모듈 생성
+export const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);
+export const db = getFirestore(app);
+
+console.log("[firebase.js] Firebase 초기화 완료: app, storage, db 객체 생성됨");

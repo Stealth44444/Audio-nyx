@@ -1,0 +1,587 @@
+/* 수익 출금 페이지 스타일 */
+
+body {
+    background-color: var(--dark-bg);
+}
+
+.navbar {
+    background: var(--darker-bg);
+}
+
+.page-content,
+main,
+footer,
+.container {
+    background: var(--darker-bg) !important;
+}
+
+/* === 공통 CSS 변수 상속 (common.css에서 정의된 것을 사용) === */
+.withdraw-container {
+    background-color: var(--darker-bg);
+    color: var(--color-text-light);
+    padding: 0;
+    min-height: calc(100vh - 300px);
+}
+
+.page-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0 2rem 0;
+    background: rgba(12, 12, 12, 0.7);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    margin-bottom: 2rem;
+    border: 1.5px solid var(--color-primary);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.page-title {
+    background: none;
+    margin-bottom: 0;
+    font-size: clamp(2rem, 3vw + 1rem, 2.5rem);
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    letter-spacing: -0.01em;
+}
+
+.withdraw-content {
+    background: var(--darker-bg);
+}
+
+/* === 페이지 애니메이션 (브랜드 페이지와 일관성) === */
+[data-animate] {
+    will-change: opacity, transform;
+    transition: opacity 1.8s cubic-bezier(.4,0,.2,1), transform 1.8s cubic-bezier(.4,0,.2,1);
+}
+
+[data-animate]:not(.animate-fade-up):not(.animate-fade-in) {
+    opacity: 0 !important;
+    transform: translateY(40px) !important;
+}
+
+.animate-fade-up {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.animate-fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* === 페이지 타이틀 === */
+.page-title {
+    color: #fff;
+    font-size: clamp(2rem, 3vw + 1rem, 2.5rem);
+    margin-bottom: 3rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* === 출금 프로세스 안내 섹션 === */
+.withdraw-process-section {
+    margin-top: 0;
+    margin-bottom: 3rem;
+    background: var(--darker-bg);
+    padding: 8rem 0 8rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.withdraw-process-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(62, 180, 137, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(62, 180, 137, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.withdraw-process-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+    text-align: left;
+    position: relative;
+    z-index: 2;
+}
+
+.withdraw-process-header .about-audionyx-title {
+    color: var(--color-primary);
+    text-shadow:
+      0 0 4px var(--color-primary),
+      0 0 8px var(--color-primary),
+      0 0 16px rgba(62, 180, 137, 0.4);
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-left: 0;
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.5px;
+}
+
+.withdraw-process-header .about-audionyx-headline {
+    font-size: clamp(1.5rem, 3vw + 1rem, 2.2rem);
+    color: #fff;
+    line-height: 1.25;
+    font-weight: 400;
+    margin-left: 1.5rem;
+    margin-bottom: 0.2rem;
+}
+
+.withdraw-process-header .about-audionyx-subcopy {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+    font-weight: 400;
+    margin-left: 1.5rem;
+    margin-bottom: 0;
+    max-width: 100%;
+}
+
+/* === 메인 콘텐츠 영역 === */
+.withdraw-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 0;
+}
+
+.withdraw-form-section {
+    flex: 1;
+    min-width: 350px;
+}
+
+.withdraw-info-section {
+    flex: 1;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* === 카드 스타일 (브랜드 페이지와 일관성) === */
+.card {
+    background: rgba(12, 12, 12, 0.8);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(62, 180, 137, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(62, 180, 137, 0.05) 0%, 
+        transparent 30%, 
+        transparent 70%, 
+        rgba(62, 180, 137, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(62, 180, 137, 0.3);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+}
+
+/* === 폼 스타일 === */
+.show-form-btn {
+    background: var(--color-primary);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(62, 180, 137, 0.3);
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+}
+
+.show-form-btn:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(62, 180, 137, 0.4);
+}
+
+.withdraw-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 2;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(62, 180, 137, 0.1);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    background: rgba(12, 12, 12, 0.9);
+    border: 1px solid rgba(62, 180, 137, 0.2);
+    color: #fff;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(62, 180, 137, 0.2);
+    background: rgba(12, 12, 12, 0.95);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    min-height: 1.2rem;
+    font-weight: 500;
+}
+
+.submit-btn {
+    background: var(--color-primary);
+    color: #000;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 16px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(62, 180, 137, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.submit-btn:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(62, 180, 137, 0.4);
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:disabled {
+    background: rgba(100, 100, 100, 0.3);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* === 계좌 정보 스타일 === */
+.account-info-card {
+    height: fit-content;
+}
+
+.no-account-info {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 2rem 0;
+    position: relative;
+    z-index: 2;
+}
+
+.no-account-info p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(62, 180, 137, 0.1);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.info-value {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #fff;
+}
+
+/* === 안내 메시지 스타일 === */
+.info {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.trust {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.trust-item:hover {
+    transform: translateX(5px);
+    color: #fff;
+    background: rgba(62, 180, 137, 0.1);
+}
+
+.trust-icon {
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-primary);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.trust-item:hover .trust-icon {
+    stroke: #fff;
+    filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.6));
+}
+
+/* === 토스트 메시지 스타일 === */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(12, 12, 12, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(62, 180, 137, 0.2);
+    font-weight: 500;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    border-left: 4px solid var(--color-primary);
+    box-shadow: 0 8px 32px rgba(62, 180, 137, 0.2);
+}
+
+.toast.error {
+    border-left: 4px solid #ff6b6b;
+    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.2);
+}
+
+/* === 폼 애니메이션 효과 === */
+#withdraw-form-wrapper {
+    animation: slideDown 0.3s ease-out;
+    transform-origin: top;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === 반응형 디자인 === */
+@media (max-width: 768px) {
+    .withdraw-process-section {
+        padding: 6rem 0;
+    }
+    
+    .withdraw-content {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 3rem 0;
+    }
+    
+    .withdraw-form-section,
+    .withdraw-info-section {
+        min-width: auto;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .card {
+        padding: 1.5rem;
+    }
+    
+    .withdraw-process-header .about-audionyx-subcopy {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 480px) {
+    .withdraw-process-section {
+        padding: 4rem 0;
+    }
+    
+    .card {
+        padding: 1.2rem;
+    }
+    
+    .card-title {
+        font-size: 1.2rem;
+    }
+    
+    .toast {
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 18px;
+    }
+    
+    .show-form-btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group select {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+    
+    .submit-btn {
+        padding: 14px 24px;
+        font-size: 0.9rem;
+    }
+} 
+
+.withdraw-process-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .withdraw-process-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.footer-heading { color: #fff !important; } 

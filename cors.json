@@ -7,7 +7,8 @@
       "https://effulgent-entremet-92f4b4.netlify.app",
       "https://whimsical-clafoutis-6a0a01.netlify.app",
       "https://papaya-maamoul-62acf0.netlify.app",
-      "https://poetic-profiterole-f81277.netlify.app"
+      "https://poetic-profiterole-f81277.netlify.app",
+      "https://audionyx-a7b2e.web.app/"
     ],
     "method": ["GET", "HEAD", "OPTIONS"],
     "responseHeader": ["Content-Type", "Range"],

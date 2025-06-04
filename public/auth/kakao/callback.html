@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Kakao Login Callback</title>
+</head>
+<body>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      if (!code) {
+        window.close();
+        return;
+      }
+      // 부모 창에 code 전달
+      if (window.opener) {
+        window.opener.postMessage({ provider: 'kakao', code }, window.location.origin);
+        window.close();
+      } else {
+        // 싱글탭 SPA 대응: localStorage에 저장 후 메인으로 이동
+        localStorage.setItem('kakao_code', code);
+        window.location.replace('/');
+      }
+    })();
+  </script>
+  <p>카카오 인증 처리 중입니다...</p>
+</body>
+</html> 

@@ -19,7 +19,6 @@ import { doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/fi
 
 // DOM 요소
 const btnLogin = document.getElementById('btn-login');
-const btnSignup = document.getElementById('btn-signup');
 const btnLogout = document.getElementById('btn-logout');
 const authButtons = document.querySelector('.auth-buttons');
 const userProfile = document.getElementById('user-profile');
@@ -740,10 +739,6 @@ function closePhoneModal(modal) {
 // 기존 로그인/회원가입 버튼을 자체 모달로 연결
 if (btnLogin) {
   btnLogin.addEventListener('click', openAuthModal);
-}
-
-if (btnSignup) {
-  btnSignup.addEventListener('click', openAuthModal);
 }
 
 // 모달 닫기 이벤트

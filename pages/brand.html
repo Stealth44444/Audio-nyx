@@ -2,7 +2,17 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0c0c0c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Audionyx">
+    <meta name="apple-mobile-web-app-title" content="Audionyx">
+    <meta name="msapplication-TileColor" content="#0c0c0c">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
     <title>Audionyx - 브랜드 소개</title>
     <meta property="og:title" content="Audionyx - 브랜드 소개">
     <meta property="og:description" content="크리에이터를 위한 음원 수익화 플랫폼, Audionyx의 브랜드를 소개합니다.">
@@ -22,6 +32,7 @@
     <script type="module" src="../js/firebase.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <link rel="icon" type="image/png" href="../images/favicon.png">
+    <link rel="apple-touch-icon" href="../images/favicon.png">
 </head>
 <body>
    
@@ -184,6 +195,98 @@
       </div>
     </section>
 
+    <!-- ===== 모바일 전용 수익 비교 섹션 ===== -->
+    <section class="mobile-revenue-section" data-animate="fade-up">
+        <div class="container">
+            <div class="mobile-revenue-header">
+                <h2 class="mobile-revenue-title">Audionyx로<br>당신의 수익이 달라집니다</h2>
+                <p class="mobile-revenue-subtitle">같은 조회수, 더 많은 수익<br>지금까지 놓쳤던 음원 수익을 되찾으세요</p>
+            </div>
+
+            <div class="mobile-stats-container">
+                <!-- 100만 조회수 기준 비교 -->
+                <div class="mobile-comparison-card">
+                    <div class="mobile-card-header">
+                        <span class="mobile-card-label">100만 조회수 기준</span>
+                        <svg class="mobile-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M2 12h20"/>
+                            <circle cx="12" cy="12" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="mobile-revenue-amount">+₩78,700</div>
+                    <p class="mobile-revenue-description">추가 수익 발생<br>음원 저작권료 80%를 그대로 받아가세요</p>
+                </div>
+
+                <!-- Before vs After 비교 -->
+                <div class="mobile-vs-card">
+                    <div class="mobile-before-after before">
+                        <div class="mobile-vs-label">기존 수익</div>
+                        <div class="mobile-vs-amount">₩177,100</div>
+                        <div class="mobile-vs-description">영상 수익만</div>
+                    </div>
+                    
+                    <div class="mobile-vs-icon">→</div>
+                    
+                    <div class="mobile-before-after after">
+                        <div class="mobile-vs-label">Audionyx 사용</div>
+                        <div class="mobile-vs-amount">₩255,800</div>
+                        <div class="mobile-vs-description">영상+음원 수익</div>
+                    </div>
+                </div>
+
+                <!-- 500만 조회수 기준 -->
+                <div class="mobile-comparison-card">
+                    <div class="mobile-card-header">
+                        <span class="mobile-card-label">500만 조회수 기준</span>
+                        <svg class="mobile-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11H1l6-6 6 6zm-6 2h8l-4 4-4-4z"/>
+                        </svg>
+                    </div>
+                    <div class="mobile-revenue-amount">+₩393,500</div>
+                    <p class="mobile-revenue-description">월 40만원 이상 추가 수익<br>연간 약 470만원 더 벌 수 있습니다</p>
+                </div>
+            </div>
+
+            <!-- 핵심 혜택 카드 -->
+            <div class="mobile-benefit-cards">
+                <div class="mobile-benefit-card">
+                    <svg class="mobile-benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 12l2 2 4-4"/>
+                    </svg>
+                    <div class="mobile-benefit-title">144% 증가</div>
+                    <p class="mobile-benefit-description">평균 수익 증가율</p>
+                </div>
+                
+                <div class="mobile-benefit-card">
+                    <svg class="mobile-benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M2 12h20"/>
+                        <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                    <div class="mobile-benefit-title">월 40만원+</div>
+                    <p class="mobile-benefit-description">500만 조회수 기준<br>추가 수익</p>
+                </div>
+                
+                <div class="mobile-benefit-card">
+                    <svg class="mobile-benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    <div class="mobile-benefit-title">100% 무료</div>
+                    <p class="mobile-benefit-description">음원 사용료<br>완전 무료</p>
+                </div>
+                
+                <div class="mobile-benefit-card">
+                    <svg class="mobile-benefit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+                    </svg>
+                    <div class="mobile-benefit-title">자동 정산</div>
+                    <p class="mobile-benefit-description">매달 80% 수익<br>자동 입금</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 핵심 기능 섹션을 인사이트 섹션 바로 뒤로 이동 -->
     <section class="key-features-section" data-animate="fade-up">
         <div class="container">
@@ -255,9 +358,9 @@
                 <h2 class="section-title">How It Works </h2>
             </div>
             
+            <!-- 데스크톱용 플로우 -->
             <div class="flows-container">
                 <div class="flow flow-item glass-card">
-                    <!-- <div class="step-number">1</div> -->
                     <figure class="flow-image">
                         <div class="placeholder-image step1-placeholder">
                             <div class="wave-animation"></div>
@@ -267,13 +370,11 @@
                     </figure>
                     <div class="flow-text">
                         <h3>Step 1  ·  음원 고르기</h3>
-                        <p>트랙 감상하고 <b>Copy CID<p></p>
+                        <p>트랙 감상하고 <b>Copy CID</b></p>
                     </div>
                 </div>
                 
-                <div class="flows-container">
                 <div class="flow flow-item glass-card">
-                    <!-- <div class="step-number">2</div> -->
                     <figure class="flow-image">
                         <div class="placeholder-image step2-placeholder">
                             <div class="shorts-mockup">
@@ -294,9 +395,7 @@
                     </div>
                 </div>
                 
-                <div class="flows-container">
                 <div class="flow flow-item glass-card">
-                    <!-- <div class="step-number">3</div> -->
                     <figure class="flow-image">
                         <div class="placeholder-image step3-placeholder">
                             <div class="dashboard-mockup">
@@ -321,6 +420,93 @@
                         <h3>Step 3  ·  자동 입금</h3>
                         <p>80% 수익 <b>매달 </b> 자동 입금 </p>
                     </div>
+                </div>
+            </div>
+
+            <!-- 모바일용 스와이프 플로우 -->
+            <div class="mobile-flows-wrapper">
+                <div class="mobile-flows-container" id="mobile-flows-container">
+                    <!-- Step 1: 음원 선택 -->
+                    <div class="mobile-flow-card" data-step="1">
+                        <div class="mobile-step-badge">1</div>
+                        <div class="mobile-interaction-preview">
+                            <div class="mobile-step1-preview">
+                                <div class="mobile-waveform"></div>
+                                <button class="mobile-copy-button">Copy CID</button>
+                            </div>
+                        </div>
+                        <div class="mobile-flow-content">
+                            <h3 class="mobile-flow-title">음원 고르기</h3>
+                            <p class="mobile-flow-description">마음에 드는 트랙을 감상하고<br><strong>Copy CID</strong> 버튼을 눌러보세요</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: 영상 업로드 -->
+                    <div class="mobile-flow-card" data-step="2">
+                        <div class="mobile-step-badge">2</div>
+                        <div class="mobile-interaction-preview">
+                            <div class="mobile-step2-preview">
+                                <div class="mobile-upload-mockup">
+                                    <div class="mobile-upload-header">
+                                        <div class="mobile-platform-icon">▶</div>
+                                        <span class="mobile-upload-title">YouTube Shorts</span>
+                                    </div>
+                                    <div class="mobile-input-field" placeholder="CID 붙여넣기...">CID: Music_12345</div>
+                                    <div class="mobile-upload-status">
+                                        <div class="mobile-check-icon">✓</div>
+                                        <span>업로드 완료</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mobile-flow-content">
+                            <h3 class="mobile-flow-title">영상 업로드</h3>
+                            <p class="mobile-flow-description">Shorts 업로드 시<br><strong>음원 CID</strong>를 붙여넣기하세요</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: 자동 입금 -->
+                    <div class="mobile-flow-card" data-step="3">
+                        <div class="mobile-step-badge">3</div>
+                        <div class="mobile-interaction-preview">
+                            <div class="mobile-step3-preview">
+                                <div class="mobile-dashboard-mockup">
+                                    <div class="mobile-dashboard-header">
+                                        <div class="mobile-dashboard-title">AUDIONYX Dashboard</div>
+                                    </div>
+                                    <div class="mobile-stats-grid">
+                                        <div class="mobile-stat-card">
+                                            <div class="mobile-stat-label">총 조회수</div>
+                                            <div class="mobile-stat-value">124,589</div>
+                                        </div>
+                                        <div class="mobile-stat-card">
+                                            <div class="mobile-stat-label">이번 달 수익</div>
+                                            <div class="mobile-stat-value">₩439,000</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mobile-flow-content">
+                            <h3 class="mobile-flow-title">자동 입금</h3>
+                            <p class="mobile-flow-description">80% 수익이<br><strong>매달 자동으로</strong> 입금됩니다</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 프로그레스 인디케이터 -->
+                <div class="mobile-progress-container">
+                    <div class="mobile-progress-dot active" data-step="1"></div>
+                    <div class="mobile-progress-dot" data-step="2"></div>
+                    <div class="mobile-progress-dot" data-step="3"></div>
+                </div>
+
+                <!-- 스와이프 힌트 -->
+                <div class="mobile-swipe-hint">
+                    <svg class="mobile-swipe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                    좌우로 스와이프하여 단계를 확인하세요
                 </div>
             </div>
         </div>
@@ -491,7 +677,7 @@
     </footer>
 
     <!-- 스크립트 -->
-    <script src="../js/brand.js"></script>
+    <script type="module" src="../js/brand.js"></script>
     
     <!-- 자체 로그인 모달 -->
     <div id="auth-modal" class="auth-modal">

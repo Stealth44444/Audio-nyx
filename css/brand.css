@@ -48,6 +48,41 @@
     
     /* 그림자 */
     --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+    /* === 2024-2025 모바일 UI/UX 트렌드 적용 === */
+
+    /* === 모바일 우선 변수 === */
+    --touch-target-min: 44px;
+    --touch-target-comfort: 48px;
+    
+    /* 모바일 간격 */
+    --mobile-spacing-xs: 8px;
+    --mobile-spacing-sm: 16px;
+    --mobile-spacing-md: 24px;
+    --mobile-spacing-lg: 32px;
+    --mobile-spacing-xl: 48px;
+    
+    /* 모바일 타이포그래피 */
+    --mobile-text-xs: 12px;
+    --mobile-text-sm: 14px;
+    --mobile-text-base: 16px;
+    --mobile-text-lg: 18px;
+    --mobile-text-xl: 20px;
+    --mobile-text-2xl: 24px;
+    --mobile-text-3xl: 28px;
+    --mobile-text-4xl: 32px;
+    
+    /* 모바일 그림자 */
+    --mobile-shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --mobile-shadow-card: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --mobile-shadow-floating: 0 8px 24px rgba(0, 0, 0, 0.2);
+    
+    /* 모바일 테두리 반경 */
+    --mobile-radius-xs: 4px;
+    --mobile-radius-sm: 6px;
+    --mobile-radius-md: 8px;
+    --mobile-radius-lg: 12px;
+    --mobile-radius-xl: 16px;
 }
 
 /* === 기본 스타일 === */
@@ -474,34 +509,1223 @@ ul {
     .key-features-section .section-title {
         font-size: 2.2rem;
     }
+    
+    .insights-flex-layout {
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    
+    .insights-left {
+        flex: none;
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+        order: 1;
+    }
+    
+    .insights-title-container {
+        text-align: center;
+    }
+    
+    .insights-title, .insights-subcopy {
+        text-align: center;
+    }
+    
+    .main-graph-card {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+    
+    .main-graph-card canvas {
+        height: 350px !important;
+    }
+    
+    .tracks-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
 }
 
+@media (max-width: 900px) {
+    .platform-logos {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .insights-left {
+        flex: none;
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+    }
+    
+    .insights-title-container {
+        text-align: center;
+        padding: 0;
+    }
+    
+    .insights-title, .insights-subcopy {
+        text-align: center;
+    }
+    
+    .main-graph-card {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .main-graph-card canvas {
+        height: 280px !important;
+    }
+    
+    .about-audionyx-headline {
+        font-size: 1.6rem;
+    }
+    
+    .about-audionyx-subcopy {
+        font-size: 1rem;
+    }
+}
+
+/* === 2024-2025 최신 모바일 UI/UX 트렌드 적용 === */
 @media (max-width: 768px) {
+    /* 모바일에서 기존 그래프 섹션 숨기기 */
+    .insights-v2.audionyx-graphs-section {
+        display: none;
+    }
+    
+    /* 모바일 전용 수익 섹션 표시 */
+    .mobile-revenue-section {
+        display: block !important;
+    }
+
+    /* 2024 트렌드: 히어로 섹션 - 감정적 연결 + 미니멀리즘 */
+    .brand-hero-banner { 
+        height: 60vh; 
+        min-height: 400px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .brand-hero-video { 
+        height: 60vh; 
+        min-height: 400px;
+        object-fit: cover;
+        width: 100%;
+    }
+    
+    .brand-hero-overlay {
+        background: linear-gradient(
+            180deg, 
+            rgba(0,0,0,0.3) 0%, 
+            rgba(0,0,0,0.6) 50%,
+            rgba(0,0,0,0.8) 100%
+        );
+    }
+    
+    .brand-hero-title { 
+        font-size: var(--mobile-text-4xl);
+        line-height: 1.2;
+        margin-bottom: var(--mobile-spacing-sm);
+        text-align: center;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+    
+    .brand-hero-subtitle { 
+        font-size: var(--mobile-text-lg);
+        line-height: 1.4;
+        text-align: center;
+        opacity: 0.9;
+        max-width: 300px;
+        margin: 0 auto var(--mobile-spacing-lg);
+    }
+    
+    .brand-hero-gradient-bottom { 
+        height: 20vh; 
+        min-height: 80px;
+        background: linear-gradient(to top, var(--dark-bg), transparent);
+    }
+
+    /* 2024 트렌드: 인사이트 섹션 - 카드 기반 디자인 */
+    .insights-v2 {
+        padding: var(--mobile-spacing-xl) var(--mobile-spacing-sm);
+        background: var(--dark-bg);
+    }
+    
+    .insights-flex-layout {
+        flex-direction: column;
+        gap: var(--mobile-spacing-lg);
+        align-items: center;
+    }
+    
+    .insights-left {
+        flex: none;
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+    }
+    
+    .insights-right {
+        flex: none;
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+    }
+    
+    .insights-title-container {
+        text-align: center;
+        padding: var(--mobile-spacing-md);
+        background: rgba(12, 12, 12, 0.8);
+        border-radius: var(--mobile-radius-lg);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(62, 180, 137, 0.1);
+    }
+    
+    .insights-subtitle {
+        font-size: var(--mobile-text-xs);
+        padding: var(--mobile-spacing-xs) var(--mobile-spacing-md);
+        margin-bottom: var(--mobile-spacing-sm);
+        border-radius: 20px;
+    }
+    
+    .insights-title {
+        font-size: var(--mobile-text-3xl);
+        line-height: 1.3;
+        margin-bottom: var(--mobile-spacing-sm);
+    }
+    
+    .insights-subcopy {
+        font-size: var(--mobile-text-base);
+        line-height: 1.5;
+        opacity: 0.85;
+    }
+    
+    /* 그래프 카드 - 2024 카드 디자인 */
+    .main-graph-card {
+        width: 100%;
+        max-width: none;
+        padding: var(--mobile-spacing-md);
+        border-radius: var(--mobile-radius-lg);
+        background: rgba(12, 12, 12, 0.9);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(62, 180, 137, 0.15);
+        box-shadow: var(--mobile-shadow-card);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .main-graph-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--mobile-shadow-floating);
+        border-color: rgba(62, 180, 137, 0.3);
+    }
+    
+    .main-graph-card canvas {
+        height: 300px !important;
+        border-radius: var(--mobile-radius-md);
+    }
+
+    /* 2024 트렌드: 핵심 기능 섹션 - 스택 카드 레이아웃 */
     .key-features-section {
-        padding: 6rem 0;
+        padding: var(--mobile-spacing-xl) var(--mobile-spacing-sm);
     }
     
     .cards-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--mobile-spacing-md);
+        max-width: 100%;
+        margin-top: var(--mobile-spacing-lg);
+    }
+    
+    .feature-card {
+        width: 100%;
+        padding: var(--mobile-spacing-lg);
+        border-radius: var(--mobile-radius-lg);
+        background: linear-gradient(135deg, rgba(12,12,12,0.9) 0%, rgba(62,180,137,0.05) 100%);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(62, 180, 137, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--mobile-shadow-floating);
+        border-color: rgba(62, 180, 137, 0.3);
+    }
+    
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+    
+    .icon-container {
+        width: var(--touch-target-comfort);
+        height: var(--touch-target-comfort);
+        margin-bottom: var(--mobile-spacing-sm);
+        background: rgba(62, 180, 137, 0.1);
+        border-radius: var(--mobile-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .feature-icon {
+        width: 24px;
+        height: 24px;
+        color: var(--color-primary);
+    }
+    
+    .feature-card h3 {
+        font-size: var(--mobile-text-xl);
+        margin-bottom: var(--mobile-spacing-xs);
+        color: #fff;
+        font-weight: 700;
+    }
+    
+    .feature-description {
+        font-size: var(--mobile-text-sm);
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+    }
+    
+    .key-features-section .section-title {
+        font-size: var(--mobile-text-3xl);
+        text-align: center;
+        margin-bottom: var(--mobile-spacing-lg);
+    }
+
+    /* 2024 트렌드: 음원 미리보기 - 모바일 최적화 카드 */
+    .preview-section {
+        padding: var(--mobile-spacing-xl) var(--mobile-spacing-sm);
+    }
+    
+    .tracks-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--mobile-spacing-md);
+        max-width: 100%;
+        margin-top: var(--mobile-spacing-lg);
+    }
+    
+    .track-card {
+        background: rgba(12, 12, 12, 0.9);
+        border-radius: var(--mobile-radius-lg);
+        padding: var(--mobile-spacing-md);
+        border: 1px solid rgba(62, 180, 137, 0.1);
+        backdrop-filter: blur(15px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        touch-action: manipulation;
+    }
+    
+    .track-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(62, 180, 137, 0.3);
+        box-shadow: var(--mobile-shadow-card);
+    }
+    
+    .track-visual {
+        height: 120px;
+        border-radius: var(--mobile-radius-md);
+        margin-bottom: var(--mobile-spacing-sm);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .track-play-btn {
+        width: var(--touch-target-comfort);
+        height: var(--touch-target-comfort);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(62, 180, 137, 0.9);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        touch-action: manipulation;
+    }
+    
+    .track-play-btn:hover {
+        background: var(--color-primary);
+        transform: scale(1.1);
+    }
+    
+    .track-info {
+        margin-bottom: var(--mobile-spacing-sm);
+    }
+    
+    .track-name {
+        font-size: var(--mobile-text-base);
+        font-weight: 600;
+        margin-bottom: var(--mobile-spacing-xs);
+        color: #fff;
+    }
+    
+    .track-genre {
+        font-size: var(--mobile-text-sm);
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .track-actions {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .copy-cid-btn {
+        width: 100%;
+        min-height: var(--touch-target-min);
+        font-size: var(--mobile-text-sm);
+        padding: var(--mobile-spacing-sm);
+        border-radius: var(--mobile-radius-md);
+        background: rgba(62, 180, 137, 0.15);
+        border: 1px solid rgba(62, 180, 137, 0.3);
+        color: var(--color-primary);
+        transition: all 0.3s ease;
+        touch-action: manipulation;
+    }
+    
+    .copy-cid-btn:hover {
+        background: rgba(62, 180, 137, 0.25);
+        transform: translateY(-2px);
+    }
+}
+
+.brand-hero-banner {
+    position: relative;
+    height: 100vh;
+    min-height: 500px;
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--darker-bg);
+    overflow: hidden;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    overflow-x: hidden;
+}
+
+.brand-hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    min-height: 500px;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.brand-hero-gradient-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30vh;
+    min-height: 120px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 60%, #000 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.brand-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+    z-index: 1;
+}
+
+.brand-hero-banner .hero-inner {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: var(--color-text-light);
+    max-width: 800px;
+    padding: 0 1.5rem;
+    width: 100%;
+}
+
+.page-content {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.brand-hero-banner, .brand-hero-video, .brand-hero-overlay, .brand-hero-banner .hero-inner {
+    z-index: 10;
+}
+
+/* === 요약 카드 (수익 증가/초기 비용/자동 정산) === */
+.insights-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+.summary-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(12, 12, 12, 0.7);
+    border: 1.5px solid var(--color-primary);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    transition: border-color 0.3s, transform 0.3s;
+}
+.summary-card:hover { border-color: var(--color-primary-hover); transform: translateY(-6px); }
+.summary-card.highlight-card {
+    background: rgba(12, 12, 12, 0.8);
+}
+.summary-icon { font-size: 2rem; }
+.percentage-highlight { color: var(--color-primary); font-weight: 700; font-size: 1.4rem; }
+
+/* === 멀티 플랫폼 수익화 섹션 === */
+.multiplatform-section {
+    background: var(--color-bg);
+    padding: 8rem 4vw 8rem 4vw;
+    position: relative;
+    overflow: hidden;
+}
+
+.multiplatform-section .about-audionyx-title {
+    color: var(--color-primary);
+    text-shadow:
+      0 0 4px var(--color-primary),
+      0 0 8px var(--color-primary),
+      0 0 16px rgba(23,255,210,0.4);
+}
+
+.platform-logos {
+    position: absolute;
+    right: 4vw;
+    bottom: 3vw;
+    display: flex;
+    gap: 2.5rem;
+    z-index: 2;
+}
+
+@media (max-width: 900px) {
+    .platform-logos {
+        position: static;
+        margin: 2.5rem 0 0 0;
+        justify-content: flex-start;
+    }
+}
+
+.multiplatform-header { text-align: center; max-width: 900px; margin: 0 auto; }
+.multiplatform-title { font-size: 2.5rem; font-weight: 700; line-height: 1.3; margin-top: 0.8rem; }
+.multiplatform-desc { font-size: 1.125rem; margin-top: 1rem; color: rgba(255,255,255,0.85); }
+.platform-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+.platform-card {
+    background: rgba(12, 12, 12, 0.7);
+    border-radius: 20px;
+    padding: 2rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+    border: 1.5px solid var(--color-primary);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+    transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
+}
+.platform-card:hover { border-color: var(--color-primary-hover); transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.45); }
+.card-content { position: relative; z-index: 2; display:flex; flex-direction:column; align-items:center; gap:0.6rem; text-align:center; color:#fff; }
+.platform-logo img { width:56px; height:56px; }
+.platform-percentage { margin-top: 0.4rem; }
+.percentage-value { font-size:1.6rem; font-weight:700; color: var(--color-primary); }
+.card-bg { position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
+.card-shape { position:absolute; width:140%; height:140%; top:-20%; left:-20%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%); transform: rotate(45deg); }
+
+/* === 음원 미리보기 섹션 - 완전 리디자인 === */
+.preview-section {
+    padding: 8rem 0;
+    background: var(--darker-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.preview-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(62, 180, 137, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 30% 70%, rgba(62, 180, 137, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.preview-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.preview-section .section-header {
+    text-align: left;
+    margin-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding-left: 0;
+}
+
+.preview-section .about-audionyx-title {
+    color: var(--color-primary);
+    text-shadow:
+      0 0 4px var(--color-primary),
+      0 0 8px var(--color-primary),
+      0 0 16px rgba(62, 180, 137, 0.4);
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-left: 0;
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.5px;
+}
+
+.preview-section .about-audionyx-headline {
+    font-size: clamp(1.5rem, 3vw + 1rem, 2.2rem);
+    color: #fff;
+    line-height: 1.25;
+    font-weight: 400;
+    margin-left: 1.5rem;
+    margin-bottom: 0.2rem;
+}
+
+.preview-section .about-audionyx-subcopy {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+    font-weight: 400;
+    margin-left: 1.5rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+
+@keyframes fireWorkBounce {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-5deg); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    75% { transform: scale(1.1) rotate(-2deg); }
+}
+
+/* 웨이브폼 펄스 애니메이션 */
+@keyframes waveformPulse {
+    0%, 100% { 
+        filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.6));
+        stroke-width: 2;
+    }
+    50% { 
+        filter: drop-shadow(0 0 16px rgba(62, 180, 137, 1));
+        stroke-width: 3;
+    }
+}
+
+/* 트랙 쇼케이스 영역 */
+.tracks-showcase {
+    margin-top: 4rem;
+}
+
+.tracks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 트랙 카드 스타일 */
+.track-card {
+    background: rgba(12, 12, 12, 0.8);
+    border-radius: 20px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(62, 180, 137, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    transform: translateY(0);
+}
+
+.track-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(62, 180, 137, 0.05) 0%, 
+        transparent 30%, 
+        transparent 70%, 
+        rgba(62, 180, 137, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.track-card::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, var(--color-primary), transparent, var(--color-primary));
+    border-radius: 22px;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+.track-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(62, 180, 137, 0.4);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(62, 180, 137, 0.15);
+}
+
+.track-card:hover::before {
+    opacity: 1;
+}
+
+.track-card:hover::after {
+    opacity: 0.6;
+}
+
+/* 트랙 비주얼 영역 */
+.track-visual {
+    position: relative;
+    height: 180px;
+    background: linear-gradient(135deg, rgba(12, 12, 12, 0.9) 0%, rgba(18, 18, 24, 0.9) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.track-waveform {
+    width: 80%;
+    height: 60px;
+    position: relative;
+}
+
+.waveform-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.4));
+    transition: all 0.4s ease;
+}
+
+.track-card:hover .waveform-svg {
+    filter: drop-shadow(0 0 16px rgba(62, 180, 137, 0.6));
+    transform: scale(1.05);
+}
+
+.waveform-svg path {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: drawWaveform 2s ease-out forwards;
+}
+
+@keyframes drawWaveform {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* 웨이브폼 펄스 애니메이션 */
+@keyframes waveformPulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.4));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(62, 180, 137, 0.8));
+        transform: scale(1.02);
+    }
+}
+
+/* 재생 중 상태 스타일 */
+.track-play-btn.playing {
+    background: #ff6b35;
+    animation: playingPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes playingPulse {
+    0%, 100% {
+        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6);
+        transform: scale(1.05);
+    }
+}
+
+/* 재생 중인 트랙 카드 전체 효과 */
+.track-card.playing {
+    border-color: rgba(255, 107, 53, 0.6);
+    box-shadow: 0 16px 40px rgba(255, 107, 53, 0.2);
+}
+
+.track-card.playing .track-overlay {
+    opacity: 1;
+    background: rgba(255, 107, 53, 0.1);
+}
+
+/* 트랙 오버레이 (재생 버튼) */
+.track-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(2px);
+}
+
+.track-card:hover .track-overlay {
+    opacity: 1;
+}
+
+.track-play-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #000;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
+    transform: scale(0.8);
+}
+
+.track-card:hover .track-play-btn {
+    transform: scale(1);
+    box-shadow: 0 12px 35px rgba(62, 180, 137, 0.6);
+}
+
+.track-play-btn:hover {
+    transform: scale(1.1) !important;
+    background: #2fcc80;
+}
+
+.track-play-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/* 트랙 정보 영역 */
+.track-info {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.track-meta {
+    flex: 1;
+}
+
+.track-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
+}
+
+.track-genre {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+}
+
+.track-actions {
+    flex-shrink: 0;
+}
+
+.copy-cid-btn {
+    background: rgba(62, 180, 137, 0.15);
+    color: var(--color-primary);
+    border: 1px solid rgba(62, 180, 137, 0.3);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.copy-cid-btn:hover {
+    background: rgba(62, 180, 137, 0.25);
+    border-color: rgba(62, 180, 137, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(62, 180, 137, 0.2);
+}
+
+/* CTA 영역 */
+.tracks-cta {
+        text-align: center;
+    margin-top: 3rem;
+}
+
+.tracks-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: var(--color-primary);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 25px rgba(62, 180, 137, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.tracks-cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.tracks-cta-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(62, 180, 137, 0.5);
+    background: #2fcc80;
+}
+
+.tracks-cta-btn:hover::before {
+    left: 100%;
+}
+
+.tracks-cta-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.tracks-cta-btn:hover svg {
+    transform: translateX(5px);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .tracks-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .preview-section {
+        padding: 6rem 0;
+    }
+    
+    .tracks-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
         margin-top: 3rem;
     }
     
+    .track-visual {
+        height: 140px;
+    }
+    
+    .track-play-btn {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .track-info {
+        padding: 1.2rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .track-actions {
+        align-self: stretch;
+    }
+    
+    .copy-cid-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ===== Audionyx란? 섹션 ===== */
+.about-audionyx-section {
+    background: var(--darker-bg);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 10rem 0;
+}
+
+.about-audionyx-section .container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+.about-audionyx-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+}
+
+.about-audionyx-section .about-audionyx-title {
+    /* 네온 민트 컬러 */
+    color: var(--color-primary); /* or #17FFD2 */
+    /* (선택) 약간의 네온 글로우 효과 */
+    text-shadow:
+      0 0 4px var(--color-primary),
+      0 0 8px var(--color-primary),
+      0 0 16px rgba(23,255,210,0.4);
+}
+
+.about-audionyx-headline {
+    font-size: clamp(1.75rem, 4vw + 1rem, 3rem);
+    color: #fff;
+    line-height: 1.2;
+    margin: 0;
+  }
+  
+  .about-audionyx-subcopy {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .no-break {
+    white-space: nowrap;
+  }
+  
+  /* 반응형 조정 */
+  @media (max-width: 600px) {
+    .about-audionyx-headline {
+      font-size: 2rem;
+    }
+    .about-audionyx-subcopy {
+      font-size: 0.95rem;
+    }
+  }
+  
+[data-animate] {
+  will-change: opacity, transform;
+  transition: opacity 1.8s cubic-bezier(.4,0,.2,1), transform 1.8s cubic-bezier(.4,0,.2,1);
+}
+[data-animate]:not(.animate-fade-up):not(.animate-fade-in) {
+  opacity: 0 !important;
+  transform: translateY(40px) !important;
+}
+.animate-fade-up {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+.animate-fade-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.svg-animate-stroke {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    opacity: 0.7;
+    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), opacity 0.8s;
+}
+
+/* 추가 호버 효과 */
+.flow-image:hover .wave-animation {
+    /* 애니메이션 지속시간 변경 효과 제거 */
+    /* animation-duration: 1.5s; */
+}
+
+.flow-image:hover .copy-button {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(62, 180, 137, 0.5);
+}
+
+.flow-image:hover .check-icon {
+    animation-duration: 1.5s;
+}
+
+.flow-image:hover .data-card {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
+}
+
+.glass-card {
+    margin-bottom: 0 !important;
+}
+
+/* 2024 트렌드: 480px 이하 초소형 기기 최적화 */
+@media (max-width: 480px) {
+    :root {
+        --mobile-spacing-xs: 6px;
+        --mobile-spacing-sm: 12px;
+        --mobile-spacing-md: 18px;
+        --mobile-spacing-lg: 24px;
+        --mobile-spacing-xl: 36px;
+    }
+    
+    .brand-hero-title { 
+        font-size: var(--mobile-text-3xl);
+    }
+    
+    .brand-hero-subtitle { 
+        font-size: var(--mobile-text-base);
+        max-width: 280px;
+    }
+    
+    .insights-title {
+        font-size: var(--mobile-text-2xl);
+    }
+    
     .feature-card {
-        padding: 1.8rem;
+        padding: var(--mobile-spacing-md);
     }
     
-    .key-features-section .section-title {
-        font-size: 1.9rem;
+    .flow {
+        padding: var(--mobile-spacing-md);
     }
     
-    .icon-container {
-        width: 70px;
-        height: 70px;
+    .track-card {
+        padding: var(--mobile-spacing-sm);
     }
     
-    .feature-icon {
-        font-size: 2.2rem;
+    .track-visual {
+        height: 100px;
+    }
+    
+    .platform-cards-grid {
+        grid-template-columns: 1fr;
+        gap: var(--mobile-spacing-sm);
+    }
+    
+    .platform-card {
+        aspect-ratio: 2/1;
+        padding: var(--mobile-spacing-sm);
+    }
+    
+    .about-audionyx-title {
+        font-size: var(--mobile-text-2xl);
+    }
+    
+    .about-audionyx-headline {
+        font-size: var(--mobile-text-lg);
+    }
+}
+
+/* 2024 트렌드: 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* 2024 트렌드: 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .feature-card,
+    .flow,
+    .track-card,
+    .platform-card,
+    .main-graph-card {
+        border-width: 2px;
+        border-color: var(--color-primary);
+    }
+}
+
+/* 2024 트렌드: 마이크로 인터랙션 */
+@keyframes cardPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 모바일에서 인터랙티브 요소 애니메이션 */
+@media (max-width: 768px) {
+    .feature-card.animate-fade-up,
+    .flow.animate-fade-up,
+    .track-card[data-track] {
+        animation: slideInFromBottom 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    .track-card:active,
+    .feature-card:active,
+    .copy-cid-btn:active,
+    .track-play-btn:active {
+        animation: cardPulse 0.2s ease-out;
     }
 }
 
@@ -547,11 +1771,213 @@ ul {
     font-weight: 500;
 }
 
+/* 데스크톱용 플로우 컨테이너 */
 .flows-container {
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
     position: relative;
+}
+
+/* 모바일 플로우는 기본적으로 숨김 */
+.mobile-flows-wrapper {
+    display: none;
+}
+
+/* === 모바일 전용 수익 섹션 === */
+.mobile-revenue-section {
+    display: none; /* 기본적으로 숨김 - 모바일에서만 표시 */
+    padding: var(--spacing-xl) 0;
+    background: var(--darker-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-revenue-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(62, 180, 137, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(62, 180, 137, 0.03) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.mobile-revenue-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-sm);
+}
+
+.mobile-revenue-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.2;
+}
+
+.mobile-revenue-subtitle {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+}
+
+.mobile-stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    padding: 0 var(--spacing-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.mobile-comparison-card {
+    background: linear-gradient(135deg, rgba(12,12,12,0.95) 0%, rgba(62,180,137,0.08) 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(62, 180, 137, 0.2);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-comparison-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
+.mobile-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.mobile-card-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.mobile-card-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+}
+
+.mobile-revenue-amount {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+    text-shadow: 0 0 20px rgba(62, 180, 137, 0.4);
+}
+
+.mobile-revenue-description {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+.mobile-vs-card {
+    background: rgba(12, 12, 12, 0.9);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.mobile-before-after {
+    text-align: center;
+}
+
+.mobile-vs-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mobile-vs-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+}
+
+.mobile-before-after.before .mobile-vs-amount {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.mobile-before-after.after .mobile-vs-amount {
+    color: var(--color-primary);
+}
+
+.mobile-vs-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.mobile-benefit-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+}
+
+.mobile-benefit-card {
+    background: rgba(62, 180, 137, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    text-align: center;
+    border: 1px solid rgba(62, 180, 137, 0.3);
+    transition: all 0.3s ease;
+}
+
+.mobile-benefit-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(62, 180, 137, 0.5);
+    background: rgba(62, 180, 137, 0.15);
+}
+
+.mobile-benefit-icon {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto var(--spacing-sm);
+    color: var(--color-primary);
+}
+
+.mobile-benefit-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.mobile-benefit-description {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.3;
 }
 
 .flow-item,
@@ -1042,760 +2468,610 @@ ul {
     margin: 0;
 }
 
-/* 반응형 스타일 */
-@media (max-width: 1024px) {
-    .insights-flex-layout {
-        flex-direction: column;
-        gap: 2rem;
-        align-items: stretch;
-    }
-    .insights-left {
-        max-width: 100%;
-        min-width: 0;
-        justify-content: center;
-        align-items: flex-start;
-        margin-bottom: 1.5rem;
-    }
-    .insights-title-container {
-        align-items: flex-start;
-        text-align: left;
-    }
-    .insights-title, .insights-subcopy {
-        text-align: left;
-    }
-    .main-graph-card {
-        max-width: 100%;
-        min-width: 0;
-        min-height: 320px;
-        padding: 1.5rem 1rem 1.5rem 1rem;
-    }
-    .main-graph-card canvas {
-        height: 220px !important;
-        max-height: 260px;
-    }
-}
-
-@media (max-width: 600px) {
-    .insights-left {
-        max-width: 100%;
-        min-width: 0;
-        justify-content: center;
-        align-items: flex-start;
-    }
-    .insights-title-container {
-        align-items: flex-start;
-        text-align: left;
-    }
-    .insights-title, .insights-subcopy {
-        text-align: left;
-    }
-    .main-graph-card {
-        min-height: 200px;
-        padding: 1rem 0.5rem 1rem 0.5rem;
-    }
-    .main-graph-card canvas {
-        height: 140px !important;
-        max-height: 180px;
-    }
-}
-
-.brand-hero-banner {
-    position: relative;
-    height: 100vh;
-    min-height: 500px;
-    width: 100%;
-    max-width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--darker-bg);
-    overflow: hidden;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    overflow-x: hidden;
-}
-
-.brand-hero-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    min-height: 500px;
-    object-fit: cover;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.brand-hero-gradient-bottom {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 30vh;
-    min-height: 120px;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 60%, #000 100%);
-    z-index: 2;
-    pointer-events: none;
-}
-
-.brand-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
-    z-index: 1;
-}
-
-.brand-hero-banner .hero-inner {
-    position: relative;
-    z-index: 3;
-    text-align: center;
-    color: var(--color-text-light);
-    max-width: 800px;
-    padding: 0 1.5rem;
-    width: 100%;
-}
-
+/* === 2024-2025 최신 모바일 UI/UX 트렌드 적용 === */
 @media (max-width: 768px) {
-    .brand-hero-banner { height: 50vh; min-height: 320px; }
-    .brand-hero-video { height: 50vh; min-height: 320px; }
-    .brand-hero-title { font-size: 2.5rem; }
-    .brand-hero-subtitle { font-size: 1rem; }
-    .brand-hero-gradient-bottom { height: 18vh; min-height: 60px; }
-}
-
-.page-content {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
-
-.brand-hero-banner, .brand-hero-video, .brand-hero-overlay, .brand-hero-banner .hero-inner {
-    z-index: 10;
-}
-
-/* === 요약 카드 (수익 증가/초기 비용/자동 정산) === */
-.insights-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-.summary-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: rgba(12, 12, 12, 0.7);
-    border: 1.5px solid var(--color-primary);
-    border-radius: 16px;
-    padding: 1.2rem 1.5rem;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-    transition: border-color 0.3s, transform 0.3s;
-}
-.summary-card:hover { border-color: var(--color-primary-hover); transform: translateY(-6px); }
-.summary-card.highlight-card {
-    background: rgba(12, 12, 12, 0.8);
-}
-.summary-icon { font-size: 2rem; }
-.percentage-highlight { color: var(--color-primary); font-weight: 700; font-size: 1.4rem; }
-
-/* === 멀티 플랫폼 수익화 섹션 === */
-.multiplatform-section {
-    background: var(--color-bg);
-    padding: 8rem 4vw 8rem 4vw;
-    position: relative;
-    overflow: hidden;
-}
-
-.multiplatform-section .about-audionyx-title {
-    color: var(--color-primary);
-    text-shadow:
-      0 0 4px var(--color-primary),
-      0 0 8px var(--color-primary),
-      0 0 16px rgba(23,255,210,0.4);
-}
-
-.platform-logos {
-    position: absolute;
-    right: 4vw;
-    bottom: 3vw;
-    display: flex;
-    gap: 2.5rem;
-    z-index: 2;
-}
-
-@media (max-width: 900px) {
-    .platform-logos {
-        position: static;
-        margin: 2.5rem 0 0 0;
-        justify-content: flex-start;
+    /* 2024 트렌드: How It Works - 스와이프 카드 UI */
+    .how-it-works {
+        padding: var(--mobile-spacing-xl) 0;
+        overflow: hidden;
     }
-}
-
-.multiplatform-header { text-align: center; max-width: 900px; margin: 0 auto; }
-.multiplatform-title { font-size: 2.5rem; font-weight: 700; line-height: 1.3; margin-top: 0.8rem; }
-.multiplatform-desc { font-size: 1.125rem; margin-top: 1rem; color: rgba(255,255,255,0.85); }
-.platform-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-    gap: 2rem;
-    margin-top: 2.5rem;
-}
-.platform-card {
-    background: rgba(12, 12, 12, 0.7);
-    border-radius: 20px;
-    padding: 2rem 1.8rem;
-    position: relative;
-    overflow: hidden;
-    border: 1.5px solid var(--color-primary);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
-    transition: border-color 0.35s, transform 0.35s, box-shadow 0.35s;
-}
-.platform-card:hover { border-color: var(--color-primary-hover); transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.45); }
-.card-content { position: relative; z-index: 2; display:flex; flex-direction:column; align-items:center; gap:0.6rem; text-align:center; color:#fff; }
-.platform-logo img { width:56px; height:56px; }
-.platform-percentage { margin-top: 0.4rem; }
-.percentage-value { font-size:1.6rem; font-weight:700; color: var(--color-primary); }
-.card-bg { position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
-.card-shape { position:absolute; width:140%; height:140%; top:-20%; left:-20%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%); transform: rotate(45deg); }
-
-/* === 음원 미리보기 섹션 - 완전 리디자인 === */
-.preview-section {
-    padding: 8rem 0;
-    background: var(--darker-bg);
-    position: relative;
-    overflow: hidden;
-}
-
-.preview-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(62, 180, 137, 0.04) 0%, transparent 50%),
-                radial-gradient(circle at 30% 70%, rgba(62, 180, 137, 0.03) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-.preview-section .container {
-    position: relative;
-    z-index: 2;
-}
-
-.preview-section .section-header {
-    text-align: left;
-    margin-bottom: 4rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-    padding-left: 0;
-}
-
-.preview-section .about-audionyx-title {
-    color: var(--color-primary);
-    text-shadow:
-      0 0 4px var(--color-primary),
-      0 0 8px var(--color-primary),
-      0 0 16px rgba(62, 180, 137, 0.4);
-    font-size: 1.05rem;
-    font-weight: 500;
-    margin-left: 0;
-    margin-bottom: 0.2rem;
-    letter-spacing: 0.5px;
-}
-
-.preview-section .about-audionyx-headline {
-    font-size: clamp(1.5rem, 3vw + 1rem, 2.2rem);
-    color: #fff;
-    line-height: 1.25;
-    font-weight: 400;
-    margin-left: 1.5rem;
-    margin-bottom: 0.2rem;
-}
-
-.preview-section .about-audionyx-subcopy {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.6;
-    font-weight: 400;
-    margin-left: 1.5rem;
-    margin-bottom: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-}
-
-
-@keyframes fireWorkBounce {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.1) rotate(-5deg); }
-    50% { transform: scale(1.2) rotate(5deg); }
-    75% { transform: scale(1.1) rotate(-2deg); }
-}
-
-/* 트랙 쇼케이스 영역 */
-.tracks-showcase {
-    margin-top: 4rem;
-}
-
-.tracks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
-    margin-bottom: 3rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* 트랙 카드 스타일 */
-.track-card {
-    background: rgba(12, 12, 12, 0.8);
-    border-radius: 20px;
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(62, 180, 137, 0.15);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    transform: translateY(0);
-}
-
-.track-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(62, 180, 137, 0.05) 0%, 
-        transparent 30%, 
-        transparent 70%, 
-        rgba(62, 180, 137, 0.03) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-}
-
-.track-card::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(135deg, var(--color-primary), transparent, var(--color-primary));
-    border-radius: 22px;
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.4s ease;
-}
-
-.track-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: rgba(62, 180, 137, 0.4);
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(62, 180, 137, 0.15);
-}
-
-.track-card:hover::before {
-    opacity: 1;
-}
-
-.track-card:hover::after {
-    opacity: 0.6;
-}
-
-/* 트랙 비주얼 영역 */
-.track-visual {
-    position: relative;
-    height: 180px;
-    background: linear-gradient(135deg, rgba(12, 12, 12, 0.9) 0%, rgba(18, 18, 24, 0.9) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-}
-
-.track-waveform {
-    width: 80%;
-    height: 60px;
-    position: relative;
-}
-
-.waveform-svg {
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.4));
-    transition: all 0.4s ease;
-}
-
-.track-card:hover .waveform-svg {
-    filter: drop-shadow(0 0 16px rgba(62, 180, 137, 0.6));
-    transform: scale(1.05);
-}
-
-.waveform-svg path {
-    stroke-dasharray: 300;
-    stroke-dashoffset: 300;
-    animation: drawWaveform 2s ease-out forwards;
-}
-
-@keyframes drawWaveform {
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
-/* 웨이브폼 펄스 애니메이션 */
-@keyframes waveformPulse {
-    0%, 100% {
-        filter: drop-shadow(0 0 8px rgba(62, 180, 137, 0.4));
-        transform: scale(1);
-    }
-    50% {
-        filter: drop-shadow(0 0 20px rgba(62, 180, 137, 0.8));
-        transform: scale(1.02);
-    }
-}
-
-/* 재생 중 상태 스타일 */
-.track-play-btn.playing {
-    background: #ff6b35;
-    animation: playingPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes playingPulse {
-    0%, 100% {
-        box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 12px 35px rgba(255, 107, 53, 0.6);
-        transform: scale(1.05);
-    }
-}
-
-/* 트랙 오버레이 (재생 버튼) */
-.track-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(2px);
-}
-
-.track-card:hover .track-overlay {
-    opacity: 1;
-}
-
-.track-play-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    color: #000;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
-    transform: scale(0.8);
-}
-
-.track-card:hover .track-play-btn {
-    transform: scale(1);
-    box-shadow: 0 12px 35px rgba(62, 180, 137, 0.6);
-}
-
-.track-play-btn:hover {
-    transform: scale(1.1) !important;
-    background: #2fcc80;
-}
-
-.track-play-btn:active {
-    transform: scale(0.95) !important;
-}
-
-/* 트랙 정보 영역 */
-.track-info {
-    padding: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
-.track-meta {
-    flex: 1;
-}
-
-.track-name {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 0.4rem;
-    line-height: 1.3;
-}
-
-.track-genre {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 400;
-}
-
-.track-actions {
-    flex-shrink: 0;
-}
-
-.copy-cid-btn {
-    background: rgba(62, 180, 137, 0.15);
-    color: var(--color-primary);
-    border: 1px solid rgba(62, 180, 137, 0.3);
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.copy-cid-btn:hover {
-    background: rgba(62, 180, 137, 0.25);
-    border-color: rgba(62, 180, 137, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(62, 180, 137, 0.2);
-}
-
-/* CTA 영역 */
-.tracks-cta {
+    
+    .how-it-works .section-header {
         text-align: center;
-    margin-top: 3rem;
-}
-
-.tracks-cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-    background: var(--color-primary);
-    color: #000;
-    border: none;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 25px rgba(62, 180, 137, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.tracks-cta-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.tracks-cta-btn:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(62, 180, 137, 0.5);
-    background: #2fcc80;
-}
-
-.tracks-cta-btn:hover::before {
-    left: 100%;
-}
-
-.tracks-cta-btn svg {
-    transition: transform 0.3s ease;
-}
-
-.tracks-cta-btn:hover svg {
-    transform: translateX(5px);
-}
-
-/* 반응형 디자인 */
-@media (max-width: 1024px) {
-    .tracks-grid {
-        gap: 2rem;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        margin-bottom: var(--mobile-spacing-lg);
+        padding: 0 var(--mobile-spacing-sm);
     }
     
-    /* .preview-section .section-title {
-        font-size: 2.2rem;
-    } */
-}
-
-@media (max-width: 768px) {
-    .preview-section {
-        padding: 6rem 0;
+    .how-it-works .section-title {
+        font-size: var(--mobile-text-3xl);
+        text-align: center;
     }
     
-    .tracks-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        margin-top: 3rem;
+    .how-it-works .section-subtitle {
+        text-align: center;
+        margin-bottom: var(--mobile-spacing-md);
     }
     
-    /* .preview-section .section-title {
-        font-size: 1.9rem;
-    } */
-    
-    .track-visual {
-        height: 140px;
+    /* 모바일 전용 스와이프 컨테이너 */
+    .mobile-flows-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding: var(--mobile-spacing-sm) 0;
     }
     
-    .track-play-btn {
-        width: 50px;
-        height: 50px;
+    .mobile-flows-container {
+        display: flex;
+        gap: var(--mobile-spacing-md);
+        padding: 0 var(--mobile-spacing-sm);
+        scroll-snap-type: x mandatory;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
     
-    .track-info {
-        padding: 1.2rem;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
+    .mobile-flows-container::-webkit-scrollbar {
+        display: none;
     }
     
-    .track-actions {
-        align-self: stretch;
+    .mobile-flow-card {
+        flex: 0 0 calc(100vw - 64px);
+        max-width: 320px;
+        background: linear-gradient(135deg, rgba(12,12,12,0.95) 0%, rgba(62,180,137,0.08) 100%);
+        border-radius: var(--mobile-radius-xl);
+        padding: var(--mobile-spacing-lg);
+        border: 1px solid rgba(62, 180, 137, 0.15);
+        backdrop-filter: blur(20px);
+        scroll-snap-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        touch-action: manipulation;
     }
     
-    .copy-cid-btn {
+    .mobile-flow-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+        opacity: 0.8;
+    }
+    
+    .mobile-flow-card::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
         width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(62,180,137,0.1) 0%, transparent 70%);
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .mobile-flow-card:hover::after {
+        opacity: 1;
+    }
+    
+    .mobile-step-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: var(--color-primary);
+        color: #000;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: var(--mobile-text-sm);
+        margin-bottom: var(--mobile-spacing-md);
+        box-shadow: 0 4px 16px rgba(62, 180, 137, 0.4);
+    }
+    
+    .mobile-interaction-preview {
+        width: 100%;
+        height: 180px;
+        border-radius: var(--mobile-radius-lg);
+        margin-bottom: var(--mobile-spacing-md);
+        position: relative;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(62, 180, 137, 0.2);
+    }
+    
+    /* Step 1: 음원 선택 인터랙션 */
+    .mobile-step1-preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: var(--mobile-spacing-md);
+    }
+    
+    .mobile-waveform {
+        width: 80%;
+        height: 40px;
+        background: linear-gradient(90deg, var(--color-primary) 0%, rgba(62, 180, 137, 0.3) 50%, var(--color-primary) 100%);
+        mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,20 L10,5 L20,35 L30,10 L40,30 L50,8 L60,32 L70,12 L80,28 L90,15 L100,25 L110,7 L120,33 L130,18 L140,22 L150,9 L160,31 L170,14 L180,26 L190,11 L200,20' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E") repeat-x;
+        margin-bottom: var(--mobile-spacing-sm);
+        animation: mobileWaveAnimation 2s ease-in-out infinite;
+        box-shadow: 0 0 20px rgba(62, 180, 137, 0.4);
+    }
+    
+    @keyframes mobileWaveAnimation {
+        0%, 100% { transform: scaleX(1); opacity: 0.8; }
+        50% { transform: scaleX(1.05); opacity: 1; }
+    }
+    
+    .mobile-copy-button {
+        background: var(--color-primary);
+        color: #000;
+        padding: var(--mobile-spacing-xs) var(--mobile-spacing-md);
+        border: none;
+        border-radius: var(--mobile-radius-md);
+        font-weight: 600;
+        font-size: var(--mobile-text-sm);
+        min-height: var(--touch-target-min);
+        box-shadow: 0 4px 16px rgba(62, 180, 137, 0.3);
+        transition: all 0.3s ease;
+        animation: mobileCopyPulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes mobileCopyPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(62, 180, 137, 0.5); }
+    }
+    
+    /* Step 2: 업로드 인터랙션 */
+    .mobile-step2-preview {
+        display: flex;
+        flex-direction: column;
+        padding: var(--mobile-spacing-md);
+    }
+    
+    .mobile-upload-mockup {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: var(--mobile-radius-md);
+        padding: var(--mobile-spacing-md);
+        border: 1px solid rgba(62, 180, 137, 0.2);
+    }
+    
+    .mobile-upload-header {
+        display: flex;
+        align-items: center;
+        gap: var(--mobile-spacing-xs);
+        margin-bottom: var(--mobile-spacing-sm);
+        padding-bottom: var(--mobile-spacing-xs);
+        border-bottom: 1px solid rgba(62, 180, 137, 0.1);
+    }
+    
+    .mobile-platform-icon {
+        width: 20px;
+        height: 20px;
+        background: #ff0000;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 10px;
+        font-weight: 700;
+    }
+    
+    .mobile-upload-title {
+        color: white;
+        font-size: var(--mobile-text-sm);
+        font-weight: 600;
+    }
+    
+    .mobile-input-field {
+        width: 100%;
+        padding: var(--mobile-spacing-sm);
+        background: rgba(62, 180, 137, 0.1);
+        border: 1px solid rgba(62, 180, 137, 0.3);
+        border-radius: var(--mobile-radius-sm);
+        color: white;
+        font-size: var(--mobile-text-sm);
+        margin-bottom: var(--mobile-spacing-sm);
+        animation: mobileTypingEffect 4s ease-in-out infinite;
+    }
+    
+    @keyframes mobileTypingEffect {
+        0%, 30% { width: 20%; }
+        70%, 100% { width: 100%; }
+    }
+    
+    .mobile-upload-status {
+        display: flex;
+        align-items: center;
+        gap: var(--mobile-spacing-xs);
+        color: var(--color-primary);
+        font-size: var(--mobile-text-xs);
+    }
+    
+    .mobile-check-icon {
+        width: 16px;
+        height: 16px;
+        background: var(--color-primary);
+        color: #000;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+        animation: mobileCheckPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes mobileCheckPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+    
+    /* Step 3: 대시보드 인터랙션 */
+    .mobile-step3-preview {
+        display: flex;
+        flex-direction: column;
+        padding: var(--mobile-spacing-md);
+    }
+    
+    .mobile-dashboard-mockup {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: var(--mobile-radius-md);
+        padding: var(--mobile-spacing-md);
+        border: 1px solid rgba(62, 180, 137, 0.2);
+    }
+    
+    .mobile-dashboard-header {
+        text-align: center;
+        margin-bottom: var(--mobile-spacing-sm);
+        padding-bottom: var(--mobile-spacing-xs);
+        border-bottom: 1px solid rgba(62, 180, 137, 0.1);
+    }
+    
+    .mobile-dashboard-title {
+        color: white;
+        font-size: var(--mobile-text-sm);
+        font-weight: 600;
+    }
+    
+    .mobile-stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--mobile-spacing-sm);
+    }
+    
+    .mobile-stat-card {
+        background: rgba(62, 180, 137, 0.1);
+        border-radius: var(--mobile-radius-sm);
+        padding: var(--mobile-spacing-sm);
+        text-align: center;
+        border: 1px solid rgba(62, 180, 137, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-stat-label {
+        font-size: var(--mobile-text-xs);
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: var(--mobile-spacing-xs);
+    }
+    
+    .mobile-stat-value {
+        font-size: var(--mobile-text-base);
+        font-weight: 700;
+        color: var(--color-primary);
+        animation: mobileStatCountUp 3s ease-out infinite;
+    }
+    
+    @keyframes mobileStatCountUp {
+        0% { transform: scale(0.9); opacity: 0.7; }
+        50% { transform: scale(1.05); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .mobile-flow-content {
+        text-align: center;
+    }
+    
+    .mobile-flow-title {
+        font-size: var(--mobile-text-xl);
+        font-weight: 700;
+        color: var(--color-primary);
+        margin-bottom: var(--mobile-spacing-xs);
+        line-height: 1.3;
+    }
+    
+    .mobile-flow-description {
+        font-size: var(--mobile-text-sm);
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.4;
+        margin: 0;
+    }
+    
+    /* 프로그레스 인디케이터 */
+    .mobile-progress-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: var(--mobile-spacing-xs);
+        margin: var(--mobile-spacing-lg) 0;
+        padding: 0 var(--mobile-spacing-sm);
+    }
+    
+    .mobile-progress-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(62, 180, 137, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-progress-dot.active {
+        background: var(--color-primary);
+        transform: scale(1.5);
+        box-shadow: 0 0 12px rgba(62, 180, 137, 0.6);
+    }
+    
+    /* 스와이프 힌트 */
+    .mobile-swipe-hint {
+        text-align: center;
+        padding: var(--mobile-spacing-sm);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: var(--mobile-text-xs);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--mobile-spacing-xs);
+        animation: mobileSwipeHint 2s ease-in-out infinite;
+    }
+    
+    @keyframes mobileSwipeHint {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+    }
+    
+    .mobile-swipe-icon {
+        width: 16px;
+        height: 16px;
+        animation: mobileSwipeIconMove 2s ease-in-out infinite;
+    }
+    
+    @keyframes mobileSwipeIconMove {
+        0%, 100% { transform: translateX(-4px); }
+        50% { transform: translateX(4px); }
+    }
+    
+    /* 모바일에서만 데스크톱 플로우 숨기기 */
+    .flows-container {
+        display: none;
+    }
+    
+    /* 모바일 플로우 컨테이너 표시 */
+    .mobile-flows-wrapper {
+        display: block;
+    }
+
+    /* 2024 트렌드: 멀티플랫폼 섹션 */
+    .multiplatform-section {
+        padding: var(--mobile-spacing-xl) var(--mobile-spacing-sm);
+    }
+    
+    .multiplatform-header {
+        text-align: center;
+        margin-bottom: var(--mobile-spacing-lg);
+    }
+    
+    .multiplatform-title {
+        font-size: var(--mobile-text-3xl);
+        margin-bottom: var(--mobile-spacing-md);
+    }
+    
+    .multiplatform-desc {
+        font-size: var(--mobile-text-base);
+        line-height: 1.5;
+        opacity: 0.85;
+    }
+    
+    .platform-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--mobile-spacing-sm);
+        max-width: 100%;
+        margin-top: var(--mobile-spacing-lg);
+    }
+    
+    .platform-card {
+        aspect-ratio: 1;
+        padding: var(--mobile-spacing-md);
+        border-radius: var(--mobile-radius-md);
+        background: rgba(12, 12, 12, 0.8);
+        border: 1px solid rgba(62, 180, 137, 0.1);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .platform-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(62, 180, 137, 0.3);
+        box-shadow: var(--mobile-shadow-card);
+    }
+    
+    .platform-logo img {
+        width: 48px;
+        height: 48px;
+        margin-bottom: var(--mobile-spacing-xs);
+    }
+    
+    .percentage-value {
+        font-size: var(--mobile-text-lg);
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    /* 기타 스타일들 */
+    .auth-buttons {
+        flex-direction: column;
+        gap: var(--mobile-spacing-sm);
+        width: 100%;
+    }
+    
+    .btn-login {
+        width: 100%;
+        min-height: var(--touch-target-min);
+        font-size: var(--mobile-text-base);
+    }
+    
+    .footer-main {
+        flex-direction: column;
+        gap: var(--mobile-spacing-lg);
+    }
+    
+    .footer-nav-container {
+        flex-direction: column;
+        gap: var(--mobile-spacing-lg);
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        gap: var(--mobile-spacing-sm);
         text-align: center;
     }
 }
 
-/* ===== Audionyx란? 섹션 ===== */
-.about-audionyx-section {
-    background: var(--color-bg);
-    padding: 8rem 4vw 8rem 4vw;
-}
+@media (max-width: 768px) {
+    /* ... 기존 코드 ... */
 
-.about-audionyx-section .container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.about-audionyx-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--spacing-lg);
-}
-
-.about-audionyx-section .about-audionyx-title {
-    /* 네온 민트 컬러 */
-    color: var(--color-primary); /* or #17FFD2 */
-    /* (선택) 약간의 네온 글로우 효과 */
-    text-shadow:
-      0 0 4px var(--color-primary),
-      0 0 8px var(--color-primary),
-      0 0 16px rgba(23,255,210,0.4);
-}
-
-.about-audionyx-headline {
-    font-size: clamp(1.75rem, 4vw + 1rem, 3rem);
-    color: #fff;
-    line-height: 1.2;
-    margin: 0;
-  }
-  
-  .about-audionyx-subcopy {
-    font-size: 1rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    margin: 0;
-  }
-  
-  .no-break {
-    white-space: nowrap;
-  }
-  
-  /* 반응형 조정 */
-  @media (max-width: 600px) {
-    .about-audionyx-headline {
-      font-size: 2rem;
+    /* === 불필요한 데스크톱 전용 효과 제거 === */
+    .feature-card:hover,
+    .track-card:hover,
+    .platform-card:hover {
+        /* 모바일에서는 hover 효과 제거 */
+        transform: none !important;
+        box-shadow: none !important;
+        border-color: inherit !important;
     }
-    .about-audionyx-subcopy {
-      font-size: 0.95rem;
+    .platform-logos {
+        position: static !important;
+        right: auto !important;
+        bottom: auto !important;
+        margin: var(--mobile-spacing-lg) 0 0 0 !important;
+        justify-content: center !important;
+        gap: var(--mobile-spacing-md) !important;
     }
+    .insights-summary,
+    .cards-grid,
+    .tracks-grid,
+    .platform-cards-grid,
+    .footer-main,
+    .footer-nav-container {
+        flex-direction: column !important;
+        display: flex !important;
+        gap: var(--mobile-spacing-md) !important;
+        max-width: 100% !important;
+    }
+    .summary-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: var(--mobile-spacing-md) !important;
+        gap: var(--mobile-spacing-xs) !important;
+    }
+    .footer-main {
+        border-bottom: none !important;
+        padding-bottom: var(--mobile-spacing-md) !important;
+    }
+    .footer-bottom {
+        flex-direction: column !important;
+        gap: var(--mobile-spacing-xs) !important;
+        text-align: center !important;
+    }
+    /* ... 기존 모바일 스타일 유지 ... */
+}
+
+@media (max-width: 768px) {
+  /* 음원 미리보기(트랙 카드) - 가로 스와이프 */
+  .tracks-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: var(--mobile-spacing-md) !important;
+    scroll-snap-type: x mandatory !important;
+    padding-bottom: var(--mobile-spacing-lg) !important;
   }
-  
-[data-animate] {
-  will-change: opacity, transform;
-  transition: opacity 1.8s cubic-bezier(.4,0,.2,1), transform 1.8s cubic-bezier(.4,0,.2,1);
+  .track-card {
+    min-width: 80vw !important;
+    max-width: 320px !important;
+    flex: 0 0 auto !important;
+    scroll-snap-align: center !important;
+    margin: 0 !important;
+  }
+  /* Why Audionyx(핵심 기능) - 2열 그리드 */
+  .cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: var(--mobile-spacing-md) !important;
+    max-width: 100% !important;
+    margin-top: var(--mobile-spacing-lg) !important;
+  }
+  .feature-card {
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+  /* 카드 터치 피드백 */
+  .track-card:active, .feature-card:active {
+    transform: scale(0.97) !important;
+    box-shadow: 0 4px 16px rgba(62,180,137,0.15) !important;
+  }
 }
-[data-animate]:not(.animate-fade-up):not(.animate-fade-in) {
-  opacity: 0 !important;
-  transform: translateY(40px) !important;
-}
-.animate-fade-up {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-.animate-fade-in {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-.svg-animate-stroke {
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-    opacity: 0.7;
-    transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), opacity 0.8s;
-}
-
-/* 추가 호버 효과 */
-.flow-image:hover .wave-animation {
-    /* 애니메이션 지속시간 변경 효과 제거 */
-    /* animation-duration: 1.5s; */
-}
-
-.flow-image:hover .copy-button {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(62, 180, 137, 0.5);
+@media (max-width: 480px) {
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
-.flow-image:hover .check-icon {
-    animation-duration: 1.5s;
-}
-
-.flow-image:hover .data-card {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(62, 180, 137, 0.4);
-}
-
-.glass-card {
-    margin-bottom: 0 !important;
+@media (max-width: 768px) {
+  /* 텍스트 가독성 향상 */
+  p, .feature-description, .mobile-revenue-description, .about-audionyx-subcopy, .mobile-benefit-description {
+    font-size: var(--mobile-text-base) !important;
+    line-height: 1.7 !important;
+    margin-bottom: var(--mobile-spacing-md) !important;
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+  h2, .section-title, .mobile-revenue-title, .about-audionyx-headline, .mobile-flow-title {
+    font-size: var(--mobile-text-2xl) !important;
+    line-height: 1.35 !important;
+    margin-bottom: var(--mobile-spacing-sm) !important;
+    text-align: center !important;
+    word-break: keep-all !important;
+    white-space: normal !important;
+  }
+  .feature-card, .track-card, .mobile-comparison-card, .mobile-benefit-card {
+    padding: var(--mobile-spacing-lg) var(--mobile-spacing-md) !important;
+  }
+  .feature-card *, .track-card *, .mobile-comparison-card *, .mobile-benefit-card * {
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+  .about-audionyx-subcopy, .mobile-revenue-subtitle, .mobile-revenue-description {
+    white-space: normal !important;
+    word-break: keep-all !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
 }
   

@@ -8,10 +8,17 @@
       "https://whimsical-clafoutis-6a0a01.netlify.app",
       "https://papaya-maamoul-62acf0.netlify.app",
       "https://poetic-profiterole-f81277.netlify.app",
-      "https://audionyx-a7b2e.web.app/"
+      "https://audionyx-a7b2e.web.app",
+      "https://audio-nyx.com"
     ],
     "method": ["GET", "HEAD", "OPTIONS"],
-    "responseHeader": ["Content-Type", "Range"],
+    "responseHeader": [
+      "Content-Type",
+      "Content-Length",
+      "ETag",
+      "Content-Range",
+      "Accept-Ranges"
+    ],
     "maxAgeSeconds": 3600
   }
 ]

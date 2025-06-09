@@ -195,6 +195,15 @@ async function initializePage() {
   }
 }
 
+// Firebase Storage URL 자동 생성 함수
+function getStorageUrl(filename) {
+  if (!filename) return '';
+  // 이미 https로 시작하면 그대로 반환
+  if (filename.startsWith('http')) return filename;
+  // 파일명만 있을 때 공식 URL로 변환
+  return `https://firebasestorage.googleapis.com/v0/b/audionyx-a7b2e.appspot.com/o/${encodeURIComponent(filename)}?alt=media`;
+}
+
 // Firestore에서 트랙 데이터 로드
 async function loadTracksFromFirebase() {
   console.log('[loadTracksFromFirebase] Firestore에서 트랙 데이터 불러오기 시작');
@@ -228,6 +237,9 @@ async function loadTracksFromFirebase() {
       } else if (typeof data.BPM === 'string' && parseInt(data.BPM) > 0) {
         bpm = parseInt(data.BPM);
       }
+      // coverUrl, src, downloadUrl 자동 보정
+      const coverUrl = getStorageUrl(data.coverUrl || '');
+      const src = getStorageUrl(data.downloadUrl || data.src || '');
       loadedTracks.push({
         id: doc.id,
         title: data.title || '제목 없음',
@@ -244,8 +256,8 @@ async function loadTracksFromFirebase() {
               : (typeof data.use_case === 'string'
                 ? data.use_case.split(',').map(u => u.trim())
                 : []))),
-        src: data.downloadUrl || data.src || '', // downloadUrl 우선 사용
-        coverUrl: data.coverUrl || '',
+        src: src, // downloadUrl 우선 사용
+        coverUrl: coverUrl,
         album: data.album || '',
         ISRC: data.ISRC || '',
         releaseDate: data['release date'] || '',

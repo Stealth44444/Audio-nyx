@@ -1085,20 +1085,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // 현재 재생 중인 다른 오디오가 있으면 정지
-            if (currentAudio && !currentAudio.paused) {
-                currentAudio.pause();
-                resetPlayButton(currentPlayButton);
-            }
-            
-            // 같은 버튼을 클릭한 경우 토글
-            if (currentPlayButton === playButton && currentAudio && !currentAudio.paused) {
-                currentAudio.pause();
-                resetPlayButton(playButton);
+            // 같은 버튼을 클릭한 경우 토글 (수정: 이어서 재생/일시정지)
+            if (currentPlayButton === playButton && currentAudio) {
+                if (!currentAudio.paused) {
+                    currentAudio.pause();
+                    setPlayingState(playButton, false);
+                } else {
+                    currentAudio.play();
+                    setPlayingState(playButton, true);
+                }
                 return;
             }
             
-            // 새 오디오 재생
+            // 다른 오디오가 재생 중이면 정지
+            if (currentAudio && !currentAudio.paused) {
+                currentAudio.pause();
+                setPlayingState(currentPlayButton, false);
+            }
+            
+            // 새 오디오 객체 생성 및 재생
             playAudio(playButton, audioSrc);
         });
     }
@@ -1106,17 +1111,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // 오디오 재생 함수
     function playAudio(playButton, audioSrc) {
         try {
-            // 기존 오디오 정리
+            // 기존 오디오 정리 (수정: 파괴하지 않고 재사용)
             if (currentAudio) {
                 currentAudio.pause();
                 currentAudio.removeEventListener('ended', handleAudioEnded);
                 currentAudio.removeEventListener('error', handleAudioError);
             }
-            
-            // 새 오디오 생성
+            // 새 오디오 객체 생성
             currentAudio = new Audio(audioSrc);
             currentPlayButton = playButton;
-            
             // 오디오 이벤트 리스너
             currentAudio.addEventListener('ended', handleAudioEnded);
             currentAudio.addEventListener('error', handleAudioError);
@@ -1126,7 +1129,6 @@ document.addEventListener('DOMContentLoaded', function() {
             currentAudio.addEventListener('canplay', () => {
                 console.log('[Brand] 오디오 재생 준비 완료');
             });
-            
             // 재생 시작
             currentAudio.play().then(() => {
                 console.log('[Brand] 오디오 재생 시작:', audioSrc);
@@ -1135,7 +1137,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('[Brand] 오디오 재생 실패:', error);
                 alert('음원 재생에 실패했습니다. 네트워크 연결을 확인해주세요.');
             });
-            
         } catch (error) {
             console.error('[Brand] 오디오 생성 오류:', error);
             alert('음원을 불러올 수 없습니다.');

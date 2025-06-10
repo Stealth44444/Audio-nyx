@@ -655,10 +655,10 @@ ul {
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 99999;
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 20px;
@@ -667,6 +667,10 @@ ul {
 
 .auth-modal.show {
   opacity: 1;
+}
+
+.auth-modal[style*="flex"] {
+  display: flex !important;
 }
 
 .auth-modal-content {
@@ -683,6 +687,7 @@ ul {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  z-index: 100000;
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.4),
     0 0 60px rgba(62, 180, 137, 0.1),

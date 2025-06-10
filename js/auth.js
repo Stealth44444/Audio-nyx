@@ -112,6 +112,9 @@ const provider = new GoogleAuthProvider();
 
 // DOM이 로드된 후 초기화 및 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', () => {
+  // 자동완성 방지 강화
+  preventAutocompleteInterference();
+  
   // DOM 요소 존재 여부 확인
   console.log('[DOM 초기화] signupEmailError 요소:', signupEmailError);
   console.log('[DOM 초기화] signupEmailInput 요소:', signupEmailInput);
@@ -474,12 +477,21 @@ async function handleLogout() {
 
 // 자체 로그인 모달 열기
 function openAuthModal() {
+  console.log('[openAuthModal] 로그인 모달 열기 시작');
   if (authModal) {
+    console.log('[openAuthModal] authModal 요소 발견:', authModal);
     authModal.style.display = 'flex';
+    authModal.style.zIndex = '99999';
+    console.log('[openAuthModal] display 및 z-index 설정 완료');
+    
     setTimeout(() => {
       authModal.classList.add('show');
+      console.log('[openAuthModal] show 클래스 추가 완료');
     }, 10);
     document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    console.log('[openAuthModal] 모달 열기 완료');
+  } else {
+    console.error('[openAuthModal] authModal 요소를 찾을 수 없습니다');
   }
 }
 
@@ -498,13 +510,22 @@ function closeAuthModal() {
 
 // 자체 회원가입 모달 열기
 function openSignupModal() {
+  console.log('[openSignupModal] 회원가입 모달 열기 시작');
   if (signupModal) {
+    console.log('[openSignupModal] signupModal 요소 발견:', signupModal);
     signupModal.style.display = 'flex';
-  setTimeout(() => {
+    signupModal.style.zIndex = '99999';
+    console.log('[openSignupModal] display 및 z-index 설정 완료');
+    
+    setTimeout(() => {
       signupModal.classList.add('show');
-  }, 10);
-  document.body.style.overflow = 'hidden';
-}
+      console.log('[openSignupModal] show 클래스 추가 완료');
+    }, 10);
+    document.body.style.overflow = 'hidden';
+    console.log('[openSignupModal] 회원가입 모달 열기 완료');
+  } else {
+    console.error('[openSignupModal] signupModal 요소를 찾을 수 없습니다');
+  }
 }
 
 // 자체 회원가입 모달 닫기
@@ -1271,4 +1292,77 @@ async function checkUsernameAndShowResult(usernameInput, errorElement, successEl
     showError(errorElement, '이미 사용 중인 아이디입니다.');
     showNotification('이미 사용 중인 아이디입니다.', true);
   }
-} 
+}
+
+// 자동완성 간섭 방지 함수
+function preventAutocompleteInterference() {
+  console.log('[preventAutocompleteInterference] 자동완성 간섭 방지 초기화');
+  
+  // 모든 입력 필드에서 자동완성이 의도치 않게 트리거되는 것을 방지
+  document.addEventListener('click', (e) => {
+    // 로그인 모달이 열려있지 않을 때는 자동완성 드롭다운 숨기기
+    const authModal = document.getElementById('auth-modal');
+    const signupModal = document.getElementById('signup-modal');
+    const onboardingModal = document.getElementById('onboarding-modal');
+    
+    const isModalOpen = (authModal && authModal.style.display === 'flex') ||
+                       (signupModal && signupModal.style.display === 'flex') ||
+                       (onboardingModal && onboardingModal.style.display === 'flex');
+    
+    if (!isModalOpen) {
+      const activeElement = document.activeElement;
+      if (activeElement && activeElement.tagName === 'INPUT') {
+        // 현재 포커스된 input이 로그인 관련 필드가 아니라면 blur 처리
+        const isAuthInput = activeElement.closest('#auth-modal, #signup-modal, #onboarding-modal');
+        if (!isAuthInput) {
+          activeElement.blur();
+        }
+      }
+    }
+  });
+  
+  // 페이지 전체에서 자동완성 드롭다운이 의도치 않게 나타나는 것 방지
+  document.addEventListener('focus', (e) => {
+    if (e.target.tagName === 'INPUT') {
+      const isAuthInput = e.target.closest('#auth-modal, #signup-modal, #onboarding-modal');
+      if (!isAuthInput) {
+        // 모달 외부의 입력 필드에서 자동완성 강제 비활성화
+        e.target.setAttribute('autocomplete', 'off');
+        e.target.setAttribute('readonly', true);
+        setTimeout(() => {
+          e.target.removeAttribute('readonly');
+        }, 100);
+      }
+    }
+  }, true);
+  
+  // 모달 닫을 때 입력 필드 초기화
+  const originalCloseAuthModal = closeAuthModal;
+  const originalCloseSignupModal = closeSignupModal;
+  const originalCloseOnboardingModal = closeOnboardingModal;
+  
+  window.closeAuthModal = function() {
+    clearModalInputs();
+    if (originalCloseAuthModal) originalCloseAuthModal();
+  };
+  
+  window.closeSignupModal = function() {
+    clearModalInputs();
+    if (originalCloseSignupModal) originalCloseSignupModal();
+  };
+  
+  window.closeOnboardingModal = function() {
+    clearModalInputs();
+    if (originalCloseOnboardingModal) originalCloseOnboardingModal();
+  };
+  
+  function clearModalInputs() {
+    const authInputs = document.querySelectorAll('#auth-modal input, #signup-modal input, #onboarding-modal input');
+    authInputs.forEach(input => {
+      if (input.type !== 'checkbox') {
+        input.value = '';
+        input.blur();
+      }
+    });
+  }
+}

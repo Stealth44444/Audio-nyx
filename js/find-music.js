@@ -401,26 +401,27 @@ function initializeFilters() {
   console.log("[initializeFilters] 필터 컨텐츠:", filtersContent);
   
   if (filtersToggle && filtersContent) {
-    // 기존 이벤트 리스너 제거를 위해 복제
-    const newFiltersToggle = filtersToggle.cloneNode(true);
-    filtersToggle.parentNode.replaceChild(newFiltersToggle, filtersToggle);
-    
-    newFiltersToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log("[initializeFilters] 필터 토글 버튼 클릭됨");
+    // 이벤트 리스너가 이미 등록되어 있는지 확인하고 중복 방지
+    if (!filtersToggle.hasAttribute('data-event-bound')) {
+      filtersToggle.setAttribute('data-event-bound', 'true');
       
-      const isActive = newFiltersToggle.classList.contains('active');
-      console.log("[initializeFilters] 현재 active 상태:", isActive);
+      filtersToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("[initializeFilters] 필터 토글 버튼 클릭됨");
+        
+        const isActive = filtersToggle.classList.contains('active');
+        console.log("[initializeFilters] 현재 active 상태:", isActive);
+        
+        filtersToggle.classList.toggle('active');
+        filtersContent.classList.toggle('active');
+        
+        console.log("[initializeFilters] 토글 후 active 상태:", filtersToggle.classList.contains('active'));
+        console.log("[initializeFilters] 컨텐츠 active 상태:", filtersContent.classList.contains('active'));
+      });
       
-      newFiltersToggle.classList.toggle('active');
-      filtersContent.classList.toggle('active');
-      
-      console.log("[initializeFilters] 토글 후 active 상태:", newFiltersToggle.classList.contains('active'));
-      console.log("[initializeFilters] 컨텐츠 active 상태:", filtersContent.classList.contains('active'));
-    });
-    
-    console.log("[initializeFilters] 필터 토글 이벤트 리스너 등록 완료");
+      console.log("[initializeFilters] 필터 토글 이벤트 리스너 등록 완료");
+    }
   } else {
     console.error("[initializeFilters] 필터 토글 요소를 찾을 수 없습니다");
   }
@@ -1061,41 +1062,42 @@ function showMiniPlayer(track, mainWavesurfer) {
   // CID 복사 버튼 이벤트 연결
   const miniPlayerCidCopyBtn = document.getElementById('mini-player-cid-copy-btn');
   if (miniPlayerCidCopyBtn && miniPlayerCid) {
-    // 기존 이벤트 리스너 제거를 위해 복제
-    const newCidCopyBtn = miniPlayerCidCopyBtn.cloneNode(true);
-    miniPlayerCidCopyBtn.parentNode.replaceChild(newCidCopyBtn, miniPlayerCidCopyBtn);
-    
-    newCidCopyBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
+    // 중복 이벤트 리스너 방지
+    if (!miniPlayerCidCopyBtn.hasAttribute('data-event-bound')) {
+      miniPlayerCidCopyBtn.setAttribute('data-event-bound', 'true');
       
-      const cidText = miniPlayerCid.textContent;
-      if (!cidText) {
-        console.warn('CID 텍스트가 없습니다.');
-        return;
-      }
-      
-      navigator.clipboard.writeText(cidText)
-        .then(() => {
-          const originalContent = newCidCopyBtn.innerHTML;
-          newCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-          newCidCopyBtn.classList.add('copied');
-          newCidCopyBtn.setAttribute('title', '복사됨!');
-          
-          setTimeout(() => {
-            newCidCopyBtn.innerHTML = originalContent;
-            newCidCopyBtn.classList.remove('copied');
-            newCidCopyBtn.setAttribute('title', 'Content ID 복사');
-          }, 1200);
-        })
-        .catch(err => {
-          console.error('CID 복사 실패:', err);
-          newCidCopyBtn.textContent = '실패';
-          setTimeout(() => {
-            newCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
-          }, 1500);
-        });
-    });
+      miniPlayerCidCopyBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const cidText = miniPlayerCid.textContent;
+        if (!cidText) {
+          console.warn('CID 텍스트가 없습니다.');
+          return;
+        }
+        
+        navigator.clipboard.writeText(cidText)
+          .then(() => {
+            const originalContent = miniPlayerCidCopyBtn.innerHTML;
+            miniPlayerCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
+            miniPlayerCidCopyBtn.classList.add('copied');
+            miniPlayerCidCopyBtn.setAttribute('title', '복사됨!');
+            
+            setTimeout(() => {
+              miniPlayerCidCopyBtn.innerHTML = originalContent;
+              miniPlayerCidCopyBtn.classList.remove('copied');
+              miniPlayerCidCopyBtn.setAttribute('title', 'Content ID 복사');
+            }, 1200);
+          })
+          .catch(err => {
+            console.error('CID 복사 실패:', err);
+            miniPlayerCidCopyBtn.textContent = '실패';
+            setTimeout(() => {
+              miniPlayerCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+            }, 1500);
+          });
+      });
+    }
   }
 
   // 재생/일시정지 버튼 상태 업데이트 및 이벤트 바인딩
@@ -1103,20 +1105,27 @@ function showMiniPlayer(track, mainWavesurfer) {
   if (miniPlayerPlayBtn) {
     updateMiniPlayerPlayButton(mainWavesurfer.isPlaying());
     
-    // 이벤트 리스너 다시 바인딩
-    miniPlayerPlayBtn.replaceWith(miniPlayerPlayBtn.cloneNode(true));
-    document.getElementById('mini-player-play').addEventListener('click', () => {
-      if (currentMainWavesurferForMiniPlayer) {
-        currentMainWavesurferForMiniPlayer.playPause();
-      }
-    });
+    // 중복 이벤트 리스너 방지
+    if (!miniPlayerPlayBtn.hasAttribute('data-event-bound')) {
+      miniPlayerPlayBtn.setAttribute('data-event-bound', 'true');
+      
+      miniPlayerPlayBtn.addEventListener('click', () => {
+        if (currentMainWavesurferForMiniPlayer) {
+          currentMainWavesurferForMiniPlayer.playPause();
+        }
+      });
+    }
   }
 
   // 닫기 버튼 이벤트 바인딩
   const miniPlayerCloseBtn = document.getElementById('mini-player-close');
   if (miniPlayerCloseBtn) {
-    miniPlayerCloseBtn.replaceWith(miniPlayerCloseBtn.cloneNode(true));
-    document.getElementById('mini-player-close').addEventListener('click', hideMiniPlayer);
+    // 중복 이벤트 리스너 방지
+    if (!miniPlayerCloseBtn.hasAttribute('data-event-bound')) {
+      miniPlayerCloseBtn.setAttribute('data-event-bound', 'true');
+      
+      miniPlayerCloseBtn.addEventListener('click', hideMiniPlayer);
+    }
   }
 
   // 진행률 업데이트 함수
@@ -1145,21 +1154,22 @@ function showMiniPlayer(track, mainWavesurfer) {
   // 진행률 직접 클릭으로 탐색 기능
   const progressContainer = document.querySelector('.mini-player-progress-container');
   if (progressContainer) {
-    // 이전 이벤트 리스너 제거를 위해 새로운 컨테이너로 복제
-    const newProgressContainer = progressContainer.cloneNode(true);
-    progressContainer.parentNode.replaceChild(newProgressContainer, progressContainer);
-    
-    newProgressContainer.addEventListener('click', function(e) {
-      if (!currentMainWavesurferForMiniPlayer) return;
+    // 중복 이벤트 리스너 방지
+    if (!progressContainer.hasAttribute('data-event-bound')) {
+      progressContainer.setAttribute('data-event-bound', 'true');
       
-      const rect = this.getBoundingClientRect();
-      const clickPosition = (e.clientX - rect.left) / rect.width;
-      const duration = currentMainWavesurferForMiniPlayer.getDuration();
-      
-      if (isFinite(clickPosition) && clickPosition >= 0 && clickPosition <= 1 && isFinite(duration)) {
-        currentMainWavesurferForMiniPlayer.seekTo(clickPosition);
-      }
-    });
+      progressContainer.addEventListener('click', function(e) {
+        if (!currentMainWavesurferForMiniPlayer) return;
+        
+        const rect = this.getBoundingClientRect();
+        const clickPosition = (e.clientX - rect.left) / rect.width;
+        const duration = currentMainWavesurferForMiniPlayer.getDuration();
+        
+        if (isFinite(clickPosition) && clickPosition >= 0 && clickPosition <= 1 && isFinite(duration)) {
+          currentMainWavesurferForMiniPlayer.seekTo(clickPosition);
+        }
+      });
+    }
   }
 
   // 미니 플레이어 표시
@@ -1178,6 +1188,17 @@ function hideMiniPlayer() {
     clearInterval(parseInt(miniPlayerElement.dataset.progressInterval));
     delete miniPlayerElement.dataset.progressInterval;
   }
+  
+  // 이벤트 바인딩 상태 초기화
+  const miniPlayerCidCopyBtn = document.getElementById('mini-player-cid-copy-btn');
+  const miniPlayerPlayBtn = document.getElementById('mini-player-play');
+  const miniPlayerCloseBtn = document.getElementById('mini-player-close');
+  const progressContainer = document.querySelector('.mini-player-progress-container');
+  
+  if (miniPlayerCidCopyBtn) miniPlayerCidCopyBtn.removeAttribute('data-event-bound');
+  if (miniPlayerPlayBtn) miniPlayerPlayBtn.removeAttribute('data-event-bound');
+  if (miniPlayerCloseBtn) miniPlayerCloseBtn.removeAttribute('data-event-bound');
+  if (progressContainer) progressContainer.removeAttribute('data-event-bound');
   
   currentMainWavesurferForMiniPlayer = null;
 }

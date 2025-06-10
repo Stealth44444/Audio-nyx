@@ -26,6 +26,50 @@ document.addEventListener('DOMContentLoaded', () => {
   // Firebase 인증 초기화
   const auth = getAuth(app);
   
+  // 이벤트 위임을 사용한 복사 버튼 처리
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.btn-copy-key')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const button = e.target.closest('.btn-copy-key');
+      const keyValue = button.closest('.channel-key-display')?.querySelector('.channel-key-value')?.textContent ||
+                     button.closest('tr')?.querySelector('.channel-key')?.textContent;
+      
+      if (!keyValue) {
+        console.warn('복사할 키 값을 찾을 수 없습니다.');
+        return;
+      }
+      
+      const originalContent = button.innerHTML;
+      button.disabled = true;
+      button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
+      
+      copyToClipboard(keyValue)
+        .then(() => {
+          button.style.background = 'rgba(40, 167, 69, 0.2)';
+          button.style.borderColor = 'rgba(40, 167, 69, 0.4)';
+          setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.style.background = '';
+            button.style.borderColor = '';
+            button.disabled = false;
+          }, 1500);
+        })
+        .catch(() => {
+          button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+          button.style.background = 'rgba(220, 53, 69, 0.2)';
+          button.style.borderColor = 'rgba(220, 53, 69, 0.4)';
+          setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.style.background = '';
+            button.style.borderColor = '';
+            button.disabled = false;
+          }, 1500);
+        });
+    }
+  });
+  
   // DOM 요소
   const registerBtn = document.getElementById('register-channel-btn');
   const modal = document.getElementById('channel-modal');
@@ -398,40 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <td>${renderStatusTag(data.status)}</td>
       `;
       
-      // 복사 버튼에 이벤트 리스너 추가 (시각적 피드백 포함)
-      const copyBtn = row.querySelector('.btn-copy-key');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const button = copyBtn;
-          const originalContent = button.innerHTML;
-          button.disabled = true;
-          button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-          copyToClipboard(data.key)
-            .then(() => {
-              button.style.background = 'rgba(40, 167, 69, 0.2)';
-              button.style.borderColor = 'rgba(40, 167, 69, 0.4)';
-              setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.style.background = '';
-                button.style.borderColor = '';
-                button.disabled = false;
-              }, 1500);
-            })
-            .catch(() => {
-              button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
-              button.style.background = 'rgba(220, 53, 69, 0.2)';
-              button.style.borderColor = 'rgba(220, 53, 69, 0.4)';
-              setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.style.background = '';
-                button.style.borderColor = '';
-                button.disabled = false;
-              }, 1500);
-            });
-        });
-      }
+      // 복사 버튼은 이벤트 위임으로 처리됨
       channelList.appendChild(row);
     });
   }
@@ -476,40 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="channel-date">${formatDate(data.createdAt)}</div>
       `;
       
-      // 복사 버튼에 이벤트 리스너 추가 (시각적 피드백 포함)
-      const copyBtn = card.querySelector('.btn-copy-key');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const button = copyBtn;
-          const originalContent = button.innerHTML;
-          button.disabled = true;
-          button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-          copyToClipboard(data.key)
-            .then(() => {
-              button.style.background = 'rgba(40, 167, 69, 0.2)';
-              button.style.borderColor = 'rgba(40, 167, 69, 0.4)';
-              setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.style.background = '';
-                button.style.borderColor = '';
-                button.disabled = false;
-              }, 1500);
-            })
-            .catch(() => {
-              button.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
-              button.style.background = 'rgba(220, 53, 69, 0.2)';
-              button.style.borderColor = 'rgba(220, 53, 69, 0.4)';
-              setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.style.background = '';
-                button.style.borderColor = '';
-                button.disabled = false;
-              }, 1500);
-            });
-        });
-      }
+      // 복사 버튼은 이벤트 위임으로 처리됨
       
       channelCardsGrid.appendChild(card);
     });

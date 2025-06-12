@@ -27,9 +27,10 @@
 
   <!-- 수정: 공통 네비게이션 바 추가 -->
   <header class="navbar">
-    <div class="logo-area">
-      <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
-    </div>
+    <div class="container">
+      <div class="logo-area">
+        <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+      </div>
     <nav role="navigation" class="menu-area">
       <ul>
         <li><a href="../index.html">홈</a></li>
@@ -53,6 +54,12 @@
         <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <div id="dropdown-menu" class="dropdown-menu">
+        <a href="producer.html" class="dropdown-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Audionyx 프로듀서
+        </a>
         <a href="faq.html" class="dropdown-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -69,10 +76,42 @@
       </div>
     </div>
 
-    <!-- 모바일용 로그인 상태 표시 -->
-    <div id="mobile-user-profile" class="mobile-user-profile" style="display: none;">
-      <img id="mobile-user-avatar" class="mobile-user-avatar" src="" alt="프로필 이미지">
-      <span id="mobile-user-name" class="mobile-user-name"></span>
+            <!-- 모바일용 프로필 메뉴 -->
+        <div id="mobile-user-profile" class="mobile-user-profile">
+            <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
+            <span id="mobile-user-name" class="mobile-user-name">게스트</span>
+            <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <!-- 모바일 드롭다운 메뉴 -->
+            <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
+                <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    로그인
+                </a>
+                <a href="producer.html" class="mobile-dropdown-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Audionyx 프로듀서
+                </a>
+                                 <a href="faq.html" class="mobile-dropdown-item">
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                         <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                         <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                     </svg>
+                     FAQ
+                 </a>
+                 <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                     </svg>
+                     로그아웃
+                 </a>
+             </div>
+        </div>
     </div>
   </header>
 
@@ -88,8 +127,8 @@
     <!-- 통합된 검색 및 필터 패널 -->
     <div class="findmusic-search-and-filters">
       <div class="findmusic-search-box">
-        <input type="text" placeholder="트랙 이름, 장르 또는 분위기로 검색하세요" class="findmusic-search-input">
-        <button class="findmusic-search-btn">
+        <input type="text" placeholder="트랙 이름, 장르 또는 분위기로 검색하세요" class="findmusic-search-input" id="search-input" autocomplete="off" spellcheck="false">
+        <button class="findmusic-search-btn" type="button">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -867,5 +906,8 @@
       </div>
     </div>
   </div>
+
+  <!-- 기본 스크립트 -->
+  <script src="../js/main.js"></script>
 </body>
 </html> 

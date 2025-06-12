@@ -20,4 +20,13 @@ export const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const db = getFirestore(app);
 
+// Firestore 연결 테스트
+try {
+  console.log("[firebase.js] Firestore 연결 테스트 중...");
+  console.log("[firebase.js] Project ID:", firebaseConfig.projectId);
+  console.log("[firebase.js] Auth Domain:", firebaseConfig.authDomain);
+} catch (error) {
+  console.error("[firebase.js] Firebase 초기화 오류:", error);
+}
+
 console.log("[firebase.js] Firebase 초기화 완료: app, storage, db 객체 생성됨");

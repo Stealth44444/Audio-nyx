@@ -110,6 +110,39 @@ const onboardingMarketingAgreeOptionalCheckbox = document.getElementById('onboar
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// 토큰 검증 함수 추가
+async function verifyUserToken() {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error('[토큰 검증] 사용자가 로그인되지 않음');
+      return { valid: false, error: 'not_authenticated' };
+    }
+    
+    const token = await user.getIdToken(true); // true = force refresh
+    console.log('[토큰 검증] 토큰 갱신 성공');
+    
+    // 토큰 만료 확인
+    const tokenResult = await user.getIdTokenResult();
+    const expirationTime = new Date(tokenResult.expirationTime);
+    const currentTime = new Date();
+    
+    console.log('[토큰 검증] 토큰 만료 시간:', expirationTime);
+    console.log('[토큰 검증] 현재 시간:', currentTime);
+    console.log('[토큰 검증] 토큰 유효:', expirationTime > currentTime);
+    
+    if (expirationTime <= currentTime) {
+      console.error('[토큰 검증] 토큰이 만료됨');
+      return { valid: false, error: 'token_expired' };
+    }
+    
+    return { valid: true, token, user };
+  } catch (error) {
+    console.error('[토큰 검증] 토큰 갱신 실패:', error);
+    return { valid: false, error: error.code || 'token_refresh_failed' };
+  }
+}
+
 // DOM이 로드된 후 초기화 및 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', () => {
   // 자동완성 방지 강화
@@ -119,6 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('[DOM 초기화] signupEmailError 요소:', signupEmailError);
   console.log('[DOM 초기화] signupEmailInput 요소:', signupEmailInput);
   console.log('[DOM 초기화] signupForm 요소:', signupForm);
+  
+  // 모바일 프로필 DOM 요소들
+  const mobileUserProfile = document.getElementById('mobile-user-profile');
+  const mobileUserAvatar = document.getElementById('mobile-user-avatar');
+  const mobileUserName = document.getElementById('mobile-user-name');
+  const mobileDropdownMenu = document.getElementById('mobile-dropdown-menu');
+  const mobileBtnLogin = document.getElementById('mobile-btn-login');
+  const mobileBtnLogout = document.getElementById('mobile-btn-logout');
   
   // 로그인 버튼 클릭 시 모달 열기
   if (btnLogin) {
@@ -292,14 +333,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 모바일 프로필 드롭다운 토글
+  if (mobileUserProfile) {
+    mobileUserProfile.addEventListener('click', (e) => {
+      e.stopPropagation(); // 이벤트 버블링 방지
+      mobileDropdownMenu.classList.toggle('show');
+      mobileUserProfile.classList.toggle('active');
+    });
+  }
+
+  // 모바일 로그인 버튼
+  if (mobileBtnLogin) {
+    mobileBtnLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      mobileDropdownMenu.classList.remove('show');
+      mobileUserProfile.classList.remove('active');
+      openAuthModal();
+    });
+  }
+
+  // 모바일 로그아웃 버튼
+  if (mobileBtnLogout) {
+    mobileBtnLogout.addEventListener('click', (e) => {
+      e.preventDefault();
+      mobileDropdownMenu.classList.remove('show');
+      mobileUserProfile.classList.remove('active');
+      handleLogout();
+    });
+  }
+
   // 로그아웃 버튼
   if (btnLogout) {
     btnLogout.addEventListener('click', handleLogout);
   }
+
+  // 드롭다운 외부 클릭 시 닫기
+  document.addEventListener('click', (e) => {
+    if (userProfile && dropdownMenu && !userProfile.contains(e.target)) {
+      dropdownMenu.classList.remove('show');
+      userProfile.setAttribute('aria-expanded', 'false');
+    }
+    if (mobileUserProfile && mobileDropdownMenu && !mobileUserProfile.contains(e.target)) {
+      mobileDropdownMenu.classList.remove('show');
+      mobileUserProfile.classList.remove('active');
+    }
+  });
 });
 
 // 사용자 상태 변경 감지
 onAuthStateChanged(auth, async (user) => {
+  // 모바일 프로필 DOM 요소들 다시 가져오기 (이벤트 리스너 내부에서는 접근 불가)
+  const mobileUserProfile = document.getElementById('mobile-user-profile');
+  const mobileUserAvatar = document.getElementById('mobile-user-avatar');
+  const mobileUserName = document.getElementById('mobile-user-name');
+  const mobileDropdownMenu = document.getElementById('mobile-dropdown-menu');
+  const mobileBtnLogin = document.getElementById('mobile-btn-login');
+  const mobileBtnLogout = document.getElementById('mobile-btn-logout');
+  
   if (user) {
     // Firebase 로그인 상태
     console.log('로그인된 사용자:', user);
@@ -308,58 +398,77 @@ onAuthStateChanged(auth, async (user) => {
     }
     if (userProfile) {
       userProfile.style.display = 'flex';
-      
-      // Firestore에서 사용자 정보 가져오기
-      let displayedName = '사용자';
-      let shouldShowProfileImage = false;
-      
-      try {
-        const userRef = doc(db, 'users', user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          
-          // 닉네임 설정
-          if (userData.nickname) {
-            displayedName = userData.nickname;
-            console.log('[onAuthStateChanged] Firestore 닉네임 로드 성공:', displayedName);
-          } else {
-            console.log('[onAuthStateChanged] Firestore에 닉네임 없음. Firebase displayName 사용 시도.');
-            displayedName = user.displayName || '사용자';
-          }
-          
-          // 프로필 이미지 표시 여부 확인 (구글 로그인인 경우에만)
-          if (userData.provider === 'google' && userData.photoURL) {
-            shouldShowProfileImage = true;
-            userAvatar.src = userData.photoURL;
-            console.log('[onAuthStateChanged] 구글 로그인 사용자 - 프로필 이미지 표시:', userData.photoURL);
-          } else {
-            console.log('[onAuthStateChanged] 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용');
-          }
+    }
+    
+    // Firestore에서 사용자 정보 가져오기
+    let displayedName = '사용자';
+    let shouldShowProfileImage = false;
+    let profileImageUrl = '../images/default-avatar.png';
+    
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        
+        // 닉네임 설정
+        if (userData.nickname) {
+          displayedName = userData.nickname;
+          console.log('[onAuthStateChanged] Firestore 닉네임 로드 성공:', displayedName);
         } else {
-          console.log('[onAuthStateChanged] Firestore에 사용자 문서 없음. Firebase displayName 사용 시도.');
+          console.log('[onAuthStateChanged] Firestore에 닉네임 없음. Firebase displayName 사용 시도.');
           displayedName = user.displayName || '사용자';
-          
-          // Firebase Auth의 providerData로 구글 로그인 확인
-          const isGoogleLogin = user.providerData && user.providerData.some(provider => provider.providerId === 'google.com');
-          if (isGoogleLogin && user.photoURL) {
-            shouldShowProfileImage = true;
-            userAvatar.src = user.photoURL;
-            console.log('[onAuthStateChanged] 구글 로그인 사용자 (Firestore 문서 없음) - Firebase Auth 프로필 이미지 사용');
-          }
         }
-      } catch (error) {
-        console.error('[onAuthStateChanged] Firestore 사용자 정보 로드 실패:', error);
+        
+        // 프로필 이미지 표시 여부 확인 (구글 로그인인 경우에만)
+        if (userData.provider === 'google' && userData.photoURL) {
+          shouldShowProfileImage = true;
+          profileImageUrl = userData.photoURL;
+          console.log('[onAuthStateChanged] 구글 로그인 사용자 - 프로필 이미지 표시:', userData.photoURL);
+        } else {
+          console.log('[onAuthStateChanged] 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용');
+        }
+      } else {
+        console.log('[onAuthStateChanged] Firestore에 사용자 문서 없음. Firebase displayName 사용 시도.');
         displayedName = user.displayName || '사용자';
+        
+        // Firebase Auth의 providerData로 구글 로그인 확인
+        const isGoogleLogin = user.providerData && user.providerData.some(provider => provider.providerId === 'google.com');
+        if (isGoogleLogin && user.photoURL) {
+          shouldShowProfileImage = true;
+          profileImageUrl = user.photoURL;
+          console.log('[onAuthStateChanged] 구글 로그인 사용자 (Firestore 문서 없음) - Firebase Auth 프로필 이미지 사용');
+        }
       }
-      
-      // 프로필 이미지 설정 (구글 로그인이 아닌 경우 기본 이미지)
-      if (!shouldShowProfileImage) {
-        userAvatar.src = '../images/default-avatar.png'; // 기본 프로필 이미지
-      }
-      
+    } catch (error) {
+      console.error('[onAuthStateChanged] Firestore 사용자 정보 로드 실패:', error);
+      displayedName = user.displayName || '사용자';
+    }
+    
+    // 데스크톱 프로필 업데이트
+    if (userAvatar) {
+      userAvatar.src = profileImageUrl;
+    }
+    if (userName) {
       userName.textContent = displayedName;
     }
+    
+    // 모바일 프로필 업데이트
+    if (mobileUserAvatar) {
+      mobileUserAvatar.src = profileImageUrl;
+    }
+    if (mobileUserName) {
+      mobileUserName.textContent = displayedName;
+    }
+    
+    // 모바일 드롭다운 메뉴 로그인/로그아웃 버튼 상태 변경
+    if (mobileBtnLogin) {
+      mobileBtnLogin.style.display = 'none';
+    }
+    if (mobileBtnLogout) {
+      mobileBtnLogout.style.display = 'flex';
+    }
+    
     // 로그인 시 네비게이션 접근 권한 업데이트
     updateNavigationAccessOnLogin(user);
     closeAuthModal(); // 로그인 성공 시 모달 닫기
@@ -370,8 +479,38 @@ onAuthStateChanged(auth, async (user) => {
     }
     if (userProfile) {
       userProfile.style.display = 'none';
-      dropdownMenu.classList.remove('show');
+      const dropdownMenu = document.getElementById('dropdown-menu');
+      if (dropdownMenu) {
+        dropdownMenu.classList.remove('show');
+      }
     }
+    
+    // 모바일 프로필 로그아웃 상태로 복원
+    if (mobileUserAvatar) {
+      // 페이지 경로에 따라 기본 아바타 경로 설정
+      const isInSubDir = window.location.pathname.includes('/pages/');
+      mobileUserAvatar.src = isInSubDir ? '../images/default-avatar.png' : 'images/default-avatar.png';
+    }
+    if (mobileUserName) {
+      mobileUserName.textContent = '게스트';
+    }
+    
+    // 모바일 드롭다운 메뉴 로그인/로그아웃 버튼 상태 변경
+    if (mobileBtnLogin) {
+      mobileBtnLogin.style.display = 'flex';
+    }
+    if (mobileBtnLogout) {
+      mobileBtnLogout.style.display = 'none';
+    }
+    
+    // 모바일 드롭다운 닫기
+    if (mobileDropdownMenu) {
+      mobileDropdownMenu.classList.remove('show');
+    }
+    if (mobileUserProfile) {
+      mobileUserProfile.classList.remove('active');
+    }
+    
     // 로그아웃 시 네비게이션 접근 권한 재설정
     updateNavigationAccess(null);
   }
@@ -461,7 +600,31 @@ async function handleLogout() {
     }
     if (userProfile) {
       userProfile.style.display = 'none';
-      dropdownMenu.classList.remove('show');
+      const dropdownMenu = document.getElementById('dropdown-menu');
+      if (dropdownMenu) {
+        dropdownMenu.classList.remove('show');
+      }
+    }
+    
+    // 모바일 프로필 로그아웃 상태로 복원
+    const mobileUserProfile = document.getElementById('mobile-user-profile');
+    const mobileUserAvatar = document.getElementById('mobile-user-avatar');
+    const mobileUserName = document.getElementById('mobile-user-name');
+    const mobileDropdownMenu = document.getElementById('mobile-dropdown-menu');
+    
+    if (mobileUserAvatar) {
+      // 페이지 경로에 따라 기본 아바타 경로 설정
+      const isInSubDir = window.location.pathname.includes('/pages/');
+      mobileUserAvatar.src = isInSubDir ? '../images/default-avatar.png' : 'images/default-avatar.png';
+    }
+    if (mobileUserName) {
+      mobileUserName.textContent = '게스트';
+    }
+    if (mobileDropdownMenu) {
+      mobileDropdownMenu.classList.remove('show');
+    }
+    if (mobileUserProfile) {
+      mobileUserProfile.classList.remove('active');
     }
     
     // 로그아웃 시 네비게이션 접근 권한 재설정
@@ -1366,3 +1529,9 @@ function preventAutocompleteInterference() {
     });
   }
 }
+
+// 토큰 검증 함수를 전역으로 export
+window.verifyUserToken = verifyUserToken;
+
+// 현재 사용자 상태를 전역으로 관리
+window.currentUser = null;

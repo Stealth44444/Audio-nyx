@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audionyx 프로듀서 - AUDIONYX</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/producer.css">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+</head>
+<body>
+    <!-- 웹 바 (상단 네비게이션) -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo-area">
+                <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+            </div>
+            <nav role="navigation" class="menu-area">
+                <ul>
+                    <li><a href="../index.html">홈</a></li>
+                    <li><a href="brand.html">브랜드 소개</a></li>
+                    <li><a href="withdraw.html">계좌 등록</a></li>
+                    <li><a href="find-music.html">음원 찾기</a></li>
+                    <li><a href="channel-management.html">채널 관리</a></li>
+                    <li><a href="track-production.html">트랙 제작</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <button id="btn-login" class="btn-login">로그인</button>
+            </div>
+            <!-- 로그인 후 표시될 프로필 영역 -->
+            <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
+                <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지">
+                <span id="user-name" class="user-name"></span>
+                <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="producer.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Audionyx 프로듀서
+                    </a>
+                    <a href="faq.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        FAQ
+                    </a>
+                    <a href="#" class="dropdown-item" id="btn-logout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        로그아웃
+                    </a>
+                </div>
+            </div>
+
+            <!-- 모바일용 프로필 메뉴 -->
+            <div id="mobile-user-profile" class="mobile-user-profile">
+                <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
+                <span id="mobile-user-name" class="mobile-user-name">게스트</span>
+                <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <!-- 모바일 드롭다운 메뉴 -->
+                <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
+                    <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        로그인
+                    </a>
+                    <a href="producer.html" class="mobile-dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Audionyx 프로듀서
+                    </a>
+                    <a href="faq.html" class="mobile-dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        FAQ
+                    </a>
+                    <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        로그아웃
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 모바일 네비게이터 -->
+    <nav class="mobile-nav">
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item">
+                <a href="../index.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9,22 9,12 15,12 15,22"/>
+                    </svg>
+                    홈
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="find-music.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 18V5l12-2v13"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="16" r="3"/>
+                    </svg>
+                    음원
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="channel-management.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
+                        <polygon points="9.75,15.02 15.5,11.75 9.75,8.48"/>
+                    </svg>
+                    채널
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="track-production.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 18V5l12-2v13M9 18l-6 2V7l6-2M9 18l6-2M9 9l6-2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    제작
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="producer.html" class="mobile-nav-link active">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    프로듀서
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+<!-- 풀스크린 히어로 배너 -->
+<section class="hero-section">
+    <div class="hero-background">
+        <img src="../images/jy.png" alt="Audionyx 프로듀서" class="hero-image">
+        <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+        <div class="container">
+            <div class="hero-text">
+                <h1 class="hero-title">AUDIONYX PRODUCER</h1>
+                <p class="hero-subtitle">음악의 새로운 경험을 창조하는 프로듀싱 전문가와 함께하세요</p>
+                <div class="hero-actions">
+                    <a href="track-production.html" class="btn-primary">트랙 요청하기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- 프로듀서 프로필 섹션 -->
+    <section class="producer-profile-section">
+        <div class="container">
+            <div class="profile-container">
+                <div class="profile-image-wrapper">
+                    <img src="../images/mikey.jpg" alt="Mikey - Audionyx 프로듀서" class="producer-profile-image">
+                </div>
+                <div class="profile-content">
+                    <div class="profile-badge">
+                        <svg class="profile-badge-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="profile-badge-text">전문 프로듀서</span>
+                    </div>
+                    <h2 class="profile-title">MIKEY</h2>
+                    <p class="profile-subtitle">차세대 음악 트렌드를 이끄는 혁신적 프로듀서</p>
+                    <p class="profile-description">
+                        10년 이상의 음악 제작 경험을 바탕으로 다양한 장르를 아우르는<br>
+                        독창적인 사운드를 만들어내는 Mikey.<br><br>
+                        국내외 유명 아티스트들과의 콜라보레이션을 통해 검증된 실력으로<br>
+                        여러분의 음악적 비전을 현실로 만들어드립니다.
+                    </p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">150+</span>
+                            <span class="stat-label">완성된 트랙</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">50M+</span>
+                            <span class="stat-label">총 스트리밍</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">85+</span>
+                            <span class="stat-label">협업 아티스트</span>
+                        </div>
+                    </div>
+                    
+                    <a href="track-production.html" class="profile-contact-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 18V5l12-2v13M9 18l-6 2V7l6-2M9 18l6-2M9 9l6-2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        트랙 요청하기
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 장르 태그 슬라이더 -->
+            <div class="genre-tags-section">
+                <h3 class="genre-tags-title">전문 장르</h3>
+                <div class="genre-tags-slider">
+                    <div class="genre-tags-track">
+                        <div class="genre-tags">
+                            <span class="genre-tag">Lo-Fi Hip Hop</span>
+                            <span class="genre-tag">Ambient</span>
+                            <span class="genre-tag">Chillwave</span>
+                            <span class="genre-tag">Synthwave</span>
+                            <span class="genre-tag">Dream Pop</span>
+                            <span class="genre-tag">Experimental Electronica</span>
+                            <span class="genre-tag">Downtempo</span>
+                            <span class="genre-tag">Vaporwave</span>
+                            <span class="genre-tag">Neo-Classical</span>
+                            <span class="genre-tag">Glitch</span>
+                            <span class="genre-tag">Ambient Drone</span>
+                            <span class="genre-tag">Trip-Hop</span>
+                            <span class="genre-tag">Electro-Acoustic</span>
+                            <span class="genre-tag">Post-Rock</span>
+                            <span class="genre-tag">Indie Folk</span>
+                            <span class="genre-tag">Jazzhop</span>
+                            <span class="genre-tag">Industrial Ambient</span>
+                            <span class="genre-tag">Minimal</span>
+                            <span class="genre-tag">Tape Loop</span>
+                            <span class="genre-tag">Psychedelic Chill</span>
+                        </div>
+                        <div class="genre-tags" aria-hidden="true">
+                            <span class="genre-tag">Lo-Fi Hip Hop</span>
+                            <span class="genre-tag">Ambient</span>
+                            <span class="genre-tag">Chillwave</span>
+                            <span class="genre-tag">Synthwave</span>
+                            <span class="genre-tag">Dream Pop</span>
+                            <span class="genre-tag">Experimental Electronica</span>
+                            <span class="genre-tag">Downtempo</span>
+                            <span class="genre-tag">Vaporwave</span>
+                            <span class="genre-tag">Neo-Classical</span>
+                            <span class="genre-tag">Glitch</span>
+                            <span class="genre-tag">Ambient Drone</span>
+                            <span class="genre-tag">Trip-Hop</span>
+                            <span class="genre-tag">Electro-Acoustic</span>
+                            <span class="genre-tag">Post-Rock</span>
+                            <span class="genre-tag">Indie Folk</span>
+                            <span class="genre-tag">Jazzhop</span>
+                            <span class="genre-tag">Industrial Ambient</span>
+                            <span class="genre-tag">Minimal</span>
+                            <span class="genre-tag">Tape Loop</span>
+                            <span class="genre-tag">Psychedelic Chill</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 프로듀서 소개 섹션 -->
+    <section class="producer-intro">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">전문 프로듀서와 함께하는 음악 제작</h2>
+                <p class="section-subtitle">오디오닉스의 전문 프로듀서가<br>당신의 음악적 비전을 현실로 만들어드립니다</p>
+            </div>
+            
+            <div class="producer-grid">
+                <div class="producer-card" data-animate="fade-up">
+                    <div class="card-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 18V5l12-2v13M9 18l-6 2V7l6-2M9 18l6-2M9 9l6-2" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">전문적인 음악 제작</h3>
+                    <p class="card-description">
+                        다양한 장르의 음악 제작 경험을 바탕으로<br>
+                        고품질의 음원을 제작해드립니다.
+                    </p>
+                </div>
+
+                <div class="producer-card" data-animate="fade-up">
+                    <div class="card-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" stroke-width="2"/>
+                            <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">전문 스튜디오 레코딩</h3>
+                    <p class="card-description">
+                        최신 장비를 갖춘 전문 스튜디오에서<br>
+                        최고 품질의 레코딩을 제공합니다.
+                    </p>
+                </div>
+
+                <div class="producer-card" data-animate="fade-up">
+                    <div class="card-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">맞춤형 믹싱 & 마스터링</h3>
+                    <p class="card-description">
+                        각 트랙의 특성에 맞는 전문적인<br>
+                        믹싱과 마스터링 서비스를 제공합니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 서비스 프로세스 섹션 -->
+    <section class="process-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">제작 프로세스</h2>
+                <p class="section-subtitle">체계적이고 전문적인 프로세스로<br>최고의 결과물을 만들어냅니다</p>
+            </div>
+
+            <div class="process-timeline">
+                <div class="process-step" data-animate="fade-right">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3 class="step-title">상담 및 기획</h3>
+                        <p class="step-description">고객의 요구사항을 정확히 파악하고<br>최적의 제작 방향을 설정합니다.</p>
+                    </div>
+                </div>
+
+                <div class="process-step" data-animate="fade-left">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3 class="step-title">프리프로덕션</h3>
+                        <p class="step-description">곡의 구조와 편곡을 완성하여<br>본격적인 제작을 준비합니다.</p>
+                    </div>
+                </div>
+
+                <div class="process-step" data-animate="fade-right">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3 class="step-title">레코딩 & 제작</h3>
+                        <p class="step-description">전문 스튜디오에서 고품질 레코딩과<br>음원 제작을 진행합니다.</p>
+                    </div>
+                </div>
+
+                <div class="process-step" data-animate="fade-left">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3 class="step-title">믹싱 & 마스터링</h3>
+                        <p class="step-description">최종 완성도를 높이는 전문적인<br>믹싱과 마스터링을 진행합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 연락처 섹션 -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-text">
+                    <h2 class="contact-title">프로듀서와 함께<br>음악을 만들어보세요</h2>
+                    <p class="contact-description">
+                        전문적인 음악 제작 서비스가 필요하시다면<br>
+                        언제든지 연락주세요.<br><br>
+                        최고의 결과물로 보답하겠습니다.
+                    </p>
+                    <div class="contact-actions">
+                        <a href="track-production.html" class="btn-primary">트랙 요청하기</a>
+                    </div>
+                </div>
+                <div class="contact-visual">
+                    <div class="visual-card">
+                        <div class="visual-content">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke-width="2"/>
+                            </svg>
+                            <h3>24/7 상담 가능</h3>
+                            <p>언제든지 연락주세요</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="footer-logo">AUDIONYX</div>
+                    <p class="footer-tagline">음악의 새로운 경험을 창조합니다</p>
+                </div>
+                <div class="footer-nav-container">
+                    <div class="footer-nav-group">
+                        <h3 class="footer-heading">서비스</h3>
+                        <ul class="footer-nav">
+                            <li><a href="find-music.html">음원 찾기</a></li>
+                            <li><a href="track-production.html">트랙 제작</a></li>
+                            <li><a href="channel-management.html">채널 관리</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-group">
+                        <h3 class="footer-heading">정보</h3>
+                        <ul class="footer-nav">
+                            <li><a href="brand.html">브랜드 소개</a></li>
+                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="producer.html">프로듀서</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-group">
+                        <h3 class="footer-heading">계정</h3>
+                        <ul class="footer-nav">
+                            <li><a href="withdraw.html">계좌 등록</a></li>
+                            <li><a href="#" id="footer-login">로그인</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AUDIONYX. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module" src="../js/auth.js"></script>
+    <script src="../js/common.js"></script>
+</body>
+</html>

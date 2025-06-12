@@ -27,9 +27,10 @@
   <div id="scroll-progress"></div>
   
   <header class="navbar">
-    <div class="logo-area">
-      <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
-    </div>
+    <div class="container">
+      <div class="logo-area">
+        <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+      </div>
     <nav role="navigation" class="menu-area">
       <ul>
         <li><a href="../index.html">홈</a></li>
@@ -53,10 +54,16 @@
         <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <div id="dropdown-menu" class="dropdown-menu">
+        <a href="producer.html" class="dropdown-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Audionyx 프로듀서
+        </a>
         <a href="faq.html" class="dropdown-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           FAQ
         </a>
@@ -69,10 +76,42 @@
       </div>
     </div>
 
-    <!-- 모바일용 로그인 상태 표시 -->
-    <div id="mobile-user-profile" class="mobile-user-profile" style="display: none;">
-      <img id="mobile-user-avatar" class="mobile-user-avatar" src="" alt="프로필 이미지">
-      <span id="mobile-user-name" class="mobile-user-name"></span>
+    <!-- 모바일용 프로필 메뉴 -->
+    <div id="mobile-user-profile" class="mobile-user-profile">
+      <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
+      <span id="mobile-user-name" class="mobile-user-name">게스트</span>
+      <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <!-- 모바일 드롭다운 메뉴 -->
+      <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
+          <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              로그인
+          </a>
+          <a href="producer.html" class="mobile-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Audionyx 프로듀서
+          </a>
+          <a href="faq.html" class="mobile-dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              FAQ
+          </a>
+          <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              로그아웃
+          </a>
+      </div>
+    </div>
     </div>
   </header>
 
@@ -143,6 +182,23 @@
             유튜브 및 모든 플랫폼 CID 등록이 전면 무료로 제공됩니다.<br>
             요청-제작-사용 모두 무료이며, 해당 음원에서 저작권 수익 발생 시 로열티 80%는 고객에게 돌아갑니다.
           </p>
+          
+          <div class="track-cta-actions" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="#track-request-form" class="btn-producer-check" style="margin: 0; scroll-behavior: smooth;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 2v20M2 12h20"/>
+                <circle cx="12" cy="12" r="4"/>
+              </svg>
+              <span>바로 제작 요청</span>
+            </a>
+            
+            <a href="producer.html" class="btn-producer-check" style="margin: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>Producer check</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -272,7 +328,7 @@
             
             <div class="form-actions">
                 <button type="submit" id="submit-request" class="btn-primary">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M12 19l7-7 3 3-7 7-3-3z"/>
                     <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
                     <path d="M2 2l7.586 7.586"/>
@@ -287,63 +343,61 @@
     
         <!-- 요청 목록 섹션 -->
         <section class="request-list-section" data-animate="fade-up">
-          <div class="request-list-card">
-            <div class="request-list-header">
-        <h2 class="section-title">내 요청 목록</h2>
-              <div class="request-status-info">
-                <div class="status-tag status-pending">
-                  <div class="status-dot"></div>
-                  대기중
-                </div>
-                <div class="status-tag status-working">
-                  <div class="status-dot"></div>
-                  제작중
-                </div>
-                <div class="status-tag status-done">
-                  <div class="status-dot"></div>
-                  완료
-                </div>
+          <div class="request-list-header">
+            <h2 class="section-title">내 요청 목록</h2>
+            <div class="request-status-info">
+              <div class="status-tag status-pending">
+                <div class="status-dot"></div>
+                대기중
+              </div>
+              <div class="status-tag status-working">
+                <div class="status-dot"></div>
+                제작중
+              </div>
+              <div class="status-tag status-done">
+                <div class="status-dot"></div>
+                완료
               </div>
             </div>
-        
-        <!-- 로딩 상태 표시 -->
-        <div id="request-loading" class="request-loading">
-          <div class="loading-spinner-large"></div>
-          <p>요청 목록을 불러오는 중...</p>
-        </div>
-        
-        <!-- 요청 없음 메시지 -->
-        <div id="no-requests" class="no-requests" style="display: none;">
-              <div class="empty-state">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M9 12l2 2 4-4"/>
-                  <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
-                  <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
-                </svg>
-                <h3>아직 요청이 없습니다</h3>
-                <p>위 폼을 통해 맞춤 트랙 제작을 요청해보세요.</p>
-              </div>
-        </div>
-        
-        <!-- 요청 목록 테이블 -->
-        <div class="request-table-container">
-          <table class="request-table">
-            <thead>
-              <tr>
-                <th>트랙 제목</th>
-                <th>장르</th>
-                <th>BPM</th>
-                <th>상태</th>
-                    <th>요청일</th>
-              </tr>
-            </thead>
-            <tbody id="request-list">
-              <!-- 요청 목록이 JavaScript에 의해 여기에 추가됩니다 -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+          </div>
+      
+          <!-- 로딩 상태 표시 -->
+          <div id="request-loading" class="request-loading">
+            <div class="loading-spinner-large"></div>
+            <p>요청 목록을 불러오는 중...</p>
+          </div>
+          
+          <!-- 요청 없음 메시지 -->
+          <div id="no-requests" class="no-requests" style="display: none;">
+            <div class="empty-state">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M9 12l2 2 4-4"/>
+                <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+              </svg>
+              <h3>아직 요청이 없습니다</h3>
+              <p>위 폼을 통해 맞춤 트랙 제작을 요청해보세요.</p>
+            </div>
+          </div>
+          
+          <!-- 요청 목록 테이블 -->
+          <div class="request-table-container">
+            <table class="request-table">
+              <thead>
+                <tr>
+                  <th>트랙 제목</th>
+                  <th>장르</th>
+                  <th>BPM</th>
+                  <th>상태</th>
+                  <th>요청일</th>
+                </tr>
+              </thead>
+              <tbody id="request-list">
+                <!-- 요청 목록이 JavaScript에 의해 여기에 추가됩니다 -->
+              </tbody>
+            </table>
+          </div>
+        </section>
   </div>
     </div>
   </main>

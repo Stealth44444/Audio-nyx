@@ -148,6 +148,17 @@ footer,
     max-width: 100%;
 }
 
+.withdraw-process-header .about-audionyx-subcopy strong {
+    color: var(--color-primary);
+    font-weight: 600;
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: rgba(62, 180, 137, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(62, 180, 137, 0.2);
+    margin-top: 0.5rem;
+}
+
 /* === 메인 콘텐츠 영역 === */
 .withdraw-content {
     display: flex;
@@ -528,6 +539,13 @@ footer,
     .withdraw-process-header .about-audionyx-subcopy {
         white-space: normal;
     }
+    
+    .withdraw-process-header .about-audionyx-subcopy strong {
+        display: block;
+        margin-top: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -564,6 +582,14 @@ footer,
         padding: 14px 24px;
         font-size: 0.9rem;
     }
+    
+    .withdraw-process-header .about-audionyx-subcopy strong {
+        display: block;
+        margin-top: 1rem;
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        text-align: center;
+    }
 } 
 
 .withdraw-process-title-row {
@@ -584,4 +610,157 @@ footer,
   }
 }
 
-.footer-heading { color: #fff !important; } 
+.footer-heading { color: #fff !important; }
+
+
+
+/* === 반응형 스타일 === */
+
+/* === 반응형 디자인 - 벤토 그리드 === */
+@media (max-width: 1024px) {
+    .settlement-bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.2rem;
+    }
+    
+    .bento-large {
+        grid-column: span 2;
+    }
+    
+    .bento-wide {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .settlement-info-section {
+        padding: 3rem 0;
+    }
+    
+    .settlement-header {
+        margin-bottom: 2.5rem;
+        padding: 0 1rem;
+    }
+    
+    .settlement-main-title {
+        font-size: 2.5rem;
+    }
+    
+    .settlement-subtitle {
+        font-size: 1rem;
+    }
+    
+    .settlement-bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .bento-large,
+    .bento-medium,
+    .bento-wide {
+        grid-column: span 2;
+    }
+    
+    .bento-small {
+        grid-column: span 1;
+    }
+    
+    .bento-card {
+        padding: 1.5rem;
+    }
+    
+    .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .timeline-flow {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .timeline-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .highlight-number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .settlement-info-section {
+        padding: 2rem 0;
+    }
+    
+    .settlement-header {
+        margin-bottom: 2rem;
+        padding: 0 0.5rem;
+    }
+    
+    .settlement-main-title {
+        font-size: 2rem;
+    }
+    
+    .settlement-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .settlement-bento-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+    
+    .bento-large,
+    .bento-medium,
+    .bento-small,
+    .bento-wide {
+        grid-column: span 1;
+    }
+    
+    .bento-card {
+        padding: 1.2rem;
+    }
+    
+    .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .card-icon {
+        padding: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .card-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .timeline-period {
+        font-size: 1rem;
+    }
+    
+    .timeline-desc {
+        font-size: 0.8rem;
+    }
+    
+    .highlight-number {
+        font-size: 1.8rem;
+    }
+    
+    .highlight-text {
+        font-size: 0.9rem;
+    }
+    
+    .highlight-sub {
+        font-size: 0.75rem;
+    }
+    
+    .example-step {
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+} 

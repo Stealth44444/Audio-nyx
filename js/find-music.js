@@ -460,20 +460,115 @@ function initializeFilters() {
     checkbox.addEventListener('change', filterTracks);
   });
   
-  // 검색 기능
-  const searchInput = document.querySelector('.findmusic-search-input');
+  // 검색 기능 - 강화된 버전
+  const searchInput = document.querySelector('.findmusic-search-input') || document.getElementById('search-input');
   const searchBtn = document.querySelector('.findmusic-search-btn');
   
+  console.log("[initializeFilters] 검색 요소 찾기:", { searchInput, searchBtn });
+  
   if (searchInput && searchBtn) {
-    searchBtn.addEventListener('click', () => {
+    // 입력 필드가 정상적으로 작동하는지 확인
+    console.log("[initializeFilters] 검색 입력 필드 발견:", searchInput);
+    console.log("[initializeFilters] 입력 필드 현재 상태:", {
+      disabled: searchInput.disabled,
+      readonly: searchInput.readOnly,
+      style: searchInput.style.cssText,
+      tabIndex: searchInput.tabIndex
+    });
+    
+    // 모든 차단 요소 제거 및 강제 활성화
+    searchInput.disabled = false;
+    searchInput.readOnly = false;
+    searchInput.style.pointerEvents = 'auto !important';
+    searchInput.style.userSelect = 'text !important';
+    searchInput.style.webkitUserSelect = 'text !important';
+    searchInput.style.mozUserSelect = 'text !important';
+    searchInput.style.msUserSelect = 'text !important';
+    searchInput.style.cursor = 'text !important';
+    searchInput.tabIndex = 0;
+    searchInput.removeAttribute('readonly');
+    searchInput.removeAttribute('disabled');
+    
+    // 강제로 스타일 적용
+    setTimeout(() => {
+      searchInput.style.setProperty('pointer-events', 'auto', 'important');
+      searchInput.style.setProperty('user-select', 'text', 'important');
+      console.log("[Search] 스타일 강제 적용 완료");
+    }, 100);
+    
+    // 클릭 이벤트로 포커스 강제 설정
+    searchInput.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      searchInput.focus();
+      console.log("[Search] 클릭으로 포커스 설정됨");
+    });
+    
+    // 더블클릭 이벤트
+    searchInput.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      searchInput.select();
+      console.log("[Search] 더블클릭으로 전체 선택됨");
+    });
+    
+    // 검색 버튼 클릭 이벤트
+    searchBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log("[Search] 검색 버튼 클릭됨");
       filterTracks();
     });
     
+    // 모든 키보드 이벤트 처리
+    searchInput.addEventListener('keydown', (e) => {
+      console.log("[Search] 키다운 이벤트:", e.key, e.keyCode);
+    });
+    
     searchInput.addEventListener('keypress', (e) => {
+      console.log("[Search] 키프레스 이벤트:", e.key, e.keyCode);
       if (e.key === 'Enter') {
+        e.preventDefault();
+        console.log("[Search] Enter 키로 검색 시도");
         filterTracks();
       }
     });
+    
+    searchInput.addEventListener('keyup', (e) => {
+      console.log("[Search] 키업 이벤트:", e.key, e.target.value);
+    });
+    
+    // 입력 이벤트 (실시간 검색 준비)
+    searchInput.addEventListener('input', (e) => {
+      console.log("[Search] 입력 감지:", e.target.value);
+    });
+    
+    // 변경 이벤트
+    searchInput.addEventListener('change', (e) => {
+      console.log("[Search] 변경 감지:", e.target.value);
+    });
+    
+    // 포커스 이벤트 (디버깅용)
+    searchInput.addEventListener('focus', (e) => {
+      console.log("[Search] 입력 필드에 포커스됨");
+      e.target.style.outline = '2px solid #3eb489';
+    });
+    
+    searchInput.addEventListener('blur', (e) => {
+      console.log("[Search] 입력 필드에서 포커스 해제됨");
+      e.target.style.outline = 'none';
+    });
+    
+    // 직접 입력 테스트 함수 추가
+    window.testSearchInput = function() {
+      searchInput.value = "테스트 입력";
+      searchInput.focus();
+      console.log("[Search] 직접 입력 테스트 완료");
+    };
+    
+    console.log("[Search] 모든 이벤트 리스너 등록 완료. 테스트: window.testSearchInput() 실행 가능");
+    
+  } else {
+    console.error("[initializeFilters] 검색 입력 필드 또는 버튼을 찾을 수 없습니다", { searchInput, searchBtn });
   }
 }
 

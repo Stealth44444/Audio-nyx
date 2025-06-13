@@ -58,8 +58,18 @@
                 </div>
             </div>
 
-            <!-- 모바일용 프로필 메뉴 -->
-            <div id="mobile-user-profile" class="mobile-user-profile">
+            <!-- 모바일용 로그인 버튼 (로그인하지 않은 상태) -->
+            <div id="mobile-auth-buttons" class="mobile-auth-buttons guest-mode">
+                <a href="#" class="mobile-btn-login" id="mobile-login-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    로그인
+                </a>
+            </div>
+
+            <!-- 모바일용 프로필 메뉴 (로그인한 상태) -->
+            <div id="mobile-user-profile" class="mobile-user-profile guest-mode">
                 <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
                 <span id="mobile-user-name" class="mobile-user-name">게스트</span>
                 <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -437,5 +447,14 @@
     <!-- JavaScript -->
     <script type="module" src="../js/auth.js"></script>
     <script src="../js/common.js"></script>
+
+    <!-- ChannelIO 라이브 챗 위젯 -->
+    <script>
+      (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+
+      ChannelIO('boot', {
+        "pluginKey": "0441558f-2896-4e7b-a8b3-0aa35c765a23"
+      });
+    </script>
 </body>
 </html>

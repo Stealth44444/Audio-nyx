@@ -25,7 +25,6 @@ let currentPlayingWavesurfer = null;
 
 // 검색어 자동완성 및 추천을 위한 데이터 구조
 let searchSuggestions = {
-  genres: new Set(),
   moods: new Set(),
   usecases: new Set(),
   titles: new Set()
@@ -34,7 +33,6 @@ let searchSuggestions = {
 // 검색어 자동완성 및 추천 데이터 초기화
 function initializeSearchSuggestions() {
   tracks.forEach(track => {
-    if (track.category) searchSuggestions.genres.add(track.category.toLowerCase());
     if (track.mood) track.mood.forEach(m => searchSuggestions.moods.add(m.toLowerCase()));
     if (track.usecase) track.usecase.forEach(u => searchSuggestions.usecases.add(u.toLowerCase()));
     if (track.title) searchSuggestions.titles.add(track.title.toLowerCase());
@@ -47,11 +45,6 @@ function generateSearchSuggestions(searchTerm) {
   
   const term = searchTerm.toLowerCase();
   const suggestions = new Set();
-  
-  // 장르 검색
-  searchSuggestions.genres.forEach(genre => {
-    if (genre.includes(term)) suggestions.add(genre);
-  });
   
   // 무드 검색
   searchSuggestions.moods.forEach(mood => {
@@ -243,7 +236,6 @@ async function loadTracksFromFirebase() {
       loadedTracks.push({
         id: doc.id,
         title: data.title || '제목 없음',
-        category: data.genre || '장르 미지정',
         mood: Array.isArray(data.mood)
           ? data.mood
           : (typeof data.mood === 'string' ? data.mood.split(',').map(m => m.trim()) : []),
@@ -630,12 +622,6 @@ function filterTracks() {
       const titleSimilarity = calculateSimilarity(track.title, searchTerm);
       maxSimilarity = Math.max(maxSimilarity, titleSimilarity);
       
-      // 장르 검색
-      if (track.category) {
-        const genreSimilarity = calculateSimilarity(track.category, searchTerm);
-        maxSimilarity = Math.max(maxSimilarity, genreSimilarity);
-      }
-      
       // 무드 검색
       if (track.mood && Array.isArray(track.mood)) {
         track.mood.forEach(mood => {
@@ -660,15 +646,6 @@ function filterTracks() {
     
     // 유사도 점수로 정렬
     tempFilteredTracks.sort((a, b) => b.searchSimilarity - a.searchSimilarity);
-  }
-  
-  // 장르 필터링
-  const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked'))
-    .map(input => input.value.toLowerCase());
-  if (selectedGenres.length > 0) {
-    tempFilteredTracks = tempFilteredTracks.filter(track => 
-      track.category && selectedGenres.includes(track.category.toLowerCase())
-    );
   }
   
   // 분위기 필터링
@@ -797,7 +774,6 @@ function renderTracks(tracksToRender) {
           ${track.title}
         </h3>
         <div class="findmusic-track-meta">
-          <span class="findmusic-track-genre">${track.category}</span>
         </div>
         <div class="findmusic-track-actions">
           <span class="findmusic-track-duration">${formatDuration(track.duration || 0)}</span>
@@ -860,7 +836,7 @@ function renderTracksPage(page) {
 
     // HTML 구조 및 내용은 기존과 동일
     trackItem.innerHTML = `
-      <div class="findmusic-item-thumbnail" data-genre="${track.category || 'Default'}">
+      <div class="findmusic-item-thumbnail">
         ${track.coverUrl ? `<img class="findmusic-item-cover" src="${track.coverUrl}" alt="${track.title} 커버" onerror="this.style.display='none'">` : ''}
         <div class="findmusic-thumbnail-waveform" data-findmusic-wave="true">
           <svg class="findmusic-waveform-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
@@ -882,9 +858,6 @@ function renderTracksPage(page) {
         <div class="findmusic-item-title-genre-wrapper">
           <h3 class="findmusic-item-title" title="${track.title}">${track.title}</h3>
           <div class="findmusic-item-tags">
-            <span class="findmusic-item-genre">
-              ${(track.category && track.category.split(',')[0].trim()) || '장르 미지정'}
-            </span>
             <span class="findmusic-item-mood">
               ${(track.mood && track.mood.length > 0 && track.mood[0]) || '무드 없음'}
             </span>
@@ -1105,9 +1078,8 @@ function showMiniPlayer(track, mainWavesurfer) {
 
   currentMainWavesurferForMiniPlayer = mainWavesurfer;
 
-  // 썸네일 및 장르별 색상
+  // 썸네일 설정
   if (miniPlayerThumbnail) {
-    miniPlayerThumbnail.setAttribute('data-genre', track.category || 'Default');
     
     // 커버 이미지 처리
     if (miniPlayerCover && track.coverUrl) {
@@ -1132,7 +1104,6 @@ function showMiniPlayer(track, mainWavesurfer) {
   // 태그 표시
   if (miniPlayerTags) {
     miniPlayerTags.innerHTML = `
-      <span class="findmusic-item-genre">${track.category || '장르 미지정'}</span>
       <span class="findmusic-item-mood">${track.mood && track.mood.length > 0 ? track.mood[0] : '무드 없음'}</span>
       <span class="findmusic-item-usecase">${track.usecase && track.usecase.length > 0 ? track.usecase[0] : '용도 없음'}</span>
     `;

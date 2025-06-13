@@ -389,6 +389,7 @@ onAuthStateChanged(auth, async (user) => {
   const mobileDropdownMenu = document.getElementById('mobile-dropdown-menu');
   const mobileBtnLogin = document.getElementById('mobile-btn-login');
   const mobileBtnLogout = document.getElementById('mobile-btn-logout');
+  const mobileAuthButtons = document.getElementById('mobile-auth-buttons');
   
   if (user) {
     // Firebase 로그인 상태
@@ -461,6 +462,16 @@ onAuthStateChanged(auth, async (user) => {
       mobileUserName.textContent = displayedName;
     }
     
+    // 모바일 UI 상태 변경 - 로그인 상태
+    if (mobileUserProfile) {
+      mobileUserProfile.classList.remove('guest-mode');
+      mobileUserProfile.classList.add('authenticated');
+    }
+    if (mobileAuthButtons) {
+      mobileAuthButtons.classList.remove('guest-mode');
+      mobileAuthButtons.classList.add('authenticated');
+    }
+    
     // 모바일 드롭다운 메뉴 로그인/로그아웃 버튼 상태 변경
     if (mobileBtnLogin) {
       mobileBtnLogin.style.display = 'none';
@@ -493,6 +504,16 @@ onAuthStateChanged(auth, async (user) => {
     }
     if (mobileUserName) {
       mobileUserName.textContent = '게스트';
+    }
+    
+    // 모바일 UI 상태 변경 - 로그아웃 상태
+    if (mobileUserProfile) {
+      mobileUserProfile.classList.remove('authenticated');
+      mobileUserProfile.classList.add('guest-mode');
+    }
+    if (mobileAuthButtons) {
+      mobileAuthButtons.classList.remove('authenticated');
+      mobileAuthButtons.classList.add('guest-mode');
     }
     
     // 모바일 드롭다운 메뉴 로그인/로그아웃 버튼 상태 변경
@@ -1535,3 +1556,24 @@ window.verifyUserToken = verifyUserToken;
 
 // 현재 사용자 상태를 전역으로 관리
 window.currentUser = null;
+
+// 모바일 로그인 버튼 이벤트 리스너 설정
+document.addEventListener('DOMContentLoaded', function() {
+  // 모바일 로그인 버튼 이벤트 리스너
+  const mobileLoginBtn = document.getElementById('mobile-login-btn');
+  if (mobileLoginBtn) {
+    mobileLoginBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      openAuthModal();
+    });
+  }
+  
+  // 기존 모바일 드롭다운 내 로그인 버튼 이벤트 리스너 (mobile-btn-login)
+  const mobileBtnLogin = document.getElementById('mobile-btn-login');
+  if (mobileBtnLogin) {
+    mobileBtnLogin.addEventListener('click', function(e) {
+      e.preventDefault();
+      openAuthModal();
+    });
+  }
+});

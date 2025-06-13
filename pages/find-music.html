@@ -76,14 +76,24 @@
       </div>
     </div>
 
-            <!-- 모바일용 프로필 메뉴 -->
-        <div id="mobile-user-profile" class="mobile-user-profile">
-            <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
-            <span id="mobile-user-name" class="mobile-user-name">게스트</span>
-            <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <!-- 모바일 드롭다운 메뉴 -->
+            <!-- 모바일용 로그인 버튼 (로그인하지 않은 상태) -->
+            <div id="mobile-auth-buttons" class="mobile-auth-buttons guest-mode">
+                <a href="#" class="mobile-btn-login" id="mobile-login-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    로그인
+                </a>
+            </div>
+
+            <!-- 모바일용 프로필 메뉴 (로그인한 상태) -->
+            <div id="mobile-user-profile" class="mobile-user-profile guest-mode">
+                <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
+                <span id="mobile-user-name" class="mobile-user-name">게스트</span>
+                <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <!-- 모바일 드롭다운 메뉴 -->
             <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
                 <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -143,91 +153,6 @@
       </button>
       
       <div class="findmusic-filters-content">
-        <!-- 장르 필터 -->
-        <div class="filter-group filter-group-tags">
-          <h4 class="filter-group-title">🎧 장르 (Genres)</h4>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="lo-fi hip hop">
-            <span>Lo-fi Hip Hop</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="ambient">
-            <span>Ambient</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="chillwave">
-            <span>Chillwave</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="synthwave">
-            <span>Synthwave</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="dream pop">
-            <span>Dream Pop</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="experimental electronica">
-            <span>Experimental Electronica</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="downtempo">
-            <span>Downtempo</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="vaporwave">
-            <span>Vaporwave/Memorywave</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="neo-classical">
-            <span>Neo-Classical/Cinematic</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="glitch">
-            <span>Glitch</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="ambient drone">
-            <span>Ambient Drone</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="trip-hop">
-            <span>Trip-hop/Chillhop</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="electro-acoustic">
-            <span>Electro-Acoustic</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="post-rock">
-            <span>Post-Rock/Ambient Rock</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="indie folk">
-            <span>Indie Folk/Folktronica</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="jazzhop">
-            <span>Jazzhop/Chill Jazz</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="industrial ambient">
-            <span>Industrial Ambient</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="minimal">
-            <span>Minimal/Microsound</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="tape loop">
-            <span>Tape Loop/Hypnoscore</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="genre" value="psychedelic chill">
-            <span>Psychedelic Chill</span>
-          </label>
-        </div>
-        
         <!-- 무드 필터 -->
         <div class="filter-group filter-group-tags">
           <h4 class="filter-group-title">🧠 무드 (Moods)</h4>
@@ -909,5 +834,14 @@
 
   <!-- 기본 스크립트 -->
   <script src="../js/main.js"></script>
+
+  <!-- ChannelIO 라이브 챗 위젯 -->
+  <script>
+    (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+
+    ChannelIO('boot', {
+      "pluginKey": "0441558f-2896-4e7b-a8b3-0aa35c765a23"
+    });
+  </script>
 </body>
 </html> 

@@ -162,6 +162,14 @@ async function initializePage() {
     renderTracksPage(currentPage); // 첫 페이지 렌더링
     setupPagination(); // 페이지네이션 UI 설정
     addAnimationEffects(); // 주석 해제
+    
+    // 화면 크기 변경 시 미니플레이어 숨김 처리
+    window.addEventListener('resize', function() {
+      if (window.innerWidth <= 768) {
+        hideMiniPlayer();
+      }
+    });
+    
     console.log("[JS SCRIPT] 초기화 완료."); // 로그 메시지 변경
 
   } catch (error) {
@@ -1059,6 +1067,12 @@ function updateMiniPlayerPlayButton(isPlaying) {
 }
 
 function showMiniPlayer(track, mainWavesurfer) {
+  // 모바일 환경에서는 미니플레이어 비활성화
+  if (window.innerWidth <= 768) {
+    console.log("[showMiniPlayer] 모바일 환경에서는 미니플레이어를 표시하지 않습니다.");
+    return;
+  }
+  
   // 필수 요소 참조
   const miniPlayerElement = document.getElementById('mini-player');
   const miniPlayerThumbnail = document.getElementById('mini-player-thumbnail');

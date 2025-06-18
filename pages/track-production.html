@@ -88,7 +88,7 @@
 
     <!-- 모바일용 프로필 메뉴 (로그인한 상태) -->
     <div id="mobile-user-profile" class="mobile-user-profile guest-mode">
-      <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.png" alt="프로필 이미지">
+      <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.svg" alt="프로필 이미지">
       <span id="mobile-user-name" class="mobile-user-name">게스트</span>
       <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -189,6 +189,7 @@
           <p class="about-audionyx-subcopy">
             Audionyx 팀의 국내 최고 프로듀서들이 직접 트랙을 제작합니다.<br>
             제작 요청은 누구나 가능하며, 상업적 사용과 수익 창출이 모두 허용됩니다.<br>
+            보다 많은 분들께 서비스를 제공하기 위해 <strong>한 유저당 최대 2회까지만 요청</strong>이 가능합니다.<br>
             유튜브 및 모든 플랫폼 CID 등록이 전면 무료로 제공됩니다.<br>
             요청-제작-사용 모두 무료이며, 해당 음원에서 저작권 수익 발생 시 로열티 80%는 고객에게 돌아갑니다.
           </p>
@@ -217,7 +218,7 @@
     <section class="process-guide-section" data-animate="fade-up">
       <div class="container">
         <div class="process-cards-grid">
-          <div class="process-card" data-animate="fade-up">
+          <div class="process-card">
             <div class="process-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
@@ -236,7 +237,7 @@
             </p>
           </div>
 
-          <div class="process-card" data-animate="fade-up">
+          <div class="process-card">
             <div class="process-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M9 12l2 2 4-4"/>
@@ -255,7 +256,7 @@
             </p>
           </div>
 
-          <div class="process-card" data-animate="fade-up">
+          <div class="process-card">
             <div class="process-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -275,7 +276,7 @@
     </section>
     
     <!-- 트랙 제작 메인 컨테이너 -->
-    <div class="track-production-container">
+    <div class="track-production-container" data-animate="fade-up">
       <div class="container">
         <!-- 맞춤 제작 요청 폼 -->
         <section class="form-section" data-animate="fade-up">
@@ -283,13 +284,42 @@
             <div class="form-header">
               <h2 class="form-title">맞춤 제작 요청</h2>
               <p class="form-subtitle">원하는 음원의 정보를 입력해 주세요</p>
+              
+              <!-- 요청 현황 표시 -->
+              <div id="request-status-bar" class="request-status-bar" style="display: none;">
+                <div class="request-count-info">
+                  <span id="current-request-count">0</span> / 2회 요청
+                </div>
+                <div class="request-limit-warning" id="limit-warning" style="display: none;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" stroke-width="2"/>
+                  </svg>
+                  최대 요청 횟수에 도달했습니다
+                </div>
+              </div>
             </div>
           
           <form id="track-request-form" class="request-form">
+              <!-- 채널명 입력 추천 안내 -->
+              <div class="form-notice">
+                <div class="notice-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                    <path d="M12 16v-4" stroke-width="2"/>
+                    <path d="M12 8h.01" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="notice-content">
+                  <p class="notice-title">💡 트랙 제목 입력 팁</p>
+                  <p class="notice-text">더 나은 맞춤 제작을 위해 <strong>유튜브 채널명</strong>을 트랙 제목에 포함하여 입력하는 것을 추천드립니다.</p>
+                  <p class="notice-example">예시: "[채널명] 브이로그 BGM", "[채널명] 오프닝 음악"</p>
+                </div>
+              </div>
+              
               <div class="form-row">
             <div class="form-group">
               <label for="track-title">트랙 제목 <span class="required">*</span></label>
-              <input type="text" id="track-title" placeholder="원하는 트랙 제목을 입력하세요" required>
+              <input type="text" id="track-title" placeholder="예: [내 채널명] 브이로그 BGM" required>
               <div class="error-message" id="title-error"></div>
             </div>
             

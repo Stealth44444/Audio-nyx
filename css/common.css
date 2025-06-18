@@ -392,7 +392,7 @@ ul {
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
-    border-radius: 30px;
+    border-radius: 8px;
     position: relative;
     transition: all 0.3s ease;
     background-color: rgba(0, 0, 0, 0.2);
@@ -1837,9 +1837,27 @@ ul {
   visibility: hidden; /* Hidden by default, shown by JS */
   opacity: 0;
   transition: opacity 0.3s ease;
+  display: block; /* Always block display */
 }
 
 .error-message.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Success message style */
+.success-message {
+  color: #28a745; /* Success green color */
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  height: 1.2em; /* Reserve space to prevent layout shifting */
+  visibility: hidden; /* Hidden by default, shown by JS */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: block; /* Always block display */
+}
+
+.success-message.show {
   visibility: visible;
   opacity: 1;
 }

@@ -1,0 +1,8 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 원 -->
+  <circle cx="32" cy="32" r="32" fill="#3EB489"/>
+  
+  <!-- 사용자 아이콘 -->
+  <path d="M32 16C27.6 16 24 19.6 24 24C24 28.4 27.6 32 32 32C36.4 32 40 28.4 40 24C40 19.6 36.4 16 32 16Z" fill="white"/>
+  <path d="M32 36C23.2 36 16 39.2 16 44V48H48V44C48 39.2 40.8 36 32 36Z" fill="white"/>
+</svg> 

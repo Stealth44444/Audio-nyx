@@ -1568,18 +1568,9 @@ body {
     height: 14px;
   }
   
-  /* 미니플레이어 모바일 최적화 */
+  /* 모바일에서 미니플레이어 완전 숨김 */
   .mini-player {
-    width: 95%;
-    padding: 1rem;
-    border-radius: 16px;
-    bottom: -100%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .mini-player.active {
-    bottom: 1.5rem;
+    display: none !important;
   }
   
   /* 정렬 컨테이너 모바일 최적화 */
@@ -1665,57 +1656,7 @@ body {
     cursor: not-allowed;
   }
   
-  /* 모바일 미니플레이어 스타일 개선 */
-  .mini-player {
-    width: 95%;
-    padding: 1.25rem;
-    border-radius: 16px;
-    bottom: -100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(8, 8, 8, 0.95);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(62, 180, 137, 0.35);
-    box-shadow: 
-      0 -10px 40px rgba(0, 0, 0, 0.6),
-      0 1px 0 rgba(255, 255, 255, 0.05) inset,
-      0 0 20px rgba(62, 180, 137, 0.1);
-    z-index: 1000;
-    transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .mini-player.active {
-    bottom: 1.5rem;
-  }
-  
-  .mini-player-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    color: rgba(255, 255, 255, 0.8);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    font-size: 16px;
-    line-height: 1;
-    backdrop-filter: blur(10px);
-  }
-  
-  .mini-player-close:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: #fff;
-    transform: rotate(90deg) scale(1.1);
-    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-  }
+  /* 768px 이하에서 미니플레이어 숨김 - 중복 제거 */
 }
 
 @media (max-width: 480px) {
@@ -1835,16 +1776,9 @@ body {
     height: 12px;
   }
   
-  /* 미니플레이어 초소형 화면 최적화 */
+  /* 480px 이하에서도 미니플레이어 숨김 유지 */
   .mini-player {
-    width: 98%;
-    padding: 0.75rem;
-    border-radius: 12px;
-    bottom: -100%;
-  }
-  
-  .mini-player.active {
-    bottom: 0.75rem;
+    display: none !important;
   }
   
   /* 그리드 간격 최적화 */
@@ -1901,25 +1835,7 @@ body {
     border-radius: 6px;
   }
   
-  /* 초소형 화면 미니플레이어 최적화 */
-  .mini-player {
-    width: 98%;
-    padding: 0.75rem;
-    border-radius: 12px;
-    bottom: -100%;
-  }
-  
-  .mini-player.active {
-    bottom: 0.5rem;
-  }
-  
-  .mini-player-close {
-    top: 0.75rem;
-    right: 0.75rem;
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
-  }
+  /* 480px 이하에서도 미니플레이어 숨김 유지 - 중복 제거 */
 }
 
 /* 웨이브폼 캔버스 애니메이션 완전 차단 */

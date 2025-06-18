@@ -1,0 +1,161 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ───────── 공통 헬퍼 함수 ───────── */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+    
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+    
+    // 이메일 인증 요구사항 완화 - 로그인만 확인
+    function hasValidAuth() {
+      return isSignedIn();
+    }
+
+    /* ───────── ① channels 컬렉션 ─────────
+       유저별 채널 정보 (문서 ID = 사용자 UID) */
+    match /channels/{userId} {
+      // 모든 사람이 채널 목록 읽기 가능 (공개)
+      allow read: if true;
+      
+      // 채널 문서 생성/수정: 로그인된 사용자 본인만, 유저 정보 포함
+      allow create, update: if isSignedIn() 
+                           && request.auth.uid == userId
+                           && hasValidUserChannelData();
+      
+      // 채널 문서 삭제: 관리자 또는 문서 소유자만
+      allow delete: if isAdmin() || isOwner(userId);
+    }
+    
+    // 유저 채널 데이터 검증 함수
+    function hasValidUserChannelData() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['userInfo', 'channels', 'updatedAt'])
+             && hasValidUserInfo(data.userInfo)
+             && data.channels is list
+             && data.updatedAt is timestamp
+             && isValidChannelsList(data.channels);
+    }
+    
+    // 유저 정보 검증 함수
+    function hasValidUserInfo(userInfo) {
+      return userInfo.keys().hasAll(['uid', 'email'])
+             && userInfo.uid is string && userInfo.uid.size() > 0
+             && userInfo.email is string && userInfo.email.size() > 0;
+    }
+    
+    // 채널 리스트 검증 함수
+    function isValidChannelsList(channels) {
+      return channels.size() <= 10;  // 최대 10개 채널 제한
+      // 각 채널 개별 검증은 클라이언트 측에서 수행
+    }
+    
+    // 개별 채널 데이터 검증 함수
+    function hasValidSingleChannel(channel) {
+      return channel.keys().hasAll(['url', 'platform', 'status', 'key', 'createdAt'])
+             && channel.url is string && channel.url.size() > 0
+             && channel.platform is string && channel.platform in ['youtube', 'tiktok', 'instagram']
+             && channel.status is string && channel.status in ['검사중', '승인됨', '거부됨']
+             && channel.key is string && channel.key.size() > 0
+             && (channel.createdAt is timestamp || channel.createdAt is string);
+    }
+
+    /* ───────── ② track_requests 컬렉션 ─────────
+       음원 요청 */
+    match /track_requests/{requestId} {
+      // 생성: 로그인 + uid 필드가 본인 UID와 일치
+      allow create: if isSignedIn() 
+                    && request.resource.data.uid == request.auth.uid
+                    && hasValidTrackRequestData();
+
+      // 읽기: 관리자 또는 본인 요청만
+      allow read: if isAdmin() || isOwner(resource.data.uid);
+      
+      // 수정: 관리자만 (상태 변경용)
+      allow update: if isAdmin();
+      
+      // 삭제: 관리자 또는 본인만
+      allow delete: if isAdmin() || isOwner(resource.data.uid);
+    }
+    
+    // 음원 요청 데이터 검증 함수
+    function hasValidTrackRequestData() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'status', 'createdAt'])
+             && data.uid is string && data.uid.size() > 0
+             && data.status is string
+             && data.createdAt is timestamp;
+    }
+
+    /* ───────── ③ user_withdraw_accounts 컬렉션 ─────────
+       사용자 정산 계좌 */
+    match /user_withdraw_accounts/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    /* ───────── ④ track 컬렉션 ─────────
+       공개 음원 메타데이터 */
+    match /track/{trackId} {
+      // 누구나 음원 정보 읽기 가능
+      allow read: if true;
+      
+      // 음원 업로드/수정/삭제: 관리자 전용
+      allow write: if isAdmin();
+    }
+
+    /* ───────── ⑤ users 컬렉션 ─────────
+       사용자 공개 프로필 */
+    match /users/{userId} {
+      // 모든 사람이 사용자 프로필 읽기 가능
+      allow read: if true;
+      
+      // 프로필 생성/수정: 본인만 (이메일 인증 요구사항 제거)
+      allow create: if isOwner(userId) && hasValidUserData();
+      allow update: if isOwner(userId);
+      
+      // 프로필 삭제: 관리자 또는 본인만
+      allow delete: if isAdmin() || isOwner(userId);
+    }
+    
+    // 사용자 데이터 검증 함수 - 실제 저장 데이터에 맞게 수정
+    function hasValidUserData() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'email', 'createdAt'])
+             && data.uid is string && data.uid.size() > 0
+             && data.email is string && data.email.size() > 0
+             && data.createdAt is timestamp
+             // 선택적 필드들 검증
+             && (data.get('displayName', '') is string)
+             && (data.get('nickname', '') is string)
+             && (data.get('phone', '') is string)
+             && (data.get('username', '') is string)
+             && (data.get('provider', '') is string);
+    }
+
+    /* ───────── ⑥ 관리자 전용 컬렉션들 ───────── */
+    match /admin/{document=**} {
+      allow read, write: if isAdmin();
+    }
+    
+    match /analytics/{document=**} {
+      allow read, write: if isAdmin();
+    }
+    
+    match /system_logs/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    /* ───────── ⑦ 기타 모든 경로 차단 ───────── */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 

@@ -2318,12 +2318,12 @@ footer,
             rgba(62, 180, 137, 0.6) 100%);
     }
     
-    /* === 모바일 카드 스타일 === */
+    /* === 모바일 카드 스타일 - 세로 길이 최적화 === */
     .guide-card {
         flex: 0 0 300px;
         min-width: 300px;
         height: auto;
-        padding: 1.25rem;
+        padding: 1rem;
         border-radius: 16px;
         scroll-snap-align: start;
         box-shadow: 
@@ -2343,15 +2343,15 @@ footer,
     }
     
     .guide-card-header {
-        padding: 0 0 1rem 0;
-        gap: 0.75rem;
+        padding: 0 0 0.75rem 0;
+        gap: 0.5rem;
         flex-wrap: nowrap;
         align-items: center;
     }
     
     .guide-card-header h3 {
-        font-size: 1rem;
-        line-height: 1.3;
+        font-size: 0.95rem;
+        line-height: 1.2;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -2360,61 +2360,61 @@ footer,
     }
     
     .guide-status-badge {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.65rem;
-        letter-spacing: 0.2px;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.6rem;
+        letter-spacing: 0.1px;
         flex-shrink: 0;
         white-space: nowrap;
     }
     
     .guide-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 12px;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
         flex-shrink: 0;
     }
     
     .guide-icon svg {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
     }
     
     .step-number {
-        width: 36px;
-        height: 36px;
-        font-size: 0.8rem;
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
         flex-shrink: 0;
     }
     
     .step-content h4 {
-        font-size: 0.9rem;
-        margin-bottom: 0.4rem;
-        line-height: 1.3;
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+        line-height: 1.2;
     }
     
     .step-content p {
-        font-size: 0.75rem;
-        margin-bottom: 0.75rem;
-        line-height: 1.4;
+        font-size: 0.7rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
     }
     
     .step-demo {
-        padding: 1rem;
+        padding: 0.75rem;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.5rem;
         text-align: center;
-        margin-top: 0.75rem;
-        border-radius: 10px;
+        margin-top: 0.5rem;
+        border-radius: 8px;
     }
     
     .demo-key {
-        font-size: 1.25rem;
-        letter-spacing: 0.05em;
+        font-size: 1.1rem;
+        letter-spacing: 0.03em;
     }
     
     .demo-copy-btn {
-        padding: 6px;
-        border-radius: 6px;
+        padding: 5px;
+        border-radius: 5px;
     }
     
     .platform-guide-tabs {
@@ -2441,8 +2441,8 @@ footer,
     
     .time-info-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
     }
     
     .time-info-item {
@@ -2450,30 +2450,30 @@ footer,
     }
     
     .time-label {
-        font-size: 0.75rem;
-        margin-bottom: 0.3rem;
+        font-size: 0.7rem;
+        margin-bottom: 0.25rem;
     }
     
     .time-value {
-        font-size: 0.9rem;
-        padding: 0.5rem;
-        border-radius: 8px;
+        font-size: 0.85rem;
+        padding: 0.4rem;
+        border-radius: 6px;
     }
     
     .time-notice {
-        gap: 0.5rem;
-        padding: 0.875rem;
-        border-radius: 8px;
-        font-size: 0.75rem;
-        margin-top: 0.875rem;
+        gap: 0.4rem;
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        margin-top: 0.75rem;
     }
     
     .step-guide-list {
-        gap: 1rem;
+        gap: 0.75rem;
     }
     
     .step-guide-item {
-        gap: 0.875rem;
+        gap: 0.75rem;
     }
     
     .platform-guide-content {
@@ -2574,7 +2574,7 @@ footer,
     .guide-card {
         flex: 0 0 280px;
         min-width: 280px;
-        padding: 1rem;
+        padding: 0.875rem;
         border-radius: 14px;
         box-shadow: 
             0 6px 28px rgba(0, 0, 0, 0.18),
@@ -2593,15 +2593,15 @@ footer,
     }
     
     .guide-card-header {
-        padding: 0 0 0.875rem 0;
-        gap: 0.5rem;
+        padding: 0 0 0.625rem 0;
+        gap: 0.4rem;
         align-items: flex-start;
         flex-wrap: wrap;
     }
     
     .guide-card-header h3 {
-        font-size: 0.9rem;
-        line-height: 1.3;
+        font-size: 0.85rem;
+        line-height: 1.2;
         margin: 0;
         flex: 1;
         min-width: 0;
@@ -2640,16 +2640,16 @@ footer,
     }
     
     .step-content p {
-        font-size: 0.7rem;
-        margin-bottom: 0.625rem;
-        line-height: 1.4;
+        font-size: 0.65rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
     }
     
     .step-demo {
-        padding: 0.75rem;
-        gap: 0.5rem;
-        margin-top: 0.625rem;
-        border-radius: 8px;
+        padding: 0.625rem;
+        gap: 0.4rem;
+        margin-top: 0.5rem;
+        border-radius: 6px;
     }
     
     .demo-key {
@@ -2685,8 +2685,8 @@ footer,
     }
     
     .time-info-grid {
-        gap: 0.875rem;
-        margin-bottom: 0.875rem;
+        gap: 0.5rem;
+        margin-bottom: 0.625rem;
     }
     
     .time-label {
@@ -2701,11 +2701,11 @@ footer,
     }
     
     .time-notice {
-        gap: 0.4rem;
-        padding: 0.75rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        margin-top: 0.75rem;
+        gap: 0.3rem;
+        padding: 0.625rem;
+        border-radius: 5px;
+        font-size: 0.65rem;
+        margin-top: 0.625rem;
     }
     
     .time-notice svg {
@@ -2715,11 +2715,11 @@ footer,
     }
     
     .step-guide-list {
-        gap: 1rem;
+        gap: 0.75rem;
     }
     
     .step-guide-item {
-        gap: 0.875rem;
+        gap: 0.625rem;
     }
     
     .step-guide-item:not(:last-child)::after {

@@ -21,7 +21,10 @@ function showError(element, message) {
   if (element) {
     element.textContent = message;
     element.style.display = 'block';
-    element.style.color = '#dc3545'; // 빨간색으로 명확히 표시
+    element.style.visibility = 'visible'; // CSS visibility 설정
+    element.style.opacity = '1'; // CSS opacity 설정
+    element.classList.add('show'); // show 클래스 추가
+    element.style.color = '#ff6b6b'; // CSS와 일치하는 에러 색상
     console.log('[showError] 에러 메시지 표시 완료:', message);
   } else {
     console.error('[showError] DOM 요소가 존재하지 않음:', element);
@@ -32,6 +35,9 @@ function hideError(element) {
   if (element) {
     element.textContent = '';
     element.style.display = 'none';
+    element.style.visibility = 'hidden'; // CSS visibility 설정
+    element.style.opacity = '0'; // CSS opacity 설정
+    element.classList.remove('show'); // show 클래스 제거
   }
 }
 
@@ -39,6 +45,9 @@ function showSuccess(element, message) {
   if (element) {
     element.textContent = message;
     element.style.display = 'block';
+    element.style.visibility = 'visible'; // CSS visibility 설정
+    element.style.opacity = '1'; // CSS opacity 설정
+    element.classList.add('show'); // show 클래스 추가
     element.style.color = '#28a745'; // 성공 메시지 색상
   }
 }
@@ -47,6 +56,9 @@ function hideSuccess(element) {
   if (element) {
     element.textContent = '';
     element.style.display = 'none';
+    element.style.visibility = 'hidden'; // CSS visibility 설정
+    element.style.opacity = '0'; // CSS opacity 설정
+    element.classList.remove('show'); // show 클래스 제거
   }
 }
 
@@ -204,6 +216,41 @@ document.addEventListener('DOMContentLoaded', () => {
     emailLoginForm.addEventListener('submit', handleEmailPasswordLogin);
   }
 
+  // 로그인 입력 필드 실시간 유효성 검사
+  if (loginEmailIdInput) {
+    loginEmailIdInput.addEventListener('blur', () => {
+      const value = loginEmailIdInput.value.trim();
+      if (value && !isValidEmail(value) && value.length < 4) {
+        showError(loginEmailIdError, '유효한 이메일 또는 아이디를 입력해 주세요.');
+      } else {
+        hideError(loginEmailIdError);
+      }
+    });
+    
+    loginEmailIdInput.addEventListener('input', () => {
+      if (loginEmailIdError.style.display === 'block') {
+        hideError(loginEmailIdError);
+      }
+    });
+  }
+
+  if (loginPasswordInput) {
+    loginPasswordInput.addEventListener('blur', () => {
+      const value = loginPasswordInput.value.trim();
+      if (value && value.length < 6) {
+        showError(loginPasswordError, '비밀번호는 6자 이상이어야 합니다.');
+      } else {
+        hideError(loginPasswordError);
+      }
+    });
+    
+    loginPasswordInput.addEventListener('input', () => {
+      if (loginPasswordError.style.display === 'block') {
+        hideError(loginPasswordError);
+      }
+    });
+  }
+
   // 자체 회원가입 폼 제출 처리
   if (signupForm) {
     signupForm.addEventListener('submit', handleSignup);
@@ -212,6 +259,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // 온보딩 폼 제출 처리
   if (onboardingForm) {
     onboardingForm.addEventListener('submit', handleOnboarding);
+  }
+
+  // 전화번호 자동 포맷팅 이벤트 리스너
+  if (signupPhoneInput) {
+    signupPhoneInput.addEventListener('input', (e) => {
+      const formatted = formatPhoneNumber(e.target.value);
+      if (formatted !== e.target.value) {
+        e.target.value = formatted;
+      }
+    });
+  }
+
+  if (onboardingPhoneInput) {
+    onboardingPhoneInput.addEventListener('input', (e) => {
+      const formatted = formatPhoneNumber(e.target.value);
+      if (formatted !== e.target.value) {
+        e.target.value = formatted;
+      }
+    });
   }
 
   // 아이디 중복 확인 버튼 (회원가입 모달)
@@ -421,16 +487,23 @@ onAuthStateChanged(auth, async (user) => {
           displayedName = user.displayName || '사용자';
         }
         
-        // 프로필 이미지 표시 여부 확인 (구글 로그인인 경우에만)
+        // 프로필 이미지 설정
         if (userData.provider === 'google' && userData.photoURL) {
           shouldShowProfileImage = true;
           profileImageUrl = userData.photoURL;
           console.log('[onAuthStateChanged] 구글 로그인 사용자 - 프로필 이미지 표시:', userData.photoURL);
         } else {
-          console.log('[onAuthStateChanged] 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용');
+          // 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용
+          shouldShowProfileImage = true;
+          const isInSubDir = window.location.pathname.includes('/pages/');
+          profileImageUrl = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
+          console.log('[onAuthStateChanged] 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용:', profileImageUrl);
         }
       } else {
-        console.log('[onAuthStateChanged] Firestore에 사용자 문서 없음. Firebase displayName 사용 시도.');
+        console.log('[onAuthStateChanged] Firestore에 사용자 문서 없음. Firebase displayName 사용.');
+        
+        // 자동 생성하지 않음 - 회원가입/온보딩에서만 생성
+        
         displayedName = user.displayName || '사용자';
         
         // Firebase Auth의 providerData로 구글 로그인 확인
@@ -439,16 +512,41 @@ onAuthStateChanged(auth, async (user) => {
           shouldShowProfileImage = true;
           profileImageUrl = user.photoURL;
           console.log('[onAuthStateChanged] 구글 로그인 사용자 (Firestore 문서 없음) - Firebase Auth 프로필 이미지 사용');
+        } else {
+          // 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용
+          shouldShowProfileImage = true;
+          const isInSubDir = window.location.pathname.includes('/pages/');
+          profileImageUrl = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
+          console.log('[onAuthStateChanged] 이메일/비밀번호 로그인 사용자 (Firestore 문서 없음) - 기본 프로필 이미지 사용');
         }
       }
     } catch (error) {
       console.error('[onAuthStateChanged] Firestore 사용자 정보 로드 실패:', error);
+      
+      // 권한 오류인 경우 사용자 문서 자동 생성 시도
+      if (error.code === 'permission-denied') {
+        try {
+          console.log('[onAuthStateChanged] 권한 오류 - 사용자 문서 자동 생성 시도');
+          await saveUserToFirestore(user, {
+            provider: user.providerData && user.providerData.some(provider => provider.providerId === 'google.com') ? 'google' : 'emailpassword'
+          });
+        } catch (saveError) {
+          console.error('[onAuthStateChanged] 사용자 문서 자동 생성 실패:', saveError);
+        }
+      }
+      
       displayedName = user.displayName || '사용자';
+      
+      // 에러 발생 시에도 기본 프로필 이미지 설정
+      shouldShowProfileImage = true;
+      const isInSubDir = window.location.pathname.includes('/pages/');
+      profileImageUrl = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
+      console.log('[onAuthStateChanged] 에러 발생 - 기본 프로필 이미지 사용:', profileImageUrl);
     }
     
     // 데스크톱 프로필 업데이트
     if (userAvatar) {
-      userAvatar.src = profileImageUrl;
+      userAvatar.src = profileImageUrl || (window.location.pathname.includes('/pages/') ? '../images/default-avatar.svg' : 'images/default-avatar.svg');
     }
     if (userName) {
       userName.textContent = displayedName;
@@ -456,7 +554,7 @@ onAuthStateChanged(auth, async (user) => {
     
     // 모바일 프로필 업데이트
     if (mobileUserAvatar) {
-      mobileUserAvatar.src = profileImageUrl;
+      mobileUserAvatar.src = profileImageUrl || (window.location.pathname.includes('/pages/') ? '../images/default-avatar.svg' : 'images/default-avatar.svg');
     }
     if (mobileUserName) {
       mobileUserName.textContent = displayedName;
@@ -500,7 +598,7 @@ onAuthStateChanged(auth, async (user) => {
     if (mobileUserAvatar) {
       // 페이지 경로에 따라 기본 아바타 경로 설정
       const isInSubDir = window.location.pathname.includes('/pages/');
-      mobileUserAvatar.src = isInSubDir ? '../images/default-avatar.png' : 'images/default-avatar.png';
+      mobileUserAvatar.src = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
     }
     if (mobileUserName) {
       mobileUserName.textContent = '게스트';
@@ -539,13 +637,32 @@ onAuthStateChanged(auth, async (user) => {
 
 // 신규 회원 Firestore 저장 함수
 async function saveUserToFirestore(user, userData = {}) {
-  if (!user || !user.uid) return;
+  console.log('[saveUserToFirestore] 함수 시작');
+  console.log('[saveUserToFirestore] user:', user);
+  console.log('[saveUserToFirestore] userData:', userData);
+  
+  if (!user || !user.uid) {
+    console.error('[saveUserToFirestore] user 또는 user.uid가 없습니다:', user);
+    return;
+  }
+  
   try {
+    console.log('[saveUserToFirestore] Firestore 연결 확인 - db:', db);
+    console.log('[saveUserToFirestore] 사용자 문서 참조 생성 중... uid:', user.uid);
+    
     const userRef = doc(db, 'users', user.uid);
+    console.log('[saveUserToFirestore] userRef 생성 완료:', userRef);
+    
+    console.log('[saveUserToFirestore] 기존 문서 존재 여부 확인 중...');
     const userSnap = await getDoc(userRef);
+    console.log('[saveUserToFirestore] getDoc 완료. exists:', userSnap.exists());
+    
     if (!userSnap.exists()) {
+      console.log('[saveUserToFirestore] 신규 사용자 - 문서 생성 시작');
+      
       // 로그인 방식 확인 (구글 로그인인지 확인)
       const isGoogleLogin = user.providerData && user.providerData.some(provider => provider.providerId === 'google.com');
+      console.log('[saveUserToFirestore] 구글 로그인 여부:', isGoogleLogin);
       
       // 신규 회원만 저장
       const userDataToSave = {
@@ -558,6 +675,17 @@ async function saveUserToFirestore(user, userData = {}) {
         username: userData.username || '',
         createdAt: serverTimestamp()
       };
+      
+      console.log('[saveUserToFirestore] 입력받은 userData:', userData);
+      console.log('[saveUserToFirestore] userData.nickname:', userData.nickname);
+      console.log('[saveUserToFirestore] userData.phone:', userData.phone);
+      console.log('[saveUserToFirestore] userData.email:', userData.email);
+      console.log('[saveUserToFirestore] userData.username:', userData.username);
+      console.log('[saveUserToFirestore] Firebase user 정보:', {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName
+      });
 
       // 구글 로그인인 경우에만 photoURL 저장
       if (isGoogleLogin && user.photoURL) {
@@ -567,11 +695,43 @@ async function saveUserToFirestore(user, userData = {}) {
         console.log('[saveUserToFirestore] 이메일/비밀번호 로그인 - photoURL 저장하지 않음');
       }
 
+      console.log('[saveUserToFirestore] 저장할 데이터:', userDataToSave);
+      console.log('[saveUserToFirestore] 저장할 데이터 상세:');
+      console.log('  - uid:', userDataToSave.uid);
+      console.log('  - displayName:', userDataToSave.displayName);
+      console.log('  - email:', userDataToSave.email);
+      console.log('  - provider:', userDataToSave.provider);
+      console.log('  - nickname:', userDataToSave.nickname);
+      console.log('  - phone:', userDataToSave.phone);
+      console.log('  - username:', userDataToSave.username);
+      console.log('[saveUserToFirestore] 현재 인증 상태 확인...');
+      console.log('[saveUserToFirestore] user.uid:', user.uid);
+      console.log('[saveUserToFirestore] user.email:', user.email);
+      console.log('[saveUserToFirestore] user.emailVerified:', user.emailVerified);
+      console.log('[saveUserToFirestore] setDoc 실행 중...');
+      
       await setDoc(userRef, userDataToSave);
-      console.log('신규 회원 Firestore 저장 완료:', user.uid, '프로바이더:', userDataToSave.provider);
+      console.log('[saveUserToFirestore] ✅ Firestore 저장 성공!');
+      console.log('[saveUserToFirestore] 저장된 UID:', user.uid);
+      console.log('[saveUserToFirestore] 저장된 프로바이더:', userDataToSave.provider);
+    } else {
+      console.log('[saveUserToFirestore] 기존 사용자 - 문서가 이미 존재함');
+      console.log('[saveUserToFirestore] 기존 문서 유지 - 업데이트하지 않음');
+      return;
     }
   } catch (error) {
-    console.error('Firestore 회원 저장 실패:', error);
+    console.error('[saveUserToFirestore] ❌ Firestore 회원 저장 실패:');
+    console.error('[saveUserToFirestore] 에러 코드:', error.code);
+    console.error('[saveUserToFirestore] 에러 메시지:', error.message);
+    console.error('[saveUserToFirestore] 전체 에러 객체:', error);
+    
+    // 권한 관련 에러인지 확인
+    if (error.code === 'permission-denied') {
+      console.error('[saveUserToFirestore] 🚫 권한 거부 오류 - Firestore 규칙을 확인하세요');
+    }
+    
+    // 에러를 다시 throw하여 상위에서 처리할 수 있도록 함
+    throw error;
   }
 }
 
@@ -778,8 +938,22 @@ function isValidEmail(email) {
 }
 
 function isValidPhoneNumber(phone) {
-  const re = /^010-[0-9]{4}-[0-9]{4}$/;
-  return re.test(phone);
+  // 010-XXXX-XXXX 형식과 01XXXXXXXXX 형식 모두 지원
+  const re1 = /^010-[0-9]{4}-[0-9]{4}$/;
+  const re2 = /^010[0-9]{8}$/;
+  return re1.test(phone) || re2.test(phone);
+}
+
+// 전화번호 자동 포맷팅 함수
+function formatPhoneNumber(phone) {
+  // 숫자만 추출
+  const numbers = phone.replace(/\D/g, '');
+  
+  // 11자리 숫자인 경우에만 포맷팅
+  if (numbers.length === 11 && numbers.startsWith('010')) {
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+  }
+  return phone;
 }
 
 function isValidPassword(password) {
@@ -822,10 +996,24 @@ async function handleEmailPasswordLogin(e) {
 
   if (!emailOrId) {
     showError(loginEmailIdError, '아이디 또는 이메일을 입력해 주세요.');
+    showNotification('아이디 또는 이메일을 입력해 주세요.', true);
     isValid = false;
   }
   if (!password) {
     showError(loginPasswordError, '비밀번호를 입력해 주세요.');
+    showNotification('비밀번호를 입력해 주세요.', true);
+    isValid = false;
+  }
+
+  // 기본 유효성 검사 추가
+  if (emailOrId && !isValidEmail(emailOrId) && emailOrId.length < 4) {
+    showError(loginEmailIdError, '유효한 이메일 또는 아이디를 입력해 주세요.');
+    showNotification('유효한 이메일 또는 아이디를 입력해 주세요.', true);
+    isValid = false;
+  }
+  if (password && password.length < 6) {
+    showError(loginPasswordError, '비밀번호는 6자 이상이어야 합니다.');
+    showNotification('비밀번호는 6자 이상이어야 합니다.', true);
     isValid = false;
   }
 
@@ -920,7 +1108,7 @@ async function handleSignup(e) {
     console.log('[handleSignup] nickname 유효성 검사 실패');
   }
   if (!isValidPhoneNumber(phone)) {
-    showError(signupPhoneError, '전화번호 형식이 올바르지 않습니다 (010-XXXX-XXXX).');
+    showError(signupPhoneError, '전화번호 형식이 올바르지 않습니다 (010-XXXX-XXXX 또는 01XXXXXXXXX).');
     showNotification('전화번호 형식이 올바르지 않습니다.', true);
     isValid = false;
     console.log('[handleSignup] phone 유효성 검사 실패');
@@ -1016,13 +1204,35 @@ async function handleSignup(e) {
     console.log('[handleSignup] 사용자 생성 성공:', user.uid);
 
     console.log('[handleSignup] Firestore 사용자 데이터 저장 시도...');
-    await saveUserToFirestore(user, {
+    console.log('[handleSignup] 전달할 사용자 데이터:', {
       nickname: nickname,
       phone: phone,
+      email: email,
       username: username,
-      marketingAgreed: marketingAgreed
+      marketingAgreed: marketingAgreed,
+      provider: 'emailpassword'
     });
-    console.log('Firestore 사용자 데이터 저장 성공');
+    console.log('[handleSignup] 개별 필드 값 확인:');
+    console.log('  - nickname:', nickname, '(타입:', typeof nickname, ')');
+    console.log('  - phone:', phone, '(타입:', typeof phone, ')');
+    console.log('  - email:', email, '(타입:', typeof email, ')');
+    console.log('  - username:', username, '(타입:', typeof username, ')');
+    try {
+      await saveUserToFirestore(user, {
+        nickname: nickname,
+        phone: phone,
+        email: email,
+        username: username,
+        marketingAgreed: marketingAgreed,
+        provider: 'emailpassword'
+      });
+      console.log('[handleSignup] ✅ Firestore 사용자 데이터 저장 성공');
+    } catch (firestoreError) {
+      console.error('[handleSignup] ❌ Firestore 저장 실패:', firestoreError);
+      // Firestore 저장 실패해도 회원가입은 성공했으므로 사용자에게 알림
+      showNotification('회원가입은 완료되었지만 일부 정보 저장에 실패했습니다. 다시 로그인해 주세요.', true);
+      throw firestoreError; // 에러를 다시 throw하여 catch 블록에서 처리
+    }
 
     showNotification('회원가입이 완료되었습니다!');
     closeSignupModal();
@@ -1375,7 +1585,7 @@ async function handleOnboarding(e) {
     isValid = false;
   }
   if (!isValidPhoneNumber(phone)) {
-    showError(onboardingPhoneError, '전화번호 형식이 올바르지 않습니다 (010-XXXX-XXXX).');
+    showError(onboardingPhoneError, '전화번호 형식이 올바르지 않습니다 (010-XXXX-XXXX 또는 01XXXXXXXXX).');
     showNotification('전화번호 형식이 올바르지 않습니다.', true);
     isValid = false;
   }
@@ -1429,11 +1639,19 @@ async function handleOnboarding(e) {
     }
 
     // Firestore에 추가 정보 저장
+    console.log('[handleOnboarding] 전달할 사용자 데이터:', {
+      nickname: nickname,
+      phone: phone,
+      username: username,
+      email: currentUser.email,
+      provider: 'google'
+    });
     await saveUserToFirestore(currentUser, {
       nickname: nickname,
       phone: phone,
       username: username,
-      email: currentUser.email // 구글 이메일 사용
+      email: currentUser.email, // 구글 이메일 사용
+      provider: 'google'
     });
 
     console.log('[handleOnboarding] 온보딩 완료');

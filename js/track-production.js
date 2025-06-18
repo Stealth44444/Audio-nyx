@@ -6,7 +6,9 @@ import {
   onSnapshot, 
   query, 
   where,
-  orderBy
+  orderBy,
+  doc,
+  getDoc
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
 
 import { 
@@ -16,14 +18,24 @@ import {
 
 import { db } from './firebase.js';
 
-// 애니메이션 초기화 함수 (브랜드 소개 페이지와 동일)
+// 애니메이션 초기화 함수 (find-music 페이지와 동일한 패턴)
 function initializeAnimations() {
+  // 메인 섹션들 애니메이션
   const animatedElements = document.querySelectorAll('[data-animate="fade-up"]');
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('animate-fade-up');
+        
+        // 프로세스 가이드 섹션인 경우 카드들도 애니메이션 적용
+        if (entry.target.classList.contains('process-guide-section')) {
+          const processCards = entry.target.querySelectorAll('.process-card');
+          processCards.forEach(card => {
+            card.classList.add('animate-fade-up');
+          });
+        }
+        
         observer.unobserve(entry.target);
       }
     });
@@ -96,6 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingEl = document.getElementById('request-loading');
   const noRequestsEl = document.getElementById('no-requests');
   
+  // 제한 관련 DOM 요소
+  const requestStatusBar = document.getElementById('request-status-bar');
+  const currentRequestCount = document.getElementById('current-request-count');
+  const limitWarning = document.getElementById('limit-warning');
+  const formCard = document.querySelector('.form-card');
+  
   // 오류 메시지 요소
   const titleError = document.getElementById('title-error');
   const bpmError = document.getElementById('bpm-error');
@@ -114,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 인증 상태 확인
   const auth = getAuth();
   let currentUser = { uid: 'anonymous', isAnonymous: true }; // 기본값을 익명 사용자로 설정
+  const MAX_REQUESTS = 2; // 최대 요청 횟수
+  let userRequestCount = 0; // 사용자 현재 요청 횟수
   
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -132,6 +152,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
+  // 요청 횟수 제한 체크 함수
+  function checkRequestLimit(requestCount) {
+    userRequestCount = requestCount;
+    
+    // 상태 바 표시
+    requestStatusBar.style.display = 'flex';
+    currentRequestCount.textContent = requestCount;
+    
+    if (requestCount >= MAX_REQUESTS) {
+      // 최대 횟수 도달시 폼 비활성화
+      limitWarning.style.display = 'flex';
+      formCard.classList.add('form-disabled');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" stroke-width="2"/>
+        </svg>
+        <span>요청 횟수 초과</span>
+      `;
+      
+      // 입력 필드 비활성화
+      titleInput.disabled = true;
+      bpmInput.disabled = true;
+      genreSelect.disabled = true;
+      descriptionInput.disabled = true;
+      refUrlInput.disabled = true;
+      emailInput.disabled = true;
+      
+      return false;
+    } else {
+      // 아직 요청 가능
+      limitWarning.style.display = 'none';
+      formCard.classList.remove('form-disabled');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+          <path d="M2 2l7.586 7.586"/>
+          <circle cx="11" cy="11" r="2"/>
+        </svg>
+        <span>요청 제출</span>
+      `;
+      
+      // 입력 필드 활성화
+      titleInput.disabled = false;
+      bpmInput.disabled = false;
+      genreSelect.disabled = false;
+      descriptionInput.disabled = false;
+      refUrlInput.disabled = false;
+      emailInput.disabled = false;
+      
+      return true;
+    }
+  }
+  
   // 폼 제출 처리
   requestForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -142,6 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     //   showNotification('로그인 후 이용 가능합니다.', true);
     //   return;
     // }
+    
+    // 요청 횟수 제한 체크
+    if (userRequestCount >= MAX_REQUESTS) {
+      showNotification('최대 요청 횟수(2회)에 도달했습니다.', true);
+      return;
+    }
     
     // 입력값 가져오기
     const title = titleInput.value.trim();
@@ -164,6 +246,30 @@ document.addEventListener('DOMContentLoaded', () => {
       
       console.log('Firestore에 트랙 요청 데이터 추가 시도...');
       
+      // 사용자 정보 가져오기
+      let userInfo = {
+        nickname: '',
+        phone: ''
+      };
+      
+      try {
+        if (currentUser && !currentUser.isAnonymous) {
+          // 로그인한 사용자인 경우 users 컬렉션에서 정보 가져오기
+          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            userInfo.nickname = userData.nickname || '';
+            userInfo.phone = userData.phone || '';
+            console.log('사용자 정보 가져오기 성공:', userInfo);
+          } else {
+            console.log('사용자 문서가 존재하지 않습니다.');
+          }
+        }
+      } catch (userError) {
+        console.error('사용자 정보 가져오기 오류:', userError);
+        // 사용자 정보를 가져오지 못해도 요청은 계속 진행
+      }
+      
       // Firestore에 요청 추가
       const docRef = await addDoc(collection(db, 'track_requests'), {
         uid: currentUser.uid, // 로그인 사용자 또는 'anonymous'
@@ -174,6 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
         refUrl: refUrl || null,
         status: '미제작',
         email: email,
+        // 사용자 정보 추가
+        userNickname: userInfo.nickname,
+        userPhone: userInfo.phone,
         createdAt: serverTimestamp()
       });
       
@@ -209,6 +318,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('요청 목록 업데이트 수신 - Snapshot empty:', snapshot.empty, 'Size:', snapshot.size);
         // 로딩 상태 숨기기
         loadingEl.style.display = 'none';
+        
+        // 요청 횟수 제한 체크
+        const requestCount = snapshot.size;
+        checkRequestLimit(requestCount);
         
         if (snapshot.empty) {
           // 요청이 없는 경우

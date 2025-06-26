@@ -183,9 +183,9 @@ ul {
 
 .navbar .container {
     display: grid;
-    grid-template-columns: auto 1fr 115px;
+    grid-template-columns: auto 1fr auto auto;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
     width: 100%;
     max-width: var(--container-width);
     /* 레이아웃 안정성을 위한 최소 높이 보장 */
@@ -307,7 +307,7 @@ ul {
     transform: scale(1.1);
 }
 
-/* 툴팁 스타일 */
+/* 툴크 스타일 */
 .menu-area a[data-requires-auth="true"]::before {
     content: '🔒 로그인 필요';
     position: absolute;
@@ -354,17 +354,98 @@ ul {
     }
 }
 
+/* === 언어 선택 토글 스타일 === */
+.language-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    grid-column: 3;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(62, 180, 137, 0.2);
+    transition: all 0.3s ease;
+    justify-self: end;
+}
+
+.language-toggle:hover {
+    background: rgba(62, 180, 137, 0.1);
+    border-color: rgba(62, 180, 137, 0.4);
+}
+
+.language-option {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-gray);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.language-option.active {
+    color: var(--color-primary);
+    background: rgba(62, 180, 137, 0.2);
+}
+
+.language-option:not(.active):hover {
+    color: var(--color-text-light);
+}
+
+.language-separator {
+    color: var(--color-text-gray);
+    opacity: 0.5;
+    font-size: 0.85rem;
+}
+
 /* === 공통 인증 관련 스타일 === */
 .auth-buttons {
     display: flex;
     align-items: center;
     gap: 1rem;
     justify-content: flex-end;
-    grid-column: 3;
+    grid-column: 4;
     /* 고정 크기로 레이아웃 안정성 확보 */
     min-width: 115px;
     width: 115px;
     height: 40px;
+    /* 인증 상태 확인 중 깜빡임 방지 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.auth-buttons.auth-ready {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 인증 로딩 상태 스타일 */
+.auth-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 4;
+    min-width: 115px;
+    width: 115px;
+    height: 40px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.auth-loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(62, 180, 137, 0.3);
+    border-top: 2px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .btn-login {
@@ -402,13 +483,23 @@ ul {
     width: 115px;
     height: 40px;
     justify-self: end;
-    grid-column: 3;
+    grid-column: 4;
     z-index: 1000;
+    /* 인증 상태 확인 중 깜빡임 방지 */
+    opacity: 0;
+    visibility: hidden;
+}
+
+.user-profile.auth-ready {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* 데스크톱에서 모바일 프로필과 모바일 로그인 버튼 완전히 숨기기 */
 .mobile-user-profile,
-.mobile-auth-buttons {
+.mobile-auth-buttons,
+.mobile-auth-loading,
+.mobile-language-toggle {
     display: none !important;
 }
 
@@ -416,6 +507,8 @@ ul {
 @media (min-width: 769px) {
     .mobile-user-profile,
     .mobile-auth-buttons,
+    .mobile-auth-loading,
+    .mobile-language-toggle,
     .mobile-user-profile.guest-mode,
     .mobile-user-profile.authenticated,
     .mobile-auth-buttons.guest-mode,
@@ -672,6 +765,10 @@ ul {
     
     .menu-area {
         display: none;
+    }
+    
+    .language-toggle {
+        display: none !important;
     }
     
     .auth-buttons {
@@ -1425,6 +1522,26 @@ ul {
         right: 1rem;
         top: 50%;
         transform: translateY(-50%);
+        /* 인증 상태 확인 중 깜빡임 방지 */
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-auth-buttons.auth-ready {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* 모바일 인증 로딩 상태 */
+    .mobile-auth-loading {
+        display: flex;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 1;
+        visibility: visible;
     }
 
     .mobile-btn-login {
@@ -1463,9 +1580,17 @@ ul {
         cursor: pointer;
         padding: 0.5rem;
         border-radius: 20px;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         background: rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(62, 180, 137, 0.3);
+        /* 인증 상태 확인 중 깜빡임 방지 */
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .mobile-user-profile.auth-ready {
+        opacity: 1;
+        visibility: visible;
     }
 
     .mobile-user-profile:hover {
@@ -1552,6 +1677,53 @@ ul {
 
     .mobile-dropdown-item:hover svg {
         opacity: 1;
+    }
+
+    /* 모바일 언어 토글 */
+    .mobile-language-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.3rem 0.6rem;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(62, 180, 137, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .mobile-language-toggle:hover {
+        background: rgba(62, 180, 137, 0.1);
+        border-color: rgba(62, 180, 137, 0.4);
+    }
+
+    .mobile-language-option {
+        padding: 0.1rem 0.3rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--color-text-gray);
+        cursor: pointer;
+        border-radius: 3px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .mobile-language-option.active {
+        color: var(--color-primary);
+        background: rgba(62, 180, 137, 0.2);
+    }
+
+    .mobile-language-option:not(.active):hover {
+        color: var(--color-text-light);
+    }
+
+    .mobile-language-separator {
+        color: var(--color-text-gray);
+        opacity: 0.5;
+        font-size: 0.75rem;
     }
 
     /* 모바일에서만 상태별 표시 제어 */

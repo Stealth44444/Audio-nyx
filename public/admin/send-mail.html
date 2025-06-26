@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>메일 발송 - Audionyx</title>
+  <link href="https://unpkg.com/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    .bg-mint-500 { background-color: #20B2AA; }
+    .bg-mint-600 { background-color: #008B8B; }
+    .hover\:bg-mint-600:hover { background-color: #008B8B; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="container mx-auto px-6 py-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold mb-8 text-center">📧 Audionyx 메일 발송</h1>
+      
+      <!-- 로그인 상태 표시 -->
+      <div id="auth-status" class="mb-6 p-4 rounded-lg bg-gray-800">
+        <div id="logged-out" class="text-center">
+          <p class="mb-4">메일을 발송하려면 먼저 로그인하세요.</p>
+          <button id="login-btn" class="px-6 py-2 bg-green-500 hover:bg-green-600 rounded-lg font-semibold transition-colors">
+            🔑 Google 로그인
+          </button>
+        </div>
+        <div id="logged-in" class="hidden">
+          <div class="flex justify-between items-center">
+            <span id="user-info" class="text-green-400"></span>
+            <button id="logout-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded text-sm transition-colors">
+              로그아웃
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 메일 발송 폼 -->
+      <div id="mail-form-container" class="hidden">
+        <form id="mail-form" class="space-y-6 bg-gray-800 p-6 rounded-lg">
+          <div>
+            <label for="to" class="block text-sm font-medium mb-2">받는 사람 이메일</label>
+            <input 
+              id="to" 
+              type="email" 
+              class="w-full p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent" 
+              placeholder="recipient@example.com"
+              required
+            />
+          </div>
+          
+          <div>
+            <label for="subject" class="block text-sm font-medium mb-2">제목</label>
+            <input 
+              id="subject" 
+              type="text" 
+              class="w-full p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent" 
+              placeholder="메일 제목을 입력하세요"
+              required
+            />
+          </div>
+          
+          <div>
+            <label for="html" class="block text-sm font-medium mb-2">메일 내용 (HTML)</label>
+            <textarea 
+              id="html" 
+              rows="12"
+              class="w-full p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent font-mono text-sm" 
+              placeholder="<h1>안녕하세요!</h1><p>메일 본문을 HTML로 작성하세요.</p>"
+              required
+            ></textarea>
+          </div>
+          
+          <div class="flex gap-4">
+            <button 
+              type="submit" 
+              class="flex-1 bg-mint-500 hover:bg-mint-600 text-white p-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              id="send-btn"
+            >
+              📨 메일 발송
+            </button>
+            <button 
+              type="button" 
+              id="preview-btn"
+              class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors"
+            >
+              👁️ 미리보기
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 미리보기 모달 -->
+      <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white text-black p-6 rounded-lg max-w-4xl max-h-96 overflow-auto">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold">메일 미리보기</h3>
+            <button id="close-preview" class="text-gray-500 hover:text-gray-700">✕</button>
+          </div>
+          <div id="preview-content" class="border p-4 rounded"></div>
+        </div>
+      </div>
+
+      <!-- 발송 결과 -->
+      <div id="result" class="mt-6 p-4 rounded-lg hidden"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-functions.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+
+    // Firebase 설정
+    const firebaseConfig = {
+      apiKey: "AIzaSyBP926ULg9wNUNGjQy0fMjRxUeS4XyeG6M",
+      authDomain: "audionyx-a7b2e.firebaseapp.com",
+      projectId: "audionyx-a7b2e",
+      storageBucket: "audionyx-a7b2e.firebasestorage.app",
+      messagingSenderId: "1002069862376",
+      appId: "1:1002069862376:web:669c93bca8ab2f1d09665d",
+      measurementId: "G-P6GNNYLJ38"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const functions = getFunctions(app);
+    const auth = getAuth(app);
+
+    // DOM 요소들
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const loggedOut = document.getElementById("logged-out");
+    const loggedIn = document.getElementById("logged-in");
+    const userInfo = document.getElementById("user-info");
+    const mailFormContainer = document.getElementById("mail-form-container");
+    const mailForm = document.getElementById("mail-form");
+    const sendBtn = document.getElementById("send-btn");
+    const previewBtn = document.getElementById("preview-btn");
+    const previewModal = document.getElementById("preview-modal");
+    const previewContent = document.getElementById("preview-content");
+    const closePreview = document.getElementById("close-preview");
+    const result = document.getElementById("result");
+
+    // 인증 상태 변경 감지
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loggedOut.classList.add("hidden");
+        loggedIn.classList.remove("hidden");
+        mailFormContainer.classList.remove("hidden");
+        userInfo.textContent = `👤 ${user.displayName || user.email}`;
+      } else {
+        loggedOut.classList.remove("hidden");
+        loggedIn.classList.add("hidden");
+        mailFormContainer.classList.add("hidden");
+      }
+    });
+
+    // 로그인
+    loginBtn.addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
+      } catch (error) {
+        console.error("로그인 오류:", error);
+        showResult("로그인에 실패했습니다.", "error");
+      }
+    });
+
+    // 로그아웃
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error("로그아웃 오류:", error);
+      }
+    });
+
+    // 미리보기
+    previewBtn.addEventListener("click", () => {
+      const html = document.getElementById("html").value;
+      previewContent.innerHTML = html;
+      previewModal.classList.remove("hidden");
+    });
+
+    closePreview.addEventListener("click", () => {
+      previewModal.classList.add("hidden");
+    });
+
+    // 메일 발송
+    mailForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const to = document.getElementById("to").value.trim();
+      const subject = document.getElementById("subject").value.trim();
+      const html = document.getElementById("html").value;
+
+      if (!to || !subject || !html) {
+        showResult("모든 필드를 입력해주세요.", "error");
+        return;
+      }
+
+      // 인증 상태 디버깅
+      const currentUser = auth.currentUser;
+      console.log("현재 사용자:", currentUser);
+      console.log("인증 토큰:", currentUser ? await currentUser.getIdToken() : "없음");
+
+      // 전송할 데이터 디버깅
+      const mailData = { to, subject, html };
+      console.log("전송할 데이터:", mailData);
+      console.log("데이터 타입:", {
+        to: typeof to,
+        subject: typeof subject, 
+        html: typeof html
+      });
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "📨 발송 중...";
+
+      try {
+        const sendMail = httpsCallable(functions, "sendMail");
+        const result = await sendMail(mailData);
+        console.log("Functions 응답:", result);
+        
+        showResult(`✅ 메일이 성공적으로 발송되었습니다!\n받는 사람: ${to}`, "success");
+        mailForm.reset();
+      } catch (error) {
+        console.error("메일 발송 오류:", error);
+        console.error("오류 상세:", {
+          code: error.code,
+          message: error.message,
+          details: error.details
+        });
+        showResult(`❌ 메일 발송에 실패했습니다.\n오류: ${error.message}`, "error");
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "📨 메일 발송";
+      }
+    });
+
+    // 결과 표시
+    function showResult(message, type) {
+      result.textContent = message;
+      result.className = `mt-6 p-4 rounded-lg ${type === "success" ? "bg-green-800 text-green-200" : "bg-red-800 text-red-200"}`;
+      result.classList.remove("hidden");
+      
+      setTimeout(() => {
+        result.classList.add("hidden");
+      }, 5000);
+    }
+
+    // 모달 외부 클릭시 닫기
+    previewModal.addEventListener("click", (e) => {
+      if (e.target === previewModal) {
+        previewModal.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html> 

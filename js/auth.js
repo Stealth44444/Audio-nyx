@@ -155,10 +155,73 @@ async function verifyUserToken() {
   }
 }
 
+// 인증 상태 로딩 표시 함수
+function showAuthLoading() {
+  // 화면 크기 확인
+  const isMobile = window.innerWidth <= 768;
+  
+  if (isMobile) {
+    // 모바일에서는 모바일 로딩만 표시
+    const mobileAuthButtons = document.getElementById('mobile-auth-buttons');
+    const mobileUserProfile = document.getElementById('mobile-user-profile');
+    
+    if (mobileAuthButtons) {
+      mobileAuthButtons.classList.remove('auth-ready');
+    }
+    if (mobileUserProfile) {
+      mobileUserProfile.classList.remove('auth-ready');
+    }
+    
+    // 모바일 로딩 요소 생성 및 표시
+    let mobileAuthLoadingElement = document.querySelector('.mobile-auth-loading');
+    if (!mobileAuthLoadingElement && mobileAuthButtons) {
+      mobileAuthLoadingElement = document.createElement('div');
+      mobileAuthLoadingElement.className = 'mobile-auth-loading';
+      mobileAuthLoadingElement.innerHTML = '<div class="auth-loading-spinner"></div>';
+      mobileAuthButtons.parentNode.insertBefore(mobileAuthLoadingElement, mobileAuthButtons);
+    }
+  } else {
+    // 데스크톱에서는 데스크톱 로딩만 표시
+    if (authButtons) {
+      authButtons.classList.remove('auth-ready');
+    }
+    if (userProfile) {
+      userProfile.classList.remove('auth-ready');
+    }
+    
+    // 로딩 요소 생성 및 표시
+    let authLoadingElement = document.querySelector('.auth-loading');
+    if (!authLoadingElement && authButtons) {
+      authLoadingElement = document.createElement('div');
+      authLoadingElement.className = 'auth-loading';
+      authLoadingElement.innerHTML = '<div class="auth-loading-spinner"></div>';
+      authButtons.parentNode.insertBefore(authLoadingElement, authButtons);
+    }
+  }
+}
+
+// 인증 상태 로딩 숨김 함수
+function hideAuthLoading() {
+  // 데스크톱 로딩 숨김
+  const authLoadingElement = document.querySelector('.auth-loading');
+  if (authLoadingElement) {
+    authLoadingElement.remove();
+  }
+  
+  // 모바일 로딩 숨김
+  const mobileAuthLoadingElement = document.querySelector('.mobile-auth-loading');
+  if (mobileAuthLoadingElement) {
+    mobileAuthLoadingElement.remove();
+  }
+}
+
 // DOM이 로드된 후 초기화 및 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', () => {
   // 자동완성 방지 강화
   preventAutocompleteInterference();
+  
+  // 인증 상태 확인 중임을 표시
+  showAuthLoading();
   
   // DOM 요소 존재 여부 확인
   console.log('[DOM 초기화] signupEmailError 요소:', signupEmailError);
@@ -460,11 +523,17 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     // Firebase 로그인 상태
     console.log('로그인된 사용자:', user);
+    
+    // 로딩 상태 숨기기
+    hideAuthLoading();
+    
+    // 데스크톱 UI 업데이트
     if (authButtons) {
       authButtons.style.display = 'none';
     }
     if (userProfile) {
       userProfile.style.display = 'flex';
+      userProfile.classList.add('auth-ready');
     }
     
     // Firestore에서 사용자 정보 가져오기
@@ -563,7 +632,7 @@ onAuthStateChanged(auth, async (user) => {
     // 모바일 UI 상태 변경 - 로그인 상태
     if (mobileUserProfile) {
       mobileUserProfile.classList.remove('guest-mode');
-      mobileUserProfile.classList.add('authenticated');
+      mobileUserProfile.classList.add('authenticated', 'auth-ready');
     }
     if (mobileAuthButtons) {
       mobileAuthButtons.classList.remove('guest-mode');
@@ -583,11 +652,18 @@ onAuthStateChanged(auth, async (user) => {
     closeAuthModal(); // 로그인 성공 시 모달 닫기
   } else {
     // Firebase 로그아웃 상태 - UI 초기화
+    
+    // 로딩 상태 숨기기
+    hideAuthLoading();
+    
+    // 데스크톱 UI 업데이트
     if (authButtons) {
       authButtons.style.display = 'flex';
+      authButtons.classList.add('auth-ready');
     }
     if (userProfile) {
       userProfile.style.display = 'none';
+      userProfile.classList.remove('auth-ready');
       const dropdownMenu = document.getElementById('dropdown-menu');
       if (dropdownMenu) {
         dropdownMenu.classList.remove('show');
@@ -606,12 +682,12 @@ onAuthStateChanged(auth, async (user) => {
     
     // 모바일 UI 상태 변경 - 로그아웃 상태
     if (mobileUserProfile) {
-      mobileUserProfile.classList.remove('authenticated');
+      mobileUserProfile.classList.remove('authenticated', 'auth-ready');
       mobileUserProfile.classList.add('guest-mode');
     }
     if (mobileAuthButtons) {
       mobileAuthButtons.classList.remove('authenticated');
-      mobileAuthButtons.classList.add('guest-mode');
+      mobileAuthButtons.classList.add('guest-mode', 'auth-ready');
     }
     
     // 모바일 드롭다운 메뉴 로그인/로그아웃 버튼 상태 변경

@@ -21,6 +21,7 @@
   
   <script type="module" src="../js/firebase.js"></script>
   <script type="module" src="../js/track-production.js"></script>
+  <script src="../js/i18n.js"></script>
 </head>
 <body>
   <!-- 브랜드 공통 네비게이터 -->
@@ -33,22 +34,28 @@
       </div>
     <nav role="navigation" class="menu-area">
       <ul>
-        <li><a href="../index.html">홈</a></li>
-        <li><a href="brand.html">브랜드 소개</a></li>
-        <li><a href="withdraw.html">계좌 등록</a></li>
-        <li><a href="find-music.html">음원 찾기</a></li>
-        <li><a href="channel-management.html">채널 관리</a></li>
-        <li class="active"><a href="track-production.html">트랙 제작</a></li>
+        <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
+        <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
+        <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
+        <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+        <li><a href="channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+        <li class="active"><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
       </ul>
-    </nav>
+        </nav>
+    <!-- 언어 선택 토글 -->
+    <div class="language-toggle">
+        <span class="language-option active" data-lang="ko">KR</span>
+        <span class="language-separator">|</span>
+        <span class="language-option" data-lang="ja">JP</span>
+    </div>
     <!-- 로그인 버튼 -->
     <div class="auth-buttons">
-        <button id="btn-login" class="btn-login">로그인</button>
+      <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
     </div>
     
     <!-- 로그인 후 표시될 프로필 영역 -->
     <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
-      <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지">
+      <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
       <span id="user-name" class="user-name"></span>
       <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -76,6 +83,13 @@
       </div>
     </div>
 
+    <!-- 모바일용 언어 선택 토글 -->
+    <div class="mobile-language-toggle">
+        <span class="mobile-language-option active" data-lang="kr">KR</span>
+        <span class="mobile-language-separator">|</span>
+        <span class="mobile-language-option" data-lang="jp">JP</span>
+    </div>
+
     <!-- 모바일용 로그인 버튼 (로그인하지 않은 상태) -->
     <div id="mobile-auth-buttons" class="mobile-auth-buttons guest-mode">
         <a href="#" class="mobile-btn-login" id="mobile-login-btn">
@@ -88,8 +102,8 @@
 
     <!-- 모바일용 프로필 메뉴 (로그인한 상태) -->
     <div id="mobile-user-profile" class="mobile-user-profile guest-mode">
-      <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.svg" alt="프로필 이미지">
-      <span id="mobile-user-name" class="mobile-user-name">게스트</span>
+            <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.svg" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
+                    <span id="mobile-user-name" class="mobile-user-name" data-i18n="channelManagement.common.guest">게스트</span>
       <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
@@ -134,7 +148,7 @@
             <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
             <polyline points="9,22 9,12 15,12 15,22"/>
           </svg>
-          홈
+          <span data-i18n="mobile.nav.home">홈</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -144,7 +158,7 @@
             <circle cx="6" cy="18" r="3"/>
             <circle cx="18" cy="16" r="3"/>
           </svg>
-          음원
+          <span data-i18n="mobile.nav.music">음원</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -153,7 +167,7 @@
             <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
             <polygon points="9.75,15.02 15.5,11.75 9.75,8.48"/>
           </svg>
-          채널
+          <span data-i18n="mobile.nav.channel">채널</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -163,7 +177,7 @@
             <path d="M3 5v14a2 2 0 002 2h16v-5"/>
             <path d="M18 12a2 2 0 100-4 2 2 0 000 4z"/>
           </svg>
-          정산
+          <span data-i18n="mobile.nav.withdraw">정산</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -172,7 +186,7 @@
             <path d="M12 2v20M2 12h20"/>
             <circle cx="12" cy="12" r="4"/>
           </svg>
-          제작
+          <span data-i18n="mobile.nav.production">제작</span>
         </a>
       </li>
     </ul>
@@ -184,9 +198,9 @@
     <section class="track-process-section" data-animate="fade-up">
       <div class="container">
         <div class="track-process-inner">
-          <div class="about-audionyx-title">트랙 제작이란?</div>
-          <h2 class="about-audionyx-headline">CID 등록 전면 무료, 상업적 사용 가능</h2>
-          <p class="about-audionyx-subcopy">
+          <div class="about-audionyx-title" data-i18n="trackProduction.process.title">트랙 제작이란?</div>
+          <h2 class="about-audionyx-headline" data-i18n="trackProduction.process.headline">CID 등록 전면 무료, 상업적 사용 가능</h2>
+          <p class="about-audionyx-subcopy" data-i18n="trackProduction.process.description">
             Audionyx 팀의 국내 최고 프로듀서들이 직접 트랙을 제작합니다.<br>
             제작 요청은 누구나 가능하며, 상업적 사용과 수익 창출이 모두 허용됩니다.<br>
             보다 많은 분들께 서비스를 제공하기 위해 <strong>한 유저당 최대 2회까지만 요청</strong>이 가능합니다.<br>
@@ -229,8 +243,8 @@
               </svg>
             </div>
             <div class="process-label">STEP 01</div>
-            <h3>요청서 작성</h3>
-            <p class="process-description">
+            <h3 data-i18n="trackProduction.steps.step1Title">요청서 작성</h3>
+            <p class="process-description" data-i18n="trackProduction.steps.step1Desc">
               원하는 트랙의 제목, 장르, BPM,<br>
               분위기 등을 상세히 작성하여<br>
               맞춤 제작을 요청합니다.
@@ -248,8 +262,8 @@
               </svg>
             </div>
             <div class="process-label">STEP 02</div>
-            <h3>오리지널 음원 제작</h3>
-            <p class="process-description">
+            <h3 data-i18n="trackProduction.steps.step2Title">오리지널 음원 제작</h3>
+            <p class="process-description" data-i18n="trackProduction.steps.step2Desc">
               최고의 전문 프로듀서 팀이<br>
               요청사항에 맞는 고품질<br>
               음원을 정성들여 제작합니다.
@@ -264,8 +278,8 @@
               </svg>
             </div>
             <div class="process-label">STEP 03</div>
-            <h3>이메일 발송</h3>
-            <p class="process-description">
+            <h3 data-i18n="trackProduction.steps.step3Title">이메일 발송</h3>
+            <p class="process-description" data-i18n="trackProduction.steps.step3Desc">
               제작 완료된 음원을<br>
               등록하신 이메일 주소로<br>
               고품질 파일로 발송해 드립니다.
@@ -282,8 +296,8 @@
         <section class="form-section" data-animate="fade-up">
           <div class="form-card">
             <div class="form-header">
-              <h2 class="form-title">맞춤 제작 요청</h2>
-              <p class="form-subtitle">원하는 음원의 정보를 입력해 주세요</p>
+              <h2 class="form-title" data-i18n="trackProduction.form.title">맞춤 제작 요청</h2>
+              <p class="form-subtitle" data-i18n="trackProduction.form.subtitle">원하는 음원의 정보를 입력해 주세요</p>
               
               <!-- 요청 현황 표시 -->
               <div id="request-status-bar" class="request-status-bar" style="display: none;">
@@ -362,7 +376,7 @@
             
               <div class="form-group full-width">
               <label for="track-ref-url">참고 영상 URL (선택)</label>
-              <input type="text" id="track-ref-url" placeholder="YouTube 등의 참고 영상 URL">
+                              <input type="text" id="track-ref-url" placeholder="YouTube 등의 참고 영상 URL" data-i18n-placeholder="trackProduction.form.refUrlPlaceholder">
               <div class="error-message" id="url-error"></div>
             </div>
             
@@ -384,19 +398,19 @@
         <!-- 요청 목록 섹션 -->
         <section class="request-list-section" data-animate="fade-up">
           <div class="request-list-header">
-            <h2 class="section-title">내 요청 목록</h2>
+            <h2 class="section-title" data-i18n="trackProduction.requestList.title">내 요청 목록</h2>
             <div class="request-status-info">
-              <div class="status-tag status-pending">
+                              <div class="status-tag status-pending">
                 <div class="status-dot"></div>
-                대기중
+                <span data-i18n="trackProduction.status.pending">대기중</span>
               </div>
               <div class="status-tag status-working">
                 <div class="status-dot"></div>
-                제작중
+                <span data-i18n="trackProduction.status.working">제작중</span>
               </div>
               <div class="status-tag status-done">
                 <div class="status-dot"></div>
-                완료
+                <span data-i18n="trackProduction.status.done">완료</span>
               </div>
             </div>
           </div>
@@ -455,11 +469,11 @@
       <div class="footer-main">
         <div class="footer-brand">
           <div class="footer-logo">Audionyx</div>
-          <p class="footer-tagline">쇼츠 음원 수익화 플랫폼</p>
+          <p class="footer-tagline" data-i18n="footer.tagline">쇼츠 음원 수익화 플랫폼</p>
         </div>
         <div class="footer-nav-container">
           <div class="footer-nav-group">
-            <h4 class="footer-heading">서비스</h4>
+            <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
             <ul class="footer-nav">
               <li><a href="../pages/find-music.html">음원 찾기</a></li>
               <li><a href="../pages/withdraw.html">계좌 등록</a></li>
@@ -468,7 +482,7 @@
             </ul>
           </div>
           <div class="footer-nav-group">
-            <h4 class="footer-heading">회사</h4>
+            <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
             <ul class="footer-nav">
               <li><a href="../pages/brand.html">브랜드 소개</a></li>
               <li><a href="/policy">이용약관</a></li>
@@ -477,13 +491,13 @@
             </ul>
           </div>
           <div class="footer-nav-group">
-            <h4 class="footer-heading">자주 묻는 질문</h4>
+            <h4 class="footer-heading" data-i18n="footer.faq">자주 묻는 질문</h4>
             <ul class="footer-nav">
               <li><a href="../pages/faq.html">FAQ 바로가기</a></li>
             </ul>
           </div>
           <div class="footer-nav-group">
-            <h4 class="footer-heading">연락처</h4>
+            <h4 class="footer-heading" data-i18n="footer.contact">연락처</h4>
             <ul class="footer-nav">
               <li><a href="mailto:audionyx369@gmail.com">audionyx369@gmail.com</a></li>
               <li class="social-links">
@@ -496,8 +510,8 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="footer-copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
-        <p class="footer-location">Seoul, Korea</p>
+        <p class="footer-copy" data-i18n="footer.copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
+        <p class="footer-location" data-i18n="footer.location">Seoul, Korea</p>
       </div>
     </div>
   </footer>

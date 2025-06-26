@@ -177,7 +177,60 @@
     color: var(--color-primary);
 }
 
-/* === FAQ 질문 버튼 === */
+/* === FAQ details/summary 스타일 === */
+.faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 1.5rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-item summary:hover {
+    color: var(--color-primary);
+}
+
+.faq-item summary::after {
+    content: '▼';
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    color: var(--color-primary);
+}
+
+.faq-item[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item p {
+    padding: 0 2rem 1.5rem 2rem;
+    margin: 0;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === 기존 FAQ 질문 버튼 스타일 (제거됨 - 하위 호환성) === */
 .faq-question {
     width: 100%;
     padding: 1.5rem 2rem;
@@ -265,6 +318,15 @@
         font-size: 1.8rem;
     }
     
+    .faq-item summary {
+        padding: 1.25rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .faq-item p {
+        padding: 0 1.5rem 1.25rem 1.5rem;
+    }
+    
     .faq-question {
         padding: 1.25rem 1.5rem;
         font-size: 1rem;
@@ -299,6 +361,16 @@
     
     .section-icon {
         font-size: 1.5rem;
+    }
+    
+    .faq-item summary {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+    }
+    
+    .faq-item p {
+        padding: 0 1.25rem 1rem 1.25rem;
+        font-size: 0.95rem;
     }
     
     .faq-question {
@@ -337,6 +409,16 @@
         gap: 0.5rem;
     }
     
+    .faq-item summary {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .faq-item p {
+        padding: 0 1rem 0.875rem 1rem;
+        font-size: 0.9rem;
+    }
+    
     .faq-question {
         padding: 0.875rem 1rem;
         font-size: 0.9rem;
@@ -368,6 +450,16 @@
 .faq-section:nth-child(6) { animation-delay: 0.6s; }
 
 /* === 접근성 개선 === */
+.faq-item summary:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.faq-item summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
 .faq-question:focus {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;

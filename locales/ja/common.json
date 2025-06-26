@@ -1,0 +1,415 @@
+{
+  "navbar": {
+    "home": "ホーム",
+    "brand": "ブランド紹介",
+    "withdraw": "口座登録",
+    "findMusic": "音源検索",
+    "channel": "チャンネル管理",
+    "track": "トラック制作",
+    "login": "ログイン",
+    "producer": "Audionyx プロデューサー",
+    "faq": "FAQ",
+    "logout": "ログアウト"
+  },
+  "hero": {
+    "fixed": "FREE TRACKS + EARN",
+    "main": "ショートに音源収益をプラス。",
+    "desc": "YouTubeが著作権者に支払った音楽ライセンス費用をAUDIONYXがクリエイターに提供する方式で音源収益が発生します。",
+    "cta": "今すぐ始める"
+  },
+  "footer": {
+    "tagline": "ショート音源収益化プラットフォーム",
+    "service": "サービス",
+    "company": "会社",
+    "contact": "連絡先",
+    "faq": "よくある質問",
+    "faqLink": "FAQ ページへ",
+    "terms": "利用規約",
+    "privacy": "個人情報保護方針",
+    "contactUs": "お問い合わせ",
+    "copy": "© 2025 AUDIONYX Music, Inc. All rights reserved.",
+    "location": "Seoul, Korea"
+  },
+  "mobile": {
+    "nav": {
+      "home": "ホーム",
+      "music": "音源",
+      "channel": "チャンネル",
+      "withdraw": "精算",
+      "production": "制作",
+      "producer": "プロデューサー"
+    }
+  },
+  "brand": {
+    "title": "ブランド紹介",
+    "heroTitle": "ブランド紹介",
+    "heroSubtitle": "クリエイター向け音源収益化プラットフォーム",
+    "heroCta": "Go Tracks",
+    "aboutTitle": "Audionyxとは？",
+    "aboutHeadline": "音源収益も、動画収益も<br>Audionyx一つで全て手に入れましょう",
+    "aboutDescription": "YouTubeはショートで発生する総収益を<br>「音源著作権者」と「動画クリエイター」に分けて支払います。<br>Audionyx音源を使用すると、著作権料の<strong>80%</strong>をAudionyxが代わりに受け取り<span class=\"no-break\">再び還元するため</span>動画収益 + 音源収益を同時に獲得できます。",
+    "insightsTitle": "Audionyxトラックで<br>あなたが<strong>逃した収益を</strong>見つけましょう",
+    "insightsSubtitle": "これまで<strong>逃していた全ての収益機会</strong>を取り戻します",
+    "insightsCta": "3ステップを確認",
+    "mobileRevenueTitle": "Audionyxで<br>あなたの収益が変わります",
+    "mobileRevenueSubtitle": "同じ再生数、より多くの収益<br>これまで逃していた音源収益を取り戻しましょう",
+    "whyTitle": "Why Audionyx?",
+    "whySubtitle": "Audionyxと共に始める新しい収益創出の3つの核心",
+    "feature1Label": "FREE TO USE",
+    "feature1Title": "All Tracks Free",
+    "feature1Desc": "最高のプロデューサーによる<br>ハイクオリティ音源無料使用",
+    "feature2Label": "100% SECURE",
+    "feature2Title": "All Tracks Licensed",
+    "feature2Desc": "全ての音源<br>著作権/CID完璧保証",
+    "feature3Label": "80% ROYALTY",
+    "feature3Title": "80% Royalty is Yours",
+    "feature3Desc": "音源を使用するだけで<br>収益の80%を獲得",
+    "multiplatformTitle": "マルチプラットフォーム収益化",
+    "multiplatformHeadline": "TikTok · Instagram · Facebook<br>全てのプラットフォームで収益を享受",
+    "multiplatformDesc": "Audionyx音源一つでShortsだけでなくReels、TikTok、Facebook Videoまで<br><strong>全てのチャンネルで同じ比率で収益を享受できます。</strong>",
+    "howWorksSubtitle": "簡単な3ステップで収益化開始",
+    "howWorksTitle": "How It Works",
+    "step1Title": "Step 1  ·  音源選択",
+    "step1Desc": "トラックを試聴して<b>Copy CID</b>",
+    "step2Title": "Step 2  ·  動画アップロード",
+    "step2Desc": "Shortsアップロード時<br><b>音源CID</b>を貼り付け",
+    "step3Title": "Step 3  ·  自動入金",
+    "step3Desc": "80%収益<b>毎月</b>自動入金",
+    "previewTitle": "Right Now",
+    "previewHeadline": "ハイクオリティ音源トラックを使用して<br>新しい収益パイプラインを作りましょう",
+    "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収益の80%を獲得できます。</strong>"
+  },
+  "withdraw": {
+    "title": "収益出金 | Audionyx",
+    "processTitle": "収益出金プロセスのご案内",
+    "processHeadline": "四半期末、自動で口座に入金",
+    "processDesc": "AudionyxはYouTube、Shortsなど全てのチャンネルの収益を集計し、登録された口座に四半期末自動入金いたします。口座登録だけで、別途申請なしに四半期ごとに収益を受け取れます。",
+    "settlementTitle": "精算詳細情報",
+    "settlementSubtitle": "正確な精算のため、以下の情報をご確認ください",
+    "step1Title": "精算周期",
+    "step1Desc": "四半期別精算システム<br>3月末、6月末、9月末、12月末<br>自動入金処理",
+    "step2Title": "入金条件",
+    "step2Desc": "最小入金額1円から<br>収益発生時自動精算<br>別途申請不要",
+    "step3Title": "源泉税",
+    "step3Desc": "法定源泉税3.3%控除<br>控除後実受領額入金<br>税務処理自動化",
+    "noticeTitle": "口座登録時の注意事項",
+    "noticeDesc1": "※ 口座登録にはまずチャンネル登録が完了している必要があります。",
+    "noticeDesc2": "口座名義人及び口座番号等を正確に入力してください。間違った情報による入金エラー時、再精算まで時間がかかる場合があります。",
+    "pageTitle": "Bank Account",
+    "formTitle": "口座登録/修正",
+    "channelNoticeTitle": "チャンネル登録が必要です",
+    "channelNoticeDesc": "口座登録にはまずチャンネルを登録する必要があります。<br>チャンネル管理ページでチャンネルを登録してから再度お試しください。",
+    "channelRegisterBtn": "チャンネル登録へ",
+    "showFormBtn": "口座登録する",
+    "bankLabel": "銀行選択",
+    "bankPlaceholder": "銀行を選択してください",
+    "accountLabel": "口座番号",
+    "accountPlaceholder": "'-'なしで数字のみ入力してください",
+    "accountConfirmLabel": "口座番号再確認",
+    "accountConfirmPlaceholder": "口座番号を再入力してください",
+    "holderLabel": "口座名義人",
+    "holderPlaceholder": "口座名義人名を入力してください",
+    "submitBtn": "口座登録する",
+    "currentAccountTitle": "現在登録されている口座情報",
+    "noAccountInfo": "登録された口座情報がありません。<br>左のフォームで口座を登録してください。",
+    "bankInfo": "銀行",
+    "accountInfo": "口座番号",
+    "holderInfo": "口座名義人",
+    "updatedInfo": "最終修正日",
+    "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収益を正確に集計して入金いたします。",
+    "trustSecurity": "安全な暗号化",
+    "trustMonitoring": "24時間モニタリング",
+    "trustEmail": "入金通知メール送信"
+  },
+  "findMusic": {
+    "title": "音源検索 | Audionyx",
+    "search": {
+      "placeholder": "トラック名、ジャンル、またはムードで検索",
+      "filterToggle": "フィルターオプションを表示"
+    },
+    "filters": {
+      "mood": "🧠 ムード (Moods)",
+      "usecase": "▶︎ 用途 (Use-Cases)",
+      "bpm": "🎵 BPM",
+      "bpmSlow": "0 - 100 (スロー)",
+      "bpmMedium": "101 - 140 (ミディアム)",
+      "bpmFast": "141+ (ファスト)",
+      "genre": "🎸 ジャンル (Genres)",
+      "duration": "⏱️ 長さ",
+      "durationShort": "15秒以下",
+      "durationMedium": "16-60秒",
+      "durationLong": "1分以上"
+    },
+    "results": {
+      "noResults": "検索結果がありません",
+      "loading": "音源を読み込み中...",
+      "totalTracks": "合計{count}トラック",
+      "trackLibrary": "トラックライブラリ"
+    },
+    "sort": {
+      "recommended": "おすすめ順",
+      "relevance": "関連度順",
+      "popular": "人気順",
+      "newest": "最新順",
+      "resetFilters": "フィルターリセット"
+    },
+    "player": {
+      "close": "閉じる",
+      "play": "再生",
+      "genre": "ジャンル",
+      "mood": "ムード",
+      "usecase": "用途",
+      "cid": "CID:",
+      "copyCid": "Content ID をコピー"
+    },
+    "player": {
+      "play": "再生",
+      "pause": "一時停止",
+      "download": "ダウンロード",
+      "favorite": "お気に入り"
+    },
+    "auth": {
+      "title": "ログイン / 会員登録",
+      "subtitle": "Audionyxのすべてのサービスを利用するには<br>ログインが必要です",
+      "emailLabel": "ユーザーIDまたはメール",
+      "emailPlaceholder": "ユーザーIDまたはメールアドレス",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "パスワード",
+      "loginButton": "ログイン",
+      "googleButton": "Googleアカウントで続行",
+      "signupLink": "会員登録する",
+      "loginLink": "ログインする",
+      "signupTitle": "会員登録",
+      "signupSubtitle": "Audionyxへようこそ！<br>簡単な情報入力でスタートしましょう",
+      "nicknameLabel": "名前（ニックネーム）",
+      "nicknamePlaceholder": "2〜16文字",
+      "phoneLabel": "電話番号",
+      "phonePlaceholder": "010-XXXX-XXXX",
+      "signupEmailLabel": "メール",
+      "signupEmailPlaceholder": "メールアドレス",
+      "usernameLabel": "ユーザーID",
+      "usernamePlaceholder": "4〜20文字（英数字）",
+      "checkDuplicate": "重複確認",
+      "signupPasswordLabel": "パスワード",
+      "signupPasswordPlaceholder": "8文字以上（英数字、特殊文字）",
+      "confirmPasswordLabel": "パスワード確認",
+      "confirmPasswordPlaceholder": "パスワード再入力",
+      "termsRequired": "利用規約およびプライバシーポリシー同意（必須）",
+      "marketingOptional": "マーケティング情報受信同意（選択）",
+      "signupButton": "会員登録",
+      "onboardingTitle": "追加情報入力",
+      "onboardingSubtitle": "Audionyxサービス利用のため<br>追加情報を入力してください",
+      "completeButton": "完了",
+      "footerText": "ログイン時に<a href=\"#\" onclick=\"event.preventDefault()\">利用規約</a>および<a href=\"#\" onclick=\"event.preventDefault()\">プライバシーポリシー</a>に同意することになります",
+      "or": "または",
+      "termsAgreement": "利用規約およびプライバシーポリシー同意（必須）",
+      "onboardingSubtitle2": "Audionyxサービス利用のため<br>追加情報を入力してください"
+    }
+  },
+  "channelManagement": {
+    "title": "チャンネル管理 | Audionyx",
+    "process": {
+      "title": "チャンネル管理プロセスガイド",
+      "headline": "絵文字キーで簡単に多様なチャンネル認証",
+      "description": "AudionyxはYouTube、TikTok、Instagramなど様々なプラットフォームのチャンネルを絵文字キーを通じて安全で簡単に認証できるシステムを提供します。チャンネル登録から収益精算まで、すべてのプロセスが自動化されており、面倒な手続きなしですぐに収益化を始めることができます。"
+    },
+
+    "registration": {
+      "title": "チャンネル登録",
+      "addChannel": "チャンネル追加",
+      "selectPlatform": "プラットフォーム選択",
+      "channelUrl": "チャンネルURL",
+      "channelUrlPlaceholder": "チャンネルURLを入力してください",
+      "emojiKey": "絵文字キー",
+      "copyEmojiKey": "絵文字キーコピー",
+      "verifyChannel": "チャンネル認証",
+      "status": {
+        "pending": "審査待ち",
+        "approved": "承認済み",
+        "rejected": "拒否",
+        "processing": "処理中"
+      }
+    },
+    "channelList": {
+      "title": "登録済みチャンネル一覧",
+      "noChannels": "登録されたチャンネルがありません",
+      "platform": "プラットフォーム",
+      "channelName": "チャンネル名",
+      "status": "ステータス",
+      "registeredDate": "登録日",
+      "actions": "アクション",
+      "channelUrl": "チャンネルURL",
+      "emojiKey": "絵文字キー",
+      "noChannelsDesc": "上部の「チャンネル登録」ボタンをクリックして最初のチャンネルを登録してみてください。",
+      "registerFirstChannel": "最初のチャンネル登録"
+    },
+    "guide": {
+      "verificationTitle": "リアルタイム自動審査システム",
+      "verificationStatus": "リアルタイム",
+      "generalTime": "一般審査時間",
+      "generalTimeValue": "1-3分",
+      "maxTime": "最大待機時間",
+      "maxTimeValue": "24時間",
+      "notice": "週末および祝日は審査が行われず、次の営業日に順次処理されます。",
+      "emojiTitle": "絵文字キー設定ガイド",
+      "emojiStatus": "チュートリアル",
+      "emojiKeyCopy": "絵文字キーコピー",
+      "emojiKeyCopyDesc": "チャンネル登録後に発行された固有の絵文字キーをクリップボードに安全にコピーしてください。",
+      "emojiKeySetup": "各プラットフォームに適した位置に絵文字キーを正確に設定してください。",
+      "youtubeDesc": "チャンネル説明欄に絵文字キーを追加してください。",
+      "tiktokDesc": "プロフィール紹介に絵文字キーを追加してください。",
+      "tiktokSteps": "プロフィール編集 → 紹介 → 絵文字キー追加",
+      "instagramDesc": "プロフィール紹介文に絵文字キーを追加してください。",
+      "instagramSteps": "プロフィール編集 → 紹介 → 絵文字キー追加",
+      "autoVerification": "自動審査完了",
+      "autoVerificationDesc": "設定完了後、システムが自動的に審査を進行し、承認と同時に収益化が開始されます。",
+      "registrationComplete": "登録完了",
+      "verificationInProgress": "審査進行中",
+      "approvalComplete": "承認完了",
+      "platformSetup": "プラットフォーム別設定",
+      "addEmojiKey": "に絵文字キーを追加してください。",
+      "youtubeSteps": "YouTube Studio → 設定 → チャンネル → 基本情報 → 説明",
+      "faqTitle": "よくある質問",
+      "helpStatus": "ヘルプ",
+      "needMoreHelp": "追加のサポートが必要ですか？",
+      "contactSupport": "カスタマーサポートお問い合わせ",
+      "urlValidation": "各プラットフォームのURL形式を自動的に<br>検証して正確な登録を保証します。",
+      "verificationPending": "検査中"
+    },
+    "faq": {
+      "howEmojiKeyWorks": "絵文字キーはどのように動作しますか？",
+      "howEmojiKeyWorksAnswer": "絵文字キーはチャンネル所有権を確認する固有の識別子です。システムが自動的にチャンネル説明をスキャンしてキーの存在有無を確認します。",
+      "whyVerificationFails": "審査が失敗する理由は何ですか？",
+      "whyVerificationFailsAnswer": "絵文字キーが正しい位置に設定されていなかったり、チャンネルURLが間違っている場合、審査が失敗する可能性があります。キー設定後、少し時間が必要な場合があります。",
+      "multipleChannels": "複数のプラットフォームのチャンネルを同時に登録できますか？",
+      "multipleChannelsAnswer": "はい、YouTube、TikTok、Instagramなど複数のプラットフォームのチャンネルを同時に登録・管理できます。各プラットフォームごとに固有の絵文字キーが発行されます。"
+    },
+    "steps": {
+      "step1Title": "チャンネルURL登録",
+      "step1Desc": "チャンネルURLを入力して<br>登録を開始します。",
+      "step2Title": "絵文字キー発行",
+      "step2Desc": "固有の絵文字キーが<br>自動的に発行されて<br>所有権を認証します。",
+      "step3Title": "自動検証完了",
+      "step3Desc": "システムが自動的に<br>チャンネルを検証し<br>検証完了後すぐに<br>収益化が開始されます。"
+    },
+    "status": {
+      "verified": "検査完了",
+      "failed": "検証失敗"
+    },
+    "modal": {
+      "title": "チャンネル登録",
+      "addChannel": "チャンネル登録",
+      "platformSelect": "プラットフォーム選択",
+      "youtubeChannelUrl": "YouTubeチャンネルURL",
+      "channelUrlPlaceholder": "https://www.youtube.com/c/チャンネル名",
+      "helpText": "YouTubeチャンネルURLまたは@ハンドルを入力してください",
+      "issuedKeyLabel": "発行された絵文字キー",
+      "copy": "コピー",
+      "cancel": "キャンセル",
+      "register": "登録する",
+      "copyTitle": "絵文字キーコピー",
+      "keyHelpText": "チャンネル説明欄に上記のキーを貼り付けてください"
+    },
+    "common": {
+      "loading": "チャンネル情報を読み込み中...",
+      "guest": "ゲスト",
+      "profileImage": "プロフィール画像",
+      "youtube": "YouTube",
+      "tiktok": "TikTok",
+      "instagram": "Instagram"
+    }
+  },
+  "trackProduction": {
+    "title": "トラック制作 | Audionyx",
+    "process": {
+      "title": "トラック制作とは？",
+      "headline": "CID登録完全無料、商用利用可能",
+      "description": "Audionyxチームの国内最高のプロデューサーが直接トラックを制作します。<br>制作リクエストは誰でも可能で、商用利用と収益創出がすべて許可されています。<br>より多くの方にサービスを提供するため、<strong>1ユーザーあたり最大2回まで</strong>リクエスト可能です。<br>YouTubeおよびすべてのプラットフォームCID登録が完全無料で提供されます。<br>リクエスト-制作-使用すべて無料で、該当音源から著作権収益が発生した場合、ロイヤリティの80%はお客様に還元されます。"
+    },
+    "steps": {
+      "step1Title": "リクエスト書作成",
+      "step1Desc": "希望するトラックのタイトル、ジャンル、BPM、<br>雰囲気などを詳細に記入して<br>カスタム制作をリクエストします。",
+      "step2Title": "オリジナル音源制作",
+      "step2Desc": "最高の専門プロデューサーチームが<br>リクエスト事項に合った高品質<br>音源を丁寧に制作します。",
+      "step3Title": "メール送信",
+      "step3Desc": "制作完了した音源を<br>登録されたメールアドレスに<br>高品質ファイルで送信いたします。"
+    },
+    "form": {
+      "title": "カスタム制作リクエスト",
+      "subtitle": "希望する音源の情報を入力してください",
+      "refUrlPlaceholder": "YouTubeなどの参考動画URL"
+    },
+    "requestList": {
+      "title": "マイリクエスト一覧"
+    },
+    "status": {
+      "pending": "待機中",
+      "working": "制作中",
+      "done": "完了"
+    }
+  },
+  "faq": {
+    "title": "FAQ | Audionyx",
+    "headline": "よくある質問",
+    "description": "Audionyxサービスについてよくある質問をご確認ください。"
+  },
+  "producer": {
+    "title": "Audionyxプロデューサー | Audionyx",
+    "headline": "プロデューサー募集",
+    "description": "Audionyxと一緒に音源を制作し、収益を創出しましょう。",
+    "hero": {
+      "title": "AUDIONYX PRODUCER",
+      "subtitle": "音楽の新しい体験を創造するプロデューシング専門家と一緒にしませんか",
+      "cta": "トラックをリクエスト"
+    },
+    "profile": {
+      "badge": "専門プロデューサー",
+      "title": "MIKEY",
+      "subtitle": "次世代音楽トレンドを牽引する革新的プロデューサー",
+      "description": "10年以上の音楽制作経験を基に、様々なジャンルを網羅する<br>独創的なサウンドを生み出すMikey。<br><br>国内外の有名アーティストとのコラボレーションを通じて実証された実力で<br>皆様の音楽的ビジョンを現実にします。",
+      "stat1": "完成したトラック",
+      "stat2": "総ストリーミング",
+      "stat3": "協力アーティスト",
+      "contactBtn": "トラックをリクエスト"
+    },
+    "genres": {
+      "title": "専門ジャンル"
+    },
+    "intro": {
+      "title": "専門プロデューサーと一緒に音楽制作",
+      "subtitle": "Audionyxの専門プロデューサーが<br>あなたの音楽的ビジョンを現実にします",
+      "card1Title": "プロフェッショナル音楽制作",
+      "card1Desc": "様々なジャンルの音楽制作経験を基に<br>高品質の音源を制作いたします。",
+      "card2Title": "プロフェッショナルスタジオレコーディング",
+      "card2Desc": "最新設備を備えたプロフェッショナルスタジオで<br>最高品質のレコーディングを提供します。",
+      "card3Title": "カスタマイズミキシング＆マスタリング",
+      "card3Desc": "各トラックの特性に合ったプロフェッショナルな<br>ミキシングとマスタリングサービスを提供します。"
+    },
+    "process": {
+      "title": "制作プロセス",
+      "subtitle": "体系的でプロフェッショナルなプロセスで<br>最高の結果物を作り出します",
+      "step1Title": "相談および企画",
+      "step1Desc": "お客様の要求事項を正確に把握し<br>最適な制作方向を設定します。",
+      "step2Title": "プリプロダクション",
+      "step2Desc": "曲の構造と編曲を完成させ<br>本格的な制作を準備します。",
+      "step3Title": "レコーディング＆制作",
+      "step3Desc": "プロフェッショナルスタジオで高品質レコーディングと<br>音源制作を進行します。",
+      "step4Title": "ミキシング＆マスタリング",
+      "step4Desc": "最終完成度を高めるプロフェッショナルな<br>ミキシングとマスタリングを進行します。"
+    },
+    "contact": {
+      "title": "プロデューサーと一緒に<br>音楽を作ってみませんか",
+      "description": "プロフェッショナルな音楽制作サービスが必要でしたら<br>いつでもご連絡ください。<br><br>最高の結果物でお応えいたします。",
+      "cta": "トラックをリクエスト",
+      "supportTitle": "24/7 相談可能",
+      "supportDesc": "いつでもご連絡ください"
+    },
+    "footer": {
+      "tagline": "音楽の新しい体験を創造します",
+      "serviceTitle": "サービス",
+      "infoTitle": "情報",
+      "accountTitle": "アカウント",
+      "copyright": "© 2024 AUDIONYX. All rights reserved."
+    }
+  }
+} 

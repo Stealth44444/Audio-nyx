@@ -13,12 +13,12 @@
     <script src="js/i18n.js"></script>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="🔥 7월 한정! 신규 채널 등록 시 로열티 100% 지급! 기존 80%에서 100%로 특별 혜택. 지금 바로 시작하세요!">
+    <meta name="description" content="🔥 7월 한정! 신규 채널 등록 후 7월 내 업로드된 숏폼 컨텐츠 로열티 100% 지급! 지금 바로 시작하세요!">
     <meta name="keywords" content="유튜브 쇼츠, 음원 수익화, 로열티 100%, 이벤트, 신규 혜택, AUDIONYX">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="🎉 7월 한정! 100% 로열티 이벤트 | AUDIONYX">
-    <meta property="og:description" content="🔥 7월 한정! 신규 채널 등록 시 로열티 100% 지급! 기존 80%에서 100%로 특별 혜택. 지금 바로 시작하세요!">
+    <meta property="og:description" content="🔥 7월 한정! 신규 채널 등록 후 7월 내 업로드된 숏폼 컨텐츠 로열티 100% 지급! 지금 바로 시작하세요!">
     <meta property="og:url" content="https://audio-nyx.com/event-july-2025.html">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://audio-nyx.com/images/event-july-og.png">
@@ -28,123 +28,220 @@
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="🎉 7월 한정! 100% 로열티 이벤트 | AUDIONYX">
-    <meta name="twitter:description" content="🔥 7월 한정! 신규 채널 등록 시 로열티 100% 지급! 기존 80%에서 100%로 특별 혜택. 지금 바로 시작하세요!">
+    <meta name="twitter:description" content="🔥 7월 한정! 신규 채널 등록 후 7월 내 업로드된 숏폼 컨텐츠 로열티 100% 지급! 지금 바로 시작하세요!">
     <meta name="twitter:image" content="https://audio-nyx.com/images/event-july-og.png">
 
     <style>
-        /* 필수 브랜드 변수 */
+        /* === 브랜드 디자인 시스템 변수 === */
         :root {
+            /* 색상 */
+            --color-primary: #3EB489;
+            --color-primary-hover: #2A9D74;
             --color-accent: #A8E6CE;
+            --color-neutral-dark: #0C0C0C;
+            --color-text-light: #F0FFF0;
+            --color-text-dark: #0C0C0C;
+            
+            /* 배경 */
+            --dark-bg: #000000;
+            --bg-glass: rgba(12, 12, 12, 0.7);
+            --border-glass: rgba(168, 230, 206, 0.2);
+            
+            /* 타이포그래피 */
+            --font-primary: 'Pretendard', 'Inter', sans-serif;
+            
+            /* 간격 & 사이즈 */
+            --container-width: 1400px;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2.5rem;
+            --spacing-xl: 4rem;
+            
+            /* 테두리 반경 */
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            
+            /* 그림자 */
             --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
-        /* 이벤트 페이지 베이스 */
-        .event-page {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        .event-page::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
-                radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.12) 0%, transparent 60%);
-            pointer-events: none;
-            animation: gradientShift 8s ease-in-out infinite;
+
+        /* === 기본 스타일 === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
         }
-        
-        .event-container {
-            max-width: 1200px;
+
+        body {
+            font-family: var(--font-primary);
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--color-text-light);
+            background-color: var(--dark-bg);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: var(--container-width);
             margin: 0 auto;
             padding: 0 20px;
             position: relative;
             z-index: 1;
         }
+
+        /* === 글래스 카드 공통 스타일 === */
+        .glass-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+        }
         
-        /* 헤더 */
+        /* === 헤더 === */
         .event-header {
-            padding: 20px 0;
+            padding: var(--spacing-lg) 0;
             text-align: center;
+            background: rgba(12, 12, 12, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
         }
         
         .event-logo {
-            font-size: 28px;
+            font-size: 2rem;
             font-weight: 900;
-            color: #ffffff;
+            color: var(--color-primary);
             text-decoration: none;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .event-logo:hover {
+            color: var(--color-accent);
+            transform: scale(1.05);
         }
         
-        /* 2025 트렌드 메인 히어로 섹션 */
+        /* === 히어로 섹션 === */
         .event-hero {
             text-align: center;
-            padding: 80px 0 100px;
-            color: #ffffff;
+            padding: 8rem 0;
+            background: var(--dark-bg);
+            position: relative;
+        }
+
+        .event-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(62, 180, 137, 0.08) 0%, transparent 70%);
+            pointer-events: none;
         }
         
         .event-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: linear-gradient(45deg, #22c55e, #10b981);
-            color: #ffffff;
-            padding: 12px 28px;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: var(--color-text-dark);
+            padding: 16px 32px;
             border-radius: 30px;
             font-weight: 800;
-            font-size: 14px;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 32px rgba(34, 197, 94, 0.4);
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px rgba(62, 180, 137, 0.4);
             animation: floatPulse 3s ease-in-out infinite;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(12px);
             letter-spacing: 0.5px;
             text-transform: uppercase;
+            position: relative;
+            z-index: 2;
         }
 
         @keyframes floatPulse {
             0%, 100% { 
                 transform: translateY(0);
-                box-shadow: 0 8px 32px rgba(34, 197, 94, 0.4);
+                box-shadow: 0 8px 32px rgba(62, 180, 137, 0.4);
             }
             50% { 
                 transform: translateY(-5px);
-                box-shadow: 0 12px 40px rgba(34, 197, 94, 0.6);
+                box-shadow: 0 12px 40px rgba(62, 180, 137, 0.6);
             }
         }
-        
-
         
         .event-title {
             font-size: clamp(2.8rem, 7vw, 5rem);
             font-weight: 900;
-            line-height: 1.05;
-            margin-bottom: 24px;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
+            line-height: 1.1;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
         }
         
         .event-subtitle {
-            font-size: clamp(1.15rem, 3vw, 1.5rem);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
             color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 50px;
+            margin-bottom: 3rem;
             line-height: 1.6;
             font-weight: 400;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-cards-container {
+            display: flex;
+            gap: 2rem;
+            margin: 0 auto 4rem;
+            max-width: 1200px;
+            flex-wrap: wrap;
+            align-items: stretch;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-description {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(51, 65, 85, 0.6));
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+        }
+
+        .event-description p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .event-description p:last-child {
+            margin-bottom: 0;
+        }
+
+        .event-description strong {
+            color: var(--color-accent);
+            font-weight: 700;
         }
         
         .royalty-comparison {
@@ -240,10 +337,139 @@
             font-weight: 500;
         }
         
-        /* CTA 버튼 */
+        /* 이벤트 혜택 카드 */
+        .event-benefit-card {
+            flex: 1;
+            min-width: 300px;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(51, 65, 85, 0.9));
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .event-benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .event-benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+        
+        .benefit-highlight {
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .benefit-percentage {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #10B981 0%, #34D399 50%, #6EE7B7 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            animation: percentageGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .benefit-text {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+        }
+        
+        .benefit-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .benefit-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateX(8px);
+        }
+        
+        .benefit-icon {
+            font-size: 1.5rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+        
+        /* === CTA 버튼 === */
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--color-primary);
+            color: var(--color-text-dark);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(62, 180, 137, 0.3);
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(62, 180, 137, 0.4);
+        }
+
         .event-cta-section {
             text-align: center;
-            margin: 80px 0;
+            margin: 6rem 0;
+            position: relative;
+            z-index: 2;
         }
         
         .event-cta-btn {
@@ -251,12 +477,12 @@
             align-items: center;
             justify-content: center;
             gap: 16px;
-            background: linear-gradient(135deg, var(--color-accent), #3EB489);
-            color: #0C0C0C;
-            padding: 24px 56px;
-            border-radius: 24px;
-            font-size: 1.4rem;
-            font-weight: 900;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: var(--color-text-dark);
+            padding: 20px 48px;
+            border-radius: var(--radius-lg);
+            font-size: 1.3rem;
+            font-weight: 800;
             text-decoration: none;
             box-shadow: 0 16px 48px rgba(62, 180, 137, 0.5);
             transition: all 0.3s ease;
@@ -310,66 +536,128 @@
         }
         
         .cta-subtext {
-            margin-top: 24px;
+            margin-top: 1.5rem;
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 600;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
             line-height: 1.5;
+            position: relative;
+            z-index: 2;
         }
         
-        /* 카운트다운 타이머 */
+        /* === 카운트다운 섹션 === */
         .countdown-section {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 28px;
-            padding: 50px 40px;
-            margin: 80px 0;
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 6rem 4rem;
+            margin: 8rem 0;
+            box-shadow: var(--shadow-card);
+            position: relative;
             text-align: center;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(62, 180, 137, 0.05) 0%, transparent 70%);
+            border-radius: var(--radius-lg);
+            pointer-events: none;
         }
         
         .countdown-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 40px;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .countdown-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .countdown-description strong {
+            color: #ff6b6b;
+            font-weight: 700;
         }
         
         .countdown-timer {
             display: flex;
             justify-content: center;
-            gap: 24px;
+            gap: 2rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
         
         .countdown-item {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 24px 20px;
-            min-width: 100px;
-            backdrop-filter: blur(8px);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(51, 65, 85, 0.7));
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            min-width: 120px;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(62, 180, 137, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .countdown-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.3);
+            transform: translateY(-8px);
+            border-color: rgba(62, 180, 137, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(62, 180, 137, 0.2);
+        }
+
+        .countdown-item:hover::before {
+            opacity: 1;
         }
         
         .countdown-number {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 900;
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: block;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            animation: countdownPulse 1s ease-in-out infinite;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+            animation: countdownPulse 2s ease-in-out infinite;
         }
 
         @keyframes countdownPulse {
@@ -378,12 +666,13 @@
         }
         
         .countdown-label {
-            font-size: 0.85rem;
+            font-size: 1rem;
             color: rgba(255, 255, 255, 0.8);
-            margin-top: 8px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
         }
         
         /* 혜택 섹션 */
@@ -399,11 +688,15 @@
 
 
         
-        .benefits-title {
+        .section-header {
             text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .benefits-title {
             font-size: clamp(2.2rem, 5vw, 3rem);
             font-weight: 900;
-            margin-bottom: 60px;
+            margin-bottom: 16px;
             color: #ffffff;
             background: linear-gradient(135deg, #ffffff 0%, #A8E6CE 100%);
             background-clip: text;
@@ -413,42 +706,127 @@
             letter-spacing: -0.02em;
         }
         
+        .benefits-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .benefits-stats {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem 1.5rem;
+            background: linear-gradient(145deg, rgba(62, 180, 137, 0.1), rgba(168, 230, 206, 0.05));
+            border: 1px solid rgba(62, 180, 137, 0.2);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 160px;
+            flex: 0 0 auto;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(62, 180, 137, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-8px);
+            border-color: rgba(62, 180, 137, 0.4);
+            box-shadow: 0 15px 40px rgba(62, 180, 137, 0.2);
+        }
+
+        .stat-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+        
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
         }
         
-        .benefit-item {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+        .benefit-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(51, 65, 85, 0.7));
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             padding: 40px 32px;
             text-align: center;
             transition: all 0.3s ease;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .benefit-item:hover {
-            transform: translateY(-8px);
-            border-color: rgba(62, 180, 137, 0.4);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(16, 185, 129, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .benefit-card:hover::before {
+            opacity: 1;
         }
         
-        .benefit-icon {
-            font-size: 4rem;
+        .benefit-icon-svg {
             margin-bottom: 24px;
-            display: block;
-            filter: drop-shadow(0 4px 8px rgba(62, 180, 137, 0.3));
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
             transition: all 0.3s ease;
-            text-shadow: 0 0 20px rgba(62, 180, 137, 0.5);
         }
 
-        .benefit-item:hover .benefit-icon {
+        .benefit-card:hover .benefit-icon-svg {
             transform: scale(1.1);
-            filter: drop-shadow(0 6px 12px rgba(62, 180, 137, 0.5));
-            text-shadow: 0 0 30px rgba(62, 180, 137, 0.8);
+            filter: drop-shadow(0 6px 12px rgba(16, 185, 129, 0.4));
         }
         
         .benefit-title {
@@ -468,48 +846,77 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
         
-        /* FAQ 섹션 */
+        /* === FAQ 섹션 === */
         .faq-section {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 32px;
-            padding: 80px 60px;
-            margin: 100px 0;
-            backdrop-filter: blur(24px);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 6rem 4rem;
+            margin: 8rem 0;
+            box-shadow: var(--shadow-card);
+            position: relative;
         }
 
-
+        .faq-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(62, 180, 137, 0.05) 0%, transparent 70%);
+            border-radius: var(--radius-lg);
+            pointer-events: none;
+        }
         
         .faq-title {
             text-align: center;
             font-size: clamp(2.2rem, 5vw, 3rem);
             font-weight: 900;
-            margin-bottom: 60px;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
         }
         
         .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            padding: 32px;
-            margin-bottom: 24px;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(51, 65, 85, 0.7));
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
             transition: all 0.3s ease;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(62, 180, 137, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .faq-item:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            border-color: rgba(62, 180, 137, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(62, 180, 137, 0.2);
+        }
+
+        .faq-item:hover::before {
+            opacity: 1;
         }
 
         .faq-item:last-child {
@@ -520,10 +927,11 @@
             font-size: 1.3rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
             letter-spacing: -0.01em;
             line-height: 1.4;
+            position: relative;
+            z-index: 2;
         }
         
         .faq-answer {
@@ -531,26 +939,207 @@
             color: rgba(255, 255, 255, 0.85);
             line-height: 1.7;
             font-weight: 400;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
         }
         
-        /* 푸터 */
+        /* === 푸터 === */
         .event-footer {
             text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 80px;
+            padding: 4rem 0;
+            border-top: 1px solid var(--border-glass);
+            margin-top: 8rem;
+            background: rgba(12, 12, 12, 0.9);
+            backdrop-filter: blur(16px);
         }
         
         .footer-text {
-            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.6);
             font-size: 0.9rem;
-            color: var(--color-text-dark);
+            line-height: 1.6;
         }
-        
 
-        
+        /* === 애니메이션 === */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
 
+        .fade-in:nth-child(1) { animation-delay: 0.2s; }
+        .fade-in:nth-child(2) { animation-delay: 0.4s; }
+        .fade-in:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === 참여 방법 섹션 === */
+        .how-to-join-section {
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 6rem 4rem;
+            margin: 8rem 0;
+            box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .how-to-join-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(62, 180, 137, 0.05) 0%, transparent 70%);
+            border-radius: var(--radius-lg);
+            pointer-events: none;
+        }
+
+        .how-to-join-title {
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-accent) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            text-align: center;
+        }
+
+        .how-to-join-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 4rem;
+            line-height: 1.6;
+        }
+
+        .steps-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.8rem;
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(51, 65, 85, 0.7));
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            max-width: 320px;
+            flex: 0 0 auto;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(62, 180, 137, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(62, 180, 137, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 30px rgba(62, 180, 137, 0.2);
+        }
+
+        .step-card:hover::before {
+            opacity: 1;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            color: var(--color-text-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-content {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .join-notice {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 182, 193, 0.05));
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .join-notice p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .join-notice strong {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
         
         /* 반응형 */
         @media (max-width: 768px) {
@@ -603,8 +1192,22 @@
                 gap: 12px;
             }
             
-            .benefit-item {
+            .benefit-card {
                 padding: 32px 24px;
+            }
+            
+            .benefit-icon-svg {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 20px;
+            }
+            
+            .benefit-title {
+                font-size: 1.3rem;
+            }
+            
+            .benefit-desc {
+                font-size: 0.95rem;
             }
             
             .faq-item {
@@ -613,6 +1216,64 @@
             
             .benefits-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .how-to-join-section {
+                padding: 4rem 2rem;
+                margin: 4rem 0;
+            }
+
+            .benefits-stats {
+                flex-direction: column;
+                gap: 1rem;
+                margin-bottom: 3rem;
+            }
+
+            .stat-item {
+                padding: 1.5rem 1rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .step-card {
+                padding: 1.5rem;
+                gap: 1rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin: 0 auto 1rem;
+            }
+
+            .join-notice {
+                padding: 1rem 1.5rem;
+            }
+
+            .join-notice p {
+                font-size: 1rem;
+            }
+
+            .event-cards-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                margin-bottom: 3rem;
+            }
+
+            .event-description, 
+            .event-benefit-card {
+                min-width: auto;
+            }
+
+            .event-benefit-card {
+                padding: 1.5rem;
             }
         }
         
@@ -898,10 +1559,10 @@
             
             <h2 class="popup-title">신규 채널 등록 시<br>로열티 100% 지급!</h2>
             
-            <p class="popup-subtitle">기존 80%에서 100%로 특별 업그레이드!<br>7월 신규 채널에게만 주어지는 특별 혜택</p>
-            
-            <div class="popup-highlight">
-                <div class="popup-highlight-text">🎯 첫 3개월간 100% 로열티</div>
+                            <p class="popup-subtitle">7월 한정 특별 혜택!<br>신규 채널 등록 후 7월 내 업로드된 숏폼 컨텐츠 100% 로열티</p>
+                
+                <div class="popup-highlight">
+                    <div class="popup-highlight-text">🎯 7월 내 숏폼 업로드 시 100% 로열티</div>
                 <div class="popup-highlight-desc">음원 수익의 100%를 가져가세요!</div>
             </div>
             
@@ -922,45 +1583,67 @@
 
     <!-- 헤더 -->
     <header class="event-header">
-        <div class="event-container">
+        <div class="container">
             <a href="index.html" class="event-logo">AUDIONYX</a>
         </div>
     </header>
 
     <!-- 메인 히어로 섹션 -->
     <section class="event-hero">
-        <div class="event-container">
+        <div class="container">
             <div class="event-badge fade-in">🔥 7월 한정 특별 이벤트</div>
             <h1 class="event-title fade-in">
                 신규 채널 등록 시<br>
                 로열티 100% 지급!
             </h1>
             <p class="event-subtitle fade-in">
-                기존 80%에서 <strong>100%로 업그레이드!</strong><br>
-                7월 신규 등록 채널에게만 주어지는 특별한 기회를 놓치지 마세요
+                <strong>7월 한정 특별 혜택!</strong><br>
+                신규 채널 등록 후 7월 내 업로드된 숏폼 컨텐츠 100% 로열티!
             </p>
-            
-            <!-- 로열티 비교 -->
-            <div class="royalty-comparison fade-in">
-                <div class="royalty-card">
-                    <div class="royalty-percentage" style="color: var(--color-text-dark); opacity: 0.7;">80%</div>
-                    <div class="royalty-label">기존 로열티</div>
-                    <div class="royalty-period">일반 회원</div>
+
+            <!-- 이벤트 정보 카드들 -->
+            <div class="event-cards-container fade-in">
+                <!-- 이벤트 상세 설명 -->
+                <div class="event-description">
+                    <p>🎯 <strong>이벤트 기간:</strong> 2025년 7월 1일 ~ 7월 31일 (한국 시간 기준)</p>
+                    <p>🚀 <strong>대상:</strong> 7월 중 신규 채널 등록하는 모든 크리에이터</p>
+                    <p>💰 <strong>혜택:</strong> 7월 내 등록 채널에서 7월 내 업로드된 숏폼 컨텐츠 로열티 100% 지급</p>
+                    <p>⭐ <strong>특별 조건:</strong> 추가 수수료 없음, 즉시 적용</p>
                 </div>
                 
-                <div class="royalty-card special float">
-                    <div class="royalty-percentage" style="color: var(--color-accent);">100%</div>
-                    <div class="royalty-label">7월 이벤트</div>
-                    <div class="royalty-period">신규 채널 한정</div>
+                <!-- 이벤트 혜택 카드 -->
+                <div class="event-benefit-card">
+                <div class="benefit-highlight">
+                    <div class="benefit-percentage">100%</div>
+                    <div class="benefit-text">로열티 전액 지급</div>
                 </div>
+                <div class="benefit-details">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🎯</span>
+                        <span>7월 숏폼 업로드 시 100% 로열티</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🚀</span>
+                        <span>7월 신규 채널 한정</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">💰</span>
+                        <span>즉시 수익화 시작</span>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </section>
 
     <!-- 카운트다운 타이머 -->
     <section class="countdown-section reveal">
-        <div class="event-container">
+        <div class="container">
             <h2 class="countdown-title">⏰ 이벤트 종료까지</h2>
+            <p class="countdown-description">
+                💥 <strong>마감 임박!</strong> 7월 31일 자정까지만 신규 채널 등록 및 숏폼 업로드 시 100% 로열티 혜택!<br>
+                지금 등록하지 않으면 이런 기회는 다시 오지 않을 수도 있어요!
+            </p>
             <div class="countdown-timer" id="countdown">
                 <div class="countdown-item">
                     <span class="countdown-number" id="days">00</span>
@@ -984,7 +1667,7 @@
 
     <!-- CTA 섹션 -->
     <section class="event-cta-section reveal">
-        <div class="event-container">
+        <div class="container">
             <a href="pages/channel-management.html" class="event-cta-btn">
                 🚀 지금 바로 시작하기
             </a>
@@ -996,46 +1679,134 @@
 
     <!-- 혜택 섹션 -->
     <section class="benefits-section reveal">
-        <div class="event-container">
-            <h2 class="benefits-title">💎 특별 혜택</h2>
+        <div class="container">
+            <div class="section-header">
+                <h2 class="benefits-title">💎 특별 혜택</h2>
+                <p class="benefits-subtitle">7월 신규 채널에게만 제공되는 차별화된 혜택을 확인하세요</p>
+            </div>
+
+            <!-- 혜택 통계 -->
+            <div class="benefits-stats">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">로열티 지급률</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">7월 한정</div>
+                    <div class="stat-label">업로드 숏폼 대상</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">무료</div>
+                    <div class="stat-label">모든 트랙 사용</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0원</div>
+                    <div class="stat-label">추가 수수료</div>
+                </div>
+            </div>
+            
             <div class="benefits-grid">
-                <div class="benefit-item">
-                    <span class="benefit-icon">💰</span>
-                    <h3 class="benefit-title">로열티 100% 지급</h3>
-                    <p class="benefit-desc">7월 신규 등록 채널에 한해 음원 로열티를 100% 지급합니다</p>
+                <div class="benefit-card glass-card">
+                    <svg class="benefit-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#10B981" stroke-width="2.5">
+                        <circle cx="24" cy="24" r="16"/>
+                        <path d="M24 16v16M16 24h16"/>
+                    </svg>
+                    <h3 class="benefit-title">100% 로열티</h3>
+                    <p class="benefit-desc">7월 내 업로드된 숏폼 컨텐츠 음원 로열티 100% 지급</p>
                 </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">🎵</span>
-                    <h3 class="benefit-title">무제한 음원 이용</h3>
-                    <p class="benefit-desc">프리미엄 트랙을 무제한으로 이용하고 수익을 창출하세요</p>
+                
+                <div class="benefit-card glass-card">
+                    <svg class="benefit-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#10B981" stroke-width="2.5">
+                        <path d="M8 18l8-8 8 8M8 30l8 8 8-8"/>
+                        <path d="M32 18l8-8M32 30l8 8"/>
+                    </svg>
+                    <h3 class="benefit-title">무제한 음원</h3>
+                    <p class="benefit-desc">프리미엄 트랙 무제한 이용</p>
                 </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">⚡</span>
+                
+                <div class="benefit-card glass-card">
+                    <svg class="benefit-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#10B981" stroke-width="2.5">
+                        <circle cx="24" cy="12" r="8"/>
+                        <path d="M24 20v12M16 36h16"/>
+                    </svg>
                     <h3 class="benefit-title">즉시 수익화</h3>
-                    <p class="benefit-desc">채널 등록 완료 즉시 수익화가 시작됩니다</p>
+                    <p class="benefit-desc">채널 등록 완료 즉시 시작</p>
                 </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">🛡️</span>
-                    <h3 class="benefit-title">저작권 완벽 보장</h3>
-                    <p class="benefit-desc">모든 음원의 저작권이 완벽히 보장되어 안전합니다</p>
+                
+                <div class="benefit-card glass-card">
+                    <svg class="benefit-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#10B981" stroke-width="2.5">
+                        <path d="M24 6l16 6v8c0 10-7 18-16 22-9-4-16-12-16-22V12l16-6z"/>
+                        <path d="M24 22v6"/>
+                        <circle cx="24" cy="18" r="2.5"/>
+                    </svg>
+                    <h3 class="benefit-title">저작권 보장</h3>
+                    <p class="benefit-desc">모든 음원 완벽 라이선스</p>
                 </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">📊</span>
-                    <h3 class="benefit-title">실시간 수익 확인</h3>
-                    <p class="benefit-desc">대시보드에서 실시간으로 수익을 확인할 수 있습니다</p>
+                
+                <div class="benefit-card glass-card">
+                    <svg class="benefit-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#10B981" stroke-width="2.5">
+                        <path d="M8 12h32M8 18h20M8 24h24M8 30h16"/>
+                        <rect x="6" y="8" width="36" height="32" rx="4"/>
+                    </svg>
+                    <h3 class="benefit-title">실시간 수익</h3>
+                    <p class="benefit-desc">대시보드 실시간 확인</p>
                 </div>
-                <div class="benefit-item">
-                    <span class="benefit-icon">🎯</span>
-                    <h3 class="benefit-title">다중 플랫폼 지원</h3>
-                    <p class="benefit-desc">YouTube, TikTok, Instagram 등 모든 플랫폼 지원</p>
+                
+                <div class="benefit-card glass-card">
+                    <svg class="benefit-icon-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#10B981" stroke-width="2.5">
+                        <circle cx="24" cy="24" r="3"/>
+                        <path d="M12 12l6 6M12 36l6-6M36 12l-6 6M36 36l-6-6"/>
+                    </svg>
+                    <h3 class="benefit-title">멀티 플랫폼</h3>
+                    <p class="benefit-desc">YouTube, TikTok, Instagram 지원</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 참여 방법 섹션 -->
+    <section class="how-to-join-section reveal">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="how-to-join-title">🚀 이벤트 참여 방법</h2>
+                <p class="how-to-join-subtitle">단 3단계로 100% 로열티 혜택을 받아보세요!</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">회원가입</h3>
+                        <p class="step-description">AUDIONYX에 무료 회원가입을 진행하세요. 간단한 정보만으로 1분 내 완료됩니다.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">채널 등록</h3>
+                        <p class="step-description">채널 관리 페이지에서 YouTube, TikTok, Instagram 등 수익화할 채널을 등록하세요.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">혜택 자동 적용</h3>
+                        <p class="step-description">7월 중 등록 및 숏폼 업로드 시 100% 로열티 혜택이 자동 적용됩니다!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="join-notice">
+                <p><strong>💡 중요:</strong> 7월 31일 자정 이후 등록하시면 이벤트 혜택을 받을 수 없으니, 반드시 이벤트 기간 내에 등록해 주세요!</p>
             </div>
         </div>
     </section>
 
     <!-- FAQ 섹션 -->
     <section class="faq-section reveal">
-        <div class="event-container">
+        <div class="container">
             <h2 class="faq-title">❓ 자주 묻는 질문</h2>
             
             <div class="faq-item">
@@ -1050,19 +1821,44 @@
             
             <div class="faq-item">
                 <h3 class="faq-question">Q. 100% 로열티는 언제까지 적용되나요?</h3>
-                <p class="faq-answer">A. 7월에 등록한 신규 채널에 대해서는 해당 채널의 첫 3개월간 100% 로열티가 적용됩니다.</p>
+                <p class="faq-answer">A. 7월에 등록한 신규 채널에서 7월 내 업로드된 숏폼 컨텐츠에만 100% 로열티가 적용됩니다. 8월 이후 업로드 컨텐츠는 일반 요금제가 적용됩니다.</p>
             </div>
             
             <div class="faq-item">
                 <h3 class="faq-question">Q. 어떻게 참여할 수 있나요?</h3>
                 <p class="faq-answer">A. AUDIONYX에 회원가입 후 채널 관리 페이지에서 새로운 채널을 등록하시면 자동으로 이벤트가 적용됩니다.</p>
             </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Q. 100% 로열티는 정확히 무엇을 의미하나요?</h3>
+                <p class="faq-answer">A. 7월 내 등록한 채널에서 7월 내 업로드된 숏폼 컨텐츠로 발생한 음원 수익의 100%를 크리에이터에게 지급합니다. 어떤 수수료도 차감하지 않습니다.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Q. 이벤트 조건에 제한이 있나요?</h3>
+                <p class="faq-answer">A. 특별한 제한은 없습니다. 7월 중 신규 채널을 등록하는 모든 사용자가 대상이며, 채널 등록 즉시 혜택이 자동 적용됩니다. 별도 신청이나 조건 충족이 필요하지 않습니다.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Q. 7월 이후에는 어떻게 되나요?</h3>
+                <p class="faq-answer">A. 7월 이후 업로드된 컨텐츠부터는 일반 요금제가 적용됩니다. 하지만 여전히 업계 최고 수준의 높은 로열티율을 유지하므로 계속해서 좋은 수익을 얻으실 수 있습니다.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Q. 여러 개의 채널을 등록할 수 있나요?</h3>
+                <p class="faq-answer">A. 네, 가능합니다. 7월 중 등록하는 모든 신규 채널에 이벤트 혜택이 적용됩니다. 단, 각 채널에서 7월 내 업로드된 숏폼 컨텐츠에만 100% 로열티가 적용됩니다.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="faq-question">Q. 수익 정산은 언제 받을 수 있나요?</h3>
+                <p class="faq-answer">A. 매월 말 정산하여 익월 15일에 등록하신 계좌로 자동 입금됩니다. 첫 정산은 채널 등록 후 다음 달부터 시작됩니다.</p>
+            </div>
         </div>
     </section>
 
     <!-- 마지막 CTA -->
     <section class="event-cta-section reveal">
-        <div class="event-container">
+        <div class="container">
             <a href="pages/channel-management.html" class="event-cta-btn">
                 🎯 AUDIONYX 시작하기
             </a>
@@ -1074,7 +1870,7 @@
 
     <!-- 푸터 -->
     <footer class="event-footer">
-        <div class="event-container">
+        <div class="container">
             <p class="footer-text">
                 © 2025 AUDIONYX Music, Inc. All rights reserved.<br>
                 이벤트 기간: 2025.07.01 ~ 2025.07.31 | 문의: audionyx369@gmail.com

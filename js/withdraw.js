@@ -10,7 +10,8 @@ import {
   getDoc, 
   setDoc, 
   serverTimestamp,
-  collection
+  collection,
+  onSnapshot
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
 
 // auth.js 로드 (인증 관련 UI 처리)
@@ -69,6 +70,7 @@ const auth = getAuth(app);
 let currentUser = null;
 let formMode = 'register'; // 'register' 또는 'update' 상태
 let userChannels = []; // 사용자 채널 정보 저장
+let channelMonitoringUnsubscribe = null; // 채널 모니터링 해제 함수
 
 // 은행별 계좌번호 형식 정보
 const bankFormats = {
@@ -294,28 +296,44 @@ async function fetchAccountData(uid) {
       return;
     }
     
-    // 채널 정보 확인
-    const channels = await fetchUserChannels(uid);
-    const hasChannels = channels.length > 0;
+    // 채널 정보와 계좌 정보를 병렬로 가져오기
+    const [channels, accountData] = await Promise.allSettled([
+      fetchUserChannels(uid),
+      getDoc(doc(db, 'user_withdraw_accounts', uid))
+    ]);
     
-    // 채널 상태에 따른 UI 업데이트
-    updateChannelStatusUI(hasChannels);
-    
-    if (!hasChannels) {
-      updateUI(null);
-      return;
+    // 채널 정보 처리
+    let hasChannels = false;
+    if (channels.status === 'fulfilled') {
+      hasChannels = channels.value.length > 0;
+      console.log('[fetchAccountData] 채널 확인 완료:', hasChannels, '채널 수:', channels.value.length);
+    } else {
+      console.error('[fetchAccountData] 채널 정보 로드 실패:', channels.reason);
+      // 채널 정보를 다시 시도
+      try {
+        const retryChannels = await fetchUserChannels(uid);
+        hasChannels = retryChannels.length > 0;
+        console.log('[fetchAccountData] 채널 재시도 성공:', hasChannels, '채널 수:', retryChannels.length);
+      } catch (retryError) {
+        console.error('[fetchAccountData] 채널 재시도 실패:', retryError);
+        hasChannels = false;
+      }
     }
     
-    // 계좌 정보 가져오기
-    const docRef = doc(db, 'user_withdraw_accounts', uid);
-    const docSnap = await getDoc(docRef);
+    // 채널 상태 UI 업데이트
+    updateChannelStatusUI(hasChannels);
     
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    // 계좌 정보 처리
+    if (accountData.status === 'fulfilled' && accountData.value.exists()) {
+      const data = accountData.value.data();
       updateUI(data);
     } else {
       updateUI(null);
+      if (accountData.status === 'rejected') {
+        console.error('[fetchAccountData] 계좌 정보 로드 실패:', accountData.reason);
+      }
     }
+    
   } catch (error) {
     console.error('계좌 정보를 불러오는 중 오류 발생:', error);
     
@@ -327,7 +345,15 @@ async function fetchAccountData(uid) {
       showToast('계좌 정보를 불러오는 중 오류가 발생했습니다.', 'error');
     }
     updateUI(null);
-    updateChannelStatusUI(false);
+    
+    // 채널 정보만 별도로 다시 확인
+    try {
+      const channels = await fetchUserChannels(uid);
+      updateChannelStatusUI(channels.length > 0);
+    } catch (channelError) {
+      console.error('[fetchAccountData] 오류 상황에서 채널 정보 확인 실패:', channelError);
+      updateChannelStatusUI(false);
+    }
   }
 }
 
@@ -410,11 +436,17 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // 로그인된 상태: 계좌 정보 가져오기
     fetchAccountData(user.uid);
+    
+    // 채널 정보 실시간 모니터링 시작
+    setupChannelMonitoring(user.uid);
   } else {
     // 로그아웃된 상태: UI 초기화
     userChannels = [];
     updateUI(null);
     updateChannelStatusUI(false);
+    
+    // 채널 모니터링 중지
+    stopChannelMonitoring();
   }
 });
 
@@ -521,37 +553,155 @@ document.addEventListener('DOMContentLoaded', () => {
 // 채널 정보 가져오기
 async function fetchUserChannels(uid) {
   try {
+    console.log('[fetchUserChannels] 채널 정보 조회 중...', uid);
     const userChannelDocRef = doc(db, 'channels', uid);
     const docSnap = await getDoc(userChannelDocRef);
     
     if (docSnap.exists()) {
       const userData = docSnap.data();
-      userChannels = userData.channels || [];
-      console.log('[fetchUserChannels] 사용자 채널 수:', userChannels.length);
-      return userChannels;
+      const channels = userData.channels || [];
+      userChannels = channels;
+      console.log('[fetchUserChannels] 사용자 채널 수:', channels.length);
+      
+      // 채널 정보 상세 로그
+      if (channels.length > 0) {
+        console.log('[fetchUserChannels] 채널 목록:', channels.map(c => ({
+          url: c.url,
+          platform: c.platform,
+          status: c.status
+        })));
+      }
+      
+      return channels;
     } else {
       userChannels = [];
-      console.log('[fetchUserChannels] 등록된 채널이 없습니다.');
+      console.log('[fetchUserChannels] 채널 문서가 존재하지 않습니다.');
       return [];
     }
   } catch (error) {
     console.error('[fetchUserChannels] 채널 정보를 불러오는 중 오류 발생:', error);
+    console.error('[fetchUserChannels] 오류 코드:', error.code);
+    console.error('[fetchUserChannels] 오류 메시지:', error.message);
+    
     userChannels = [];
+    
+    // 네트워크 오류인 경우 재시도
+    if (error.code === 'unavailable' || error.message.includes('network')) {
+      console.log('[fetchUserChannels] 네트워크 오류로 인한 재시도...');
+      // 짧은 대기 후 재시도
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      try {
+        const userChannelDocRef = doc(db, 'channels', uid);
+        const docSnap = await getDoc(userChannelDocRef);
+        
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          const channels = userData.channels || [];
+          userChannels = channels;
+          console.log('[fetchUserChannels] 재시도 성공 - 채널 수:', channels.length);
+          return channels;
+        } else {
+          console.log('[fetchUserChannels] 재시도 결과 - 채널 문서 없음');
+          return [];
+        }
+      } catch (retryError) {
+        console.error('[fetchUserChannels] 재시도 실패:', retryError);
+        return [];
+      }
+    }
+    
     return [];
   }
 }
 
 // 채널 등록 상태에 따른 UI 업데이트
 function updateChannelStatusUI(hasChannels) {
+  console.log('[updateChannelStatusUI] 채널 상태 업데이트:', hasChannels);
+  
   if (hasChannels) {
     // 채널이 있는 경우: 안내 메시지 숨기고 폼 활성화
-    channelStatusNotice.style.display = 'none';
-    showFormBtn.style.display = 'block';
-    showFormBtn.disabled = false;
+    console.log('[updateChannelStatusUI] 채널이 있음 - 계좌 등록 폼 활성화');
+    if (channelStatusNotice) {
+      channelStatusNotice.style.display = 'none';
+    }
+    if (showFormBtn) {
+      showFormBtn.style.display = 'block';
+      showFormBtn.disabled = false;
+    }
   } else {
     // 채널이 없는 경우: 안내 메시지 표시하고 폼 비활성화
-    channelStatusNotice.style.display = 'block';
-    showFormBtn.style.display = 'none';
-    formWrapper.style.display = 'none';
+    console.log('[updateChannelStatusUI] 채널이 없음 - 계좌 등록 폼 비활성화');
+    if (channelStatusNotice) {
+      channelStatusNotice.style.display = 'block';
+    }
+    if (showFormBtn) {
+      showFormBtn.style.display = 'none';
+    }
+    if (formWrapper) {
+      formWrapper.style.display = 'none';
+    }
+  }
+  
+  // DOM 요소 상태 확인
+  console.log('[updateChannelStatusUI] DOM 요소 상태:', {
+    channelStatusNotice: channelStatusNotice ? channelStatusNotice.style.display : 'not found',
+    showFormBtn: showFormBtn ? showFormBtn.style.display : 'not found',
+    formWrapper: formWrapper ? formWrapper.style.display : 'not found'
+  });
+}
+
+// 채널 정보 실시간 모니터링 설정
+function setupChannelMonitoring(uid) {
+  console.log('[setupChannelMonitoring] 채널 모니터링 시작:', uid);
+  
+  // 기존 리스너가 있다면 해제
+  if (channelMonitoringUnsubscribe) {
+    channelMonitoringUnsubscribe();
+  }
+  
+  try {
+    const userChannelDocRef = doc(db, 'channels', uid);
+    
+    channelMonitoringUnsubscribe = onSnapshot(userChannelDocRef, (docSnapshot) => {
+      console.log('[setupChannelMonitoring] 채널 문서 변경 감지');
+      
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data();
+        const channels = userData.channels || [];
+        userChannels = channels;
+        
+        console.log('[setupChannelMonitoring] 실시간 채널 업데이트:', channels.length);
+        
+        // 채널 상태 UI 업데이트
+        updateChannelStatusUI(channels.length > 0);
+      } else {
+        console.log('[setupChannelMonitoring] 채널 문서가 존재하지 않음');
+        userChannels = [];
+        updateChannelStatusUI(false);
+      }
+    }, (error) => {
+      console.error('[setupChannelMonitoring] 채널 모니터링 오류:', error);
+      
+      // 오류 발생 시 일반적인 방법으로 다시 시도
+      setTimeout(() => {
+        console.log('[setupChannelMonitoring] 오류 복구를 위한 재조회 시도');
+        fetchUserChannels(uid).then(channels => {
+          updateChannelStatusUI(channels.length > 0);
+        });
+      }, 2000);
+    });
+    
+  } catch (error) {
+    console.error('[setupChannelMonitoring] 모니터링 설정 실패:', error);
+  }
+}
+
+// 채널 모니터링 중지
+function stopChannelMonitoring() {
+  console.log('[stopChannelMonitoring] 채널 모니터링 중지');
+  
+  if (channelMonitoringUnsubscribe) {
+    channelMonitoringUnsubscribe();
+    channelMonitoringUnsubscribe = null;
   }
 }

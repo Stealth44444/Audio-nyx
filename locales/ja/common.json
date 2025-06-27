@@ -1,4 +1,16 @@
 {
+  "nav": {
+    "home": "ホーム",
+    "findMusic": "楽曲検索",
+    "trackProduction": "トラック制作",
+    "channelManagement": "チャンネル管理",
+    "faq": "FAQ",
+    "withdraw": "口座登録",
+    "brand": "ブランド紹介",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "languageToggle": "KO"
+  },
   "navbar": {
     "home": "ホーム",
     "brand": "ブランド紹介",
@@ -18,27 +30,29 @@
     "cta": "今すぐ始める"
   },
   "footer": {
-    "tagline": "ショート音源収益化プラットフォーム",
+    "tagline": "ショート動画楽曲収益化プラットフォーム",
     "service": "サービス",
+    "findMusic": "楽曲検索",
+    "withdraw": "口座登録",
+    "channelManagement": "チャンネル管理",
+    "trackProduction": "トラック制作",
     "company": "会社",
-    "contact": "連絡先",
-    "faq": "よくある質問",
-    "faqLink": "FAQ ページへ",
+    "brand": "ブランド紹介",
     "terms": "利用規約",
     "privacy": "個人情報保護方針",
     "contactUs": "お問い合わせ",
+    "faq": "よくある質問",
+    "faqLink": "FAQ へ",
+    "contact": "連絡先",
     "copy": "© 2025 AUDIONYX Music, Inc. All rights reserved.",
     "location": "Seoul, Korea"
   },
   "mobile": {
-    "nav": {
-      "home": "ホーム",
-      "music": "音源",
-      "channel": "チャンネル",
-      "withdraw": "精算",
-      "production": "制作",
-      "producer": "プロデューサー"
-    }
+    "home": "ホーム",
+    "music": "楽曲",
+    "channel": "チャンネル",
+    "withdraw": "決済",
+    "production": "制作"
   },
   "brand": {
     "title": "ブランド紹介",
@@ -47,7 +61,7 @@
     "heroCta": "Go Tracks",
     "aboutTitle": "Audionyxとは？",
     "aboutHeadline": "音源収益も、動画収益も<br>Audionyx一つで全て手に入れましょう",
-    "aboutDescription": "YouTubeはショートで発生する総収益を<br>「音源著作権者」と「動画クリエイター」に分けて支払います。<br>Audionyx音源を使用すると、著作権料の<strong>80%</strong>をAudionyxが代わりに受け取り<span class=\"no-break\">再び還元するため</span>動画収益 + 音源収益を同時に獲得できます。",
+    "aboutDescription": "YouTubeはショートで発生する総収益を<br>「音源著作権者」と「動画クリエイター」に分けて支払います。<br>Audionyx音源を使用すると、著作権料の<strong>一部</strong>をAudionyxが代わりに受け取り<span class=\"no-break\">再び還元するため</span>動画収益 + 音源収益を同時に獲得できます。",
     "insightsTitle": "Audionyxトラックで<br>あなたが<strong>逃した収益を</strong>見つけましょう",
     "insightsSubtitle": "これまで<strong>逃していた全ての収益機会</strong>を取り戻します",
     "insightsCta": "3ステップを確認",
@@ -61,9 +75,9 @@
     "feature2Label": "100% SECURE",
     "feature2Title": "All Tracks Licensed",
     "feature2Desc": "全ての音源<br>著作権/CID完璧保証",
-    "feature3Label": "80% ROYALTY",
-    "feature3Title": "80% Royalty is Yours",
-    "feature3Desc": "音源を使用するだけで<br>収益の80%を獲得",
+    "feature3Label": "HIGH ROYALTY",
+    "feature3Title": "Most Royalty is Yours",
+    "feature3Desc": "音源を使用するだけで<br>収益の一部を獲得",
     "multiplatformTitle": "マルチプラットフォーム収益化",
     "multiplatformHeadline": "TikTok · Instagram · Facebook<br>全てのプラットフォームで収益を享受",
     "multiplatformDesc": "Audionyx音源一つでShortsだけでなくReels、TikTok、Facebook Videoまで<br><strong>全てのチャンネルで同じ比率で収益を享受できます。</strong>",
@@ -74,10 +88,10 @@
     "step2Title": "Step 2  ·  動画アップロード",
     "step2Desc": "Shortsアップロード時<br><b>音源CID</b>を貼り付け",
     "step3Title": "Step 3  ·  自動入金",
-    "step3Desc": "80%収益<b>毎月</b>自動入金",
+    "step3Desc": "収益の一部が<b>毎月</b>自動入金",
     "previewTitle": "Right Now",
     "previewHeadline": "ハイクオリティ音源トラックを使用して<br>新しい収益パイプラインを作りましょう",
-    "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収益の80%を獲得できます。</strong>"
+    "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収益の一部を獲得できます。</strong>"
   },
   "withdraw": {
     "title": "収益出金 | Audionyx",
@@ -176,9 +190,13 @@
       "passwordLabel": "パスワード",
       "passwordPlaceholder": "パスワード",
       "loginButton": "ログイン",
+      "or": "または",
       "googleButton": "Googleアカウントで続行",
+      "signupLinkText": "Audionyxが初めてですか？",
       "signupLink": "会員登録する",
+      "loginLinkText": "既にアカウントをお持ちですか？",
       "loginLink": "ログインする",
+      "footerText": "ログイン時に <a href=\"#\" onclick=\"event.preventDefault()\">利用規約</a> および <a href=\"#\" onclick=\"event.preventDefault()\">個人情報保護方針</a>に同意することになります",
       "signupTitle": "会員登録",
       "signupSubtitle": "Audionyxへようこそ！<br>簡単な情報入力でスタートしましょう",
       "nicknameLabel": "名前（ニックネーム）",
@@ -194,16 +212,12 @@
       "signupPasswordPlaceholder": "8文字以上（英数字、特殊文字）",
       "confirmPasswordLabel": "パスワード確認",
       "confirmPasswordPlaceholder": "パスワード再入力",
-      "termsRequired": "利用規約およびプライバシーポリシー同意（必須）",
+      "termsAgreement": "利用規約およびプライバシーポリシー同意（必須）",
       "marketingOptional": "マーケティング情報受信同意（選択）",
       "signupButton": "会員登録",
       "onboardingTitle": "追加情報入力",
       "onboardingSubtitle": "Audionyxサービス利用のため<br>追加情報を入力してください",
-      "completeButton": "完了",
-      "footerText": "ログイン時に<a href=\"#\" onclick=\"event.preventDefault()\">利用規約</a>および<a href=\"#\" onclick=\"event.preventDefault()\">プライバシーポリシー</a>に同意することになります",
-      "or": "または",
-      "termsAgreement": "利用規約およびプライバシーポリシー同意（必須）",
-      "onboardingSubtitle2": "Audionyxサービス利用のため<br>追加情報を入力してください"
+      "onboardingCompleteButton": "完了"
     }
   },
   "channelManagement": {
@@ -324,7 +338,7 @@
     "process": {
       "title": "トラック制作とは？",
       "headline": "CID登録完全無料、商用利用可能",
-      "description": "Audionyxチームの国内最高のプロデューサーが直接トラックを制作します。<br>制作リクエストは誰でも可能で、商用利用と収益創出がすべて許可されています。<br>より多くの方にサービスを提供するため、<strong>1ユーザーあたり最大2回まで</strong>リクエスト可能です。<br>YouTubeおよびすべてのプラットフォームCID登録が完全無料で提供されます。<br>リクエスト-制作-使用すべて無料で、該当音源から著作権収益が発生した場合、ロイヤリティの80%はお客様に還元されます。"
+      "description": "Audionyxチームの国内最高のプロデューサーが直接トラックを制作します。<br>制作リクエストは誰でも可能で、商用利用と収益創出がすべて許可されています。<br>より多くの方にサービスを提供するため、<strong>1ユーザーあたり最大2回まで</strong>リクエスト可能です。<br>YouTubeおよびすべてのプラットフォームCID登録が完全無料で提供されます。<br>リクエスト-制作-使用すべて無料で、該当音源から著作権収益が発生した場合、ロイヤリティの一部はお客様に還元されます。"
     },
     "steps": {
       "step1Title": "リクエスト書作成",
@@ -351,7 +365,164 @@
   "faq": {
     "title": "FAQ | Audionyx",
     "headline": "よくある質問",
-    "description": "Audionyxサービスについてよくある質問をご確認ください。"
+    "description": "Audionyxサービスについての気になる点をご確認ください",
+    "sections": {
+      "overview": "サービス概要",
+      "signup": "登録・セキュリティ",
+      "channel": "チャンネル管理",
+      "music": "楽曲・著作権",
+      "production": "トラック制作",
+      "revenue": "収益・決済",
+      "producer": "プロデューサー",
+      "support": "技術サポート"
+    },
+    "questions": {
+      "overview": {
+        "what_is_audionyx": {
+          "question": "Audionyxはどのようなサービスですか？",
+          "answer": "Audionyxは、クリエイターが著作権の心配なく使用できる高品質な楽曲を提供し、楽曲使用による収益をクリエイターと共有するプラットフォームです。"
+        },
+        "service_cost": {
+          "question": "サービス利用に費用は発生しますか？",
+          "answer": "Audionyxのすべてのサービスは無料でご利用いただけます。楽曲ダウンロード、チャンネル登録、収益分配など、すべての機能を追加費用なしでご利用できます。"
+        },
+        "login_required": {
+          "question": "ログインなしでもサービスを利用できますか？",
+          "answer": "楽曲検索とブランド紹介ページはログインなしでもご利用可能です。ただし、チャンネル管理、トラック制作依頼、口座登録などの機能はログインが必要です。"
+        },
+        "longform_usage": {
+          "question": "Audionyx楽曲をロングフォーム動画でも使用できますか？",
+          "answer": "可能です。ただし、Shortsとは異なり、ロングフォーム動画の場合は収益分配率が異なる可能性があり、詳細な条件は別途お知らせいたします。"
+        },
+        "other_platforms": {
+          "question": "YouTube以外のプラットフォームでも決済されますか？",
+          "answer": "Twitch・AFREECA TVではまだ自動決済がサポートされていませんが、2025年下半期に順次拡大予定です。TikTok、Instagram Reelsは現在検討中です。"
+        }
+      },
+      "signup": {
+        "social_to_email": {
+          "question": "ソーシャルログインをメールログインに変更できますか？",
+          "answer": "「アカウント設定 > ログイン方法」メニューで、メールアドレスとパスワードを設定して追加ログイン方法として登録できます。既存のソーシャルログインも引き続きご利用いただけます。"
+        },
+        "withdraw_data": {
+          "question": "退会後に再登録すると、以前の決済履歴は復元されますか？",
+          "answer": "30日以内の再登録時は、以前の決済履歴とチャンネル登録情報が復元されます。30日を超過した場合は新しいアカウントとみなされ、以前のデータは復元されません。"
+        }
+      },
+      "channel": {
+        "registration_requirements": {
+          "question": "チャンネル登録に登録者数や再生回数の条件はありますか？",
+          "answer": "いいえ、全くありません！Audionyxはすべてのクリエイターを歓迎します。登録者数、再生回数、チャンネル開設期間などの条件は一切なく、誰でもチャンネルを登録してサービスをご利用いただけます。"
+        },
+        "how_to_register": {
+          "question": "チャンネル登録はどのように行いますか？",
+          "answer": "チャンネル管理ページで「チャンネル登録」ボタンをクリックし、YouTubeチャンネルのURLを入力してください。登録後、固有の絵文字キーが発行されるので、このキーをチャンネル概要欄に追加して認証を完了してください。"
+        },
+        "channel_suspension": {
+          "question": "チャンネルに問題が発生したり停止されたらどうなりますか？",
+          "answer": "チャンネルが停止されても、ユーザーがAudionyxに借金を負う必要は全くありません。チャンネル停止時は該当チャンネルの楽曲収益が0円になるだけで、これまでに発生した収益に対する返還義務や追加費用の支払い義務はありません。チャンネル運営はクリエイターの責任であり、YouTubeポリシー違反によるチャンネル制裁時でも金銭的負担は発生しません。"
+        },
+        "multiple_channels": {
+          "question": "複数のチャンネルを登録できますか？",
+          "answer": "はい、一つのアカウントで複数のYouTubeチャンネルを登録できます。各チャンネルごとに固有の絵文字キーが発行され、個別に管理されます。"
+        }
+      },
+      "music": {
+        "find_music_feature": {
+          "question": "楽曲検索機能はどのように使用しますか？",
+          "answer": "楽曲検索ページで、ジャンル、ムード、用途別にフィルタリングしたり、検索語を入力して希望の楽曲を見つけることができます。各楽曲は試聴でき、波形可視化を通じて楽曲の特性を確認できます。オートコンプリート機能でより簡単に検索できます。"
+        },
+        "download_music": {
+          "question": "楽曲をダウンロードできますか？",
+          "answer": "現在は楽曲プレビュー機能のみ提供しています。楽曲ダウンロード機能は今後のアップデートで提供予定です。"
+        },
+        "copyright_issues": {
+          "question": "楽曲使用時に著作権問題はありませんか？",
+          "answer": "Audionyxのすべての楽曲は、内部プロデューサーチームが直接制作したオリジナル楽曲です。現在2名の専門プロデューサーで構成されたチームが高品質の楽曲を制作しており、すべての楽曲はAudionyxが直接著作権を登録し、ISRCを発行してリストに登録しています。したがって著作権関連の法的問題は全くなく、安心してご利用いただけます。ただし、楽曲使用時は必ずチャンネル登録と認証過程を完了する必要があります。"
+        },
+        "remix_allowed": {
+          "question": "Audionyxビートをリミックスしたり歌詞を付けても大丈夫ですか？",
+          "answer": "二次創作は許可されており、原曲と同じ収益分配条件が適用されます。ただし、原曲のクレジット表記は必須であり、不適切な歌詞やコンテンツは制裁される可能性があります。"
+        },
+        "volume_detection": {
+          "question": "BGMの音量を下げるとCIDが検出されませんか？",
+          "answer": "-18 LUFS以上の音量では正常に認識されます。極端に低い音量（-24 LUFS以下）では認識率が低下する可能性があるため、適切な音量を維持してください。"
+        }
+      },
+      "production": {
+        "how_to_request": {
+          "question": "トラック制作依頼はどのように行いますか？",
+          "answer": "トラック制作ページで、希望する楽曲のタイトル、BPM、ジャンル、詳細説明を入力し、参考URLと連絡先を提供してください。ログインなしでも依頼でき、依頼状況をリアルタイムで確認できます。"
+        },
+        "production_cost": {
+          "question": "トラック制作に費用は発生しますか？",
+          "answer": "トラック制作依頼は無料で提出できます。制作の可否と条件は個別に検討後、ご案内いたします。"
+        },
+        "request_status": {
+          "question": "制作依頼の状況はどのように確認しますか？",
+          "answer": "トラック制作ページ下部の「依頼リスト」でリアルタイムで状況を確認できます。「待機中」、「制作中」、「完了」の状態で区分して表示されます。"
+        }
+      },
+      "revenue": {
+        "account_registration": {
+          "question": "口座登録はどのように行いますか？",
+          "answer": "口座登録ページで、銀行、口座番号、口座名義人を入力して登録できます。登録された口座情報はセキュリティのため一部がマスキングされて表示され、いつでも修正できます。"
+        },
+        "revenue_distribution": {
+          "question": "収益はどのように分配されますか？",
+          "answer": "楽曲を使用した動画の収益に応じて、クリエイターとAudionyxが収益を分配します。具体的な分配比率と決済周期は別途ご案内いたします。"
+        },
+        "account_security": {
+          "question": "口座情報は安全に保管されますか？",
+          "answer": "はい、すべての口座情報は暗号化されて安全に保存されます。画面に表示される際も口座番号の一部がマスキングされてセキュリティが維持されます。"
+        },
+        "settlement_schedule": {
+          "question": "楽曲使用後の決済金はいつ確認できますか？入金はいつされますか？",
+          "answer": "楽曲使用動画のアップロード基準で2ヶ月後の月末（M+2）まで決済レポートを提供しており、動画アップロード3ヶ月後の月末まで（M+3）決済金が入金されます。",
+          "example": "例（以下の基準で毎月決済）：\n1月15日 Audionyx楽曲使用動画アップロード\n3月30日まで決済レポート提供、決済金確認可能（1/15～1/31 売上履歴）\n4月30日まで決済金入金（1/15～1/31 売上履歴）"
+        },
+        "minimum_payment": {
+          "question": "決済金の最低入金額はいくらですか？",
+          "answer": "Audionyxはたった1円でも発生すれば毎月決済いたします。"
+        },
+        "tax_deduction": {
+          "question": "決済金額と実際の入金額が異なります。",
+          "answer": "決済金額は源泉税控除前の金額であり、決済金額から源泉税3.3%が控除された金額が入金されます。"
+        },
+        "paypal_overseas": {
+          "question": "海外居住者はPayPalでも受け取れますか？",
+          "answer": "2025年Q4からPayPal決済サービスを導入予定です。現在は国内銀行口座でのみ決済が可能です。"
+        },
+        "deleted_video_revenue": {
+          "question": "動画が削除されましたが、既に受け取ったロイヤリティを返還する必要がありますか？",
+          "answer": "支給された金額は回収されません。ただし、決済基準日以降に削除された動画の収益は今後の決済から除外されます。"
+        }
+      },
+      "producer": {
+        "external_requirements": {
+          "question": "外部プロデューサー登録の要件はありますか？",
+          "answer": "最低3曲のポートフォリオおよび関連経歴を提出していただければ、審査後にご連絡いたします。ジャンルやスタイルに制限はありませんが、Audionyxブランドに適した品質を求めています。"
+        },
+        "project_file_sales": {
+          "question": "DAWプロジェクトファイルも販売できますか？",
+          "answer": "2026年「プロデューサーストア」機能を通じて、MIDI、ステム、プロジェクトファイルなどの販売が可能になる予定です。現在は完成された楽曲のみ登録可能です。"
+        }
+      },
+      "support": {
+        "login_issues": {
+          "question": "ログインできない時はどうすればいいですか？",
+          "answer": "Google、カカオ、Naver、メール、電話番号など様々なログイン方法を提供しています。一つの方法がうまくいかない場合は他の方法を試してください。継続的な問題がある場合は、ブラウザキャッシュを削除するか他のブラウザを使用してみてください。"
+        },
+        "audio_playback_issues": {
+          "question": "楽曲が再生されない時はどうすればいいですか？",
+          "answer": "ブラウザの自動再生ポリシーにより楽曲が再生されない場合があります。ページを更新するか、他の楽曲を先にクリックしてから再度お試しください。"
+        },
+        "additional_inquiries": {
+          "question": "追加でお問い合わせがある時はどのように連絡すればいいですか？",
+          "answer": "トラック制作依頼時に連絡先を残していただくか、チャンネル登録時に提供されたメールを通じてお問い合わせいただけます。今後別途カスタマーサポートチャンネルも提供予定です。"
+        }
+      }
+    }
   },
   "producer": {
     "title": "Audionyxプロデューサー | Audionyx",

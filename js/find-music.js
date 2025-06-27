@@ -971,6 +971,56 @@ function renderTracksPage(page) {
       });
     }
     
+    // 모바일에서 카드 전체 클릭 시 재생 이벤트 추가
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && wavesurfer && playBtn) {
+      trackItem.addEventListener('click', (e) => {
+        // CID 복사 버튼 클릭은 제외
+        if (e.target.closest('.findmusic-cid-copy-btn')) {
+          return;
+        }
+        
+        // 다른 트랙이 재생 중이면 정지
+        if (currentPlayingWavesurfer && currentPlayingWavesurfer !== wavesurfer) {
+          currentPlayingWavesurfer.pause();
+          currentPlayingWavesurfer.getWrapper().closest('.findmusic-track-list-item').classList.remove('playing');
+        }
+        
+        // 현재 트랙 재생/정지 토글
+        if (wavesurfer.isPlaying()) {
+          wavesurfer.pause();
+          trackItem.classList.remove('playing');
+          currentPlayingWavesurfer = null;
+        } else {
+          wavesurfer.play();
+          trackItem.classList.add('playing');
+          currentPlayingWavesurfer = wavesurfer;
+        }
+      });
+    } else if (!isMobile && playBtn && wavesurfer) {
+      // 데스크톱에서는 재생 버튼 클릭 이벤트만
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // 다른 트랙이 재생 중이면 정지
+        if (currentPlayingWavesurfer && currentPlayingWavesurfer !== wavesurfer) {
+          currentPlayingWavesurfer.pause();
+          currentPlayingWavesurfer.getWrapper().closest('.findmusic-track-list-item').classList.remove('playing');
+        }
+        
+        // 현재 트랙 재생/정지 토글
+        if (wavesurfer.isPlaying()) {
+          wavesurfer.pause();
+          trackItem.classList.remove('playing');
+          currentPlayingWavesurfer = null;
+        } else {
+          wavesurfer.play();
+          trackItem.classList.add('playing');
+          currentPlayingWavesurfer = wavesurfer;
+        }
+      });
+    }
+    
     // 각 트랙 아이템을 순차적으로 페이드인 애니메이션 효과 적용
     setTimeout(() => {
       trackItem.style.transition = 'opacity 0.5s ease, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';

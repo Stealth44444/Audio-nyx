@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Audionyx</title>
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/faq.css">
+    <link rel="stylesheet" href="../css/common.css?v=20250116">
+    <link rel="stylesheet" href="../css/faq.css?v=20250116">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,20 +41,20 @@
                 <a href="../index.html" class="logo-link"><div class="logo">Audionyx</div></a>
             </div>
         <nav class="menu-area">
-            <ul>
-                <li><a href="../index.html">홈</a></li>
-                <li><a href="brand.html">브랜드 소개</a></li>
-                <li><a href="find-music.html">음원 찾기</a></li>
-                <li><a href="channel-management.html">채널 관리</a></li>
-                <li><a href="track-production.html">트랙 제작</a></li>
-                <li><a href="withdraw.html">계좌 등록</a></li>
+            <ul class="nav-list">
+                <li class="nav-item active"><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+                <li class="nav-item"><a href="brand.html" data-i18n="nav.brand">브랜드 소개</a></li>
+                <li class="nav-item"><a href="find-music.html" data-i18n="nav.findMusic">음원 찾기</a></li>
+                <li class="nav-item"><a href="channel-management.html" data-i18n="nav.channelManagement">채널 관리</a></li>
+                <li class="nav-item"><a href="track-production.html" data-i18n="nav.trackProduction">트랙 제작</a></li>
+                <li class="nav-item"><a href="withdraw.html" data-i18n="nav.withdraw">계좌 등록</a></li>
             </ul>
         </nav>
         <!-- 언어 선택 토글 -->
         <div class="language-toggle">
-            <span class="language-option active" data-lang="kr">KR</span>
+            <span class="language-option active" data-lang="ko">KR</span>
             <span class="language-separator">|</span>
-            <span class="language-option" data-lang="jp">JP</span>
+            <span class="language-option" data-lang="ja">JP</span>
         </div>
         <div class="auth-buttons">
             <button class="btn-login" id="btn-login">로그인</button>
@@ -90,9 +90,9 @@
 
         <!-- 모바일용 언어 선택 토글 -->
         <div class="mobile-language-toggle">
-            <span class="mobile-language-option active" data-lang="kr">KR</span>
+            <span class="mobile-language-option active" data-lang="ko">KR</span>
             <span class="mobile-language-separator">|</span>
-            <span class="mobile-language-option" data-lang="jp">JP</span>
+            <span class="mobile-language-option" data-lang="ja">JP</span>
         </div>
 
         <!-- 모바일용 로그인 버튼 (로그인하지 않은 상태) -->
@@ -205,9 +205,9 @@
         <section class="faq-hero" data-animate="fade-up">
             <div class="container">
                 <div class="faq-hero-content">
-                    <div class="faq-subtitle">자주 묻는 질문</div>
+                    <div class="faq-subtitle" data-i18n="faq.headline">자주 묻는 질문</div>
                     <h1 class="faq-title">FAQ</h1>
-                    <p class="faq-description">Audionyx 서비스에 대한 궁금한 점들을 확인해보세요</p>
+                    <p class="faq-description" data-i18n="faq.description">Audionyx 서비스에 대한 궁금한 점들을 확인해보세요</p>
                 </div>
             </div>
         </section>
@@ -219,32 +219,32 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">🎵</span>
-                        서비스 개요
+                        <span data-i18n="faq.sections.overview">서비스 개요</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>Audionyx는 어떤 서비스인가요?</summary>
-                            <p>Audionyx는 크리에이터가 저작권 걱정 없이 사용할 수 있는 고품질 음원을 제공하고, 음원 사용에 따른 수익을 크리에이터와 공유하는 플랫폼입니다.</p>
+                            <summary data-i18n="faq.questions.overview.what_is_audionyx.question">Audionyx는 어떤 서비스인가요?</summary>
+                            <p data-i18n="faq.questions.overview.what_is_audionyx.answer">Audionyx는 크리에이터가 저작권 걱정 없이 사용할 수 있는 고품질 음원을 제공하고, 음원 사용에 따른 수익을 크리에이터와 공유하는 플랫폼입니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>서비스 이용에 비용이 발생하나요?</summary>
-                            <p>Audionyx의 모든 서비스는 무료로 이용하실 수 있습니다. 음원 다운로드, 채널 등록, 수익 분배 등 모든 기능을 추가 비용 없이 사용할 수 있습니다.</p>
+                            <summary data-i18n="faq.questions.overview.service_cost.question">서비스 이용에 비용이 발생하나요?</summary>
+                            <p data-i18n="faq.questions.overview.service_cost.answer">Audionyx의 모든 서비스는 무료로 이용하실 수 있습니다. 음원 다운로드, 채널 등록, 수익 분배 등 모든 기능을 추가 비용 없이 사용할 수 있습니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>로그인 없이도 서비스를 이용할 수 있나요?</summary>
-                            <p>음원 찾기와 브랜드 소개 페이지는 로그인 없이도 이용 가능합니다. 하지만 채널 관리, 트랙 제작 요청, 계좌 등록 등의 기능은 로그인이 필요합니다.</p>
+                            <summary data-i18n="faq.questions.overview.login_required.question">로그인 없이도 서비스를 이용할 수 있나요?</summary>
+                            <p data-i18n="faq.questions.overview.login_required.answer">음원 찾기와 브랜드 소개 페이지는 로그인 없이도 이용 가능합니다. 하지만 채널 관리, 트랙 제작 요청, 계좌 등록 등의 기능은 로그인이 필요합니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>Audionyx 음원을 롱폼 영상에도 사용할 수 있나요?</summary>
-                            <p>가능합니다. 단, Shorts와 달리 롱폼 영상의 경우 수익 분배 비율이 다를 수 있으며, 상세한 조건은 별도 공지를 통해 안내드립니다.</p>
+                            <summary data-i18n="faq.questions.overview.longform_usage.question">Audionyx 음원을 롱폼 영상에도 사용할 수 있나요?</summary>
+                            <p data-i18n="faq.questions.overview.longform_usage.answer">가능합니다. 단, Shorts와 달리 롱폼 영상의 경우 수익 분배 비율이 다를 수 있으며, 상세한 조건은 별도 공지를 통해 안내드립니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>YouTube 외 플랫폼에서도 정산이 되나요?</summary>
-                            <p>Twitch·아프리카TV는 아직 자동 정산이 지원되지 않으나, 2025년 하반기 순차 확대 예정입니다. TikTok, Instagram Reels는 현재 검토 중입니다.</p>
+                            <summary data-i18n="faq.questions.overview.other_platforms.question">YouTube 외 플랫폼에서도 정산이 되나요?</summary>
+                            <p data-i18n="faq.questions.overview.other_platforms.answer">Twitch·아프리카TV는 아직 자동 정산이 지원되지 않으나, 2025년 하반기 순차 확대 예정입니다. TikTok, Instagram Reels는 현재 검토 중입니다.</p>
                         </details>
                     </div>
                 </div>
@@ -253,17 +253,17 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">👤</span>
-                        가입·보안
+                        <span data-i18n="faq.sections.signup">가입·보안</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>소셜 로그인을 이메일 로그인으로 바꿀 수 있나요?</summary>
-                            <p>'계정 설정 &gt; 로그인 방법' 메뉴에서 이메일 주소와 비밀번호를 설정하여 추가 로그인 방법으로 등록할 수 있습니다. 기존 소셜 로그인도 계속 사용 가능합니다.</p>
+                            <summary data-i18n="faq.questions.signup.social_to_email.question">소셜 로그인을 이메일 로그인으로 바꿀 수 있나요?</summary>
+                            <p data-i18n="faq.questions.signup.social_to_email.answer">'계정 설정 > 로그인 방법' 메뉴에서 이메일 주소와 비밀번호를 설정하여 추가 로그인 방법으로 등록할 수 있습니다. 기존 소셜 로그인도 계속 사용 가능합니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>탈퇴 후 재가입하면 이전 정산 내역이 복구되나요?</summary>
-                            <p>30일 이내 재가입 시 이전 정산 내역과 채널 등록 정보가 복구됩니다. 30일 초과 시에는 새로운 계정으로 간주되어 이전 데이터는 복구되지 않습니다.</p>
+                            <summary data-i18n="faq.questions.signup.withdraw_data.question">탈퇴 후 재가입하면 이전 정산 내역이 복구되나요?</summary>
+                            <p data-i18n="faq.questions.signup.withdraw_data.answer">30일 이내 재가입 시 이전 정산 내역과 채널 등록 정보가 복구됩니다. 30일 초과 시에는 새로운 계정으로 간주되어 이전 데이터는 복구되지 않습니다.</p>
                         </details>
                     </div>
                 </div>
@@ -272,27 +272,27 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">📺</span>
-                        채널 관리
+                        <span data-i18n="faq.sections.channel">채널 관리</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>채널 등록에 구독자 수나 조회수 조건이 있나요?</summary>
-                            <p><strong>아니요, 전혀 없습니다!</strong> Audionyx는 모든 크리에이터를 환영합니다. 구독자 수, 조회수, 채널 개설 기간 등 어떤 조건도 없이 누구나 채널을 등록하고 서비스를 이용할 수 있습니다.</p>
+                            <summary data-i18n="faq.questions.channel.registration_requirements.question">채널 등록에 구독자 수나 조회수 조건이 있나요?</summary>
+                            <p><strong data-i18n="faq.questions.channel.registration_requirements.answer">아니요, 전혀 없습니다! Audionyx는 모든 크리에이터를 환영합니다. 구독자 수, 조회수, 채널 개설 기간 등 어떤 조건도 없이 누구나 채널을 등록하고 서비스를 이용할 수 있습니다.</strong></p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>채널 등록은 어떻게 하나요?</summary>
-                            <p>채널 관리 페이지에서 '채널 등록' 버튼을 클릭하고 유튜브 채널 URL을 입력하면 됩니다. 등록 후 고유한 이모지 키가 발급되며, 이 키를 채널 소개란에 추가하여 인증을 완료하세요.</p>
+                            <summary data-i18n="faq.questions.channel.how_to_register.question">채널 등록은 어떻게 하나요?</summary>
+                            <p data-i18n="faq.questions.channel.how_to_register.answer">채널 관리 페이지에서 '채널 등록' 버튼을 클릭하고 유튜브 채널 URL을 입력하면 됩니다. 등록 후 고유한 이모지 키가 발급되며, 이 키를 채널 소개란에 추가하여 인증을 완료하세요.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>채널에 문제가 생기거나 정지되면 어떻게 되나요?</summary>
-                            <p><strong>채널이 정지되어도 유저가 Audionyx에게 빚을 질 필요는 전혀 없습니다.</strong> 채널 정지 시 해당 채널의 음원 수익이 0원이 되는 것일 뿐, 이전에 발생한 수익에 대한 반환 의무나 추가 비용 지불 의무는 없습니다. 채널 운영은 크리에이터의 책임이며, 유튜브 정책 위반으로 인한 채널 제재 시에도 금전적 부담은 발생하지 않습니다.</p>
+                            <summary data-i18n="faq.questions.channel.channel_suspension.question">채널에 문제가 생기거나 정지되면 어떻게 되나요?</summary>
+                            <p><strong data-i18n="faq.questions.channel.channel_suspension.answer">채널이 정지되어도 유저가 Audionyx에게 빚을 질 필요는 전혀 없습니다. 채널 정지 시 해당 채널의 음원 수익이 0원이 되는 것일 뿐, 이전에 발생한 수익에 대한 반환 의무나 추가 비용 지불 의무는 없습니다. 채널 운영은 크리에이터의 책임이며, 유튜브 정책 위반으로 인한 채널 제재 시에도 금전적 부담은 발생하지 않습니다.</strong></p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>여러 개의 채널을 등록할 수 있나요?</summary>
-                            <p>네, 하나의 계정으로 여러 개의 유튜브 채널을 등록할 수 있습니다. 각 채널마다 고유한 이모지 키가 발급되며, 개별적으로 관리됩니다.</p>
+                            <summary data-i18n="faq.questions.channel.multiple_channels.question">여러 개의 채널을 등록할 수 있나요?</summary>
+                            <p data-i18n="faq.questions.channel.multiple_channels.answer">네, 하나의 계정으로 여러 개의 유튜브 채널을 등록할 수 있습니다. 각 채널마다 고유한 이모지 키가 발급되며, 개별적으로 관리됩니다.</p>
                         </details>
                     </div>
                 </div>
@@ -301,32 +301,32 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">🎧</span>
-                        음원·저작권
+                        <span data-i18n="faq.sections.music">음원·저작권</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>음원 찾기 기능은 어떻게 사용하나요?</summary>
-                            <p>음원 찾기 페이지에서 장르, 무드, 용도별로 필터링하거나 검색어를 입력하여 원하는 음원을 찾을 수 있습니다. 각 음원은 미리 들어볼 수 있으며, 파형 시각화를 통해 음원의 특성을 확인할 수 있습니다. 자동완성 기능으로 더 쉽게 검색할 수 있습니다.</p>
+                            <summary data-i18n="faq.questions.music.find_music_feature.question">음원 찾기 기능은 어떻게 사용하나요?</summary>
+                            <p data-i18n="faq.questions.music.find_music_feature.answer">음원 찾기 페이지에서 장르, 무드, 용도별로 필터링하거나 검색어를 입력하여 원하는 음원을 찾을 수 있습니다. 각 음원은 미리 들어볼 수 있으며, 파형 시각화를 통해 음원의 특성을 확인할 수 있습니다. 자동완성 기능으로 더 쉽게 검색할 수 있습니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>음원을 다운로드할 수 있나요?</summary>
-                            <p>현재는 음원 미리듣기 기능만 제공하고 있습니다. 음원 다운로드 기능은 추후 업데이트를 통해 제공될 예정입니다.</p>
+                            <summary data-i18n="faq.questions.music.download_music.question">음원을 다운로드할 수 있나요?</summary>
+                            <p data-i18n="faq.questions.music.download_music.answer">현재는 음원 미리듣기 기능만 제공하고 있습니다. 음원 다운로드 기능은 추후 업데이트를 통해 제공될 예정입니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>음원 사용 시 저작권 문제는 없나요?</summary>
-                            <p>Audionyx의 모든 음원은 내부 프로듀서 팀이 직접 제작한 오리지널 음원입니다. 현재 2명의 전문 프로듀서로 구성된 팀이 고품질의 음원을 제작하고 있으며, 모든 음원은 Audionyx가 직접 저작권을 등록하고 ISRC를 발급받아 리스트에 등록됩니다. 따라서 저작권 관련 법적 문제가 전혀 없으며, 안심하고 사용하실 수 있습니다. 단, 음원 사용 시에는 반드시 채널 등록과 인증 과정을 완료해야 합니다.</p>
+                            <summary data-i18n="faq.questions.music.copyright_issues.question">음원 사용 시 저작권 문제는 없나요?</summary>
+                            <p data-i18n="faq.questions.music.copyright_issues.answer">Audionyx의 모든 음원은 내부 프로듀서 팀이 직접 제작한 오리지널 음원입니다. 현재 2명의 전문 프로듀서로 구성된 팀이 고품질의 음원을 제작하고 있으며, 모든 음원은 Audionyx가 직접 저작권을 등록하고 ISRC를 발급받아 리스트에 등록됩니다. 따라서 저작권 관련 법적 문제가 전혀 없으며, 안심하고 사용하실 수 있습니다. 단, 음원 사용 시에는 반드시 채널 등록과 인증 과정을 완료해야 합니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>Audionyx 비트를 리믹스하거나 가사를 얹어도 되나요?</summary>
-                            <p>2차 창작은 허용되며 원본 음원과 동일한 수익 분배 조건이 적용됩니다. 단, 원본 음원의 크레딧 표기는 필수이며, 부적절한 가사나 콘텐츠는 제재될 수 있습니다.</p>
+                            <summary data-i18n="faq.questions.music.remix_allowed.question">Audionyx 비트를 리믹스하거나 가사를 얹어도 되나요?</summary>
+                            <p data-i18n="faq.questions.music.remix_allowed.answer">2차 창작은 허용되며 원본 음원과 동일한 수익 분배 조건이 적용됩니다. 단, 원본 음원의 크레딧 표기는 필수이며, 부적절한 가사나 콘텐츠는 제재될 수 있습니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>배경음 볼륨을 줄이면 CID가 못 잡나요?</summary>
-                            <p>-18 LUFS 이상의 볼륨에서는 정상적으로 인식됩니다. 지나치게 낮은 볼륨(-24 LUFS 이하)에서는 인식률이 떨어질 수 있으니 적절한 볼륨을 유지해 주세요.</p>
+                            <summary data-i18n="faq.questions.music.volume_detection.question">배경음 볼륨을 줄이면 CID가 못 잡나요?</summary>
+                            <p data-i18n="faq.questions.music.volume_detection.answer">-18 LUFS 이상의 볼륨에서는 정상적으로 인식됩니다. 지나치게 낮은 볼륨(-24 LUFS 이하)에서는 인식률이 떨어질 수 있으니 적절한 볼륨을 유지해 주세요.</p>
                         </details>
                     </div>
                 </div>
@@ -335,22 +335,22 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">🎼</span>
-                        트랙 제작
+                        <span data-i18n="faq.sections.production">트랙 제작</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>트랙 제작 요청은 어떻게 하나요?</summary>
-                            <p>트랙 제작 페이지에서 원하는 음원의 제목, BPM, 장르, 상세 설명을 입력하고 참고 URL과 연락처를 제공하면 됩니다. 로그인 없이도 요청할 수 있으며, 요청 상태를 실시간으로 확인할 수 있습니다.</p>
+                            <summary data-i18n="faq.questions.production.how_to_request.question">트랙 제작 요청은 어떻게 하나요?</summary>
+                            <p data-i18n="faq.questions.production.how_to_request.answer">트랙 제작 페이지에서 원하는 음원의 제목, BPM, 장르, 상세 설명을 입력하고 참고 URL과 연락처를 제공하면 됩니다. 로그인 없이도 요청할 수 있으며, 요청 상태를 실시간으로 확인할 수 있습니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>트랙 제작에 비용이 발생하나요?</summary>
-                            <p>트랙 제작 요청은 무료로 제출할 수 있습니다. 제작 여부와 조건은 개별적으로 검토 후 안내드립니다.</p>
+                            <summary data-i18n="faq.questions.production.production_cost.question">트랙 제작에 비용이 발생하나요?</summary>
+                            <p data-i18n="faq.questions.production.production_cost.answer">트랙 제작 요청은 무료로 제출할 수 있습니다. 제작 여부와 조건은 개별적으로 검토 후 안내드립니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>제작 요청 상태는 어떻게 확인하나요?</summary>
-                            <p>트랙 제작 페이지 하단의 '내 요청 목록'에서 실시간으로 상태를 확인할 수 있습니다. '대기중', '제작중', '완료' 상태로 구분되어 표시됩니다.</p>
+                            <summary data-i18n="faq.questions.production.request_status.question">제작 요청 상태는 어떻게 확인하나요?</summary>
+                            <p data-i18n="faq.questions.production.request_status.answer">트랙 제작 페이지 하단의 '내 요청 목록'에서 실시간으로 상태를 확인할 수 있습니다. '대기중', '제작중', '완료' 상태로 구분되어 표시됩니다.</p>
                         </details>
                     </div>
                 </div>
@@ -359,51 +359,51 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">💰</span>
-                        수익·정산
+                        <span data-i18n="faq.sections.revenue">수익·정산</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>계좌 등록은 어떻게 하나요?</summary>
-                            <p>계좌 등록 페이지에서 은행, 계좌번호, 예금주 이름을 입력하여 등록할 수 있습니다. 등록된 계좌 정보는 보안을 위해 일부가 마스킹되어 표시되며, 언제든지 수정할 수 있습니다.</p>
+                            <summary data-i18n="faq.questions.revenue.account_registration.question">계좌 등록은 어떻게 하나요?</summary>
+                            <p data-i18n="faq.questions.revenue.account_registration.answer">계좌 등록 페이지에서 은행, 계좌번호, 예금주 이름을 입력하여 등록할 수 있습니다. 등록된 계좌 정보는 보안을 위해 일부가 마스킹되어 표시되며, 언제든지 수정할 수 있습니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>수익은 어떻게 분배되나요?</summary>
-                            <p>음원을 사용한 영상의 수익에 따라 크리에이터와 Audionyx가 수익을 분배합니다. 구체적인 분배 비율과 정산 주기는 별도 안내를 통해 공지됩니다.</p>
+                            <summary data-i18n="faq.questions.revenue.revenue_distribution.question">수익은 어떻게 분배되나요?</summary>
+                            <p data-i18n="faq.questions.revenue.revenue_distribution.answer">음원을 사용한 영상의 수익에 따라 크리에이터와 Audionyx가 수익을 분배합니다. 구체적인 분배 비율과 정산 주기는 별도 안내를 통해 공지됩니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>계좌 정보는 안전하게 보관되나요?</summary>
-                            <p>네, 모든 계좌 정보는 암호화되어 안전하게 저장됩니다. 화면에 표시될 때도 계좌번호 일부가 마스킹되어 보안이 유지됩니다.</p>
+                            <summary data-i18n="faq.questions.revenue.account_security.question">계좌 정보는 안전하게 보관되나요?</summary>
+                            <p data-i18n="faq.questions.revenue.account_security.answer">네, 모든 계좌 정보는 암호화되어 안전하게 저장됩니다. 화면에 표시될 때도 계좌번호 일부가 마스킹되어 보안이 유지됩니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>음원 사용 후 정산금은 언제 확인할 수 있나요? 입금은 언제 되나요?</summary>
-                            <p>음원 사용 영상 업로드 기준으로 2개월 후 말일(M+2)까지 정산 리포트를 제공하고 있고, 영상 업로드 3개월 후 말일까지(M+3) 정산금이 입금됩니다.</p>
-                            <p><strong>예시 (아래 기준으로 매달 정산):</strong><br>
+                            <summary data-i18n="faq.questions.revenue.settlement_schedule.question">음원 사용 후 정산금은 언제 확인할 수 있나요? 입금은 언제 되나요?</summary>
+                            <p data-i18n="faq.questions.revenue.settlement_schedule.answer">음원 사용 영상 업로드 기준으로 2개월 후 말일(M+2)까지 정산 리포트를 제공하고 있고, 영상 업로드 3개월 후 말일까지(M+3) 정산금이 입금됩니다.</p>
+                            <p><strong data-i18n="faq.questions.revenue.settlement_schedule.example">예시 (아래 기준으로 매달 정산):<br>
                             1월 15일 Audionyx 음원 사용 영상 업로드<br>
                             3월 30일까지 정산 리포트 제공, 정산금 확인 가능 (1/15 ~ 1/31 판매내역)<br>
-                            4월 30일까지 정산금 입금 (1/15 ~ 1/31 판매내역)</p>
+                            4월 30일까지 정산금 입금 (1/15 ~ 1/31 판매내역)</strong></p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>정산금의 최소 입금액은 얼마인가요?</summary>
-                            <p>Audionyx는 단돈 1원이 발생되더라도 매월 정산해 드리고 있어요.</p>
+                            <summary data-i18n="faq.questions.revenue.minimum_payment.question">정산금의 최소 입금액은 얼마인가요?</summary>
+                            <p data-i18n="faq.questions.revenue.minimum_payment.answer">Audionyx는 단돈 1원이 발생되더라도 매월 정산해 드리고 있어요.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>정산 금액과 실제 입금액이 달라요.</summary>
-                            <p>정산 금액은 원천세 차감 전 금액이며 정산 금액에서 원천세 3.3%가 차감된 금액이 입금됩니다.</p>
+                            <summary data-i18n="faq.questions.revenue.tax_deduction.question">정산 금액과 실제 입금액이 달라요.</summary>
+                            <p data-i18n="faq.questions.revenue.tax_deduction.answer">정산 금액은 원천세 차감 전 금액이며 정산 금액에서 원천세 3.3%가 차감된 금액이 입금됩니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>해외 거주자는 PayPal로도 받을 수 있나요?</summary>
-                            <p>2025 Q4부터 PayPal 정산 서비스를 도입할 예정입니다. 현재는 국내 은행 계좌로만 정산이 가능합니다.</p>
+                            <summary data-i18n="faq.questions.revenue.paypal_overseas.question">해외 거주자는 PayPal로도 받을 수 있나요?</summary>
+                            <p data-i18n="faq.questions.revenue.paypal_overseas.answer">2025 Q4부터 PayPal 정산 서비스를 도입할 예정입니다. 현재는 국내 은행 계좌로만 정산이 가능합니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>영상이 삭제됐는데 이미 받은 로열티를 반환해야 하나요?</summary>
-                            <p>지급된 금액은 환수되지 않습니다. 다만 정산 기준일 이후 삭제된 영상의 수익은 차후 정산에서 제외됩니다.</p>
+                            <summary data-i18n="faq.questions.revenue.deleted_video_revenue.question">영상이 삭제됐는데 이미 받은 로열티를 반환해야 하나요?</summary>
+                            <p data-i18n="faq.questions.revenue.deleted_video_revenue.answer">지급된 금액은 환수되지 않습니다. 다만 정산 기준일 이후 삭제된 영상의 수익은 차후 정산에서 제외됩니다.</p>
                         </details>
                     </div>
                 </div>
@@ -412,17 +412,17 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">🎹</span>
-                        프로듀서
+                        <span data-i18n="faq.sections.producer">프로듀서</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>외부 프로듀서 등록 요건이 있나요?</summary>
-                            <p>최소 3곡 포트폴리오 및 관련 경력을 제출해 주시면 심사 후 연락드립니다. 장르나 스타일에 제한은 없으나 Audionyx 브랜드에 적합한 퀄리티를 요구합니다.</p>
+                            <summary data-i18n="faq.questions.producer.external_requirements.question">외부 프로듀서 등록 요건이 있나요?</summary>
+                            <p data-i18n="faq.questions.producer.external_requirements.answer">최소 3곡 포트폴리오 및 관련 경력을 제출해 주시면 심사 후 연락드립니다. 장르나 스타일에 제한은 없으나 Audionyx 브랜드에 적합한 퀄리티를 요구합니다.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>DAW 프로젝트 파일도 판매할 수 있나요?</summary>
-                            <p>2026년 '프로듀서 스토어' 기능을 통해 MIDI, 스템, 프로젝트 파일 등의 판매가 가능할 예정입니다. 현재는 완성된 음원만 등록 가능합니다.</p>
+                            <summary data-i18n="faq.questions.producer.project_file_sales.question">DAW 프로젝트 파일도 판매할 수 있나요?</summary>
+                            <p data-i18n="faq.questions.producer.project_file_sales.answer">2026년 '프로듀서 스토어' 기능을 통해 MIDI, 스템, 프로젝트 파일 등의 판매가 가능할 예정입니다. 현재는 완성된 음원만 등록 가능합니다.</p>
                         </details>
                     </div>
                 </div>
@@ -431,22 +431,22 @@
                 <div class="faq-section" data-animate="fade-up">
                     <h2 class="faq-section-title">
                         <span class="section-icon">🛠️</span>
-                        기술 지원
+                        <span data-i18n="faq.sections.support">기술 지원</span>
                     </h2>
                     <div class="faq-list">
                         <details class="faq-item">
-                            <summary>로그인이 안 될 때는 어떻게 하나요?</summary>
-                            <p>구글, 카카오, 네이버, 이메일, 전화번호 등 다양한 로그인 방법을 제공합니다. 한 가지 방법이 안 될 경우 다른 방법을 시도해보세요. 지속적인 문제가 있을 경우 브라우저 캐시를 삭제하거나 다른 브라우저를 사용해보세요.</p>
+                            <summary data-i18n="faq.questions.support.login_issues.question">로그인이 안 될 때는 어떻게 하나요?</summary>
+                            <p data-i18n="faq.questions.support.login_issues.answer">구글, 카카오, 네이버, 이메일, 전화번호 등 다양한 로그인 방법을 제공합니다. 한 가지 방법이 안 될 경우 다른 방법을 시도해보세요. 지속적인 문제가 있을 경우 브라우저 캐시를 삭제하거나 다른 브라우저를 사용해보세요.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>음원이 재생되지 않을 때는 어떻게 하나요?</summary>
-                            <p>브라우저의 자동재생 정책으로 인해 음원이 재생되지 않을 수 있습니다. 페이지를 새로고침하거나 다른 음원을 먼저 클릭한 후 다시 시도해보세요.</p>
+                            <summary data-i18n="faq.questions.support.audio_playback_issues.question">음원이 재생되지 않을 때는 어떻게 하나요?</summary>
+                            <p data-i18n="faq.questions.support.audio_playback_issues.answer">브라우저의 자동재생 정책으로 인해 음원이 재생되지 않을 수 있습니다. 페이지를 새로고침하거나 다른 음원을 먼저 클릭한 후 다시 시도해보세요.</p>
                         </details>
 
                         <details class="faq-item">
-                            <summary>추가 문의사항이 있을 때는 어떻게 연락하나요?</summary>
-                            <p>트랙 제작 요청 시 연락처를 남겨주시거나, 채널 등록 시 제공한 이메일을 통해 문의하실 수 있습니다. 추후 별도의 고객지원 채널도 제공될 예정입니다.</p>
+                            <summary data-i18n="faq.questions.support.additional_inquiries.question">추가 문의사항이 있을 때는 어떻게 연락하나요?</summary>
+                            <p data-i18n="faq.questions.support.additional_inquiries.answer">트랙 제작 요청 시 연락처를 남겨주시거나, 채널 등록 시 제공한 이메일을 통해 문의하실 수 있습니다. 추후 별도의 고객지원 채널도 제공될 예정입니다.</p>
                         </details>
                     </div>
                 </div>
@@ -460,39 +460,39 @@
             <div class="footer-main">
                 <div class="footer-brand">
                     <div class="footer-logo">Audionyx</div>
-                    <p class="footer-tagline">쇼츠 음원 수익화 플랫폼</p>
+                    <p class="footer-tagline" data-i18n="footer.tagline">쇼츠 음원 수익화 플랫폼</p>
                 </div>
                 
                 <div class="footer-nav-container">
                     <div class="footer-nav-group">
-                        <h4 class="footer-heading">서비스</h4>
+                        <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
                         <ul class="footer-nav">
-                            <li><a href="../pages/find-music.html">음원 찾기</a></li>
-                            <li><a href="../pages/withdraw.html">계좌 등록</a></li>
-                            <li><a href="../pages/channel-management.html">채널 관리</a></li>
-                            <li><a href="../pages/track-production.html">트랙 제작</a></li>
+                            <li><a href="../pages/find-music.html" data-i18n="footer.findMusic">음원 찾기</a></li>
+                            <li><a href="../pages/withdraw.html" data-i18n="footer.withdraw">계좌 등록</a></li>
+                            <li><a href="../pages/channel-management.html" data-i18n="footer.channelManagement">채널 관리</a></li>
+                            <li><a href="../pages/track-production.html" data-i18n="footer.trackProduction">트랙 제작</a></li>
                         </ul>
                     </div>
                     
                     <div class="footer-nav-group">
-                        <h4 class="footer-heading">회사</h4>
+                        <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
                         <ul class="footer-nav">
-                            <li><a href="../pages/brand.html">브랜드 소개</a></li>
-                            <li><a href="/policy">이용약관</a></li>
-                            <li><a href="/privacy">개인정보처리방침</a></li>
-                            <li><a href="/contact">문의하기</a></li>
+                            <li><a href="../pages/brand.html" data-i18n="footer.brand">브랜드 소개</a></li>
+                            <li><a href="/policy" data-i18n="footer.terms">이용약관</a></li>
+                            <li><a href="/privacy" data-i18n="footer.privacy">개인정보처리방침</a></li>
+                            <li><a href="/contact" data-i18n="footer.contactUs">문의하기</a></li>
                         </ul>
                     </div>
                     
                     <div class="footer-nav-group">
-                        <h4 class="footer-heading">자주 묻는 질문</h4>
+                        <h4 class="footer-heading" data-i18n="footer.faq">자주 묻는 질문</h4>
                         <ul class="footer-nav">
-                            <li><a href="../pages/faq.html">FAQ 바로가기</a></li>
+                            <li><a href="../pages/faq.html" data-i18n="footer.faqLink">FAQ 바로가기</a></li>
                         </ul>
                     </div>
                     
                     <div class="footer-nav-group">
-                        <h4 class="footer-heading">연락처</h4>
+                        <h4 class="footer-heading" data-i18n="footer.contact">연락처</h4>
                         <ul class="footer-nav">
                             <li><a href="mailto:audionyx369@gmail.com">audionyx369@gmail.com</a></li>
                             <li class="social-links">
@@ -512,8 +512,8 @@
             </div>
             
             <div class="footer-bottom">
-                <p class="footer-copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
-                <p class="footer-location">Seoul, Korea</p>
+                <p class="footer-copy" data-i18n="footer.copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
+                <p class="footer-location" data-i18n="footer.location">Seoul, Korea</p>
             </div>
         </div>
     </footer>

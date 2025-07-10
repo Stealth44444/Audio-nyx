@@ -127,8 +127,228 @@ document.addEventListener('DOMContentLoaded', function() {
     // 네비게이션 메뉴 활성화 실행
     activateCurrentPageNavItem();
     
-    // 음원 미리보기 섹션 초기화
-    initializePreviewSection();
+    // 영문 태그를 한국어로 변환하는 매핑 시스템 (2025 업데이트)
+    const tagKoreanMappings = {
+      mood: {
+        // === 새 태그 매핑 (우선순위) ===
+        'joyful': '즐거운/신나는', // 밝고 경쾌한 긍정 에너지
+        'energetic': '에너지틱', // BPM 빠르고 활동적인 느낌
+        'inspiring': '감동/희망', // 용기·긍정·희망 고조
+        'chill': '편안/여유', // 로파이·카페·브이로그용
+        'romantic': '로맨틱', // 사랑·달콤·따뜻함
+        'playful': '장난/귀여움', // 게임·코믹·키즈
+        'groovy': '그루비/펑키', // 리듬·스윙·댄스
+        'epic': '웅장/스케일', // 영화 트레일러·게임 OST
+        'dramatic': '드라마틱', // 감정 기승전결, 서사
+        'dark': '다크', // 음울·딥·고딕
+        'tense': '긴장/서스펜스', // 비트·펄스·몰입
+        'aggressive': '공격적/분노', // 하드록·트랩·배틀
+        'mysterious': '미스터리', // 몽환·SF·퍼즐
+        'sad': '슬픔/우울', // 발라드·이별·회상
+        
+        // === 기존 태그 호환성 매핑 ===
+        'powerful': '에너지틱', // → Energetic 매핑
+        'exciting': '에너지틱', // → Energetic 매핑
+        'hopeful': '감동/희망', // → Inspiring 매핑
+        'uplifting': '감동/희망', // → Inspiring 매핑
+        'peaceful': '편안/여유', // → Chill 매핑
+        'carefree': '편안/여유', // → Chill 매핑
+        'love': '로맨틱', // → Romantic 매핑
+        'sexy': '로맨틱', // → Romantic 매핑
+        'funny': '장난/귀여움', // → Playful 매핑
+        'serious': '드라마틱', // → Dramatic 매핑
+        'angry': '공격적/분노', // → Aggressive 매핑
+        'scary': '미스터리', // → Mysterious (soft) 매핑
+        
+        // === 추가 호환 태그들 ===
+        'calm': '편안/여유',
+        'melancholic': '슬픔/우울', // → Sad 매핑
+        'nostalgic': '로맨틱',
+        'cheerful': '즐거운/신나는', // → Joyful 매핑
+        'suspenseful': '긴장/서스펜스',
+        'cinematic': '웅장/스케일',
+        'ambient': '편안/여유',
+        'emotional': '드라마틱',
+        'dreamy': '로맨틱',
+        'intense': '긴장/서스펜스',
+        'gentle': '편안/여유',
+        'happy': '즐거운/신나는', // → Joyful 매핑
+        'relaxing': '편안/여유',
+        'funky': '그루비/펑키',
+        'moody': '다크',
+        'gothic': '다크',
+        'tension': '긴장/서스펜스',
+        'enigmatic': '미스터리'
+      },
+      usecase: {
+        // === 새 태그 매핑 (우선순위) ===
+        'docu / education & science': '다큐·교육·과학',
+        'docu_education': '다큐·교육·과학', // 호환성 유지
+        'documentary_education': '다큐·교육·과학',
+        'education_science': '다큐·교육·과학',
+        
+        'travel & aerial scenic': '여행·드론·풍경', 
+        'travel_aerial': '여행·드론·풍경', // 호환성 유지
+        'aerial_scenic': '여행·드론·풍경',
+        
+        'fashion & beauty': '패션·뷰티',
+        'fashion_beauty': '패션·뷰티', // 호환성 유지
+        
+        'lifestyle / vlog': 'Vlog·라이프스타일',
+        'lifestyle_vlog': 'Vlog·라이프스타일', // 호환성 유지
+        'vlog_lifestyle': 'Vlog·라이프스타일',
+        
+        'gaming & esports': '게이밍·e스포츠',
+        'gaming_esports': '게이밍·e스포츠', // 호환성 유지
+        'gaming_e-sports': '게이밍·e스포츠',
+        
+        'tech & innovation': '테크·산업·혁신',
+        'tech_innovation': '테크·산업·혁신', // 호환성 유지
+        'technology_innovation': '테크·산업·혁신',
+                 
+         'animation & narration': '애니메이션·나레이션',
+         'animation_narration': '애니메이션·나레이션', // 호환성 유지
+         
+         'party, events & entertainment': '파티·이벤트·오락',
+        'party_events': '파티·이벤트·오락', // 호환성 유지
+        'events_entertainment': '파티·이벤트·오락',
+        
+        'wellness & asmr': '웰니스·명상·앰비언트',
+        'wellness_asmr': '웰니스·명상·앰비언트', // 호환성 유지
+        'meditation_asmr': '웰니스·명상·앰비언트',
+        
+                          'motivation & sports': '스포츠·동기부여',
+         'sports & motivation': '스포츠·동기부여', // 호환성 유지
+         'sports_motivation': '스포츠·동기부여', // 호환성 유지
+        
+        'pets & nature': '펫·동물·자연',
+        'pets_nature': '펫·동물·자연', // 호환성 유지
+        'animals_nature': '펫·동물·자연',
+        
+        'trailers & branding': '트레일러·인트로·로고',
+        'trailers_branding': '트레일러·인트로·로고', // 호환성 유지
+        'branding_intro': '트레일러·인트로·로고',
+        
+        'diy & how-to': 'DIY·튜토리얼',
+        'diy_howto': 'DIY·튜토리얼', // 호환성 유지
+        'tutorial_howto': 'DIY·튜토리얼',
+        
+        'holiday & seasonal': '홀리데이·시즌별',
+        'holiday_seasonal': '홀리데이·시즌별', // 호환성 유지
+        'seasonal_holiday': '홀리데이·시즌별',
+        
+        'art & culture': '예술·문화',
+        'art_culture': '예술·문화', // 호환성 유지
+        'culture_art': '예술·문화',
+        
+        'news & current affairs': '뉴스·시사',
+        'news_affairs': '뉴스·시사', // 호환성 유지
+        'current_affairs': '뉴스·시사',
+        
+        'drive': '드라이브',
+        'automotive': '드라이브',
+        'car_review': '드라이브',
+        
+        // === 기존 단일 태그 호환성 매핑 ===
+        'documentary': '다큐·교육·과학',
+        'education': '다큐·교육·과학',
+        'science': '다큐·교육·과학',
+        'study': '다큐·교육·과학',
+        'travel': '여행·드론·풍경',
+        'drone': '여행·드론·풍경',
+        'aerial': '여행·드론·풍경',
+        'scenic': '여행·드론·풍경',
+        'fashion': '패션·뷰티',
+        'beauty': '패션·뷰티',
+        'runway': '패션·뷰티',
+        'lifestyle': 'Vlog·라이프스타일',
+        'vlog': 'Vlog·라이프스타일',
+        'daily': 'Vlog·라이프스타일',
+        'gaming': '게이밍·e스포츠',
+        'esports': '게이밍·e스포츠',
+        'game': '게이밍·e스포츠',
+        'competitive': '게이밍·e스포츠',
+        'tech': '테크·산업·혁신',
+        'technology': '테크·산업·혁신',
+        'innovation': '테크·산업·혁신',
+        'unbox': '테크·산업·혁신',
+        'review': '테크·산업·혁신',
+                 'animation': '애니메이션·나레이션',
+         'kids': '애니메이션·나레이션',
+         'cartoon': '애니메이션·나레이션',
+         'narration': '애니메이션·나레이션',
+        'party': '파티·이벤트·오락',
+        'event': '파티·이벤트·오락',
+        'celebration': '파티·이벤트·오락',
+        'entertainment': '파티·이벤트·오락',
+        'wellness': '웰니스·명상·앰비언트',
+        'meditation': '웰니스·명상·앰비언트',
+        'asmr': '웰니스·명상·앰비언트',
+        'rain asmr': '웰니스·명상·앰비언트',
+        'ambient': '웰니스·명상·앰비언트',
+                 'sports': '스포츠·동기부여',
+         'fitness': '스포츠·동기부여',
+         'workout': '스포츠·동기부여',
+         'motivation': '스포츠·동기부여',
+        'pets': '펫·동물·자연',
+        'nature': '펫·동물·자연',
+        'animals': '펫·동물·자연',
+        'trailer': '트레일러·인트로·로고',
+        'branding': '트레일러·인트로·로고',
+        'intro': '트레일러·인트로·로고',
+        'logo': '트레일러·인트로·로고',
+        'cinematic': '트레일러·인트로·로고',
+        'diy': 'DIY·튜토리얼',
+        'tutorial': 'DIY·튜토리얼',
+        'how-to': 'DIY·튜토리얼',
+        'recipe': 'DIY·튜토리얼',
+        'holiday': '홀리데이·시즌별',
+        'seasonal': '홀리데이·시즌별',
+        'christmas': '홀리데이·시즌별',
+        'halloween': '홀리데이·시즌별',
+        'art': '예술·문화',
+        'culture': '예술·문화',
+        'creative': '예술·문화',
+        'performance': '예술·문화',
+        'news': '뉴스·시사',
+        'current affairs': '뉴스·시사',
+        'business': '뉴스·시사',
+        'car': '드라이브',
+        'transportation': '드라이브'
+      }
+    };
+
+    // 영문 태그를 한국어로 변환하는 함수
+    function convertTagToKorean(tag, type) {
+      if (!tag) return '';
+      
+      const mappings = tagKoreanMappings[type];
+      if (!mappings) return tag;
+      
+      // 직접 매핑 확인
+      if (mappings[tag]) {
+        return mappings[tag];
+      }
+      
+      // 소문자로 변환해서 확인
+      const lowerTag = tag.toLowerCase();
+      if (mappings[lowerTag]) {
+        return mappings[lowerTag];
+      }
+      
+      // 부분 매칭 확인
+      for (const [englishTag, koreanTag] of Object.entries(mappings)) {
+        if (lowerTag.includes(englishTag.toLowerCase()) || englishTag.toLowerCase().includes(lowerTag)) {
+          return koreanTag;
+        }
+      }
+      
+      // 매핑이 없으면 원본 반환
+      return tag;
+    }
+    
+    // 정적 미리보기 섹션 애니메이션만 설정 (Firestore 로딩 제거)
+    setupPreviewSectionAnimations();
 
     
     // 인사이트 섹션 애니메이션
@@ -842,160 +1062,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // === 음원 미리보기 섹션 초기화 (Firestore 연동) ===
-    async function initializePreviewSection() {
-        try {
-            console.log('[Brand] 음원 미리보기 섹션 초기화 시작');
-            
-            // 특정 3곡만 가져오기 (다양한 변형 포함)
-            const targetTracks = [
-                'electric palms', 
-                'echo chamber', 
-                'ultraviolet gate',
-                // 추가 변형들
-                'electric palm',
-                'echo chamber 4a.m.',
-                'echo chamber 4am',
-                'echo chamber 4 a.m.',
-                'ultraviolet',
-                'palms',
-                'chamber'
-            ];
-            const tracks = await loadBrandTracks(targetTracks);
-            
-            if (tracks.length > 0) {
-                renderBrandTracks(tracks);
-                setupPreviewSectionAnimations();
-            } else {
-                console.warn('[Brand] 지정된 음원을 찾을 수 없습니다. 기존 HTML 카드 사용');
-                // 기존 HTML 카드가 있다면 애니메이션만 적용
-                setupPreviewSectionAnimations();
-            }
-        } catch (error) {
-            console.error('[Brand] 음원 미리보기 섹션 초기화 오류:', error);
-            console.log('[Brand] 기존 HTML 카드로 폴백');
-            // Firestore 연결 실패 시 기존 HTML 카드 사용하고 애니메이션만 적용
-            setupPreviewSectionAnimations();
-        }
-    }
+    // === 음원 미리보기 섹션 초기화 기능 제거 ===
+    // Firestore 로딩 제거 - 정적 HTML 카드만 사용하여 오디오 재생 오류 해결
     
-    // === Firestore에서 브랜드용 음원 데이터 로드 ===
-    async function loadBrandTracks(targetTitles) {
-        try {
-            console.log('[Brand] Firestore에서 트랙 데이터 불러오기 시작');
-            const trackSnapshot = await getDocs(collection(db, 'track'));
-            
-            if (trackSnapshot.empty) {
-                console.warn('[Brand] Firestore track 컬렉션에 데이터가 없습니다');
-                return [];
-            }
-            
-            // 모든 트랙 타이틀 로그 출력 (디버깅용)
-            console.log('[Brand] 🔍 Firestore에 있는 모든 트랙들:');
-            const allTracks = [];
-            trackSnapshot.forEach((doc) => {
-                const data = doc.data();
-                allTracks.push(data.title || 'No Title');
-                console.log(`  - "${data.title || 'No Title'}"`);
-            });
-            
-            const loadedTracks = [];
-            trackSnapshot.forEach((doc) => {
-                const data = doc.data();
-                const title = (data.title || '').toLowerCase();
-                
-                // 더 유연한 검색을 위해 각 타겟에 대해 개별 체크
-                console.log(`[Brand] 검사 중: "${data.title}" vs 타겟들`);
-                
-                for (const target of targetTitles) {
-                    const targetLower = target.toLowerCase();
-                    
-                    // 다양한 매칭 방식 시도
-                    const isMatch = 
-                        title.includes(targetLower) ||                           // 포함 검사
-                        title.replace(/\s+/g, '').includes(targetLower.replace(/\s+/g, '')) || // 공백 제거 후 검사
-                        title.replace(/[^\w]/g, '').includes(targetLower.replace(/[^\w]/g, '')) || // 특수문자 제거 후 검사
-                        targetLower.split(' ').every(word => title.includes(word)); // 각 단어 포함 검사
-                    
-                    if (isMatch) {
-                        console.log(`[Brand] ✅ 매칭됨: "${data.title}" <-> "${target}"`);
-                        loadedTracks.push({
-                            id: doc.id,
-                            title: data.title || '제목 없음',
-                            category: data.genre || '장르 미지정',
-                            mood: Array.isArray(data.mood) ? data.mood : [],
-                            src: data.downloadUrl || data.src || '',
-                            coverUrl: data.coverUrl || '',
-                            ISRC: data.ISRC || `AUDNX${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`,
-                            duration: data.duration || 0
-                        });
-                        break; // 한 번 매칭되면 다음 트랙으로
-                    }
-                }
-            });
-            
-            console.log(`[Brand] 🎵 매칭된 트랙들:`);
-            loadedTracks.forEach(track => {
-                console.log(`  - "${track.title}" (${track.category})`);
-            });
-            
-            console.log(`[Brand] 로드된 브랜드 트랙 수: ${loadedTracks.length}`);
-            return loadedTracks;
-        } catch (error) {
-            console.error('[Brand] Firestore 트랙 로드 오류:', error);
-            throw error;
-        }
-    }
+    // === Firestore 브랜드 트랙 로드 기능 제거 ===
+    // Firestore 로딩 제거 - 정적 HTML 카드만 사용하여 성능 향상 및 오류 해결
     
-    // === 브랜드 트랙 카드 렌더링 ===
-    function renderBrandTracks(tracks) {
-        const tracksGrid = document.querySelector('.tracks-grid');
-        if (!tracksGrid) {
-            console.warn('[Brand] .tracks-grid 요소를 찾을 수 없습니다');
-            return;
-        }
-        
-        // 기존 카드 제거
-        tracksGrid.innerHTML = '';
-        
-        tracks.forEach((track, index) => {
-            const trackCard = document.createElement('div');
-            trackCard.className = 'track-card glass-card';
-            trackCard.setAttribute('data-track', index + 1);
-            trackCard.setAttribute('data-track-id', track.id);
-            
-            trackCard.innerHTML = `
-                <div class="track-visual">
-                    <div class="track-waveform">
-                        <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
-                            <path d="M0,30 L10,${15 + Math.random() * 10} L20,${35 + Math.random() * 20} L30,${10 + Math.random() * 15} L40,${40 + Math.random() * 15} L50,${20 + Math.random() * 10} L60,${35 + Math.random() * 15} L70,${5 + Math.random() * 10} L80,${45 + Math.random() * 10} L90,${25 + Math.random() * 10} L100,${30 + Math.random() * 10} L110,${12 + Math.random() * 8} L120,${42 + Math.random() * 12} L130,${18 + Math.random() * 8} L140,${38 + Math.random() * 12} L150,${8 + Math.random() * 8} L160,${48 + Math.random() * 8} L170,${22 + Math.random() * 8} L180,${32 + Math.random() * 12} L190,${28 + Math.random() * 8} L200,30" 
-                                  stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <div class="track-overlay">
-                        <button class="track-play-btn" data-src="${track.src}">
-                            <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
-                                <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="track-info">
-                    <div class="track-meta">
-                        <div class="track-name">${track.title}</div>
-                        <div class="track-genre">${track.category} • ${track.mood[0] || 'Ambient'}</div>
-                    </div>
-                    <div class="track-actions">
-                        <button class="copy-cid-btn" data-cid="${track.ISRC}">Copy CID</button>
-                    </div>
-                </div>
-            `;
-            
-            tracksGrid.appendChild(trackCard);
-        });
-        
-        console.log(`[Brand] ${tracks.length}개 트랙 카드 렌더링 완료`);
-    }
+    // === 브랜드 트랙 카드 렌더링 기능 제거 ===
+    // Firestore 로딩 제거 - 정적 HTML 카드만 사용
     
     // === 음원 미리보기 섹션 애니메이션 ===
     function setupPreviewSectionAnimations() {
@@ -1065,12 +1139,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // === 전역 오디오 플레이어 변수 ===
-    let currentAudio = null;
+    // === 전역 재생 시뮬레이션 변수 ===
     let currentPlayButton = null;
+    let currentSimulationTimer = null;
     
-    // 재생 버튼 인터랙션 (실제 오디오 재생)
+    // 재생 버튼 인터랙션 (시뮬레이션 모드)
     function setupPlayButtonInteractions() {
+        console.log('[Brand] 🎵 재생 시뮬레이션 모드로 설정됨');
+        
         // 이벤트 위임을 사용하여 동적으로 생성된 버튼도 처리
         document.addEventListener('click', function(e) {
             const playButton = e.target.closest('.track-play-btn');
@@ -1079,86 +1155,51 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            const audioSrc = playButton.getAttribute('data-src');
-            if (!audioSrc) {
-                console.warn('[Brand] 오디오 소스가 없습니다');
-                return;
-            }
-            
-            // 같은 버튼을 클릭한 경우 토글 (수정: 이어서 재생/일시정지)
-            if (currentPlayButton === playButton && currentAudio) {
-                if (!currentAudio.paused) {
-                    currentAudio.pause();
-                    setPlayingState(playButton, false);
-                } else {
-                    currentAudio.play();
-                    setPlayingState(playButton, true);
+            // 현재 재생 중인 다른 버튼이 있으면 정지
+            if (currentPlayButton && currentPlayButton !== playButton) {
+                resetPlayButton(currentPlayButton);
+                if (currentSimulationTimer) {
+                    clearTimeout(currentSimulationTimer);
                 }
+            }
+            
+            // 같은 버튼을 다시 클릭한 경우 정지
+            if (currentPlayButton === playButton) {
+                resetPlayButton(playButton);
+                if (currentSimulationTimer) {
+                    clearTimeout(currentSimulationTimer);
+                }
+                currentPlayButton = null;
+                currentSimulationTimer = null;
                 return;
             }
             
-            // 다른 오디오가 재생 중이면 정지
-            if (currentAudio && !currentAudio.paused) {
-                currentAudio.pause();
-                setPlayingState(currentPlayButton, false);
-            }
-            
-            // 새 오디오 객체 생성 및 재생
-            playAudio(playButton, audioSrc);
+            // 재생 시뮬레이션 시작
+            simulateAudioPlayback(playButton);
         });
     }
     
-    // 오디오 재생 함수
-    function playAudio(playButton, audioSrc) {
-        try {
-            // 기존 오디오 정리 (수정: 파괴하지 않고 재사용)
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.removeEventListener('ended', handleAudioEnded);
-                currentAudio.removeEventListener('error', handleAudioError);
+    // 재생 시뮬레이션 함수 (실제 오디오 파일 없이 UI만 변경)
+    function simulateAudioPlayback(playButton) {
+        const trackName = playButton.closest('.track-card').querySelector('.track-name')?.textContent || '음원';
+        console.log(`[Brand] 🎵 "${trackName}" 재생 시뮬레이션 시작`);
+        
+        currentPlayButton = playButton;
+        setPlayingState(playButton, true);
+        
+        // 30초 후 자동 정지 (실제 트랙 길이 시뮬레이션)
+        currentSimulationTimer = setTimeout(() => {
+            console.log(`[Brand] 🎵 "${trackName}" 재생 시뮬레이션 완료`);
+            if (currentPlayButton === playButton) {
+                resetPlayButton(playButton);
+                currentPlayButton = null;
+                currentSimulationTimer = null;
             }
-            // 새 오디오 객체 생성
-            currentAudio = new Audio(audioSrc);
-            currentPlayButton = playButton;
-            // 오디오 이벤트 리스너
-            currentAudio.addEventListener('ended', handleAudioEnded);
-            currentAudio.addEventListener('error', handleAudioError);
-            currentAudio.addEventListener('loadstart', () => {
-                console.log('[Brand] 오디오 로딩 시작:', audioSrc);
-            });
-            currentAudio.addEventListener('canplay', () => {
-                console.log('[Brand] 오디오 재생 준비 완료');
-            });
-            // 재생 시작
-            currentAudio.play().then(() => {
-                console.log('[Brand] 오디오 재생 시작:', audioSrc);
-                setPlayingState(playButton, true);
-            }).catch(error => {
-                console.error('[Brand] 오디오 재생 실패:', error);
-                alert('음원 재생에 실패했습니다. 네트워크 연결을 확인해주세요.');
-            });
-        } catch (error) {
-            console.error('[Brand] 오디오 생성 오류:', error);
-            alert('음원을 불러올 수 없습니다.');
-        }
+        }, 30000); // 30초
     }
     
-    // 오디오 종료 처리
-    function handleAudioEnded() {
-        console.log('[Brand] 오디오 재생 완료');
-        if (currentPlayButton) {
-            resetPlayButton(currentPlayButton);
-        }
-    }
-    
-    // 오디오 오류 처리
-    function handleAudioError(e) {
-        console.error('[Brand] 오디오 재생 오류:', e);
-        if (currentPlayButton) {
-            resetPlayButton(currentPlayButton);
-        }
-        alert('음원 재생 중 오류가 발생했습니다.');
-    }
+    // 시뮬레이션 모드 - 오디오 관련 함수들 제거됨
+    // 실제 오디오 파일 없이 UI 시뮬레이션만 사용
     
     // 재생 상태 설정
     function setPlayingState(playButton, isPlaying) {

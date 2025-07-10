@@ -9,6 +9,7 @@ import {
   query, 
   orderBy, 
   updateDoc, 
+  deleteDoc,
   doc,
   where,
   getDocs 
@@ -20,6 +21,7 @@ import { db, app } from './firebase.js';
 // 현재 사용자 정보를 저장할 변수
 let currentUser = null;
 let channelUnsubscribe = null; // 채널 리스너 해제 함수
+let channelsData = []; // 채널 데이터 저장 변수
 
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 사용자 가이드 섹션 초기화
   initializeUserGuide();
+  
+  // 컨텐츠 링크 초기화
+  initializeContentLinks();
   
   // 복사 버튼 이벤트 핸들러 초기화
   function initializeCopyButtons() {
@@ -207,6 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // 복사 버튼 초기화
   initializeCopyButtons();
   
+  // 컨텐츠 링크 초기화
+  initializeContentLinks();
+  
   // 입력 필드 활성화 보장
   function ensureInputFieldEnabled() {
     if (urlInput) {
@@ -253,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // 채널 목록 실시간 업데이트 설정
       setupChannelListener();
+      
+      // 컨텐츠 링크 로드
+      loadContentLinks();
     } else {
       currentUser = null;
       console.log('로그인되지 않은 상태');
@@ -274,6 +285,21 @@ document.addEventListener('DOMContentLoaded', () => {
       // 빈 상태 표시
       if (noChannelsEl) {
         noChannelsEl.style.display = 'flex';
+      }
+      
+      // 컨텐츠 링크 테이블 초기화
+      const tableBody = document.getElementById('content-links-list');
+      const noLinksEl = document.getElementById('no-content-links');
+      const tableWrapper = document.querySelector('.content-table-wrapper');
+      
+      if (tableBody) {
+        tableBody.innerHTML = '';
+      }
+      if (tableWrapper) {
+        tableWrapper.style.display = 'none';
+      }
+      if (noLinksEl) {
+        noLinksEl.style.display = 'block';
       }
     }
   });
@@ -640,6 +666,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         console.log('현재 사용자의 채널 수:', channels.length);
+        
+        // channelsData 업데이트 - 컨텐츠 링크 모달에서 사용
+        channelsData = channels.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        
+        console.log('channelsData 업데이트됨:', channelsData);
         
         // 로딩 숨기기
         if (loadingEl) {
@@ -1123,6 +1157,858 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 애니메이션 효과 추가
   addAnimationEffects();
+  
+  // === 컨텐츠 링크 관리 기능 ===
+
+  // 컨텐츠 링크 관련 변수
+  let contentLinksData = [];
+  let contentModalOpen = false;
+
+  // 컨텐츠 링크 초기화
+  function initializeContentLinks() {
+    const addContentBtn = document.getElementById('add-content-link');
+    const addFirstContentBtn = document.getElementById('add-first-content-link');
+    const contentModal = document.getElementById('content-link-modal');
+    const closeContentModalBtn = document.getElementById('close-content-modal');
+    const cancelContentBtn = document.getElementById('cancel-content-link');
+    const contentForm = document.getElementById('content-link-form');
+    const contentUrlInput = document.getElementById('content-url');
+    
+    // 이벤트 리스너 추가
+    if (addContentBtn) {
+      addContentBtn.addEventListener('click', openContentModal);
+    }
+    
+    if (addFirstContentBtn) {
+      addFirstContentBtn.addEventListener('click', openContentModal);
+    }
+    
+    if (closeContentModalBtn) {
+      closeContentModalBtn.addEventListener('click', closeContentModal);
+    }
+    
+    if (cancelContentBtn) {
+      cancelContentBtn.addEventListener('click', closeContentModal);
+    }
+    
+    if (contentModal) {
+      contentModal.addEventListener('click', (e) => {
+        if (e.target === contentModal) {
+          closeContentModal();
+        }
+      });
+    }
+    
+    if (contentForm) {
+      contentForm.addEventListener('submit', handleContentLinkSubmit);
+    }
+    
+    if (contentUrlInput) {
+      contentUrlInput.addEventListener('input', handleContentUrlChange);
+    }
+    
+    // 컨텐츠 링크 테이블 이벤트 위임 설정
+    const contentLinksTable = document.getElementById('content-links-list');
+    if (contentLinksTable) {
+      contentLinksTable.addEventListener('click', (e) => {
+        // 삭제 버튼 클릭 처리
+        if (e.target.closest('.btn-delete-content')) {
+          const button = e.target.closest('.btn-delete-content');
+          const linkId = button.getAttribute('data-link-id');
+          if (linkId) {
+            deleteContentLink(linkId);
+          }
+        }
+      });
+    }
+    
+    // 컨텐츠 링크 데이터 로드
+    loadContentLinks();
+    
+    // 오디오닉스 음원 목록 로드
+    loadAudionyxTracks();
+  }
+
+  // 컨텐츠 링크 모달 열기
+  function openContentModal() {
+    const modal = document.getElementById('content-link-modal');
+    if (!modal) return;
+    
+    contentModalOpen = true;
+    modal.style.display = 'flex';
+    
+    // 애니메이션 효과
+    requestAnimationFrame(() => {
+      modal.classList.add('show');
+      const modalContent = modal.querySelector('.modal-content');
+      if (modalContent) {
+        modalContent.style.transform = 'scale(1)';
+        modalContent.style.opacity = '1';
+      }
+    });
+    
+    // 모달 초기화 (지연된 실행)
+    setTimeout(() => {
+      console.log('모달 초기화 시작');
+      console.log('현재 channelsData 상태:', channelsData);
+      loadChannelOptions();        // 채널 목록 로드
+      loadAudionyxTracks();       // 음원 목록 로드
+      setupAudioTrackAutocomplete(); // 자동완성 설정
+    }, 100);
+    
+    // 모든 입력 필드 강제 활성화
+    setTimeout(() => {
+      console.log('입력 필드 활성화 시작');
+      
+      // 모든 입력 필드와 선택 필드 활성화
+      const inputFields = modal.querySelectorAll('input, select, textarea');
+      inputFields.forEach((field, index) => {
+        console.log(`필드 ${index + 1} 활성화:`, field.id || field.name || 'unknown');
+        
+        // 모든 제한 제거
+        field.disabled = false;
+        field.readOnly = false;
+        field.removeAttribute('disabled');
+        field.removeAttribute('readonly');
+        field.removeAttribute('tabindex');
+        
+        // 스타일 강제 적용
+        const cursor = field.tagName.toLowerCase() === 'select' ? 'pointer' : 'text';
+        field.style.cssText = `
+          pointer-events: auto !important;
+          cursor: ${cursor} !important;
+          background: rgba(12, 12, 12, 0.9) !important;
+          border: 1px solid rgba(255, 255, 255, 0.1) !important;
+          color: #fff !important;
+          z-index: 200 !important;
+          position: relative !important;
+          padding: 14px 16px !important;
+          border-radius: 8px !important;
+          font-size: 1rem !important;
+        `;
+        
+        // 이벤트 리스너 추가
+        field.addEventListener('focus', () => {
+          console.log('필드 포커스됨:', field.id || field.name);
+          field.style.borderColor = '#3eb489 !important';
+        });
+        
+        field.addEventListener('blur', () => {
+          field.style.borderColor = 'rgba(255, 255, 255, 0.1) !important';
+        });
+        
+        field.addEventListener('click', (e) => {
+          e.stopPropagation();
+          field.focus();
+          console.log('필드 클릭됨:', field.id || field.name);
+        });
+      });
+      
+      // 컨텐츠 URL 입력 필드 특별 처리
+      const contentUrlInput = document.getElementById('content-url');
+      if (contentUrlInput) {
+        console.log('Content URL 입력 필드 설정');
+        contentUrlInput.addEventListener('input', handleContentUrlChange);
+        
+        setTimeout(() => {
+          contentUrlInput.focus();
+          console.log('Content URL 필드 포커스됨');
+        }, 100);
+      }
+    }, 150);
+    
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', handleContentModalEscape);
+  }
+
+  // 컨텐츠 링크 모달 닫기
+  function closeContentModal() {
+    const modal = document.getElementById('content-link-modal');
+    if (!modal) return;
+    
+    contentModalOpen = false;
+    modal.classList.remove('show');
+    
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+      modalContent.style.transform = 'scale(0.95)';
+      modalContent.style.opacity = '0';
+    }
+    
+    setTimeout(() => {
+      modal.style.display = 'none';
+      resetContentForm();
+    }, 300);
+    
+    document.removeEventListener('keydown', handleContentModalEscape);
+  }
+
+  // ESC 키 핸들러
+  function handleContentModalEscape(e) {
+    if (e.key === 'Escape' && contentModalOpen) {
+      closeContentModal();
+    }
+  }
+
+  // 컨텐츠 URL 변경 핸들러
+  function handleContentUrlChange(e) {
+    const url = e.target.value.trim();
+    const platformInfo = detectPlatformFromUrl(url);
+    updateDetectedPlatform(platformInfo);
+  }
+
+  // URL에서 플랫폼 감지
+  function detectPlatformFromUrl(url) {
+    if (!url) {
+      return { platform: null, name: '자동 감지됨', icon: '' };
+    }
+    
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      return {
+        platform: 'youtube',
+        name: 'YouTube',
+        icon: '../images/platform-youtube.svg'
+      };
+    } else if (url.includes('tiktok.com')) {
+      return {
+        platform: 'tiktok',
+        name: 'TikTok',
+        icon: '../images/platform-tiktok.svg'
+      };
+    } else if (url.includes('instagram.com')) {
+      return {
+        platform: 'instagram',
+        name: 'Instagram',
+        icon: '../images/platform-instagram.svg'
+      };
+    } else {
+      return {
+        platform: 'other',
+        name: '기타 플랫폼',
+        icon: ''
+      };
+    }
+  }
+
+  // 감지된 플랫폼 UI 업데이트
+  function updateDetectedPlatform(platformInfo) {
+    const platformIcon = document.getElementById('detected-platform-icon');
+    const platformName = document.getElementById('detected-platform-name');
+    
+    if (platformIcon && platformName) {
+      if (platformInfo.icon) {
+        platformIcon.src = platformInfo.icon;
+        platformIcon.style.display = 'block';
+      } else {
+        platformIcon.style.display = 'none';
+      }
+      
+      platformName.textContent = platformInfo.name;
+    }
+  }
+
+  // 컨텐츠 링크 폼 제출 핸들러
+  async function handleContentLinkSubmit(e) {
+    e.preventDefault();
+    
+    if (!currentUser) {
+      showNotification('로그인이 필요합니다.', 'error');
+      return;
+    }
+    
+    const formData = new FormData(e.target);
+    const channelId = formData.get('channel-select');
+    const contentUrl = formData.get('content-url');
+    const audioTrack = formData.get('audio-track');
+    
+    // 유효성 검증
+    if (!channelId) {
+      showNotification('채널을 선택해주세요.', 'error');
+      return;
+    }
+    
+    if (!contentUrl) {
+      showNotification('컨텐츠 URL을 입력해주세요.', 'error');
+      return;
+    }
+    
+    if (!audioTrack) {
+      showNotification('음원을 입력해주세요.', 'error');
+      return;
+    }
+    
+    const platformInfo = detectPlatformFromUrl(contentUrl);
+    
+    // 선택된 채널 정보 가져오기
+    const selectedChannel = channelsData.find(ch => ch.id === channelId);
+    
+    if (!selectedChannel) {
+      console.error('선택된 채널을 찾을 수 없습니다:', channelId);
+      console.log('현재 channelsData:', channelsData);
+      showNotification('선택된 채널을 찾을 수 없습니다. 채널을 다시 선택해주세요.', 'error');
+      return;
+    }
+    
+    const contentLinkData = {
+      channelId,
+      channelUrl: selectedChannel.originalUrl || selectedChannel.channelUrl || selectedChannel.url || '',
+      channelPlatform: selectedChannel.platform || 'youtube',
+      contentUrl,
+      audioTrack,
+      platform: platformInfo.platform,
+      userId: currentUser.uid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+    
+    // 디버깅 로그
+    console.log('콘텐츠 링크 제출 시도:', contentLinkData);
+    console.log('현재 사용자:', currentUser.uid);
+    console.log('선택된 채널:', selectedChannel);
+    
+    try {
+      const docRef = await addDoc(collection(db, 'contentLinks'), contentLinkData);
+      console.log('컨텐츠 링크가 추가되었습니다:', docRef.id);
+      
+      showNotification('컨텐츠 링크가 성공적으로 등록되었습니다! 🎉', 'success');
+      closeContentModal();
+      loadContentLinks(); // 목록 새로고침
+      
+    } catch (error) {
+      console.error('컨텐츠 링크 추가 중 오류:', error);
+      console.error('오류 상세:', error.code, error.message);
+      showNotification('컨텐츠 링크 등록 중 오류가 발생했습니다. 다시 시도해주세요.', 'error');
+    }
+  }
+
+  // 컨텐츠 링크 목록 로드
+  async function loadContentLinks() {
+    console.log('loadContentLinks 호출됨 - currentUser:', currentUser ? currentUser.uid : '없음');
+    
+    if (!currentUser) {
+      console.log('사용자가 인증되지 않음 - 컨텐츠 링크 로드 건너뜀');
+      return;
+    }
+    
+    try {
+      console.log('컨텐츠 링크 쿼리 시작 - userId:', currentUser.uid);
+      
+      const q = query(
+        collection(db, 'contentLinks'),
+        where('userId', '==', currentUser.uid)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      console.log('쿼리 결과 문서 수:', querySnapshot.docs.length);
+      
+      // 모든 문서를 맵핑한 후 삭제되지 않은 것만 필터링
+      const allLinksData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      
+      // 소프트 삭제된 문서 제외 (deletedAt 필드가 없는 것만)
+      contentLinksData = allLinksData.filter(link => !link.deletedAt);
+      
+      console.log('전체 문서 수:', allLinksData.length);
+      console.log('활성 컨텐츠 링크 수:', contentLinksData.length);
+      console.log('로드된 컨텐츠 링크 데이터:', contentLinksData);
+      
+      // 클라이언트에서 정렬 (createdAt 기준 내림차순)
+      contentLinksData.sort((a, b) => {
+        const aTime = a.createdAt?.toDate?.() || new Date(0);
+        const bTime = b.createdAt?.toDate?.() || new Date(0);
+        return bTime - aTime;
+      });
+      
+      console.log('컨텐츠 링크 테이블 렌더링 시작');
+      renderContentLinksTable();
+      
+    } catch (error) {
+      console.error('컨텐츠 링크 로드 중 오류:', error);
+      showNotification('컨텐츠 링크를 불러오는 중 오류가 발생했습니다.', 'error');
+    }
+  }
+
+  // 컨텐츠 링크 테이블 렌더링
+  function renderContentLinksTable() {
+    console.log('renderContentLinksTable 호출됨 - 데이터 개수:', contentLinksData.length);
+    
+    const tableBody = document.getElementById('content-links-list');
+    const noLinksEl = document.getElementById('no-content-links');
+    const tableWrapper = document.querySelector('.content-table-wrapper');
+    
+    console.log('DOM 요소 확인 - tableBody:', !!tableBody, 'noLinksEl:', !!noLinksEl, 'tableWrapper:', !!tableWrapper);
+    
+    if (!tableBody || !noLinksEl || !tableWrapper) {
+      console.error('필수 DOM 요소를 찾을 수 없음');
+      return;
+    }
+    
+    if (contentLinksData.length === 0) {
+      console.log('컨텐츠 링크 없음 - 빈 상태 표시');
+      tableWrapper.style.display = 'none';
+      noLinksEl.style.display = 'block';
+      return;
+    }
+    
+    console.log('컨텐츠 링크 테이블 렌더링 시작 - 링크 수:', contentLinksData.length);
+    tableWrapper.style.display = 'block';
+    noLinksEl.style.display = 'none';
+    
+    tableBody.innerHTML = contentLinksData.map(link => {
+      // 채널 정보 가져오기
+      const channel = channelsData.find(ch => ch.id === link.channelId);
+      const channelDisplay = channel ? 
+        `${truncateUrl(channel.originalUrl || channel.channelUrl || channel.url || '채널 URL 없음', 30)} (${getPlatformName(channel.platform)})` : 
+        '채널 정보 없음';
+      
+      return `
+        <tr data-link-id="${link.id}">
+          <td class="content-url-cell">
+            <a href="${link.contentUrl}" target="_blank" class="content-url-display" title="${link.contentUrl}">
+              ${truncateUrl(link.contentUrl, 35)}
+            </a>
+          </td>
+          <td>
+            <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7);">
+              ${channelDisplay}
+            </div>
+          </td>
+          <td>${link.audioTrack || '미지정'}</td>
+          <td>
+            <div class="content-platform-badge ${link.platform}">
+              ${getPlatformIcon(link.platform)}
+              <span>${getPlatformName(link.platform)}</span>
+            </div>
+          </td>
+          <td>${formatDate(link.createdAt)}</td>
+          <td>
+            <div class="content-actions">
+              <button class="btn-content-action btn-delete-content" data-link-id="${link.id}" title="삭제">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polyline points="3,6 5,6 21,6"/>
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                </svg>
+                삭제
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // 플랫폼 아이콘 가져오기
+  function getPlatformIcon(platform) {
+    const icons = {
+      youtube: '<img src="../images/platform-youtube.svg" alt="YouTube" width="14" height="14">',
+      tiktok: '<img src="../images/platform-tiktok.svg" alt="TikTok" width="14" height="14">',
+      instagram: '<img src="../images/platform-instagram.svg" alt="Instagram" width="14" height="14">',
+      other: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>'
+    };
+    return icons[platform] || icons.other;
+  }
+
+  // 플랫폼 이름 가져오기
+  function getPlatformName(platform) {
+    const names = {
+      youtube: 'YouTube',
+      tiktok: 'TikTok',
+      instagram: 'Instagram',
+      other: '기타'
+    };
+    return names[platform] || '알 수 없음';
+  }
+
+  // 컨텐츠 링크 삭제
+  async function deleteContentLink(linkId) {
+    if (!confirm('이 컨텐츠 링크를 완전히 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) {
+      console.log('사용자가 삭제를 취소함');
+      return;
+    }
+    
+    console.log('=== 컨텐츠 링크 삭제 시작 ===');
+    console.log('삭제 대상 linkId:', linkId);
+    console.log('현재 사용자:', currentUser ? currentUser.uid : 'null');
+    
+    try {
+      console.log('Firestore 삭제 작업 시작...');
+      
+      // 실제로 Firestore 컬렉션에서 문서 삭제
+      await deleteDoc(doc(db, 'contentLinks', linkId));
+      
+      console.log('✅ Firestore 삭제 완료!');
+      console.log('=== 컨텐츠 링크 삭제 성공 ===');
+      showNotification('컨텐츠 링크가 완전히 삭제되었습니다.', 'success');
+      
+      // 목록 새로고침
+      console.log('컨텐츠 링크 목록 새로고침 시작...');
+      loadContentLinks();
+      
+    } catch (error) {
+      console.error('❌ 컨텐츠 링크 삭제 중 오류 발생!');
+      console.error('오류 전체 객체:', error);
+      console.error('오류 코드:', error.code);
+      console.error('오류 메시지:', error.message);
+      console.error('오류 스택:', error.stack);
+      
+      // 오류 상세 정보 로그
+      if (error.code === 'permission-denied') {
+        console.error('🚫 권한 오류 - 사용자가 이 문서를 삭제할 권한이 없음');
+        console.error('현재 사용자 UID:', currentUser ? currentUser.uid : 'null');
+        showNotification('삭제 권한이 없습니다. 본인이 등록한 링크만 삭제할 수 있습니다.', 'error');
+      } else if (error.code === 'not-found') {
+        console.error('📄 문서를 찾을 수 없음 - 이미 삭제되었거나 존재하지 않음');
+        showNotification('삭제하려는 링크가 존재하지 않습니다.', 'error');
+        // 목록 새로고침하여 최신 상태 반영
+        loadContentLinks();
+      } else {
+        console.error('🔥 기타 삭제 오류:', error.message);
+        showNotification(`삭제 중 오류가 발생했습니다: ${error.message}`, 'error');
+      }
+      
+      console.log('=== 컨텐츠 링크 삭제 실패 ===');
+    }
+  }
+
+  // 채널 목록을 드롭다운에 채우기
+  function loadChannelOptions() {
+    console.log('loadChannelOptions 호출됨');
+    const channelSelect = document.getElementById('channel-select');
+    
+    if (!channelSelect) {
+      console.error('channel-select 엘리먼트를 찾을 수 없습니다');
+      return;
+    }
+    
+    if (!channelsData || channelsData.length === 0) {
+      console.warn('channelsData가 아직 로드되지 않았거나 비어있습니다');
+      // 1초 후 재시도 (최대 3회)
+      const retryCount = channelSelect.dataset.retryCount || 0;
+      if (retryCount < 3) {
+        channelSelect.dataset.retryCount = parseInt(retryCount) + 1;
+        setTimeout(() => {
+          if (channelsData && channelsData.length > 0) {
+            console.log('channelsData 로드 완료, 재시도');
+            loadChannelOptions();
+          } else {
+            console.log(`재시도 ${retryCount + 1}회 수행`);
+            loadChannelOptions();
+          }
+        }, 1000);
+      } else {
+        console.log('최대 재시도 횟수 초과, 빈 채널 목록 표시');
+        showEmptyChannelOptions(channelSelect);
+      }
+      return;
+    }
+    
+    console.log('채널 데이터:', channelsData);
+    
+    // 기존 옵션 제거 (첫 번째 기본 옵션 제외)
+    while (channelSelect.children.length > 1) {
+      channelSelect.removeChild(channelSelect.lastChild);
+    }
+    
+    // 승인된 채널만 표시 (approved 또는 active 상태)
+    const approvedChannels = channelsData.filter(channel => 
+      channel.status === 'approved' || channel.status === 'active'
+    );
+    
+    console.log('승인된 채널 수:', approvedChannels.length);
+    
+    if (approvedChannels.length === 0) {
+      // 승인된 채널이 없는 경우 모든 채널 표시 (디버깅용)
+      console.log('승인된 채널이 없음, 모든 채널 표시');
+      const allChannels = channelsData;
+      
+      allChannels.forEach(channel => {
+        const option = document.createElement('option');
+        option.value = channel.id;
+        
+        // 채널 URL 표시 (originalUrl 또는 url 사용)
+        const channelUrl = channel.originalUrl || channel.channelUrl || channel.url || '채널 URL 없음';
+        const platformName = getPlatformName(channel.platform || 'youtube');
+        const statusText = channel.status || '상태 없음';
+        
+        option.textContent = `${channelUrl} (${platformName}) - ${statusText}`;
+        channelSelect.appendChild(option);
+        
+        console.log('채널 추가됨:', option.textContent);
+      });
+      
+      if (allChannels.length === 0) {
+        showEmptyChannelOptions(channelSelect);
+      }
+    } else {
+      // 승인된 채널 표시
+      approvedChannels.forEach(channel => {
+        const option = document.createElement('option');
+        option.value = channel.id;
+        
+        // 채널 URL 표시 (originalUrl 또는 url 사용)
+        const channelUrl = channel.originalUrl || channel.channelUrl || channel.url || '채널 URL 없음';
+        const platformName = getPlatformName(channel.platform || 'youtube');
+        
+        option.textContent = `${channelUrl} (${platformName})`;
+        channelSelect.appendChild(option);
+        
+        console.log('승인된 채널 추가됨:', option.textContent);
+      });
+    }
+    
+    console.log('채널 옵션 로드 완료, 총 옵션 수:', channelSelect.children.length);
+    
+    // 재시도 카운트 초기화
+    channelSelect.removeAttribute('data-retry-count');
+  }
+  
+  // 빈 채널 옵션 표시 함수
+  function showEmptyChannelOptions(channelSelect) {
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = '등록된 채널이 없습니다';
+    option.disabled = true;
+    channelSelect.appendChild(option);
+    
+    console.log('빈 채널 옵션 표시됨');
+  }
+
+  // Firestore track_new 컬렉션에서 음원 목록 가져오기
+  let allTracks = [];
+  
+  async function loadAudionyxTracks() {
+    try {
+      console.log('[loadAudionyxTracks] Firestore track_new 컬렉션에서 음원 목록 로드 시작');
+      
+      const trackSnapshot = await getDocs(collection(db, 'track_new'));
+      
+      if (trackSnapshot.empty) {
+        console.warn('[loadAudionyxTracks] track_new 컬렉션에 데이터가 없습니다');
+        allTracks = [];
+        return;
+      }
+      
+      allTracks = [];
+      trackSnapshot.forEach((doc) => {
+        const data = doc.data();
+        
+        // 새로운 스키마에 맞게 데이터 매핑
+        const trackTitle = data['Track Title'] || '';
+        const isrc = data['ISRC'] || '';
+        const artist = data['Primary Artist'] || '';
+        
+        if (trackTitle) {
+          allTracks.push({
+            id: doc.id,
+            title: trackTitle,
+            cid: isrc, // ISRC를 CID로 사용
+            artist: artist,
+            // 검색을 위한 추가 정보
+            mood1: data['mood 1'] || '',
+            mood2: data['mood 2'] || '',
+            usecase1: data['usecase1'] || '',
+            usecase2: data['usecase2'] || '',
+            usecase3: data['usecase3'] || '',
+            releaseTitle: data['Release Title'] || ''
+          });
+        }
+      });
+      
+      // 제목순으로 정렬
+      allTracks.sort((a, b) => a.title.localeCompare(b.title));
+      
+      console.log(`[loadAudionyxTracks] 음원 목록 로드 완료: ${allTracks.length}개`);
+      console.log('[loadAudionyxTracks] 로드된 트랙 샘플:', allTracks.slice(0, 3));
+      
+    } catch (error) {
+      console.error('[loadAudionyxTracks] 음원 목록 로드 중 오류:', error);
+      
+      // 오류 발생 시 빈 배열로 초기화
+      allTracks = [];
+      
+      // 사용자에게 알림 (선택적)
+      showNotification('음원 목록을 불러오는 중 오류가 발생했습니다.', 'error');
+    }
+  }
+
+  // 음원 자동완성 기능
+  function setupAudioTrackAutocomplete() {
+    const audioTrackInput = document.getElementById('audio-track');
+    const suggestionsContainer = document.getElementById('audio-track-suggestions');
+    
+    if (!audioTrackInput || !suggestionsContainer) return;
+    
+    let currentHighlight = -1;
+    
+    audioTrackInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      
+      if (query.length < 2) {
+        hideSuggestions();
+        return;
+      }
+      
+      const filteredTracks = filterTracks(query);
+      showSuggestions(filteredTracks, query);
+    });
+    
+    audioTrackInput.addEventListener('keydown', (e) => {
+      const suggestions = suggestionsContainer.querySelectorAll('.audio-track-suggestion');
+      
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        currentHighlight = Math.min(currentHighlight + 1, suggestions.length - 1);
+        updateHighlight(suggestions);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        currentHighlight = Math.max(currentHighlight - 1, -1);
+        updateHighlight(suggestions);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (currentHighlight >= 0 && suggestions[currentHighlight]) {
+          selectSuggestion(suggestions[currentHighlight]);
+        }
+      } else if (e.key === 'Escape') {
+        hideSuggestions();
+      }
+    });
+    
+    audioTrackInput.addEventListener('blur', () => {
+      // 약간의 지연을 두어 클릭 이벤트가 처리되도록 함
+      setTimeout(() => hideSuggestions(), 150);
+    });
+    
+    function filterTracks(query) {
+      const lowercaseQuery = query.toLowerCase();
+      return allTracks.filter(track => 
+        track.title.toLowerCase().includes(lowercaseQuery) ||
+        track.cid.toLowerCase().includes(lowercaseQuery) ||
+        track.artist.toLowerCase().includes(lowercaseQuery) ||
+        track.mood1.toLowerCase().includes(lowercaseQuery) ||
+        track.mood2.toLowerCase().includes(lowercaseQuery) ||
+        track.usecase1.toLowerCase().includes(lowercaseQuery) ||
+        track.usecase2.toLowerCase().includes(lowercaseQuery) ||
+        track.usecase3.toLowerCase().includes(lowercaseQuery)
+      ).slice(0, 8); // 최대 8개만 표시
+    }
+    
+    function showSuggestions(tracks, query) {
+      if (tracks.length === 0) {
+        suggestionsContainer.innerHTML = '<div class="suggestions-no-results">검색 결과가 없습니다</div>';
+        suggestionsContainer.style.display = 'block';
+        return;
+      }
+      
+      suggestionsContainer.innerHTML = tracks.map(track => {
+        const highlightedTitle = highlightMatch(track.title, query);
+        const highlightedCid = highlightMatch(track.cid, query);
+        const highlightedArtist = highlightMatch(track.artist, query);
+        
+        return `
+          <div class="audio-track-suggestion" data-title="${track.title}" data-cid="${track.cid}" data-artist="${track.artist}">
+            <div class="suggestion-title">${highlightedTitle}</div>
+            <div class="suggestion-artist" style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); margin: 2px 0;">by ${highlightedArtist}</div>
+            <div class="suggestion-cid" style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.5);">CID: ${highlightedCid}</div>
+          </div>
+        `;
+      }).join('');
+      
+      // 클릭 이벤트 추가
+      suggestionsContainer.querySelectorAll('.audio-track-suggestion').forEach(item => {
+        item.addEventListener('click', () => selectSuggestion(item));
+      });
+      
+      suggestionsContainer.style.display = 'block';
+      currentHighlight = -1;
+    }
+    
+    function highlightMatch(text, query) {
+      const regex = new RegExp(`(${query})`, 'gi');
+      return text.replace(regex, '<span class="suggestion-match">$1</span>');
+    }
+    
+    function hideSuggestions() {
+      suggestionsContainer.style.display = 'none';
+      currentHighlight = -1;
+    }
+    
+    function updateHighlight(suggestions) {
+      suggestions.forEach((item, index) => {
+        item.classList.toggle('highlighted', index === currentHighlight);
+      });
+    }
+    
+    function selectSuggestion(item) {
+      const title = item.dataset.title;
+      const cid = item.dataset.cid;
+      const artist = item.dataset.artist;
+      
+      // 아티스트 정보도 포함하여 표시
+      if (artist && artist !== '아티스트 정보 없음') {
+        audioTrackInput.value = `${title} by ${artist} (${cid})`;
+      } else {
+        audioTrackInput.value = `${title} (${cid})`;
+      }
+      
+      hideSuggestions();
+    }
+  }
+
+  // 컨텐츠 링크 폼 리셋
+  function resetContentForm() {
+    const form = document.getElementById('content-link-form');
+    if (form) {
+      form.reset();
+      
+      // 채널 선택 초기화
+      const channelSelect = document.getElementById('channel-select');
+      if (channelSelect) {
+        channelSelect.selectedIndex = 0;
+      }
+      
+      // 음원 입력 및 자동완성 초기화
+      const audioTrackInput = document.getElementById('audio-track');
+      const suggestionsContainer = document.getElementById('audio-track-suggestions');
+      if (audioTrackInput) {
+        audioTrackInput.value = '';
+      }
+      if (suggestionsContainer) {
+        suggestionsContainer.style.display = 'none';
+        suggestionsContainer.innerHTML = '';
+      }
+      
+      updateDetectedPlatform({ platform: null, name: '자동 감지됨', icon: '' });
+      
+      // 입력 필드 활성화 상태 유지
+      const contentUrlInput = document.getElementById('content-url');
+      if (contentUrlInput) {
+        contentUrlInput.disabled = false;
+        contentUrlInput.readOnly = false;
+        contentUrlInput.removeAttribute('disabled');
+        contentUrlInput.removeAttribute('readonly');
+        contentUrlInput.removeAttribute('tabindex');
+        
+        // 모든 CSS 재설정
+        contentUrlInput.style.cssText = `
+          width: 100% !important;
+          background: rgba(12, 12, 12, 0.9) !important;
+          border: 1px solid rgba(255, 255, 255, 0.1) !important;
+          color: #fff !important;
+          padding: 14px 16px !important;
+          border-radius: 8px !important;
+          font-size: 1rem !important;
+          pointer-events: auto !important;
+          cursor: text !important;
+          position: static !important;
+          z-index: auto !important;
+        `;
+      }
+    }
+  }
+
+  // 이벤트 위임으로 처리하므로 글로벌 함수 노출 불필요
 });
 
 // 애니메이션 효과 추가

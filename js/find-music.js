@@ -1,12 +1,16 @@
 // WaveSurfer import
 import WaveSurfer from 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js';
 // Firebase Storage 관련 모듈들을 firebase.js에서 가져옵니다.
-import { app, db } from './firebase.js';
+import { app, db, storage } from './firebase.js';
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
+import { ref, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js';
 // 인증 관련 기능을 위해 auth.js 모듈 가져오기
 import './auth.js';
 
 console.log("[find-music.js] 스크립트 최상단 실행됨"); // 최상단 로그 추가
+
+// Firebase Storage 파일 목록 캐시
+let storageTrackFiles = [];
 
 // 전역 변수
 let tracks = []; // Firebase에서 가져온 트랙 데이터
@@ -22,6 +26,284 @@ let currentMainWavesurferForMiniPlayer = null; // 현재 미니 플레이어와 
 
 // 전역 변수에 currentPlayingWavesurfer 추가
 let currentPlayingWavesurfer = null;
+
+// 새로운 태그 매핑 시스템 - 영문 태그를 한국어로 매핑
+const tagMappings = {
+  mood: {
+    // 새 태그와 기존 태그 매핑 (storage에서 로드할 때 사용)
+    'energetic': ['energetic', 'powerful', 'exciting'],
+    'inspiring': ['inspiring', 'hopeful', 'uplifting'],
+    'chill': ['chill', 'peaceful', 'carefree', 'calm', 'relaxing'],
+    'romantic': ['romantic', 'love', 'sexy'],
+    'playful': ['playful', 'funny', 'light-hearted'],
+    'groovy': ['groovy', 'sexy', 'funky'],
+    'epic': ['epic', 'dramatic', 'cinematic'],
+    'dramatic': ['dramatic', 'serious'],
+    'dark': ['dark', 'moody', 'gothic'],
+    'tense': ['tense', 'suspenseful', 'tension'],
+    'aggressive': ['aggressive', 'angry', 'powerful'],
+    'mysterious': ['mysterious', 'scary', 'enigmatic']
+  },
+  usecase: {
+    // 새 태그와 기존 태그 매핑
+    'docu_education': ['documentary', 'education', 'science', 'study'],
+    'travel_aerial': ['travel', 'drone', 'aerial', 'scenic'],
+    'fashion_beauty': ['fashion', 'beauty', 'runway', 'lifestyle'],
+    'lifestyle_vlog': ['vlog', 'lifestyle', 'daily', 'morning vlog', 'night chill'],
+    'gaming_esports': ['gaming', 'esports', 'game', 'competitive'],
+    'tech_innovation': ['tech', 'technology', 'innovation', 'unbox', 'review'],
+    'animation_narration': ['animation', 'kids', 'cartoon', 'narration'],
+    'party_events': ['party', 'event', 'celebration', 'entertainment'],
+    'wellness_asmr': ['wellness', 'meditation', 'asmr', 'rain asmr', 'ambient'],
+    'sports_motivation': ['sports', 'fitness', 'workout', 'motivation'],
+    'pets_nature': ['pets', 'nature', 'animals', 'cute pets'],
+    'trailers_branding': ['trailer', 'branding', 'intro', 'logo', 'cinematic'],
+    'diy_howto': ['diy', 'tutorial', 'how-to', 'recipe'],
+    'holiday_seasonal': ['holiday', 'seasonal', 'christmas', 'halloween'],
+    'art_culture': ['art', 'culture', 'creative', 'performance'],
+    'news_affairs': ['news', 'current affairs', 'business'],
+    'drive': ['drive', 'automotive', 'car', 'transportation']
+  }
+};
+
+// 태그 매핑 함수 - storage의 영문 태그를 새 시스템에 매핑
+function mapTagToNewSystem(originalTag, type) {
+  if (!originalTag) return null;
+  
+  const mappings = tagMappings[type];
+  if (!mappings) return null;
+  
+  const lowerTag = originalTag.toLowerCase();
+  
+  // 새 태그 시스템에서 매칭되는 것 찾기
+  for (const [newTag, oldTags] of Object.entries(mappings)) {
+    if (oldTags.some(oldTag => lowerTag.includes(oldTag.toLowerCase()) || oldTag.toLowerCase().includes(lowerTag))) {
+      return newTag;
+    }
+  }
+  
+  return null;
+}
+
+// 영문 태그를 한국어로 변환하는 매핑 시스템 (2025 업데이트)
+const tagKoreanMappings = {
+  mood: {
+    // === 새 태그 매핑 (우선순위) ===
+    'joyful': '즐거운/신나는', // 밝고 경쾌한 긍정 에너지
+    'energetic': '에너지틱', // BPM 빠르고 활동적인 느낌
+    'inspiring': '감동/희망', // 용기·긍정·희망 고조
+    'chill': '편안/여유', // 로파이·카페·브이로그용
+    'romantic': '로맨틱', // 사랑·달콤·따뜻함
+    'playful': '장난/귀여움', // 게임·코믹·키즈
+    'groovy': '그루비/펑키', // 리듬·스윙·댄스
+    'epic': '웅장/스케일', // 영화 트레일러·게임 OST
+    'dramatic': '드라마틱', // 감정 기승전결, 서사
+    'dark': '다크', // 음울·딥·고딕
+    'tense': '긴장/서스펜스', // 비트·펄스·몰입
+    'aggressive': '공격적/분노', // 하드록·트랩·배틀
+    'mysterious': '미스터리', // 몽환·SF·퍼즐
+    'sad': '슬픔/우울', // 발라드·이별·회상
+    
+    // === 기존 태그 호환성 매핑 ===
+    'powerful': '에너지틱', // → Energetic 매핑
+    'exciting': '에너지틱', // → Energetic 매핑
+    'hopeful': '감동/희망', // → Inspiring 매핑
+    'uplifting': '감동/희망', // → Inspiring 매핑
+    'peaceful': '편안/여유', // → Chill 매핑
+    'carefree': '편안/여유', // → Chill 매핑
+    'love': '로맨틱', // → Romantic 매핑
+    'sexy': '로맨틱', // → Romantic 매핑
+    'funny': '장난/귀여움', // → Playful 매핑
+    'serious': '드라마틱', // → Dramatic 매핑
+    'angry': '공격적/분노', // → Aggressive 매핑
+    'scary': '미스터리', // → Mysterious (soft) 매핑
+    
+    // === 추가 호환 태그들 ===
+    'calm': '편안/여유',
+    'melancholic': '슬픔/우울', // → Sad 매핑
+    'nostalgic': '로맨틱',
+    'cheerful': '즐거운/신나는', // → Joyful 매핑
+    'suspenseful': '긴장/서스펜스',
+    'cinematic': '웅장/스케일',
+    'ambient': '편안/여유',
+    'emotional': '드라마틱',
+    'dreamy': '로맨틱',
+    'intense': '긴장/서스펜스',
+    'gentle': '편안/여유',
+    'happy': '즐거운/신나는', // → Joyful 매핑
+    'relaxing': '편안/여유',
+    'funky': '그루비/펑키',
+    'moody': '다크',
+    'gothic': '다크',
+    'tension': '긴장/서스펜스',
+    'enigmatic': '미스터리'
+  },
+  usecase: {
+    // === 새 태그 매핑 (우선순위) ===
+    'docu / education & science': '다큐·교육·과학',
+    'docu_education': '다큐·교육·과학', // 호환성 유지
+    'documentary_education': '다큐·교육·과학',
+    'education_science': '다큐·교육·과학',
+    
+    'travel & aerial scenic': '여행·드론·풍경', 
+    'travel_aerial': '여행·드론·풍경', // 호환성 유지
+    'aerial_scenic': '여행·드론·풍경',
+    
+    'fashion & beauty': '패션·뷰티',
+    'fashion_beauty': '패션·뷰티', // 호환성 유지
+    
+    'lifestyle / vlog': 'Vlog·라이프스타일',
+    'lifestyle_vlog': 'Vlog·라이프스타일', // 호환성 유지
+    'vlog_lifestyle': 'Vlog·라이프스타일',
+    
+    'gaming & esports': '게이밍·e스포츠',
+    'gaming_esports': '게이밍·e스포츠', // 호환성 유지
+    'gaming_e-sports': '게이밍·e스포츠',
+    
+    'tech & innovation': '테크·산업·혁신',
+    'tech_innovation': '테크·산업·혁신', // 호환성 유지
+    'technology_innovation': '테크·산업·혁신',
+    
+    'animation & narration': '애니메이션·나레이션',
+    'animation_narration': '애니메이션·나레이션', // 호환성 유지
+    
+    'party, events & entertainment': '파티·이벤트·오락',
+    'party_events': '파티·이벤트·오락', // 호환성 유지
+    'events_entertainment': '파티·이벤트·오락',
+    
+    'wellness & asmr': '웰니스·명상·앰비언트',
+    'wellness_asmr': '웰니스·명상·앰비언트', // 호환성 유지
+    'meditation_asmr': '웰니스·명상·앰비언트',
+    
+    'motivation & sports': '스포츠·동기부여',
+    'sports & motivation': '스포츠·동기부여', // 호환성 유지
+    'sports_motivation': '스포츠·동기부여', // 호환성 유지
+    
+    'pets & nature': '펫·동물·자연',
+    'pets_nature': '펫·동물·자연', // 호환성 유지
+    'animals_nature': '펫·동물·자연',
+    
+    'trailers & branding': '트레일러·인트로·로고',
+    'trailers_branding': '트레일러·인트로·로고', // 호환성 유지
+    'branding_intro': '트레일러·인트로·로고',
+    
+    'diy & how-to': 'DIY·튜토리얼',
+    'diy_howto': 'DIY·튜토리얼', // 호환성 유지
+    'tutorial_howto': 'DIY·튜토리얼',
+    
+    'holiday & seasonal': '홀리데이·시즌별',
+    'holiday_seasonal': '홀리데이·시즌별', // 호환성 유지
+    'seasonal_holiday': '홀리데이·시즌별',
+    
+    'art & culture': '예술·문화',
+    'art_culture': '예술·문화', // 호환성 유지
+    'culture_art': '예술·문화',
+    
+    'news & current affairs': '뉴스·시사',
+    'news_affairs': '뉴스·시사', // 호환성 유지
+    'current_affairs': '뉴스·시사',
+    
+    'drive': '드라이브',
+    'automotive': '드라이브',
+    'car_review': '드라이브',
+    
+    // === 기존 단일 태그 호환성 매핑 ===
+    'documentary': '다큐·교육·과학',
+    'education': '다큐·교육·과학',
+    'science': '다큐·교육·과학',
+    'study': '다큐·교육·과학',
+    'travel': '여행·드론·풍경',
+    'drone': '여행·드론·풍경',
+    'aerial': '여행·드론·풍경',
+    'scenic': '여행·드론·풍경',
+    'fashion': '패션·뷰티',
+    'beauty': '패션·뷰티',
+    'runway': '패션·뷰티',
+    'lifestyle': 'Vlog·라이프스타일',
+    'vlog': 'Vlog·라이프스타일',
+    'daily': 'Vlog·라이프스타일',
+    'gaming': '게이밍·e스포츠',
+    'esports': '게이밍·e스포츠',
+    'game': '게이밍·e스포츠',
+    'competitive': '게이밍·e스포츠',
+    'tech': '테크·산업·혁신',
+    'technology': '테크·산업·혁신',
+    'innovation': '테크·산업·혁신',
+    'unbox': '테크·산업·혁신',
+    'review': '테크·산업·혁신',
+    'animation': '애니메이션·나레이션',
+    'kids': '애니메이션·나레이션',
+    'cartoon': '애니메이션·나레이션',
+    'narration': '애니메이션·나레이션',
+    'party': '파티·이벤트·오락',
+    'event': '파티·이벤트·오락',
+    'celebration': '파티·이벤트·오락',
+    'entertainment': '파티·이벤트·오락',
+    'wellness': '웰니스·명상·앰비언트',
+    'meditation': '웰니스·명상·앰비언트',
+    'asmr': '웰니스·명상·앰비언트',
+    'rain asmr': '웰니스·명상·앰비언트',
+    'ambient': '웰니스·명상·앰비언트',
+    'sports': '스포츠·동기부여',
+    'fitness': '스포츠·동기부여',
+    'workout': '스포츠·동기부여',
+    'motivation': '스포츠·동기부여',
+    'pets': '펫·동물·자연',
+    'nature': '펫·동물·자연',
+    'animals': '펫·동물·자연',
+    'trailer': '트레일러·인트로·로고',
+    'branding': '트레일러·인트로·로고',
+    'intro': '트레일러·인트로·로고',
+    'logo': '트레일러·인트로·로고',
+    'cinematic': '트레일러·인트로·로고',
+    'diy': 'DIY·튜토리얼',
+    'tutorial': 'DIY·튜토리얼',
+    'how-to': 'DIY·튜토리얼',
+    'recipe': 'DIY·튜토리얼',
+    'holiday': '홀리데이·시즌별',
+    'seasonal': '홀리데이·시즌별',
+    'christmas': '홀리데이·시즌별',
+    'halloween': '홀리데이·시즌별',
+    'art': '예술·문화',
+    'culture': '예술·문화',
+    'creative': '예술·문화',
+    'performance': '예술·문화',
+    'news': '뉴스·시사',
+    'current affairs': '뉴스·시사',
+    'business': '뉴스·시사',
+    'car': '드라이브',
+    'transportation': '드라이브'
+  }
+};
+
+// 영문 태그를 한국어로 변환하는 함수
+function convertTagToKorean(tag, type) {
+  if (!tag) return '';
+  
+  const mappings = tagKoreanMappings[type];
+  if (!mappings) return tag;
+  
+  // 직접 매핑 확인
+  if (mappings[tag]) {
+    return mappings[tag];
+  }
+  
+  // 소문자로 변환해서 확인
+  const lowerTag = tag.toLowerCase();
+  if (mappings[lowerTag]) {
+    return mappings[lowerTag];
+  }
+  
+  // 부분 매칭 확인
+  for (const [englishTag, koreanTag] of Object.entries(mappings)) {
+    if (lowerTag.includes(englishTag.toLowerCase()) || englishTag.toLowerCase().includes(lowerTag)) {
+      return koreanTag;
+    }
+  }
+  
+  // 매핑이 없으면 원본 반환
+  return tag;
+}
 
 // 검색어 자동완성 및 추천을 위한 데이터 구조
 let searchSuggestions = {
@@ -170,6 +452,23 @@ async function initializePage() {
       }
     });
     
+    // Track Library 클릭 이벤트 추가
+    const trackLibraryTitle = document.querySelector('.findmusic-tracks-title');
+    if (trackLibraryTitle) {
+      trackLibraryTitle.addEventListener('click', function() {
+        // 1페이지로 돌아가기
+        currentPage = 1;
+        renderTracksPage(currentPage);
+        setupPagination();
+        
+        // 페이지 상단으로 스크롤
+        const tracksArea = document.querySelector('.findmusic-tracks-area');
+        if (tracksArea) {
+          tracksArea.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+    
     console.log("[JS SCRIPT] 초기화 완료."); // 로그 메시지 변경
 
   } catch (error) {
@@ -197,21 +496,173 @@ async function initializePage() {
 }
 
 // Firebase Storage URL 자동 생성 함수
-function getStorageUrl(filename) {
-  if (!filename) return '';
-  // 이미 https로 시작하면 그대로 반환
-  if (filename.startsWith('http')) return filename;
-  // 파일명만 있을 때 공식 URL로 변환
-  return `https://firebasestorage.googleapis.com/v0/b/audionyx-a7b2e.appspot.com/o/${encodeURIComponent(filename)}?alt=media`;
+// Firebase Storage에서 track 폴더의 파일 목록 가져오기
+async function getStorageTrackFiles() {
+  if (storageTrackFiles.length > 0) {
+    console.log('[getStorageTrackFiles] 캐시된 파일 목록 사용:', storageTrackFiles.length, '개');
+    return storageTrackFiles;
+  }
+  
+  console.log('[getStorageTrackFiles] 🔍 Firebase Storage에서 track 폴더 파일 목록 가져오기 시작');
+  console.log('[getStorageTrackFiles] Storage 객체:', storage);
+  console.log('[getStorageTrackFiles] Storage app:', storage.app);
+  console.log('[getStorageTrackFiles] Storage bucket:', storage._config?.bucket);
+  
+  try {
+    const trackRef = ref(storage, 'track');
+    console.log('[getStorageTrackFiles] Track 참조 생성 완료:', trackRef);
+    
+    console.log('[getStorageTrackFiles] listAll() 함수 호출 중...');
+    const listResult = await listAll(trackRef);
+    console.log('[getStorageTrackFiles] listAll() 결과 받음:', {
+      items: listResult.items.length,
+      prefixes: listResult.prefixes.length
+    });
+    
+    if (listResult.items.length === 0) {
+      console.warn('[getStorageTrackFiles] ⚠️ track 폴더에 파일이 하나도 없습니다!');
+      console.warn('[getStorageTrackFiles] Firebase Console에서 Storage 확인 필요');
+      return [];
+    }
+    
+    storageTrackFiles = listResult.items.map(item => ({
+      name: item.name,
+      path: item.fullPath,
+      normalizedName: normalizeFileName(item.name)
+    }));
+    
+    console.log('[getStorageTrackFiles] ✅ Storage 파일 목록 (총 ' + storageTrackFiles.length + '개):');
+    console.log('[getStorageTrackFiles] 처음 5개 파일:', storageTrackFiles.slice(0, 5).map(f => f.name));
+    console.log('[getStorageTrackFiles] 마지막 5개 파일:', storageTrackFiles.slice(-5).map(f => f.name));
+    
+    return storageTrackFiles;
+  } catch (error) {
+    console.error('[getStorageTrackFiles] ❌ Storage 파일 목록 가져오기 실패:', error);
+    console.error('[getStorageTrackFiles] 오류 상세:', {
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      stack: error.stack
+    });
+    return [];
+  }
+}
+
+// 파일명 정규화 함수
+function normalizeFileName(filename) {
+  return filename
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '') // 특수문자 제거
+    .replace(/\s+/g, ''); // 공백 제거
+}
+
+// 가장 유사한 파일 찾기
+function findBestFileMatch(trackTitle, storageFiles) {
+  if (!trackTitle || storageFiles.length === 0) return null;
+  
+  const normalizedTitle = normalizeFileName(trackTitle);
+  let bestMatch = null;
+  let bestSimilarity = 0;
+  
+  for (const file of storageFiles) {
+    // 파일명에서 확장자 제거
+    const fileNameWithoutExt = file.normalizedName.replace(/\.(mp3|wav|m4a)$/i, '');
+    const similarity = calculateSimilarity(normalizedTitle, fileNameWithoutExt);
+    
+    console.log(`[findBestFileMatch] "${trackTitle}" vs "${file.name}" -> 유사도: ${similarity.toFixed(3)}`);
+    
+    if (similarity > bestSimilarity) {
+      bestSimilarity = similarity;
+      bestMatch = file;
+    }
+  }
+  
+  // 최소 유사도 임계값 (0.6 이상이어야 매칭)
+  if (bestSimilarity >= 0.6) {
+    console.log(`[findBestFileMatch] 최적 매칭: "${trackTitle}" -> "${bestMatch.name}" (유사도: ${bestSimilarity.toFixed(3)})`);
+    return bestMatch;
+  }
+  
+  console.log(`[findBestFileMatch] 유사한 파일 없음: "${trackTitle}" (최고 유사도: ${bestSimilarity.toFixed(3)})`);
+  return null;
+}
+
+async function getStorageUrl(filePath) {
+  if (!filePath || filePath.startsWith('http') || filePath.trim() === '') {
+    return filePath || '';
+  }
+
+  try {
+    const fileRef = ref(storage, filePath);
+    const url = await getDownloadURL(fileRef);
+    // console.log(`[getStorageUrl] 성공: ${filePath}`);
+    return url;
+  } catch (error) {
+    if (error.code === 'storage/object-not-found') {
+      console.warn(`[getStorageUrl] 경고: Storage에 파일 없음: ${filePath}`);
+    } else {
+      console.error(`[getStorageUrl] 오류: ${filePath} URL 가져오기 실패`, error);
+    }
+    return ''; // 파일이 없거나 오류 발생 시 빈 문자열 반환
+  }
+}
+
+// 404 오류 디버깅을 위한 함수
+function debugStorageFileNotFound(requestedFile, storageFiles) {
+  console.group(`[DEBUG] 404 파일 분석: ${requestedFile}`);
+  
+  console.log('요청된 파일:', requestedFile);
+  console.log('Storage 총 파일 수:', storageFiles.length);
+  
+  // 파일명만 추출 (경로 제거)
+  const requestedFileName = requestedFile.split('/').pop();
+  console.log('요청된 파일명:', requestedFileName);
+  
+  // 유사한 파일명 찾기
+  const similarFiles = storageFiles.filter(f => {
+    const fileName = f.name.toLowerCase();
+    const requested = requestedFileName.toLowerCase();
+    return fileName.includes(requested.replace(/\.(mp3|wav|m4a)$/i, '')) ||
+           requested.includes(fileName.replace(/\.(mp3|wav|m4a)$/i, ''));
+  });
+  
+  if (similarFiles.length > 0) {
+    console.log('유사한 파일들:', similarFiles.map(f => f.name));
+  } else {
+    console.log('유사한 파일 없음');
+    console.log('Storage의 모든 파일명 (처음 10개):');
+    storageFiles.slice(0, 10).forEach(f => console.log(`  - ${f.name}`));
+  }
+  
+  console.groupEnd();
 }
 
 // Firestore에서 트랙 데이터 로드
 async function loadTracksFromFirebase() {
-  console.log('[loadTracksFromFirebase] Firestore에서 트랙 데이터 불러오기 시작');
+  console.log('[loadTracksFromFirebase] 🚀 Firestore에서 트랙 데이터 불러오기 시작');
+  
+  // 먼저 Storage에서 실제 파일 목록 가져오기
+  console.log('[loadTracksFromFirebase] 📁 getStorageTrackFiles() 함수 호출 시작...');
+  
+  let storageFiles = [];
   try {
-    const trackSnapshot = await getDocs(collection(db, 'track'));
+    storageFiles = await getStorageTrackFiles();
+    console.log('[loadTracksFromFirebase] ✅ getStorageTrackFiles() 완료, 반환된 결과:', storageFiles.length, '개');
+  } catch (error) {
+    console.error('[loadTracksFromFirebase] ❌ getStorageTrackFiles() 오류:', error);
+    storageFiles = []; // 빈 배열로 초기화
+  }
+  
+  console.log('[loadTracksFromFirebase] Storage 파일 목록 로드 최종 결과:', storageFiles.length, '개');
+  
+  if (storageFiles.length === 0) {
+    console.warn('[loadTracksFromFirebase] ⚠️ Storage에 파일이 하나도 없습니다! Firebase Console을 확인해주세요.');
+  }
+  
+  try {
+    const trackSnapshot = await getDocs(collection(db, 'track_new'));
     if (trackSnapshot.empty) {
-      console.warn('[loadTracksFromFirebase] Firestore track 컬렉션에 데이터가 없습니다.');
+      console.warn('[loadTracksFromFirebase] Firestore track_new 컬렉션에 데이터가 없습니다.');
       const loadingElement = document.getElementById('findmusic-loading');
       if (loadingElement) {
         loadingElement.innerHTML = `
@@ -224,53 +675,108 @@ async function loadTracksFromFirebase() {
       }
       return [];
     }
-    const loadedTracks = [];
-    trackSnapshot.forEach((doc, idx) => {
+    
+    console.log(`[loadTracksFromFirebase] ${trackSnapshot.size}개 트랙 데이터 병렬 처리 시작...`);
+    
+    const trackPromises = trackSnapshot.docs.map(async (doc, idx) => {
       const data = doc.data();
-      // BPM 파싱 보강: 숫자 또는 숫자 문자열 모두 지원
-      let bpm = '';
-      if (typeof data.bpm === 'number' && data.bpm > 0) {
-        bpm = data.bpm;
-      } else if (typeof data.BPM === 'number' && data.BPM > 0) {
-        bpm = data.BPM;
-      } else if (typeof data.bpm === 'string' && parseInt(data.bpm) > 0) {
-        bpm = parseInt(data.bpm);
-      } else if (typeof data.BPM === 'string' && parseInt(data.BPM) > 0) {
-        bpm = parseInt(data.BPM);
+      
+      // Mood 배열 생성
+      const moods = [data['mood 1'], data['mood 2']]
+        .filter(m => m && (typeof m !== 'number' || !isNaN(m)))
+        .map(m => m.toString().trim())
+        .filter(Boolean);
+
+      // Usecase 배열 생성
+      const usecases = [data['usecase1'], data['usecase2'], data['usecase3']]
+        .filter(u => u && typeof u === 'string')
+        .map(u => u.trim())
+        .filter(Boolean);
+
+      const trackTitle = data['Track Title'] || '제목 없음';
+      let audioFilePath = '';
+      let actualFileName = 'N/A';
+
+      if (data.storagePath && data.storagePath !== 'N/A') {
+        const fileName = data.storagePath.split('/').pop();
+        if (storageFiles.some(f => f.name === fileName)) {
+          audioFilePath = data.storagePath;
+          actualFileName = fileName;
+        }
       }
-      // coverUrl, src, downloadUrl 자동 보정
-      const coverUrl = getStorageUrl(data.coverUrl || '');
-      const src = getStorageUrl(data.downloadUrl || data.src || '');
-      loadedTracks.push({
+      
+      if (!audioFilePath) {
+        const bestMatch = findBestFileMatch(trackTitle, storageFiles);
+        if (bestMatch) {
+          audioFilePath = bestMatch.path;
+          actualFileName = bestMatch.name;
+        } else {
+          audioFilePath = `track/${trackTitle}.mp3`; // 최후 fallback
+        }
+      }
+      
+      const srcPromise = getStorageUrl(audioFilePath);
+      
+      // Firestore에 coverUrl이 있으면 우선 사용, 없으면 기본 경로로 찾기
+      let coverUrl = data.coverUrl || '';
+      if (!coverUrl) {
+        try {
+          coverUrl = await getStorageUrl(`covers/${trackTitle}-cover.jpg`);
+        } catch (error) {
+          console.log(`[loadTracksFromFirebase] 커버 이미지를 찾을 수 없음: ${trackTitle}`);
+          coverUrl = ''; // 기본값으로 빈 문자열
+        }
+      }
+
+      const src = await srcPromise;
+
+      let releaseDate = '';
+      if (data['Release Date']) {
+        if (data['Release Date'].toDate) {
+          releaseDate = data['Release Date'].toDate().toLocaleDateString('ko-KR');
+        } else {
+          releaseDate = data['Release Date'].toString();
+        }
+      }
+
+      return {
         id: doc.id,
-        title: data.title || '제목 없음',
-        mood: Array.isArray(data.mood)
-          ? data.mood
-          : (typeof data.mood === 'string' ? data.mood.split(',').map(m => m.trim()) : []),
-        usecase: Array.isArray(data.usecase)
-          ? data.usecase
-          : (Array.isArray(data.use_case)
-            ? data.use_case
-            : (typeof data.usecase === 'string'
-              ? data.usecase.split(',').map(u => u.trim())
-              : (typeof data.use_case === 'string'
-                ? data.use_case.split(',').map(u => u.trim())
-                : []))),
-        src: src, // downloadUrl 우선 사용
+        title: trackTitle,
+        artist: data['Primary Artist'] || '아티스트 정보 없음',
+        mood: moods,
+        usecase: usecases,
+        src: src,
         coverUrl: coverUrl,
-        album: data.album || '',
-        ISRC: data.ISRC || '',
-        releaseDate: data['release date'] || '',
-        bpm: bpm,
+        album: data['Release Title'] || '',
+        ISRC: data['ISRC'] || '',
+        releaseDate: releaseDate,
+        bpm: data.bpm || data.BPM || '',
         duration: data.duration || 0,
         recommended: !!data.recommended,
         new: !!data.new,
         popularity: data.popularity || 0,
-        // 기타 필요한 필드 추가 가능
-      });
+        storagePath: data.storagePath || 'N/A',
+        actualFileName: actualFileName,
+        trackId: data['Track ID'] || '',
+        trackListing: data['Track Listing'] || '',
+        cLine: data['C-Line'] || '',
+        pLine: data['P-Line'] || '',
+        trackPLine: data['Track P-Line'] || '',
+        cYear: data['C-Year'] || '',
+        pYear: data['P-Year'] || '',
+        trackPYear: data['Track P-Year'] || ''
+      };
     });
-    console.log(`[loadTracksFromFirebase] Firestore에서 최종 로드된 트랙 수: ${loadedTracks.length}`);
-    return loadedTracks;
+
+    const loadedTracks = await Promise.all(trackPromises);
+    
+    console.log(`[loadTracksFromFirebase] 🎵 Firestore에서 최종 로드된 트랙 수: ${loadedTracks.length}`);
+    
+    if (loadedTracks.length === 0) {
+      console.warn('⚠️ 로드된 트랙이 없습니다. track_new 컬렉션을 확인해주세요.');
+    }
+    
+    return loadedTracks.filter(Boolean); // 혹시 모를 null 값 제거
   } catch (error) {
     console.error('[loadTracksFromFirebase] Firestore에서 트랙 데이터 불러오기 오류:', error);
     throw error;
@@ -393,37 +899,70 @@ function addAnimationEffects() {
 function initializeFilters() {
   console.log("[initializeFilters] 필터 초기화 시작");
   
-  // 필터 토글 버튼
-  const filtersToggle = document.querySelector('.findmusic-filters-toggle');
-  const filtersContent = document.querySelector('.findmusic-filters-content');
+  // 무드 필터 토글 버튼
+  const moodFilterToggle = document.querySelector('.findmusic-mood-filter-toggle');
+  const moodFilterContent = document.querySelector('.findmusic-mood-filter-content');
   
-  console.log("[initializeFilters] 필터 토글 버튼:", filtersToggle);
-  console.log("[initializeFilters] 필터 컨텐츠:", filtersContent);
+  console.log("[initializeFilters] 무드 필터 토글 버튼:", moodFilterToggle);
+  console.log("[initializeFilters] 무드 필터 컨텐츠:", moodFilterContent);
   
-  if (filtersToggle && filtersContent) {
+  if (moodFilterToggle && moodFilterContent) {
     // 이벤트 리스너가 이미 등록되어 있는지 확인하고 중복 방지
-    if (!filtersToggle.hasAttribute('data-event-bound')) {
-      filtersToggle.setAttribute('data-event-bound', 'true');
+    if (!moodFilterToggle.hasAttribute('data-event-bound')) {
+      moodFilterToggle.setAttribute('data-event-bound', 'true');
       
-      filtersToggle.addEventListener('click', (e) => {
+      moodFilterToggle.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("[initializeFilters] 필터 토글 버튼 클릭됨");
+        console.log("[initializeFilters] 무드 필터 토글 버튼 클릭됨");
         
-        const isActive = filtersToggle.classList.contains('active');
-        console.log("[initializeFilters] 현재 active 상태:", isActive);
+        const isActive = moodFilterToggle.classList.contains('active');
+        console.log("[initializeFilters] 무드 필터 현재 active 상태:", isActive);
         
-        filtersToggle.classList.toggle('active');
-        filtersContent.classList.toggle('active');
+        moodFilterToggle.classList.toggle('active');
+        moodFilterContent.classList.toggle('active');
         
-        console.log("[initializeFilters] 토글 후 active 상태:", filtersToggle.classList.contains('active'));
-        console.log("[initializeFilters] 컨텐츠 active 상태:", filtersContent.classList.contains('active'));
+        console.log("[initializeFilters] 무드 필터 토글 후 active 상태:", moodFilterToggle.classList.contains('active'));
+        console.log("[initializeFilters] 무드 필터 컨텐츠 active 상태:", moodFilterContent.classList.contains('active'));
       });
       
-      console.log("[initializeFilters] 필터 토글 이벤트 리스너 등록 완료");
+      console.log("[initializeFilters] 무드 필터 토글 이벤트 리스너 등록 완료");
     }
   } else {
-    console.error("[initializeFilters] 필터 토글 요소를 찾을 수 없습니다");
+    console.error("[initializeFilters] 무드 필터 토글 요소를 찾을 수 없습니다");
+  }
+  
+  // 용도 필터 토글 버튼
+  const usecaseFilterToggle = document.querySelector('.findmusic-usecase-filter-toggle');
+  const usecaseFilterContent = document.querySelector('.findmusic-usecase-filter-content');
+  
+  console.log("[initializeFilters] 용도 필터 토글 버튼:", usecaseFilterToggle);
+  console.log("[initializeFilters] 용도 필터 컨텐츠:", usecaseFilterContent);
+  
+  if (usecaseFilterToggle && usecaseFilterContent) {
+    // 이벤트 리스너가 이미 등록되어 있는지 확인하고 중복 방지
+    if (!usecaseFilterToggle.hasAttribute('data-event-bound')) {
+      usecaseFilterToggle.setAttribute('data-event-bound', 'true');
+      
+      usecaseFilterToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("[initializeFilters] 용도 필터 토글 버튼 클릭됨");
+        
+        const isActive = usecaseFilterToggle.classList.contains('active');
+        console.log("[initializeFilters] 용도 필터 현재 active 상태:", isActive);
+        
+        usecaseFilterToggle.classList.toggle('active');
+        usecaseFilterContent.classList.toggle('active');
+        
+        console.log("[initializeFilters] 용도 필터 토글 후 active 상태:", usecaseFilterToggle.classList.contains('active'));
+        console.log("[initializeFilters] 용도 필터 컨텐츠 active 상태:", usecaseFilterContent.classList.contains('active'));
+      });
+      
+      console.log("[initializeFilters] 용도 필터 토글 이벤트 리스너 등록 완료");
+    }
+  } else {
+    console.error("[initializeFilters] 용도 필터 토글 요소를 찾을 수 없습니다");
   }
   
   // 필터 초기화 버튼
@@ -656,58 +1195,32 @@ function filterTracks() {
     tempFilteredTracks.sort((a, b) => b.searchSimilarity - a.searchSimilarity);
   }
   
-  // 분위기 필터링
+  // 무드 필터링 (새로운 태그 매핑 시스템 사용)
   const selectedMoods = Array.from(document.querySelectorAll('input[name="mood"]:checked'))
     .map(input => input.value.toLowerCase());
   if (selectedMoods.length > 0) {
-    tempFilteredTracks = tempFilteredTracks.filter(track => 
-      track.mood && track.mood.some(moodItem => selectedMoods.includes(moodItem.toLowerCase()))
-    );
-  }
-  
-  // 용도 필터링
-  const selectedUsecases = Array.from(document.querySelectorAll('input[name="usecase"]:checked'))
-    .map(input => input.value.toLowerCase());
-  if (selectedUsecases.length > 0) {
-    tempFilteredTracks = tempFilteredTracks.filter(track => 
-      track.usecase && Array.isArray(track.usecase) && 
-      track.usecase.some(usecaseItem => 
-        selectedUsecases.includes(usecaseItem.toLowerCase())
-      )
-    );
-  }
-  
-  // BPM 필터링
-  const selectedBpms = Array.from(document.querySelectorAll('input[name="bpm"]:checked'))
-    .map(input => input.value);
-  if (selectedBpms.length > 0) {
     tempFilteredTracks = tempFilteredTracks.filter(track => {
-      if (!track.bpm) return false;
-      return selectedBpms.some(bpmRange => {
-        switch(bpmRange) {
-          case 'slow': return track.bpm < 100;
-          case 'medium': return track.bpm >= 100 && track.bpm < 120;
-          case 'fast': return track.bpm >= 120 && track.bpm < 140;
-          case 'very-fast': return track.bpm >= 140; // 추가된 BPM 범위
-          default: return false;
-        }
+      if (!track.mood || !Array.isArray(track.mood)) return false;
+      
+      return track.mood.some(moodItem => {
+        const mappedMood = mapTagToNewSystem(moodItem, 'mood');
+        return selectedMoods.includes(moodItem.toLowerCase()) ||
+               (mappedMood && selectedMoods.includes(mappedMood));
       });
     });
   }
   
-  // 길이 필터링
-  const selectedDurations = Array.from(document.querySelectorAll('input[name="duration"]:checked'))
-    .map(input => input.value);
-  if (selectedDurations.length > 0) {
+  // 용도 필터링 (새로운 태그 매핑 시스템 사용)
+  const selectedUsecases = Array.from(document.querySelectorAll('input[name="usecase"]:checked'))
+    .map(input => input.value.toLowerCase());
+  if (selectedUsecases.length > 0) {
     tempFilteredTracks = tempFilteredTracks.filter(track => {
-      if (track.duration === undefined || track.duration === null) return false; // duration null/undefined 체크
-      return selectedDurations.some(durationRange => {
-        switch(durationRange) {
-          case 'short': return track.duration <= 30;
-          case 'medium': return track.duration > 30 && track.duration <= 60;
-          case 'long': return track.duration > 60;
-          default: return false;
-        }
+      if (!track.usecase || !Array.isArray(track.usecase)) return false;
+      
+      return track.usecase.some(usecaseItem => {
+        const mappedUsecase = mapTagToNewSystem(usecaseItem, 'usecase');
+        return selectedUsecases.includes(usecaseItem.toLowerCase()) ||
+               (mappedUsecase && selectedUsecases.includes(mappedUsecase));
       });
     });
   }
@@ -864,14 +1377,28 @@ function renderTracksPage(page) {
 
       <div class="findmusic-item-main-group">
         <div class="findmusic-item-title-genre-wrapper">
+          <div class="findmusic-item-title-row">
           <h3 class="findmusic-item-title" title="${track.title}">${track.title}</h3>
+            <span class="findmusic-item-artist" title="${track.artist || '아티스트 정보 없음'}">by ${track.artist || '아티스트 정보 없음'}</span>
+          </div>
           <div class="findmusic-item-tags">
-            <span class="findmusic-item-mood">
-              ${(track.mood && track.mood.length > 0 && track.mood[0]) || '무드 없음'}
-            </span>
-            <span class="findmusic-item-usecase">
-              ${(track.usecase && track.usecase.length > 0 && track.usecase[0]) || '용도 없음'}
-            </span>
+            ${(() => {
+              const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
+              const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
+              
+              const moodTags = moods.map(mood => ({
+                korean: convertTagToKorean(mood, 'mood'),
+                type: 'mood'
+              }));
+              const usecaseTags = usecases.map(usecase => ({
+                korean: convertTagToKorean(usecase, 'usecase'),
+                type: 'usecase'
+              }));
+              
+              return [...moodTags, ...usecaseTags].map(tag => 
+                `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.korean}">${tag.korean}</span>`
+              ).join('');
+            })()}
           </div>
         </div>
         
@@ -980,46 +1507,13 @@ function renderTracksPage(page) {
           return;
         }
         
-        // 다른 트랙이 재생 중이면 정지
-        if (currentPlayingWavesurfer && currentPlayingWavesurfer !== wavesurfer) {
-          currentPlayingWavesurfer.pause();
-          currentPlayingWavesurfer.getWrapper().closest('.findmusic-track-list-item').classList.remove('playing');
-        }
-        
-        // 현재 트랙 재생/정지 토글
-        if (wavesurfer.isPlaying()) {
-          wavesurfer.pause();
-          trackItem.classList.remove('playing');
-          currentPlayingWavesurfer = null;
-        } else {
-          wavesurfer.play();
-          trackItem.classList.add('playing');
-          currentPlayingWavesurfer = wavesurfer;
-        }
-      });
-    } else if (!isMobile && playBtn && wavesurfer) {
-      // 데스크톱에서는 재생 버튼 클릭 이벤트만
-      playBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        
-        // 다른 트랙이 재생 중이면 정지
-        if (currentPlayingWavesurfer && currentPlayingWavesurfer !== wavesurfer) {
-          currentPlayingWavesurfer.pause();
-          currentPlayingWavesurfer.getWrapper().closest('.findmusic-track-list-item').classList.remove('playing');
-        }
-        
-        // 현재 트랙 재생/정지 토글
-        if (wavesurfer.isPlaying()) {
-          wavesurfer.pause();
-          trackItem.classList.remove('playing');
-          currentPlayingWavesurfer = null;
-        } else {
-          wavesurfer.play();
-          trackItem.classList.add('playing');
-          currentPlayingWavesurfer = wavesurfer;
-        }
+        // playTrack 함수 사용 (모바일)
+        playTrack(trackItem, wavesurfer);
       });
     }
+    
+    // 재생 버튼 이벤트는 initializeWaveform에서만 처리하도록 수정
+    // (중복 이벤트 리스너 제거)
     
     // 각 트랙 아이템을 순차적으로 페이드인 애니메이션 효과 적용
     setTimeout(() => {
@@ -1165,12 +1659,27 @@ function showMiniPlayer(track, mainWavesurfer) {
   // 타이틀
   if (miniPlayerTitle) miniPlayerTitle.textContent = track.title;
 
-  // 태그 표시
+  // 태그 표시 - 트랙 아이템과 동일한 스타일 적용
   if (miniPlayerTags) {
-    miniPlayerTags.innerHTML = `
-      <span class="findmusic-item-mood">${track.mood && track.mood.length > 0 ? track.mood[0] : '무드 없음'}</span>
-      <span class="findmusic-item-usecase">${track.usecase && track.usecase.length > 0 ? track.usecase[0] : '용도 없음'}</span>
-    `;
+    const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
+    const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
+    
+    const moodTags = moods.map(mood => ({
+      korean: convertTagToKorean(mood, 'mood'),
+      type: 'mood'
+    }));
+    const usecaseTags = usecases.map(usecase => ({
+      korean: convertTagToKorean(usecase, 'usecase'), 
+      type: 'usecase'
+    }));
+    
+    const allTags = [...moodTags, ...usecaseTags];
+    
+    miniPlayerTags.innerHTML = allTags.length > 0 
+      ? allTags.map(tag => 
+          `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.korean}">${tag.korean}</span>`
+        ).join('')
+      : '<span class="findmusic-item-tag">태그 없음</span>';
   }
   
   // 시간 정보
@@ -1233,7 +1742,9 @@ function showMiniPlayer(track, mainWavesurfer) {
   // 재생/일시정지 버튼 상태 업데이트 및 이벤트 바인딩
   const miniPlayerPlayBtn = document.getElementById('mini-player-play');
   if (miniPlayerPlayBtn) {
-    updateMiniPlayerPlayButton(mainWavesurfer.isPlaying());
+    // 현재 재생 상태에 따라 버튼 업데이트
+    const isCurrentlyPlaying = mainWavesurfer.isPlaying();
+    updateMiniPlayerPlayButton(isCurrentlyPlaying);
     
     // 중복 이벤트 리스너 방지
     if (!miniPlayerPlayBtn.hasAttribute('data-event-bound')) {
@@ -1403,16 +1914,81 @@ function initializeWaveform(waveContainer) {
   if(loadingSpinner) loadingSpinner.style.display = 'block'; 
   if(playIcon && playBtn) playIcon.style.display = 'none'; // playBtn 존재 유무도 함께 체크
 
+  // 대체 확장자 시도를 위한 변수 (초기화)
+  if (!waveContainer.dataset.retryCount) {
+    waveContainer.dataset.retryCount = '0';
+  }
+  const maxRetries = 3;
+  const extensions = ['.mp3', '.wav', '.m4a'];
+
   wavesurfer.load(waveContainer.dataset.src);
   
   wavesurfer.on('error', err => {
     console.error(`[initializeWaveform] ERROR 이벤트 발생: ${waveContainer.dataset.src}`, err);
-    waveContainer.innerHTML = '<div class="findmusic-wave-error">오디오 로드 실패</div>';
-    if(playBtn) playBtn.disabled = false; 
+    
+    // 현재 재시도 횟수 가져오기
+    const retryCount = parseInt(waveContainer.dataset.retryCount) || 0;
+    
+    // 404 오류이고 재시도 횟수가 남아있는 경우 다른 확장자 시도
+    if ((err && err.status === 404) && retryCount < maxRetries) {
+      const currentSrc = waveContainer.dataset.src;
+      const trackId = trackItem.getAttribute('data-track-id');
+      const trackData = tracks.find(t => t.id === trackId) || filteredTracks.find(t => t.id === trackId);
+      
+      if (trackData && trackData.title) {
+        const newExtension = extensions[retryCount];
+        const newSrc = getStorageUrl(`track/${trackData.title}${newExtension}`);
+        
+        console.log(`[Track ${trackData.title}] 대체 확장자 시도 (${retryCount + 1}/${maxRetries}): ${newExtension}`);
+        console.log(`[Track ${trackData.title}] 새 URL: ${newSrc}`);
+        
+        waveContainer.dataset.retryCount = (retryCount + 1).toString();
+        waveContainer.dataset.src = newSrc;
+        
+        // 새 URL로 다시 로드 시도
+        wavesurfer.load(newSrc);
+        return; // 이벤트 처리 종료, 재시도 중
+      }
+    }
+    
+    // 재시도 실패 또는 다른 오류인 경우
+    const errorMessage = err && err.status === 404 ? 
+      '오디오 파일을 찾을 수 없습니다' : 
+      '오디오 로드 실패';
+    
+    waveContainer.innerHTML = `<div class="findmusic-wave-error">${errorMessage}</div>`;
+    
+    // 재생 버튼을 비활성화 상태로 설정
+    if(playBtn) {
+      playBtn.disabled = true;
+      playBtn.classList.add('error');
+      playBtn.title = errorMessage;
+    } 
     if(loadingSpinner) loadingSpinner.style.display = 'none';
     if(playIcon && playBtn) { // playBtn 존재 유무도 함께 체크
-        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>'; 
+        playIcon.innerHTML = '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>'; // 오류 아이콘
         playIcon.style.display = 'block';
+        playIcon.style.color = '#ff4444';
+    }
+    
+    // 트랙 데이터에 오류 상태 표시
+    const trackId = trackItem.getAttribute('data-track-id');
+    const trackData = tracks.find(t => t.id === trackId) || filteredTracks.find(t => t.id === trackId);
+    if (trackData) {
+      trackData.hasAudioError = true;
+      console.warn(`[Track ${trackData.title}] 오디오 로드 완전 실패 - 모든 확장자 시도 완료`);
+      console.warn(`[Track ${trackData.title}] 최종 URL: ${waveContainer.dataset.src}`);
+      console.warn(`[Track ${trackData.title}] 원본 storagePath: ${trackData.storagePath || 'N/A'}`);
+      console.warn(`[Track ${trackData.title}] 매칭된 파일명: ${trackData.actualFileName || 'N/A'}`);
+      console.warn(`[Track ${trackData.title}] Storage 매칭 성공 여부: ${trackData.actualFileName !== 'N/A' ? 'Yes' : 'No'}`);
+      
+      // 404 오류인 경우 디버깅 정보 출력
+      if (err && err.status === 404) {
+        // Storage 파일 목록 다시 가져오기 (캐시된 것 사용)
+        getStorageTrackFiles().then(storageFiles => {
+          debugStorageFileNotFound(trackData.storagePath || `track/${trackData.title}.mp3`, storageFiles);
+        });
+      }
     }
   });
   
@@ -1652,20 +2228,41 @@ function playTrack(trackElement, wavesurfer) {
   // 새 트랙 재생 시작
   currentPlayingWavesurfer = wavesurfer;
   
-  // 미니플레이어에 새 트랙 정보 즉시 표시
-  showMiniPlayer(trackData, wavesurfer);
-  
-  // 트랙 재생
+  // 트랙 재생/일시정지 토글
   if (wavesurfer.isPlaying()) {
     wavesurfer.pause();
+    trackElement.classList.remove('playing');
+    hideMiniPlayer();
   } else {
-    wavesurfer.play();
+    // 웨이브폼이 준비되었는지 확인
+    const isReady = wavesurfer.getDuration() > 0;
+    
+    if (isReady) {
+      // 즉시 재생 가능한 경우
+      wavesurfer.play();
+      trackElement.classList.add('playing');
+      // 재생 시작 후 미니플레이어 표시 (play 이벤트에서 자동 처리됨)
+    } else {
+      // 웨이브폼이 아직 로드되지 않은 경우
+      const playBtn = trackElement.querySelector('.findmusic-play-btn');
+      const loadingSpinner = playBtn?.querySelector('.loading-spinner');
+      
+      if (loadingSpinner) {
+        loadingSpinner.style.display = 'block';
+      }
+      
+      // 로드 완료 후 자동 재생
+      wavesurfer.once('ready', () => {
+        if (loadingSpinner) {
+          loadingSpinner.style.display = 'none';
+        }
+        wavesurfer.play();
+        trackElement.classList.add('playing');
+      });
+    }
   }
   
-  // 현재 트랙 UI 상태 업데이트
-  trackElement.classList.add('playing');
-  
-  console.log(`[playTrack] 트랙 재생 시작: ${trackData.title}`);
+  console.log(`[playTrack] 트랙 처리: ${trackData.title}`);
 }
 
 // 중복된 DOMContentLoaded 이벤트 리스너 제거됨

@@ -1287,3 +1287,74 @@ footer,
 .process-card:nth-child(odd) {
     transform: translateY(-3px);
 }
+
+/* === 일본 계좌 필드 스타일 === */
+.account-fields {
+    display: block;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.account-fields.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+.account-fields.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.jp-input-guide {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.jp-input-guide .format-label {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.jp-input-guide .format-example {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#jp-account-fields .form-group input[type="text"],
+#jp-account-fields .form-group select {
+    font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+}
+
+#jp-account-fields input[maxlength="4"],
+#jp-account-fields input[maxlength="3"],
+#jp-account-fields input[maxlength="7"] {
+    width: 150px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+}
+
+#jp-account-fields input[pattern*="[ァ-ヶー"]  {
+    font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-size: 1rem;
+}
+
+/* 모바일 반응형 추가 */
+@media (max-width: 768px) {
+    .jp-input-guide {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    #jp-account-fields input[maxlength="4"],
+    #jp-account-fields input[maxlength="3"],
+    #jp-account-fields input[maxlength="7"] {
+        width: 100%;
+        max-width: 200px;
+    }
+}

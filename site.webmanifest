@@ -1,0 +1,22 @@
+{
+    "name": "AUDIONYX - 쇼츠 음원 수익화 플랫폼",
+    "short_name": "AUDIONYX",
+    "description": "쇼츠에 음원 수익을 더하세요",
+    "icons": [
+        {
+            "src": "./favicon_io/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "./favicon_io/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#3EB489",
+    "background_color": "#0f172a",
+    "display": "standalone",
+    "start_url": "/",
+    "scope": "/"
+} 

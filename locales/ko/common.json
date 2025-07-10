@@ -331,6 +331,47 @@
       "youtube": "YouTube",
       "tiktok": "TikTok",
       "instagram": "Instagram"
+    },
+    "copyrightNotice": {
+      "title": "중요 안내",
+      "text": "크리에이터님께 입금될 정확한 음원 저작권료를 상정하기 위하여 Audionyx 음원을 사용하신 숏폼 컨텐츠 링크를 제공해주셔야 합니다."
+    },
+    "contentLinks": {
+      "title": "Audionyx 음원 사용 숏폼 컨텐츠 링크",
+      "subtitle": "등록하신 컨텐츠 링크를 통해 정확한 수익 정산이 이루어집니다",
+      "addButton": "컨텐츠 링크 추가",
+      "addFirstButton": "첫 컨텐츠 링크 추가",
+      "addLink": "링크 추가",
+      "table": {
+        "contentUrl": "컨텐츠 URL",
+        "audioTrack": "사용된 음원",
+        "platform": "플랫폼",
+        "uploadDate": "등록일",
+        "actions": "관리"
+      },
+      "noLinks": "등록된 컨텐츠 링크가 없습니다",
+      "noLinksDesc": "Audionyx 음원을 사용한 숏폼 컨텐츠 링크를 등록하여 정확한 저작권료 산정에 도움을 주세요. 크리에이터님의 영상 링크를 등록하지 않으실 경우 저작권료 상정이 불가능하고 수령이 어렵습니다.",
+      "addFirstLink": "첫 컨텐츠 링크 등록하기",
+      "contentUrl": "컨텐츠 URL",
+      "audioTrack": "사용된 음원",
+      "platform": "플랫폼",
+      "addedDate": "등록일",
+      "actions": "관리"
+    },
+    "contentModal": {
+      "title": "컨텐츠 링크 추가",
+      "channelSelect": "사용 채널",
+      "selectChannel": "채널을 선택하세요",
+      "channelHelp": "컨텐츠를 업로드한 채널을 선택해주세요",
+      "contentUrl": "컨텐츠 URL",
+      "contentUrlPlaceholder": "YouTube, TikTok, Instagram 영상 URL을 입력하세요",
+      "contentUrlHelp": "YouTube Shorts, TikTok, Instagram Reels 등의 URL을 입력하세요",
+      "audioTrack": "사용된 Audionyx 음원",
+      "selectTrack": "음원을 선택하세요",
+      "trackHelp": "컨텐츠에서 사용된 정확한 Audionyx 음원 제목 또는 CID 코드를 입력하세요",
+      "detectedPlatform": "감지된 플랫폼",
+      "cancel": "취소",
+      "add": "링크 추가"
     }
   },
   "trackProduction": {

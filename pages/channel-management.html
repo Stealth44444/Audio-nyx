@@ -74,7 +74,7 @@
         <a href="faq.html" class="dropdown-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <span data-i18n="navbar.faq">FAQ</span>
         </a>
@@ -128,7 +128,7 @@
                 <a href="faq.html" class="mobile-dropdown-item">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <span data-i18n="navbar.faq">FAQ</span>
                 </a>
@@ -154,6 +154,19 @@
           <p class="about-audionyx-subcopy" data-i18n="channelManagement.process.description">
             Audionyx는 YouTube, TikTok, Instagram 등 다양한 플랫폼의 채널을 이모지 키를 통해 안전하고 간편하게 인증할 수 있는 시스템을 제공합니다. 채널 등록부터 수익 정산까지, 모든 과정이 자동화되어 있어 번거로운 절차 없이 바로 수익화를 시작할 수 있습니다.
           </p>
+          
+          <!-- 음원 저작권료 안내 -->
+          <div class="copyright-notice">
+            <div class="notice-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4M12 8h.01"/>
+              </svg>
+            </div>
+            <p class="copyright-notice-text" data-i18n="channelManagement.process.copyrightNotice">
+              크리에이터님께 입금될 정확한 음원 저작권료를 상정하기 위하여 Audionyx 음원을 사용하신 숏폼 컨텐츠 링크를 제공해주셔야 합니다.
+            </p>
+          </div>
         </div>
 
       </div>
@@ -309,7 +322,7 @@
               <div class="guide-icon help-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
-                  <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>
                 </svg>
               </div>
               <h3 data-i18n="channelManagement.guide.faqTitle">자주 묻는 질문</h3>
@@ -478,6 +491,52 @@
             </tbody>
           </table>
             </div>
+            
+            <!-- 숏폼 컨텐츠 링크 테이블 섹션 -->
+            <div class="content-links-section">
+              <div class="content-links-header">
+                <h3 class="content-links-title" data-i18n="channelManagement.contentLinks.title">Audionyx 음원 사용 숏폼 컨텐츠 링크</h3>
+                <button id="add-content-link" class="btn-add-content">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span data-i18n="channelManagement.contentLinks.addLink">링크 추가</span>
+                </button>
+              </div>
+              
+              <!-- 컨텐츠 링크 테이블 -->
+              <div class="content-table-wrapper">
+                <table class="content-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="channelManagement.contentLinks.contentUrl">컨텐츠 URL</th>
+                      <th data-i18n="channelManagement.contentLinks.channel">채널</th>
+                      <th data-i18n="channelManagement.contentLinks.audioTrack">사용된 음원</th>
+                      <th data-i18n="channelManagement.contentLinks.platform">플랫폼</th>
+                      <th data-i18n="channelManagement.contentLinks.addedDate">등록일</th>
+                      <th data-i18n="channelManagement.contentLinks.actions">관리</th>
+                    </tr>
+                  </thead>
+                  <tbody id="content-links-list">
+                    <!-- 컨텐츠 링크 목록이 JavaScript에 의해 여기에 추가됩니다 -->
+                  </tbody>
+                </table>
+              </div>
+              
+              <!-- 컨텐츠 링크 없음 메시지 -->
+              <div id="no-content-links" class="no-content-links">
+                <div class="empty-state">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                  </svg>
+                  <h3 data-i18n="channelManagement.contentLinks.noLinks">등록된 컨텐츠 링크가 없습니다</h3>
+                  <p data-i18n="channelManagement.contentLinks.noLinksDesc">Audionyx 음원을 사용한 숏폼 컨텐츠 링크를 등록하여 정확한 저작권료 산정에 도움을 주세요.</p>
+                  <button id="add-first-content-link" class="btn-primary" data-i18n="channelManagement.contentLinks.addFirstLink">첫 컨텐츠 링크 등록하기</button>
+                </div>
+              </div>
+            </div>
         </div>
         
         <!-- 채널 없음 메시지 -->
@@ -575,6 +634,82 @@
           <div class="modal-actions">
             <button type="button" id="cancel-registration" class="btn-secondary" data-i18n="channelManagement.modal.cancel">취소</button>
             <button type="submit" id="submit-channel" class="btn-primary" data-i18n="channelManagement.modal.register">등록하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 컨텐츠 링크 추가 모달 -->
+  <div id="content-link-modal" class="channel-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 data-i18n="channelManagement.contentModal.title">컨텐츠 링크 추가</h3>
+        <button id="close-content-modal" class="close-modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="content-link-form">
+          <!-- 채널 선택 -->
+          <div class="form-group">
+            <label for="channel-select" data-i18n="channelManagement.contentModal.channelSelect">사용 채널</label>
+            <select id="channel-select" name="channel-select" required>
+              <option value="" data-i18n="channelManagement.contentModal.selectChannel">채널을 선택하세요</option>
+              <!-- 등록된 채널 목록이 JavaScript에 의해 동적으로 추가됩니다 -->
+            </select>
+            <div class="help-text">
+              <span data-i18n="channelManagement.contentModal.channelHelp">컨텐츠를 업로드한 채널을 선택해주세요</span>
+            </div>
+          </div>
+          
+          <!-- 컨텐츠 URL 입력 -->
+          <div class="form-group">
+            <label for="content-url" data-i18n="channelManagement.contentModal.contentUrl">컨텐츠 URL</label>
+            <input type="url" id="content-url" name="content-url" data-i18n-placeholder="channelManagement.contentModal.contentUrlPlaceholder" placeholder="https://youtube.com/shorts/..." required>
+            <div class="url-help-text">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4M12 8h.01"/>
+              </svg>
+              <span data-i18n="channelManagement.contentModal.contentUrlHelp">YouTube Shorts, TikTok, Instagram Reels 등의 URL을 입력하세요</span>
+            </div>
+          </div>
+          
+          <!-- 사용된 음원 입력 (자동완성) -->
+          <div class="form-group">
+            <label for="audio-track" data-i18n="channelManagement.contentModal.audioTrack">사용된 Audionyx 음원</label>
+            <div class="audio-track-input-container">
+              <input type="text" id="audio-track" name="audio-track" placeholder="음원 제목 또는 CID 코드 입력..." required autocomplete="off">
+              <div class="audio-track-suggestions" id="audio-track-suggestions">
+                <!-- 자동완성 목록이 여기에 표시됩니다 -->
+              </div>
+            </div>
+            <div class="help-text">
+              <span data-i18n="channelManagement.contentModal.trackHelp">컨텐츠에서 사용된 정확한 Audionyx 음원 제목 또는 CID 코드를 입력하세요</span>
+            </div>
+          </div>
+          
+          <!-- 플랫폼 자동 감지 -->
+          <div class="form-group">
+            <label data-i18n="channelManagement.contentModal.detectedPlatform">감지된 플랫폼</label>
+            <div class="detected-platform">
+              <div class="platform-info" id="detected-platform-info">
+                <div class="platform-icon">
+                  <img id="detected-platform-icon" src="" alt="" width="24" height="24">
+                </div>
+                <span id="detected-platform-name">자동 감지됨</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-actions">
+            <button type="button" id="cancel-content-link" class="btn-secondary" data-i18n="channelManagement.contentModal.cancel">취소</button>
+            <button type="submit" id="submit-content-link" class="btn-primary" data-i18n="channelManagement.contentModal.add">링크 추가</button>
           </div>
         </form>
       </div>

@@ -65,12 +65,30 @@ const accountConfirmGroup = document.getElementById('account-confirm-group');
 const accountMatchStatus = document.getElementById('account-match-status');
 const formatExample = document.getElementById('format-example');
 
+// 언어별 필드 DOM 요소
+const krAccountFields = document.getElementById('kr-account-fields');
+const jpAccountFields = document.getElementById('jp-account-fields');
+const languageOptions = document.querySelectorAll('.language-option, .mobile-language-option');
+
+// 일본 계좌 필드 DOM 요소
+const bankCodeInput = document.getElementById('bank-code');
+const branchCodeInput = document.getElementById('branch-code');
+const accountTypeSelect = document.getElementById('account-type');
+const accountNumberInput = document.getElementById('account-number');
+const accountHolderKanaInput = document.getElementById('account-holder-kana');
+const bankCodeError = document.getElementById('bank-code-error');
+const branchCodeError = document.getElementById('branch-code-error');
+const accountTypeError = document.getElementById('account-type-error');
+const accountNumberError = document.getElementById('account-number-error');
+const accountHolderKanaError = document.getElementById('account-holder-kana-error');
+
 // Firebase Auth 인스턴스
 const auth = getAuth(app);
 let currentUser = null;
 let formMode = 'register'; // 'register' 또는 'update' 상태
 let userChannels = []; // 사용자 채널 정보 저장
 let channelMonitoringUnsubscribe = null; // 채널 모니터링 해제 함수
+let currentLanguage = 'ko'; // 현재 선택된 언어
 
 // 은행별 계좌번호 형식 정보
 const bankFormats = {
@@ -85,12 +103,155 @@ const bankFormats = {
   '토스뱅크': { length: [13], example: '1000-12-1234567' }
 };
 
+// 언어 토글 기능
+function toggleLanguage(lang) {
+  currentLanguage = lang;
+  
+  // 언어 토글 UI 업데이트
+  languageOptions.forEach(option => {
+    option.classList.remove('active');
+    if (option.dataset.lang === lang) {
+      option.classList.add('active');
+    }
+  });
+  
+  // 계좌 필드 전환 및 required 속성 관리
+  if (lang === 'ko') {
+    krAccountFields.style.display = 'block';
+    jpAccountFields.style.display = 'none';
+    // 한국 필드에 required 속성 추가
+    setRequiredAttributes('ko');
+    // 폼 상태 초기화
+    clearAllFields();
+  } else {
+    krAccountFields.style.display = 'none';
+    jpAccountFields.style.display = 'block';
+    // 일본 필드에 required 속성 추가
+    setRequiredAttributes('jp');
+    // 폼 상태 초기화
+    clearAllFields();
+  }
+  
+  // 에러 메시지 초기화
+  clearErrors();
+}
+
+// required 속성을 언어에 따라 동적으로 관리
+function setRequiredAttributes(lang) {
+  if (lang === 'ko') {
+    // 한국 필드에 required 추가
+    if (bankSelect) bankSelect.setAttribute('required', '');
+    if (accountInput) accountInput.setAttribute('required', '');
+    if (accountConfirmInput) accountConfirmInput.setAttribute('required', '');
+    if (holderInput) holderInput.setAttribute('required', '');
+    
+    // 일본 필드에서 required 제거
+    if (bankCodeInput) bankCodeInput.removeAttribute('required');
+    if (branchCodeInput) branchCodeInput.removeAttribute('required');
+    if (accountTypeSelect) accountTypeSelect.removeAttribute('required');
+    if (accountNumberInput) accountNumberInput.removeAttribute('required');
+    if (accountHolderKanaInput) accountHolderKanaInput.removeAttribute('required');
+  } else {
+    // 일본 필드에 required 추가
+    if (bankCodeInput) bankCodeInput.setAttribute('required', '');
+    if (branchCodeInput) branchCodeInput.setAttribute('required', '');
+    if (accountTypeSelect) accountTypeSelect.setAttribute('required', '');
+    if (accountNumberInput) accountNumberInput.setAttribute('required', '');
+    if (accountHolderKanaInput) accountHolderKanaInput.setAttribute('required', '');
+    
+    // 한국 필드에서 required 제거
+    if (bankSelect) bankSelect.removeAttribute('required');
+    if (accountInput) accountInput.removeAttribute('required');
+    if (accountConfirmInput) accountConfirmInput.removeAttribute('required');
+    if (holderInput) holderInput.removeAttribute('required');
+  }
+}
+
+// 모든 필드 초기화
+function clearAllFields() {
+  // 한국 계좌 필드 초기화
+  if (bankSelect) bankSelect.value = '';
+  if (accountInput) accountInput.value = '';
+  if (accountConfirmInput) accountConfirmInput.value = '';
+  if (holderInput) holderInput.value = '';
+  
+  // 일본 계좌 필드 초기화
+  if (bankCodeInput) bankCodeInput.value = '';
+  if (branchCodeInput) branchCodeInput.value = '';
+  if (accountTypeSelect) accountTypeSelect.value = '';
+  if (accountNumberInput) accountNumberInput.value = '';
+  if (accountHolderKanaInput) accountHolderKanaInput.value = '';
+  
+  // UI 상태 초기화
+  if (accountConfirmGroup) accountConfirmGroup.style.display = 'none';
+  if (accountFormatGuide) accountFormatGuide.style.display = 'none';
+  if (accountMatchStatus) accountMatchStatus.style.display = 'none';
+}
+
 // 오류 메시지 초기화
 function clearErrors() {
-  bankError.textContent = '';
-  accountError.textContent = '';
-  accountConfirmError.textContent = '';
-  holderError.textContent = '';
+  // 한국 계좌 필드 에러 초기화
+  if (bankError) bankError.textContent = '';
+  if (accountError) accountError.textContent = '';
+  if (accountConfirmError) accountConfirmError.textContent = '';
+  if (holderError) holderError.textContent = '';
+  
+  // 일본 계좌 필드 에러 초기화
+  if (bankCodeError) bankCodeError.textContent = '';
+  if (branchCodeError) branchCodeError.textContent = '';
+  if (accountTypeError) accountTypeError.textContent = '';
+  if (accountNumberError) accountNumberError.textContent = '';
+  if (accountHolderKanaError) accountHolderKanaError.textContent = '';
+}
+
+// 일본 계좌 검증 함수들
+function validateJapaneseAccount() {
+  let isValid = true;
+  clearErrors();
+  
+  // 은행 코드 검증 (4자리 숫자)
+  if (!bankCodeInput.value) {
+    bankCodeError.textContent = '銀行コードを入力してください。';
+    isValid = false;
+  } else if (!/^\d{4}$/.test(bankCodeInput.value)) {
+    bankCodeError.textContent = '銀行コードは4桁の数字で入力してください。';
+    isValid = false;
+  }
+  
+  // 지점 코드 검증 (3자리 숫자)
+  if (!branchCodeInput.value) {
+    branchCodeError.textContent = '支店コードを入力してください。';
+    isValid = false;
+  } else if (!/^\d{3}$/.test(branchCodeInput.value)) {
+    branchCodeError.textContent = '支店コードは3桁の数字で入力してください。';
+    isValid = false;
+  }
+  
+  // 계좌 종별 검증
+  if (!accountTypeSelect.value) {
+    accountTypeError.textContent = '口座種別を選択してください。';
+    isValid = false;
+  }
+  
+  // 계좌 번호 검증 (7자리 숫자)
+  if (!accountNumberInput.value) {
+    accountNumberError.textContent = '口座番号を入力してください。';
+    isValid = false;
+  } else if (!/^\d{7}$/.test(accountNumberInput.value)) {
+    accountNumberError.textContent = '口座番号は7桁の数字で入力してください。';
+    isValid = false;
+  }
+  
+  // 계좌 명의자 카나 검증
+  if (!accountHolderKanaInput.value) {
+    accountHolderKanaError.textContent = '名義カナを入力してください。';
+    isValid = false;
+  } else if (!/^[ァ-ヶー\s]+$/.test(accountHolderKanaInput.value)) {
+    accountHolderKanaError.textContent = '名義カナはカタカナで入力してください。';
+    isValid = false;
+  }
+  
+  return isValid;
 }
 
 // 계좌번호 형식 검증
@@ -142,6 +303,15 @@ function checkAccountMatch() {
 
 // 입력값 유효성 검사
 function validateForm() {
+  if (currentLanguage === 'ko') {
+    return validateKoreanAccount();
+  } else {
+    return validateJapaneseAccount();
+  }
+}
+
+// 한국 계좌 검증
+function validateKoreanAccount() {
   let isValid = true;
   clearErrors();
   
@@ -237,28 +407,50 @@ function updateUI(data = null) {
     noAccountInfo.style.display = 'none';
     accountInfo.style.display = 'block';
     
-    infoBank.textContent = data.bank || '-';
-    infoAccount.textContent = maskAccountNumber(data.account) || '-';
-    infoHolder.textContent = data.holder || '-';
-    infoUpdated.textContent = formatDate(data.updatedAt) || '-';
+    // 저장된 언어에 따라 UI 업데이트
+    if (data.language) {
+      currentLanguage = data.language;
+      toggleLanguage(data.language);
+    }
     
-    // 폼에 현재 데이터 채우기
-    bankSelect.value = data.bank || '';
-    accountInput.value = data.account || '';
-    accountConfirmInput.value = data.account || '';
-    holderInput.value = data.holder || '';
-    
-    // 계좌번호가 있으면 재확인 필드와 형식 안내 표시
-    if (data.account) {
-      accountConfirmGroup.style.display = 'block';
-      checkAccountMatch();
+    if (data.language === 'jp') {
+      // 일본 계좌 정보 표시
+      infoBank.textContent = `${data.bankCode || '-'} / ${data.branchCode || '-'}`;
+      infoAccount.textContent = `${data.accountType || '-'} ${maskAccountNumber(data.accountNumber) || '-'}`;
+      infoHolder.textContent = data.accountHolderKana || '-';
       
-      if (data.bank && bankFormats[data.bank]) {
-        const format = bankFormats[data.bank];
-        formatExample.textContent = `예: ${format.example} (${format.length.join('~')}자리)`;
-        accountFormatGuide.style.display = 'block';
+      // 일본 계좌 폼에 현재 데이터 채우기
+      if (bankCodeInput) bankCodeInput.value = data.bankCode || '';
+      if (branchCodeInput) branchCodeInput.value = data.branchCode || '';
+      if (accountTypeSelect) accountTypeSelect.value = data.accountType || '';
+      if (accountNumberInput) accountNumberInput.value = data.accountNumber || '';
+      if (accountHolderKanaInput) accountHolderKanaInput.value = data.accountHolderKana || '';
+    } else {
+      // 한국 계좌 정보 표시
+      infoBank.textContent = data.bank || '-';
+      infoAccount.textContent = maskAccountNumber(data.account) || '-';
+      infoHolder.textContent = data.holder || '-';
+      
+      // 한국 계좌 폼에 현재 데이터 채우기
+      if (bankSelect) bankSelect.value = data.bank || '';
+      if (accountInput) accountInput.value = data.account || '';
+      if (accountConfirmInput) accountConfirmInput.value = data.account || '';
+      if (holderInput) holderInput.value = data.holder || '';
+      
+      // 계좌번호가 있으면 재확인 필드와 형식 안내 표시
+      if (data.account) {
+        accountConfirmGroup.style.display = 'block';
+        checkAccountMatch();
+        
+        if (data.bank && bankFormats[data.bank]) {
+          const format = bankFormats[data.bank];
+          formatExample.textContent = `예: ${format.example} (${format.length.join('~')}자리)`;
+          accountFormatGuide.style.display = 'block';
+        }
       }
     }
+    
+    infoUpdated.textContent = formatDate(data.updatedAt) || '-';
     
     // 버튼 텍스트 수정
     submitBtn.textContent = '계좌 수정하기';
@@ -270,10 +462,7 @@ function updateUI(data = null) {
     accountInfo.style.display = 'none';
     
     // 폼 초기화
-    form.reset();
-    accountConfirmGroup.style.display = 'none';
-    accountFormatGuide.style.display = 'none';
-    accountMatchStatus.style.display = 'none';
+    clearAllFields();
     
     // 버튼 텍스트 수정
     submitBtn.textContent = '계좌 등록하기';
@@ -455,8 +644,21 @@ document.addEventListener('DOMContentLoaded', () => {
   // 애니메이션 초기화
   initializeAnimations();
   
+  // 초기 언어 설정에 따른 required 속성 설정
+  setRequiredAttributes(currentLanguage);
+  
   // 폼 토글 버튼 이벤트
   showFormBtn?.addEventListener('click', toggleForm);
+  
+  // 언어 토글 이벤트
+  languageOptions.forEach(option => {
+    option.addEventListener('click', (e) => {
+      const lang = e.target.dataset.lang;
+      if (lang && lang !== currentLanguage) {
+        toggleLanguage(lang);
+      }
+    });
+  });
   
   // 폼 제출 이벤트
   form?.addEventListener('submit', async (e) => {
@@ -477,11 +679,25 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.textContent = '처리 중...';
     
     try {
-      const accountData = {
-        bank: bankSelect.value,
-        account: accountInput.value,
-        holder: holderInput.value
-      };
+      let accountData;
+      
+      if (currentLanguage === 'ko') {
+        accountData = {
+          language: 'ko',
+          bank: bankSelect.value,
+          account: accountInput.value,
+          holder: holderInput.value
+        };
+      } else {
+        accountData = {
+          language: 'jp',
+          bankCode: bankCodeInput.value,
+          branchCode: branchCodeInput.value,
+          accountType: accountTypeSelect.value,
+          accountNumber: accountNumberInput.value,
+          accountHolderKana: accountHolderKanaInput.value
+        };
+      }
       
       const success = await saveAccountData(currentUser.uid, accountData);
       

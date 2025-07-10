@@ -133,7 +133,20 @@
     "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収益を正確に集計して入金いたします。",
     "trustSecurity": "安全な暗号化",
     "trustMonitoring": "24時間モニタリング",
-    "trustEmail": "入金通知メール送信"
+    "trustEmail": "入金通知メール送信",
+    "bankCodeLabel": "銀行コード",
+    "bankCodePlaceholder": "4桁の銀行コードを入力",
+    "branchCodeLabel": "支店コード", 
+    "branchCodePlaceholder": "3桁の支店コードを入力",
+    "accountTypeLabel": "口座種別",
+    "accountTypePlaceholder": "口座種別を選択",
+    "accountTypeOrdinary": "普通",
+    "accountTypeCurrent": "当座",
+    "accountTypeSavings": "貯蓄",
+    "accountNumberLabel": "口座番号",
+    "accountNumberPlaceholder": "7桁の口座番号を入力",
+    "accountHolderKanaLabel": "名義カナ",
+    "accountHolderKanaPlaceholder": "カタカナで口座名義を入力"
   },
   "findMusic": {
     "title": "音源検索 | Audionyx",
@@ -331,6 +344,47 @@
       "youtube": "YouTube",
       "tiktok": "TikTok",
       "instagram": "Instagram"
+    },
+    "copyrightNotice": {
+      "title": "重要なお知らせ",
+      "text": "クリエイターの皆様への正確な楽曲著作権料算定のため、Audionyx楽曲をご利用いただいたショートフォームコンテンツのリンクをご提供ください。"
+    },
+    "contentLinks": {
+      "title": "Audionyx楽曲使用ショートフォームコンテンツリンク",
+      "subtitle": "登録されたコンテンツリンクを通じて正確な収益精算が行われます",
+      "addButton": "コンテンツリンク追加",
+      "addFirstButton": "初回コンテンツリンク追加",
+      "addLink": "リンク追加",
+      "table": {
+        "contentUrl": "コンテンツURL",
+        "audioTrack": "使用楽曲",
+        "platform": "プラットフォーム",
+        "uploadDate": "登録日",
+        "actions": "管理"
+      },
+      "noLinks": "登録されたコンテンツリンクがありません",
+      "noLinksDesc": "Audionyx楽曲を使用したショートフォームコンテンツのリンクを登録して、正確な著作権料算定にご協力ください。クリエイターの皆様の動画リンクを登録いただけない場合、著作権料の算定が困難で、受領が困難になります。",
+      "addFirstLink": "初回コンテンツリンク登録",
+      "contentUrl": "コンテンツURL",
+      "audioTrack": "使用楽曲",
+      "platform": "プラットフォーム",
+      "addedDate": "登録日",
+      "actions": "管理"
+    },
+    "contentModal": {
+      "title": "コンテンツリンク追加",
+      "channelSelect": "使用チャンネル",
+      "selectChannel": "チャンネルを選択してください",
+      "channelHelp": "コンテンツをアップロードしたチャンネルを選択してください",
+      "contentUrl": "コンテンツURL",
+      "contentUrlPlaceholder": "YouTube、TikTok、Instagram動画URLを入力してください",
+      "contentUrlHelp": "YouTube Shorts、TikTok、Instagram ReelsなどのURLを入力してください",
+      "audioTrack": "使用したAudionyx楽曲",
+      "selectTrack": "楽曲を選択してください",
+      "trackHelp": "コンテンツで使用した正確なAudionyx楽曲タイトルまたはCIDコードを入力してください",
+      "detectedPlatform": "検出されたプラットフォーム",
+      "cancel": "キャンセル",
+      "add": "リンク追加"
     }
   },
   "trackProduction": {

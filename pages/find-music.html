@@ -81,7 +81,7 @@
         <a href="faq.html" class="dropdown-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <span data-i18n="navbar.faq">FAQ</span>
         </a>
@@ -135,7 +135,7 @@
                                  <a href="faq.html" class="mobile-dropdown-item">
                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                          <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                         <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                      </svg>
                      <span data-i18n="navbar.faq">FAQ</span>
                  </a>
@@ -170,271 +170,157 @@
         </button>
       </div>
       
-      <button class="findmusic-filters-toggle">
-        <svg class="findmusic-filters-toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 7H21M6 12H18M10 17H14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span data-i18n="findMusic.search.filterToggle">필터 옵션 보기</span>
-      </button>
+      <!-- 필터 버튼 컨테이너 -->
+      <div class="findmusic-filter-buttons">
+        <!-- 무드 필터 버튼 -->
+        <button class="findmusic-mood-filter-toggle">
+          <svg class="findmusic-filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1L13.5 2.5L16.17 5.17C15.24 5.06 14.32 5 13.4 5C9.56 5 6.51 6.44 5.44 8.6C4.94 9.54 5.39 10.67 6.33 11.17C6.6 11.31 6.89 11.37 7.18 11.37C7.85 11.37 8.5 11.05 8.83 10.47C9.46 9.38 11.24 8.5 13.4 8.5C15.56 8.5 17.34 9.38 17.97 10.47C18.5 11.37 19.72 11.67 20.62 11.14C21.52 10.61 21.82 9.39 21.29 8.49L21 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span data-i18n="findMusic.filters.mood">🎵 무드</span>
+        </button>
+        
+        <!-- 용도 필터 버튼 -->
+        <button class="findmusic-usecase-filter-toggle">
+          <svg class="findmusic-filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span data-i18n="findMusic.filters.usecase">🎬 용도</span>
+        </button>
+      </div>
       
-      <div class="findmusic-filters-content">
-        <!-- 무드 필터 -->
+      <!-- 무드 필터 컨텐츠 -->
+      <div class="findmusic-mood-filter-content">
         <div class="filter-group filter-group-tags">
-          <h4 class="filter-group-title" data-i18n="findMusic.filters.mood">🧠 무드 (Moods)</h4>
           <label class="filter-option">
-            <input type="checkbox" name="mood" value="nostalgic">
-            <span>Nostalgic</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="dreamy">
-            <span>Dreamy</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="warm">
-            <span>Warm</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="melancholic">
-            <span>Melancholic</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="calm">
-            <span>Calm</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="reflective">
-            <span>Reflective</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="introspective">
-            <span>Introspective</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="playful">
-            <span>Playful</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="mysterious">
-            <span>Mysterious</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="ethereal">
-            <span>Ethereal</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="somber">
-            <span>Somber</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="uplifting">
-            <span>Uplifting</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="atmospheric">
-            <span>Atmospheric</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="hypnotic">
-            <span>Hypnotic</span>
+            <input type="checkbox" name="mood" value="joyful">
+            <span>즐거운/신나는</span>
           </label>
           <label class="filter-option">
             <input type="checkbox" name="mood" value="energetic">
-            <span>Energetic</span>
+            <span>에너지틱</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="mood" value="fragile">
-            <span>Fragile</span>
+            <input type="checkbox" name="mood" value="inspiring">
+            <span>감동/희망</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="mood" value="moody">
-            <span>Moody</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="gentle">
-            <span>Gentle</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="dark">
-            <span>Dark</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="light-hearted">
-            <span>Light-hearted</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="spacious">
-            <span>Spacious</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="textured">
-            <span>Textured</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="meditative">
-            <span>Meditative</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="haunting">
-            <span>Haunting</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="lush">
-            <span>Lush</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="glitchy">
-            <span>Glitchy</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="organic">
-            <span>Organic</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="futuristic">
-            <span>Futuristic</span>
+            <input type="checkbox" name="mood" value="chill">
+            <span>편안/여유</span>
           </label>
           <label class="filter-option">
             <input type="checkbox" name="mood" value="romantic">
-            <span>Romantic</span>
+            <span>로맨틱</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="mood" value="playful">
+            <span>장난/귀여움</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="mood" value="groovy">
+            <span>그루비/펑키</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="mood" value="epic">
+            <span>웅장/스케일</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="mood" value="dramatic">
+            <span>드라마틱</span>
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="mood" value="dark">
+            <span>다크</span>
           </label>
           <label class="filter-option">
             <input type="checkbox" name="mood" value="tense">
-            <span>Tense</span>
+            <span>긴장/서스펜스</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="mood" value="sparse">
-            <span>Sparse</span>
+            <input type="checkbox" name="mood" value="aggressive">
+            <span>공격적/분노</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="mood" value="cosmic">
-            <span>Cosmic</span>
+            <input type="checkbox" name="mood" value="mysterious">
+            <span>미스터리</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="mood" value="urban">
-            <span>Urban</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="pastoral">
-            <span>Pastoral</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="circular">
-            <span>Circular/Looped</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="sacred">
-            <span>Sacred</span>
+            <input type="checkbox" name="mood" value="sad">
+            <span>슬픔/우울</span>
           </label>
         </div>
-        
-        <!-- 용도 필터 -->
+      </div>
+      
+      <!-- 용도 필터 컨텐츠 -->
+      <div class="findmusic-usecase-filter-content">
         <div class="filter-group filter-group-tags">
-          <h4 class="filter-group-title" data-i18n="findMusic.filters.usecase">▶︎ 용도 (Use-Cases)</h4>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="study">
-            <span>Study/Focus</span>
+            <input type="checkbox" name="usecase" value="docu_education">
+            <span>다큐·교육·과학</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="workout">
-            <span>Workout/Pump</span>
+            <input type="checkbox" name="usecase" value="travel_aerial">
+            <span>여행·드론·풍경</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="morning vlog">
-            <span>Morning Vlog</span>
+            <input type="checkbox" name="usecase" value="fashion_beauty">
+            <span>패션·뷰티</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="night chill">
-            <span>Night Chill</span>
+            <input type="checkbox" name="usecase" value="lifestyle_vlog">
+            <span>Vlog·라이프스타일</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="feel-good">
-            <span>Feel-Good Smile</span>
+            <input type="checkbox" name="usecase" value="gaming_esports">
+            <span>게이밍·e스포츠</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="soft sadness">
-            <span>Soft Sadness</span>
+            <input type="checkbox" name="usecase" value="tech_innovation">
+            <span>테크·산업·혁신</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="motivation">
-            <span>Motivation Boost</span>
+            <input type="checkbox" name="usecase" value="animation_narration">
+            <span>애니메이션·나레이션</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="cute pets">
-            <span>Cute Pets</span>
+            <input type="checkbox" name="usecase" value="party_events">
+            <span>파티·이벤트·오락</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="travel drone">
-            <span>Travel Drone</span>
+            <input type="checkbox" name="usecase" value="wellness_asmr">
+            <span>웰니스·명상·앰비언트</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="rain asmr">
-            <span>Rain/ASMR</span>
+            <input type="checkbox" name="usecase" value="sports_motivation">
+            <span>스포츠·동기부여</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="recipe">
-            <span>Recipe Quickie</span>
+            <input type="checkbox" name="usecase" value="pets_nature">
+            <span>펫·동물·자연</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="tutorial">
-            <span>Tutorial/How-to</span>
+            <input type="checkbox" name="usecase" value="trailers_branding">
+            <span>트레일러·인트로·로고</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="unbox">
-            <span>Product Unbox</span>
+            <input type="checkbox" name="usecase" value="diy_howto">
+            <span>DIY·튜토리얼</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="fashion">
-            <span>Fashion Try-on</span>
+            <input type="checkbox" name="usecase" value="holiday_seasonal">
+            <span>홀리데이·시즌별</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="retro">
-            <span>Retro/VHS</span>
+            <input type="checkbox" name="usecase" value="art_culture">
+            <span>예술·문화</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="cyber">
-            <span>Cyber/Neon</span>
+            <input type="checkbox" name="usecase" value="news_affairs">
+            <span>뉴스·시사</span>
           </label>
           <label class="filter-option">
-            <input type="checkbox" name="usecase" value="loop">
-            <span>Loop/Transition FX</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="cinematic">
-            <span>Cinematic Trailer</span>
-          </label>
-        </div>
-        
-        <!-- BPM 필터 -->
-        <div class="filter-group">
-          <h4 class="filter-group-title" data-i18n="findMusic.filters.bpm">🎵 BPM</h4>
-          <label class="filter-option">
-            <input type="checkbox" name="bpm" value="slow">
-            <span data-i18n="findMusic.filters.bpmSlow">0 - 100 (느림)</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="bpm" value="medium">
-            <span data-i18n="findMusic.filters.bpmMedium">101 - 140 (보통)</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="bpm" value="fast">
-            <span data-i18n="findMusic.filters.bpmFast">141+ (빠름)</span>
-          </label>
-        </div>
-        
-        <!-- 길이 필터 -->
-        <div class="filter-group">
-          <h4 class="filter-group-title" data-i18n="findMusic.filters.duration">⏱️ 길이</h4>
-          <label class="filter-option">
-            <input type="checkbox" name="duration" value="short">
-            <span data-i18n="findMusic.filters.durationShort">15초 이하</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="duration" value="medium">
-            <span data-i18n="findMusic.filters.durationMedium">16-60초</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="duration" value="long">
-            <span data-i18n="findMusic.filters.durationLong">1분 이상</span>
+            <input type="checkbox" name="usecase" value="drive">
+            <span>드라이브</span>
           </label>
         </div>
       </div>
@@ -552,9 +438,7 @@
         <div class="findmusic-item-title-genre-wrapper">
           <h3 id="mini-player-title" class="findmusic-item-title">Track Title</h3>
           <div id="mini-player-tags" class="findmusic-item-tags">
-            <span class="findmusic-item-genre" data-i18n="findMusic.player.genre">장르</span>
-            <span class="findmusic-item-mood" data-i18n="findMusic.player.mood">무드</span>
-            <span class="findmusic-item-usecase" data-i18n="findMusic.player.usecase">용도</span>
+            <!-- 태그는 JavaScript에서 동적으로 생성됩니다 -->
           </div>
         </div>
         <div class="findmusic-item-waveform-container">

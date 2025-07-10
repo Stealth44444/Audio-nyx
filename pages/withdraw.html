@@ -20,7 +20,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
-    <link rel="manifest" href="../favicon_io/site.webmanifest">
+    <link rel="manifest" href="../site.webmanifest">
     <link rel="icon" href="../favicon_io/favicon.ico" type="image/x-icon">
     <!-- Theme Color -->
     <meta name="theme-color" content="#3EB489">
@@ -132,7 +132,8 @@
           <a href="faq.html" class="mobile-dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               FAQ
           </a>
@@ -329,44 +330,98 @@
               <button id="show-form-btn" class="show-form-btn" data-i18n="withdraw.showFormBtn">계좌 등록하기</button>
               <div id="withdraw-form-wrapper" style="display:none;">
                 <form id="withdraw-form" class="withdraw-form">
-                  <div class="form-group">
-                    <label for="bank" data-i18n="withdraw.bankLabel">은행 선택</label>
-                    <select id="bank" name="bank" required>
-                      <option value="" disabled selected data-i18n="withdraw.bankPlaceholder">은행을 선택하세요</option>
-                      <option value="국민은행">국민은행</option>
-                      <option value="신한은행">신한은행</option>
-                      <option value="우리은행">우리은행</option>
-                      <option value="하나은행">하나은행</option>
-                      <option value="농협은행">농협은행</option>
-                      <option value="기업은행">기업은행</option>
-                      <option value="SC제일은행">SC제일은행</option>
-                      <option value="카카오뱅크">카카오뱅크</option>
-                      <option value="토스뱅크">토스뱅크</option>
-                    </select>
-                    <div class="error-message" id="bank-error"></div>
-                  </div>
-                  <div class="form-group">
-                    <label for="account" data-i18n="withdraw.accountLabel">계좌번호</label>
-                    <input type="text" id="account" name="account" data-i18n="withdraw.accountPlaceholder" placeholder="'-' 없이 숫자만 입력하세요" required>
-                    <div class="account-format-guide" id="account-format-guide" style="display: none;">
-                      <div class="format-info">
-                        <span class="format-label">입력 형식:</span>
-                        <span class="format-example" id="format-example">예: 1234567890123</span>
-                      </div>
+                  <!-- 한국 계좌 등록 필드 -->
+                  <div id="kr-account-fields" class="account-fields">
+                    <div class="form-group">
+                      <label for="bank" data-i18n="withdraw.bankLabel">은행 선택</label>
+                      <select id="bank" name="bank">
+                        <option value="" disabled selected data-i18n="withdraw.bankPlaceholder">은행을 선택하세요</option>
+                        <option value="국민은행">국민은행</option>
+                        <option value="신한은행">신한은행</option>
+                        <option value="우리은행">우리은행</option>
+                        <option value="하나은행">하나은행</option>
+                        <option value="농협은행">농협은행</option>
+                        <option value="기업은행">기업은행</option>
+                        <option value="SC제일은행">SC제일은행</option>
+                        <option value="카카오뱅크">카카오뱅크</option>
+                        <option value="토스뱅크">토스뱅크</option>
+                      </select>
+                      <div class="error-message" id="bank-error"></div>
                     </div>
-                    <div class="error-message" id="account-error"></div>
+                    <div class="form-group">
+                      <label for="account" data-i18n="withdraw.accountLabel">계좌번호</label>
+                      <input type="text" id="account" name="account" data-i18n="withdraw.accountPlaceholder" placeholder="'-' 없이 숫자만 입력하세요">
+                      <div class="account-format-guide" id="account-format-guide" style="display: none;">
+                        <div class="format-info">
+                          <span class="format-label">입력 형식:</span>
+                          <span class="format-example" id="format-example">예: 1234567890123</span>
+                        </div>
+                      </div>
+                      <div class="error-message" id="account-error"></div>
+                    </div>
+                    <div class="form-group" id="account-confirm-group" style="display: none;">
+                      <label for="account-confirm" data-i18n="withdraw.accountConfirmLabel">계좌번호 재확인</label>
+                      <input type="text" id="account-confirm" name="account-confirm" data-i18n="withdraw.accountConfirmPlaceholder" placeholder="계좌번호를 다시 입력하세요">
+                      <div class="account-match-status" id="account-match-status"></div>
+                      <div class="error-message" id="account-confirm-error"></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="holder" data-i18n="withdraw.holderLabel">예금주</label>
+                      <input type="text" id="holder" name="holder" data-i18n="withdraw.holderPlaceholder" placeholder="예금주 이름을 입력하세요">
+                      <div class="error-message" id="holder-error"></div>
+                    </div>
                   </div>
-                  <div class="form-group" id="account-confirm-group" style="display: none;">
-                    <label for="account-confirm" data-i18n="withdraw.accountConfirmLabel">계좌번호 재확인</label>
-                    <input type="text" id="account-confirm" name="account-confirm" data-i18n="withdraw.accountConfirmPlaceholder" placeholder="계좌번호를 다시 입력하세요" required>
-                    <div class="account-match-status" id="account-match-status"></div>
-                    <div class="error-message" id="account-confirm-error"></div>
+
+                  <!-- 일본 계좌 등록 필드 -->
+                  <div id="jp-account-fields" class="account-fields" style="display: none;">
+                    <div class="form-group">
+                      <label for="bank-code" data-i18n="withdraw.bankCodeLabel">銀行コード</label>
+                      <input type="text" id="bank-code" name="bank-code" data-i18n="withdraw.bankCodePlaceholder" placeholder="4桁の銀行コードを入力" maxlength="4" pattern="[0-9]{4}">
+                      <div class="jp-input-guide">
+                        <span class="format-label">例:</span>
+                        <span class="format-example">0001 (みずほ銀行), 0005 (三菱UFJ銀行)</span>
+                      </div>
+                      <div class="error-message" id="bank-code-error"></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="branch-code" data-i18n="withdraw.branchCodeLabel">支店コード</label>
+                      <input type="text" id="branch-code" name="branch-code" data-i18n="withdraw.branchCodePlaceholder" placeholder="3桁の支店コードを入力" maxlength="3" pattern="[0-9]{3}">
+                      <div class="jp-input-guide">
+                        <span class="format-label">例:</span>
+                        <span class="format-example">001, 002, 003</span>
+                      </div>
+                      <div class="error-message" id="branch-code-error"></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="account-type" data-i18n="withdraw.accountTypeLabel">口座種別</label>
+                      <select id="account-type" name="account-type">
+                        <option value="" disabled selected data-i18n="withdraw.accountTypePlaceholder">口座種別を選択</option>
+                        <option value="普通" data-i18n="withdraw.accountTypeOrdinary">普通</option>
+                        <option value="当座" data-i18n="withdraw.accountTypeCurrent">当座</option>
+                        <option value="貯蓄" data-i18n="withdraw.accountTypeSavings">貯蓄</option>
+                      </select>
+                      <div class="error-message" id="account-type-error"></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="account-number" data-i18n="withdraw.accountNumberLabel">口座番号</label>
+                      <input type="text" id="account-number" name="account-number" data-i18n="withdraw.accountNumberPlaceholder" placeholder="7桁の口座番号を入力" maxlength="7" pattern="[0-9]{7}">
+                      <div class="jp-input-guide">
+                        <span class="format-label">例:</span>
+                        <span class="format-example">1234567</span>
+                      </div>
+                      <div class="error-message" id="account-number-error"></div>
+                    </div>
+                    <div class="form-group">
+                      <label for="account-holder-kana" data-i18n="withdraw.accountHolderKanaLabel">名義カナ</label>
+                      <input type="text" id="account-holder-kana" name="account-holder-kana" data-i18n="withdraw.accountHolderKanaPlaceholder" placeholder="カタカナで口座名義を入力" pattern="[ァ-ヶー\s]+">
+                      <div class="jp-input-guide">
+                        <span class="format-label">例:</span>
+                        <span class="format-example">ヤマダ タロウ</span>
+                      </div>
+                      <div class="error-message" id="account-holder-kana-error"></div>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label for="holder" data-i18n="withdraw.holderLabel">예금주</label>
-                    <input type="text" id="holder" name="holder" data-i18n="withdraw.holderPlaceholder" placeholder="예금주 이름을 입력하세요" required>
-                    <div class="error-message" id="holder-error"></div>
-                  </div>
+
                   <button type="submit" id="submit-btn" class="submit-btn" data-i18n="withdraw.submitBtn">계좌 등록하기</button>
                 </form>
               </div>

@@ -57,6 +57,16 @@ service cloud.firestore {
       return channels.size() <= 10;  // 최대 10개 채널 제한
       // 각 채널 개별 검증은 클라이언트 측에서 수행
     }
+    
+    // 개별 채널 데이터 검증 함수
+    function hasValidSingleChannel(channel) {
+      return channel.keys().hasAll(['url', 'platform', 'status', 'key', 'createdAt'])
+             && channel.url is string && channel.url.size() > 0
+             && channel.platform is string && channel.platform in ['youtube', 'tiktok', 'instagram']
+             && channel.status is string && channel.status in ['검사중', '승인됨', '거부됨']
+             && channel.key is string && channel.key.size() > 0
+             && (channel.createdAt is timestamp || channel.createdAt is string);
+    }
 
     /* ───────── ② contentLinks 컬렉션 ─────────
        사용자별 컨텐츠 링크 (개별 문서) */
@@ -121,11 +131,7 @@ service cloud.firestore {
     /* ───────── ④ user_withdraw_accounts 컬렉션 ─────────
        사용자 정산 계좌 */
     match /user_withdraw_accounts/{userId} {
-      // 읽기: 본인만 (데이터 검증 불필요)
-      allow read: if isOwner(userId);
-      
-      // 쓰기: 본인 + 데이터 검증
-      allow write: if isOwner(userId) && hasValidWithdrawAccountData();
+      allow read, write: if isOwner(userId) && hasValidWithdrawAccountData();
     }
     
     // 계좌 정보 검증 함수
@@ -381,4 +387,4 @@ service cloud.firestore {
       allow read, write: if false;
     }
   }
-}
+} 

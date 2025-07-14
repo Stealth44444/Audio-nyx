@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이용약관 - AUDIONYX</title>
+    <meta name="description" content="AUDIONYX 음원 이용 크리에이터 동의서 및 이용약관">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/common.css">
+    
+    <!-- Firebase v10 -->
+    <script type="module" src="../js/firebase.js"></script>
+    <script src="../js/i18n.js"></script>
+    <script src="../js/auth.js"></script>
+    
+    <style>
+        .terms-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 12px;
+            border: 1px solid rgba(62, 180, 137, 0.2);
+            margin-top: 100px;
+            margin-bottom: 2rem;
+        }
+        
+        .terms-title {
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .terms-content {
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+        
+        .terms-article {
+            margin-bottom: 2rem;
+        }
+        
+        .terms-article h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .terms-article p, .terms-article li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .terms-article ol, .terms-article ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .terms-highlight {
+            background: rgba(62, 180, 137, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        .terms-checkbox {
+            background: rgba(62, 180, 137, 0.1);
+            border: 1px solid var(--color-primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-primary);
+        }
+        
+        @media (max-width: 768px) {
+            .terms-container {
+                margin-top: 80px;
+                padding: 1.5rem;
+                border-radius: 8px;
+            }
+            
+            .terms-title {
+                font-size: 1.5rem;
+            }
+            
+            .terms-content {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo-area">
+                <a href="../index.html" class="logo-link">
+                    <h1 class="logo">AUDIONYX</h1>
+                </a>
+            </div>
+            
+            <!-- 데스크톱 메뉴 -->
+            <div class="menu-area">
+                <ul>
+                    <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+                    <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw" data-requires-auth="true">계좌 등록</a></li>
+                    <li><a href="../pages/channel-management.html" data-i18n="navbar.channel" data-requires-auth="true">채널 관리</a></li>
+                    <li><a href="../pages/track-production.html" data-i18n="navbar.track" data-requires-auth="true">트랙 제작</a></li>
+                    <li><a href="../pages/brand.html" data-i18n="navbar.brand">브랜드</a></li>
+                </ul>
+            </div>
+            
+            <!-- 언어 토글 -->
+            <div class="language-toggle">
+                <a href="#" class="language-option active" data-lang="ko">KO</a>
+                <span class="language-separator">|</span>
+                <a href="#" class="language-option" data-lang="ja">JP</a>
+            </div>
+            
+            <!-- 인증 버튼 -->
+            <div class="auth-buttons">
+                <a href="#" class="btn-login" id="login-btn" data-i18n="auth.login">로그인</a>
+            </div>
+            
+            <!-- 사용자 프로필 -->
+            <div class="user-profile" id="user-profile">
+                <img src="../images/default-avatar.svg" alt="User Avatar" class="user-avatar" id="user-avatar">
+                <span class="user-name" id="user-name">사용자</span>
+                <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="#" class="dropdown-item" id="logout-btn" data-i18n="auth.logout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <path d="M21 12H9"/>
+                        </svg>
+                        로그아웃
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 모바일 인증 요소들 -->
+            <div class="mobile-auth-buttons">
+                <a href="#" class="mobile-btn-login" id="mobile-login-btn" data-i18n="auth.login">로그인</a>
+            </div>
+            
+            <div class="mobile-auth-loading" id="mobile-auth-loading" style="display: none;">
+                <div class="auth-loading-spinner"></div>
+            </div>
+            
+            <div class="mobile-user-profile" id="mobile-user-profile">
+                <img src="../images/default-avatar.svg" alt="User Avatar" class="mobile-user-avatar" id="mobile-user-avatar">
+                <svg class="mobile-dropdown-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+                <div class="mobile-dropdown-menu" id="mobile-dropdown-menu">
+                    <a href="#" class="mobile-dropdown-item" id="mobile-logout-btn" data-i18n="auth.logout">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <path d="M21 12H9"/>
+                        </svg>
+                        로그아웃
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 모바일 언어 토글 -->
+            <div class="mobile-language-toggle">
+                <a href="#" class="mobile-language-option active" data-lang="ko">KO</a>
+                <span class="mobile-language-separator">|</span>
+                <a href="#" class="mobile-language-option" data-lang="ja">JP</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+        <div class="container">
+            <div class="terms-container">
+                <h1 class="terms-title">AUDIONYX 음원 이용 크리에이터 동의서</h1>
+                
+                <div class="terms-content">
+                    <article class="terms-article">
+                        <h3>제1조(목적)</h3>
+                        <p>본 동의서는 영상 크리에이터(이하 "사용자")가 AUDIONYX 플랫폼(이하 "플랫폼")이 제공하는 음원(이하 "플랫폼 음원")을 자신의 디지털 영상(YouTube Shorts·Instagram Reels·TikTok 등, 이하 "영상")에 삽입하여 게시·수익화할 수 있도록, 라이선스 조건과 수익 분배 구조를 규정함을 목적으로 한다.</p>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제2조(정의)</h3>
+                        <ol>
+                            <li>"플랫폼 음원"은 회사가 보유하거나 적법 라이선스를 보유한 모든 음원을 의미한다.</li>
+                            <li>"저작권료"란 영상에서 플랫폼 음원이 사용되어 발생한 YouTube Content ID 수익 및 기타 DSP·광고 수익을 말한다.</li>
+                            <li>"순수익(Net Revenue Pool)"은 플랫폼이 Too Lost 등 제3자 유통사 및 플랫폼으로부터 실제로 수령한 총금액에서 결제·송금 수수료, 환불·차감액을 공제한 <span class="terms-highlight">전체 음원 카탈로그 기준의 통합 수익 풀</span>을 의미한다.</li>
+                        </ol>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제3조(라이선스 부여)</h3>
+                        <ol>
+                            <li>회사는 사용자에게 플랫폼 음원을 전 세계적·비독점적·무상 라이선스로 제공한다.</li>
+                            <li>허용 범위: (1) 영상 배경음 또는 BGM 삽입, (2) SNS·스트리밍 플랫폼 게시, (3) 영상 수익화.</li>
+                            <li>금지 범위: (a) 음원을 단독으로 재배포·판매·스트리밍, (b) 음원을 리믹스·리메이크 후 재배포, (c) 음원을 불법·혐오·차별·정책 위반 콘텐츠에 사용.</li>
+                        </ol>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제4조(수익 분배 및 지급)</h3>
+                        <ol>
+                            <li>플랫폼은 순수익 풀을 기준으로 <span class="terms-highlight">[크리에이터40%]</span>를 사용자에게, <span class="terms-highlight">[플랫폼60%]</span>를 플랫폼 수수료로 분배한다. (합계 100%)</li>
+                            <li>정산 주기: (i) 1분기(1–3월) 발생 수익 → 2분기 말(6월 30일) 이내 지급, (ii) 2분기 발생 수익 → 3분기 말(9월 30일) 이내 지급, 이후 동일 패턴으로 분기별 지급한다.</li>
+                            <li>Too Lost 등 제3자 유통사에서 정산이 지연될 경우, 회사의 지급 의무는 해당 금액을 실제로 수령한 뒤 <span class="terms-highlight">14일 이내</span>로 이연되며, 회사는 지연으로 인한 손익에 대해 고의·중과실이 없는 한 책임을 지지 않는다.</li>
+                            <li>최소 지급 한도는 적용하지 않으며, 금융 수수료 차감 후 전액 지급한다. 지급 방식은 사용자 계정에 등록된 국내·해외 은행 계좌 또는 PayPal을 통해 이뤄진다.</li>
+                        </ol>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제5조(사용자 보증·정책 준수 및 수익 보류)</h3>
+                        <ol>
+                            <li>사용자는 (a) 영상이 제3자의 저작권·초상권·퍼블리시티권을 침해하지 않음을, (b) 플랫폼 음원을 본 동의서 허용 범위 내에서만 사용함을 보증한다.</li>
+                            <li>사용자가 정책을 위반하거나, 영상이 폭력·선정성·증오발언 등 각 플랫폼 가이드라인 또는 회사 내부 정책에 위배된다고 합리적으로 판단되는 경우, 회사는 해당 영상에 대한 수익을 전부 또는 일부 보류·차감·지급 거절할 수 있으며, 별도 통지 후 라이선스를 종료할 수 있다.</li>
+                            <li>사용자는 플랫폼 음원이 삽입된 영상을 제3자 유통사에 별도로 등록하거나 CID 클레임을 제출해서는 안 된다.</li>
+                        </ol>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제6조(면책·책임제한)</h3>
+                        <ol>
+                            <li>회사는 YouTube·TikTok·Instagram 등 제3자 플랫폼 정책 변경이나 광고 단가 변동으로 인한 수익 변동에 대해 책임을 지지 않는다.</li>
+                            <li>사용자가 본 동의서 위반 또는 제3자 권리침해로 회사에 손해를 입힌 경우, 사용자는 회사를 면책하고 모든 손해를 배상해야 한다.</li>
+                        </ol>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제7조(계약 기간 및 종료)</h3>
+                        <ol>
+                            <li>본 라이선스는 사용자가 '동의 및 음원 사용' 버튼을 클릭한 시점에 발효되며, 사용자가 영상을 삭제하거나 회사가 라이선스를 회수할 때까지 유효하다.</li>
+                            <li>회사는 사용자가 본 동의서를 위반할 경우 사전 통지 후 라이선스를 즉시 종료할 수 있다.</li>
+                            <li>계약 종료 후에도 이미 게시된 영상에 한해 60일간 수익 분배 조항이 적용된다. 단, §5.2에 따른 정책 위반 영상은 제외한다.</li>
+                        </ol>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제8조(개인정보 처리)</h3>
+                        <p>사용자는 정산을 위해 필요한 최소한의 개인정보(이메일, 결제정보 등) 제공에 동의한다. 개인정보 처리방침은 <a href="../pages/privacy.html" style="color: var(--color-primary);">[링크]</a>를 참조한다.</p>
+                    </article>
+
+                    <article class="terms-article">
+                        <h3>제9조(준거법 및 분쟁 해결)</h3>
+                        <p>본 동의서는 대한민국 법령을 준거법으로 하며, 분쟁은 서울중앙지방법원을 전속 관할로 한다.</p>
+                    </article>
+
+                    <div class="terms-checkbox">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="terms-agreement">
+                            <label for="terms-agreement">위 약관을 모두 읽고 이해하였으며 이에 동의합니다.</label>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-text-gray);">
+                            [동의] 버튼 클릭 시 전자서명이 완료됩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="footer-logo">Audionyx</div>
+                    <p class="footer-tagline" data-i18n="footer.tagline">쇼츠 음원 수익화 플랫폼</p>
+                </div>
+                
+                <div class="footer-nav-container">
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
+                        <ul class="footer-nav">
+                            <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+                            <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
+                            <li><a href="../pages/channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+                            <li><a href="../pages/track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
+                        <ul class="footer-nav">
+                            <li><a href="../pages/brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
+                            <li><a href="../pages/terms.html" data-i18n="footer.terms">이용약관</a></li>
+                            <li><a href="../pages/privacy.html" data-i18n="footer.privacy">개인정보처리방침</a></li>
+                            <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs">문의하기</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.contact">연락처</h4>
+                        <ul class="footer-nav">
+                            <li><a href="mailto:audionyx369@gmail.com">audionyx369@gmail.com</a></li>
+                            <li class="social-links">
+                                <a href="#" aria-label="YouTube">
+                                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                                </a>
+                                <a href="#" aria-label="Instagram">
+                                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                                </a>
+                                <a href="#" aria-label="Twitter">
+                                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copy" data-i18n="footer.copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
+                <p class="footer-location" data-i18n="footer.location">Seoul, Korea</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 모바일 네비게이터 -->
+    <nav class="mobile-nav">
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item">
+                <a href="../index.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    <span data-i18n="mobile.home">홈</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="../pages/find-music.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 18V5l12-2v13"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="16" r="3"/>
+                    </svg>
+                    <span data-i18n="mobile.music">음원</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="../pages/channel-management.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
+                        <polygon points="9.75,15.02 15.5,11.75 9.75,8.48"/>
+                    </svg>
+                    <span data-i18n="mobile.channel">채널</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="../pages/withdraw.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 12V7H5a2 2 0 010-4h14v4"/>
+                        <path d="M3 5v14a2 2 0 002 2h16v-5"/>
+                        <path d="M18 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    </svg>
+                    <span data-i18n="mobile.withdraw">정산</span>
+                </a>
+            </li>
+            <li class="mobile-nav-item">
+                <a href="../pages/brand.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                    </svg>
+                    <span data-i18n="mobile.brand">브랜드</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 채널톡 스크립트 -->
+    <script>
+        function openChannelTalk() {
+            if (typeof ChannelIO !== 'undefined') {
+                ChannelIO('show');
+            } else {
+                // 채널톡이 로드되지 않았을 경우 이메일로 대체
+                window.location.href = 'mailto:audionyx369@gmail.com?subject=문의사항&body=안녕하세요. 문의사항이 있습니다.';
+            }
+        }
+    </script>
+</body>
+</html> 

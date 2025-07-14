@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보처리방침 - AUDIONYX</title>
+    <meta name="description" content="AUDIONYX 개인정보 처리방침">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/common.css">
+    
+    <!-- Firebase v10 -->
+    <script type="module" src="../js/firebase.js?v=20250116"></script>
+    <script src="../js/i18n.js?v=20250116"></script>
+    
+    <style>
+        .privacy-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 12px;
+            border: 1px solid rgba(62, 180, 137, 0.2);
+            margin-top: 100px;
+            margin-bottom: 2rem;
+        }
+        
+        .privacy-title {
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .privacy-content {
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+        
+        .privacy-article {
+            margin-bottom: 2rem;
+        }
+        
+        .privacy-article h2 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .privacy-article h3 {
+            color: var(--color-secondary);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .privacy-article p {
+            margin-bottom: 1rem;
+        }
+        
+        .privacy-article ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .privacy-article li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .privacy-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: rgba(40, 40, 40, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .privacy-table th {
+            background: var(--color-primary);
+            color: var(--color-background);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .privacy-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(62, 180, 137, 0.2);
+        }
+        
+        .privacy-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .privacy-contact {
+            background: rgba(62, 180, 137, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .privacy-contact h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .privacy-date {
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .privacy-container {
+                margin-top: 80px;
+                padding: 1rem;
+            }
+            
+            .privacy-title {
+                font-size: 1.5rem;
+            }
+            
+            .privacy-table {
+                font-size: 0.9rem;
+            }
+            
+            .privacy-table th,
+            .privacy-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo-area">
+                <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+            </div>
+            <nav role="navigation" class="menu-area">
+                <ul>
+                    <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
+                    <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
+                    <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
+                    <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+                    <li><a href="channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+                    <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+                </ul>
+            </nav>
+            <!-- 언어 선택 토글 -->
+            <div class="language-toggle">
+                <span class="language-option active" data-lang="ko">KR</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="ja">JP</span>
+            </div>
+            <!-- 로그인 버튼 -->
+            <div class="auth-buttons">
+                <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
+            </div>
+            
+            <!-- 로그인 후 표시될 프로필 영역 -->
+            <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
+                <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
+                <span id="user-name" class="user-name"></span>
+                <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="producer.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
+                    </a>
+                    <a href="channel-management.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <path d="M21 15l-5-5L5 21"/>
+                        </svg>
+                        <span data-i18n="navbar.channel">채널 관리</span>
+                    </a>
+                    <a href="withdraw.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 12V7H5a2 2 0 010-4h14v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 5v14a2 2 0 002 2h16v-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18 12a2 2 0 100-4 2 2 0 000 4z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.withdraw">정산/출금</span>
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a href="#" class="dropdown-item logout" onclick="handleLogout()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="16,17 21,12 16,7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="21" y1="12" x2="9" y2="12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.logout">로그아웃</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="privacy-container">
+            <h1 class="privacy-title">🔒 AUDIONYX 개인정보 처리방침</h1>
+            <div class="privacy-date">
+                시행일자: 2025-01-01<br>
+                최종개정: 2025-01-01
+            </div>
+            
+            <div class="privacy-content">
+                <p>본 방침은 『개인정보 보호법』, 『정보통신망 이용촉진 및 정보보호 등에 관한 법률』, GDPR, CPRA 등 관련 법령을 준수하며, AUDIONYX(이하 "회사")가 운영하는 서비스(웹/앱 포함, 이하 "서비스")에서 수집·이용되는 개인정보 처리 원칙을 규정합니다.</p>
+                
+                <article class="privacy-article">
+                    <h2>1. 수집하는 개인정보 항목 및 수집 방법</h2>
+                    
+                    <table class="privacy-table">
+                        <thead>
+                            <tr>
+                                <th>구분</th>
+                                <th>항목</th>
+                                <th>수집 시점</th>
+                                <th>필수/선택</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>회원 가입</td>
+                                <td>이메일, 비밀번호, 닉네임, 국가</td>
+                                <td>회원 가입</td>
+                                <td>필수</td>
+                            </tr>
+                            <tr>
+                                <td>크리에이터 등록</td>
+                                <td>실명, 생년월일, 은행 계좌/PayPal, 세금 식별번호(국가별)</td>
+                                <td>크리에이터 등록</td>
+                                <td>필수</td>
+                            </tr>
+                            <tr>
+                                <td>결제·정산</td>
+                                <td>거래내역, 송금기록</td>
+                                <td>정산 처리 시</td>
+                                <td>필수</td>
+                            </tr>
+                            <tr>
+                                <td>고객지원</td>
+                                <td>문의 내용, 첨부파일, 통화 녹취</td>
+                                <td>고객센터 이용 시</td>
+                                <td>선택</td>
+                            </tr>
+                            <tr>
+                                <td>자동 수집</td>
+                                <td>IP, 쿠키, 서비스 이용기록, 기기정보(UA)</td>
+                                <td>서비스 이용 시</td>
+                                <td>필수</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p>회사는 만 14세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다.</p>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>2. 개인정보 이용 목적</h2>
+                    <ul>
+                        <li><strong>서비스 제공:</strong> 회원 식별, 로그인, 콘텐츠 업로드·스트리밍, 정산 대시보드 제공</li>
+                        <li><strong>정산 및 세무:</strong> 저작권료 지급, 세금 신고, 영수증·세금계산서 발행</li>
+                        <li><strong>고객지원:</strong> 문의 처리, 분쟁 해결, 공지사항 전달</li>
+                        <li><strong>서비스 개선 및 마케팅:</strong> 이용 패턴 분석, 신규 기능 개발, 선택적 프로모션 발송(수신동의 시)</li>
+                    </ul>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>3. 보유·이용 기간 및 파기</h2>
+                    
+                    <table class="privacy-table">
+                        <thead>
+                            <tr>
+                                <th>항목</th>
+                                <th>보유 기간</th>
+                                <th>법적 근거</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>회원 정보</td>
+                                <td>탈퇴 후 5년</td>
+                                <td>전자상거래법 §6(거래 기록 보존)</td>
+                            </tr>
+                            <tr>
+                                <td>정산·세무 정보</td>
+                                <td>5년</td>
+                                <td>국세기본법 §85-3</td>
+                            </tr>
+                            <tr>
+                                <td>로그 기록·IP</td>
+                                <td>3개월</td>
+                                <td>통신비밀보호법 §15-2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p>보유 기간 경과 시 지체 없이 파기하며, 전자 파일은 디지털 셰어딩, 문서는 분쇄·소각 방식으로 파기합니다.</p>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>4. 제3자 제공 및 국외 이전</h2>
+                    
+                    <table class="privacy-table">
+                        <thead>
+                            <tr>
+                                <th>제공받는 자</th>
+                                <th>제공 항목</th>
+                                <th>목적</th>
+                                <th>보유·이용 기간</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Too Lost Ltd. (EU/US)</td>
+                                <td>음원 메타데이터, ISRC, 크리에이터 이름</td>
+                                <td>음원 유통 및 정산</td>
+                                <td>유통 계약 종료 시까지</td>
+                            </tr>
+                            <tr>
+                                <td>YouTube LLC (US)</td>
+                                <td>음원·영상 CID 데이터</td>
+                                <td>저작권료 집계</td>
+                                <td>동의 철회 또는 계약 종료 시</td>
+                            </tr>
+                            <tr>
+                                <td>결제 PG사 (PayPal, Stripe 등)</td>
+                                <td>이름, 이메일, 결제정보</td>
+                                <td>저작권료 지급</td>
+                                <td>지급 완료 후 5년</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p>국외 이전 시 암호화 전송(SSL) 및 AWS Seoul→○○ Region 간 VPN 터널 적용.</p>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>5. 개인정보 처리 위탁</h2>
+                    <p>회사는 서비스 운영을 위해 아래 업체에 업무를 위탁하며, 계약 시 개인정보 보호 관련 의무를 명시·관리합니다.</p>
+                    <ul>
+                        <li><strong>아마존웹서비스(AWS):</strong> 클라우드 서버·DB 호스팅</li>
+                        <li><strong>SendGrid:</strong> 이메일 발송 시스템</li>
+                    </ul>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>6. 이용자 권리 및 행사 방법</h2>
+                    <p>이용자는 언제든지 개인정보 열람·정정·삭제를 요청할 수 있습니다.</p>
+                    <ul>
+                        <li>'계정 → 설정 → 개인정보' 메뉴 또는 audionyx369@gmail.com으로 요청 시 30일 이내 처리합니다.</li>
+                        <li>GDPR 적용 지역 이용자는 데이터 이동권(Portability), 처리 제한권을 행사할 수 있습니다.</li>
+                    </ul>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>7. 쿠키 및 유사 기술 사용</h2>
+                    <ul>
+                        <li><strong>세션 쿠키:</strong> 로그인 상태 유지 (브라우저 종료 시 만료)</li>
+                        <li><strong>분석 쿠키(GA4):</strong> 서비스 개선 목적 (옵트아웃 가능)</li>
+                        <li>광고 쿠키는 사용하지 않습니다.</li>
+                    </ul>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>8. 개인정보 보호책임자</h2>
+                    
+                    <table class="privacy-table">
+                        <thead>
+                            <tr>
+                                <th>구분</th>
+                                <th>담당자</th>
+                                <th>연락처</th>
+                                <th>이메일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>책임자</td>
+                                <td>CTO</td>
+                                <td>-</td>
+                                <td>a31713080@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>실무담당</td>
+                                <td>AUDIONYX</td>
+                                <td>-</td>
+                                <td>audionyx369@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>9. 권익침해 구제 방법</h2>
+                    <ul>
+                        <li>개인정보 분쟁조정위원회 (국번없이 1833-6972, www.kopico.go.kr)</li>
+                        <li>대검찰청 사이버수사과 (국번없이 1301)</li>
+                        <li>경찰청 사이버범죄 신고시스템 (ecrm.police.go.kr)</li>
+                    </ul>
+                </article>
+                
+                <article class="privacy-article">
+                    <h2>10. 방침 변경 고지</h2>
+                    <p>방침 변경 시 최소 7일 전 '공지사항' 및 이메일로 고지합니다. 중대 변경(수집 항목·목적 추가 등)은 30일 전 고지 후 동의 절차를 진행합니다.</p>
+                </article>
+                
+                <div class="privacy-contact">
+                    <h3>문의하기</h3>
+                    <p>개인정보 처리방침에 대한 문의사항이 있으시면 언제든 연락주세요.</p>
+                    <p><strong>이메일:</strong> audionyx369@gmail.com</p>
+                    <p><strong>담당자 이메일:</strong> a31713080@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo-section">
+                <a href="../index.html" class="footer-logo">
+                    <span style="color: var(--color-primary);">AUDIO</span><span style="color: white;">NYX</span>
+                </a>
+                
+                <div class="footer-nav-container">
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
+                        <ul class="footer-nav">
+                            <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+                            <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
+                            <li><a href="../pages/channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+                            <li><a href="../pages/track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+                        </ul>
+                    </div>
+                
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
+                        <ul class="footer-nav">
+                            <li><a href="../pages/brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
+                            <li><a href="../pages/terms.html" data-i18n="footer.terms">이용약관</a></li>
+                            <li><a href="../pages/privacy.html" data-i18n="footer.privacy">개인정보처리방침</a></li>
+                            <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs">문의하기</a></li>
+                        </ul>
+                    </div>
+                
+                <div class="footer-nav-group">
+                    <h4 class="footer-heading" data-i18n="footer.contact">연락처</h4>
+                    <ul class="footer-nav">
+                        <li><a href="mailto:audionyx369@gmail.com">audionyx369@gmail.com</a></li>
+                        <li class="social-links">
+                            <a href="#" aria-label="YouTube">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                            </a>
+                            <a href="#" aria-label="Instagram">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </a>
+                            <a href="#" aria-label="Twitter">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="footer-copy" data-i18n="footer.copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
+                <p class="footer-location" data-i18n="footer.location">Seoul, Korea</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- 채널톡 스크립트 -->
+    <script>
+        function openChannelTalk() {
+            if (typeof ChannelIO !== 'undefined') {
+                ChannelIO('show');
+            } else {
+                // 채널톡이 로드되지 않았을 경우 이메일로 대체
+                window.location.href = 'mailto:audionyx369@gmail.com?subject=문의사항&body=안녕하세요. 문의사항이 있습니다.';
+            }
+        }
+    </script>
+</body>
+</html> 

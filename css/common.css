@@ -498,7 +498,11 @@ ul {
 /* 데스크톱에서 모바일 프로필과 모바일 로그인 버튼 완전히 숨기기 */
 .mobile-user-profile,
 .mobile-auth-buttons,
-.mobile-auth-loading,
+.mobile-auth-loading {
+    display: none !important;
+}
+
+/* 모바일 언어 토글은 기본적으로 숨김 */
 .mobile-language-toggle {
     display: none !important;
 }
@@ -516,6 +520,11 @@ ul {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
+    }
+    
+    /* 데스크톱에서는 일반 언어 토글 표시 */
+    .language-toggle {
+        display: flex !important;
     }
 }
 
@@ -1519,7 +1528,7 @@ ul {
     .mobile-auth-buttons {
         display: flex;
         position: absolute;
-        right: 1rem;
+        left: calc(50% + 4rem);
         top: 50%;
         transform: translateY(-50%);
         /* 인증 상태 확인 중 깜빡임 방지 */
@@ -1537,7 +1546,7 @@ ul {
     .mobile-auth-loading {
         display: flex;
         position: absolute;
-        right: 1rem;
+        left: calc(50% + 4rem);
         top: 50%;
         transform: translateY(-50%);
         opacity: 1;
@@ -1545,10 +1554,10 @@ ul {
     }
 
     .mobile-btn-login {
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.8rem;
         border-radius: 20px;
         font-weight: 500;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         transition: all 0.3s ease;
         border: 1px solid var(--color-primary);
         background: rgba(0, 0, 0, 0.3);
@@ -1558,8 +1567,8 @@ ul {
         text-decoration: none;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        min-height: 36px;
+        gap: 0.3rem;
+        min-height: 32px;
     }
 
     .mobile-btn-login:hover {
@@ -1572,13 +1581,13 @@ ul {
     .mobile-user-profile {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.3rem;
         position: absolute;
-        right: 1rem;
+        left: calc(50% + 4rem);
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
-        padding: 0.5rem;
+        padding: 0.3rem 0.5rem;
         border-radius: 20px;
         transition: all 0.3s ease;
         background: rgba(0, 0, 0, 0.3);
@@ -1599,10 +1608,12 @@ ul {
     }
 
     .mobile-user-avatar {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
         border: 1px solid var(--color-primary);
+        object-fit: cover;
+        background-color: rgba(62, 180, 137, 0.1);
     }
 
     .mobile-user-name {
@@ -1679,20 +1690,27 @@ ul {
         opacity: 1;
     }
 
+    /* 데스크톱에서 언어 토글 숨기기 */
+    .language-toggle {
+        display: none !important;
+    }
+
     /* 모바일 언어 토글 */
     .mobile-language-toggle {
-        display: flex;
+        display: flex !important;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.2rem;
         position: absolute;
-        left: 1rem;
+        right: 0.5rem;
         top: 50%;
         transform: translateY(-50%);
-        padding: 0.3rem 0.6rem;
+        padding: 0.25rem 0.4rem;
         border-radius: 6px;
         background: rgba(0, 0, 0, 0.2);
         border: 1px solid rgba(62, 180, 137, 0.2);
         transition: all 0.3s ease;
+        z-index: 10;
+        font-size: 0.8rem;
     }
 
     .mobile-language-toggle:hover {
@@ -1879,6 +1897,48 @@ ul {
     .form-group textarea {
         padding: 10px 14px;
         font-size: 0.9rem;
+    }
+
+    /* 480px 이하에서 모바일 헤더 요소들 크기 조정 */
+    .mobile-language-toggle {
+        right: 0.25rem !important;
+        padding: 0.2rem 0.3rem !important;
+        font-size: 0.7rem !important;
+        gap: 0.15rem !important;
+    }
+
+    .mobile-user-profile {
+        left: calc(50% + 3rem) !important;
+        padding: 0.25rem 0.4rem !important;
+        gap: 0.25rem !important;
+    }
+
+    .mobile-auth-buttons,
+    .mobile-auth-loading {
+        left: calc(50% + 3rem) !important;
+    }
+
+    .mobile-user-avatar {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .mobile-btn-login {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.75rem !important;
+        min-height: 28px !important;
+    }
+}
+
+/* 매우 작은 화면 (360px 이하)에서 로고 옆 간격 더 줄이기 */
+@media (max-width: 360px) {
+    .mobile-user-profile {
+        left: calc(50% + 2.5rem) !important;
+    }
+
+    .mobile-auth-buttons,
+    .mobile-auth-loading {
+        left: calc(50% + 2.5rem) !important;
     }
 
     /* Removed existing .auth-modal-content media query here to consolidate */

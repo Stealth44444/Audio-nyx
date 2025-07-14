@@ -539,7 +539,7 @@ onAuthStateChanged(auth, async (user) => {
     // Firestore에서 사용자 정보 가져오기
     let displayedName = '사용자';
     let shouldShowProfileImage = false;
-    let profileImageUrl = '../images/default-avatar.png';
+    let profileImageUrl = '../images/default-avatar.svg';
     
     try {
       const userRef = doc(db, 'users', user.uid);
@@ -556,11 +556,14 @@ onAuthStateChanged(auth, async (user) => {
           displayedName = user.displayName || '사용자';
         }
         
-        // 프로필 이미지 설정
-        if (userData.provider === 'google' && userData.photoURL) {
+        // 프로필 이미지 설정 - Firebase Auth photoURL 우선 사용
+        const isGoogleLogin = user.providerData && user.providerData.some(provider => provider.providerId === 'google.com');
+        
+        if ((isGoogleLogin && user.photoURL) || (userData.provider === 'google' && userData.photoURL)) {
           shouldShowProfileImage = true;
-          profileImageUrl = userData.photoURL;
-          console.log('[onAuthStateChanged] 구글 로그인 사용자 - 프로필 이미지 표시:', userData.photoURL);
+          // Firebase Auth의 photoURL을 우선 사용, 없으면 Firestore의 photoURL 사용
+          profileImageUrl = user.photoURL || userData.photoURL;
+          console.log('[onAuthStateChanged] 구글 로그인 사용자 - 프로필 이미지 표시:', profileImageUrl);
         } else {
           // 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용
           shouldShowProfileImage = true;
@@ -580,7 +583,7 @@ onAuthStateChanged(auth, async (user) => {
         if (isGoogleLogin && user.photoURL) {
           shouldShowProfileImage = true;
           profileImageUrl = user.photoURL;
-          console.log('[onAuthStateChanged] 구글 로그인 사용자 (Firestore 문서 없음) - Firebase Auth 프로필 이미지 사용');
+          console.log('[onAuthStateChanged] 구글 로그인 사용자 (Firestore 문서 없음) - Firebase Auth 프로필 이미지 사용:', user.photoURL);
         } else {
           // 이메일/비밀번호 로그인 사용자 - 기본 프로필 이미지 사용
           shouldShowProfileImage = true;
@@ -606,16 +609,31 @@ onAuthStateChanged(auth, async (user) => {
       
       displayedName = user.displayName || '사용자';
       
-      // 에러 발생 시에도 기본 프로필 이미지 설정
+      // 에러 발생 시에도 프로필 이미지 설정 - Firebase Auth photoURL 우선 확인
       shouldShowProfileImage = true;
-      const isInSubDir = window.location.pathname.includes('/pages/');
-      profileImageUrl = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
-      console.log('[onAuthStateChanged] 에러 발생 - 기본 프로필 이미지 사용:', profileImageUrl);
+      const isGoogleLogin = user.providerData && user.providerData.some(provider => provider.providerId === 'google.com');
+      
+      if (isGoogleLogin && user.photoURL) {
+        profileImageUrl = user.photoURL;
+        console.log('[onAuthStateChanged] 에러 발생 - Firebase Auth 프로필 이미지 사용:', user.photoURL);
+      } else {
+        const isInSubDir = window.location.pathname.includes('/pages/');
+        profileImageUrl = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
+        console.log('[onAuthStateChanged] 에러 발생 - 기본 프로필 이미지 사용:', profileImageUrl);
+      }
     }
     
     // 데스크톱 프로필 업데이트
     if (userAvatar) {
       userAvatar.src = profileImageUrl || (window.location.pathname.includes('/pages/') ? '../images/default-avatar.svg' : 'images/default-avatar.svg');
+      
+      // 이미지 로드 실패 시 기본 이미지로 fallback
+      userAvatar.onerror = function() {
+        const isInSubDir = window.location.pathname.includes('/pages/');
+        this.src = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
+        console.log('[userAvatar] 프로필 이미지 로드 실패 - 기본 이미지로 대체');
+        this.onerror = null; // 무한 루프 방지
+      };
     }
     if (userName) {
       userName.textContent = displayedName;
@@ -624,6 +642,14 @@ onAuthStateChanged(auth, async (user) => {
     // 모바일 프로필 업데이트
     if (mobileUserAvatar) {
       mobileUserAvatar.src = profileImageUrl || (window.location.pathname.includes('/pages/') ? '../images/default-avatar.svg' : 'images/default-avatar.svg');
+      
+      // 이미지 로드 실패 시 기본 이미지로 fallback
+      mobileUserAvatar.onerror = function() {
+        const isInSubDir = window.location.pathname.includes('/pages/');
+        this.src = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
+        console.log('[mobileUserAvatar] 프로필 이미지 로드 실패 - 기본 이미지로 대체');
+        this.onerror = null; // 무한 루프 방지
+      };
     }
     if (mobileUserName) {
       mobileUserName.textContent = displayedName;
@@ -763,12 +789,12 @@ async function saveUserToFirestore(user, userData = {}) {
         displayName: user.displayName
       });
 
-      // 구글 로그인인 경우에만 photoURL 저장
-      if (isGoogleLogin && user.photoURL) {
-        userDataToSave.photoURL = user.photoURL;
-        console.log('[saveUserToFirestore] 구글 로그인 - photoURL 저장:', user.photoURL);
+      // photoURL 저장 - 구글 로그인이거나 기존에 photoURL이 있는 경우
+      if ((isGoogleLogin && user.photoURL) || userData.photoURL) {
+        userDataToSave.photoURL = user.photoURL || userData.photoURL;
+        console.log('[saveUserToFirestore] photoURL 저장:', userDataToSave.photoURL);
       } else {
-        console.log('[saveUserToFirestore] 이메일/비밀번호 로그인 - photoURL 저장하지 않음');
+        console.log('[saveUserToFirestore] photoURL 없음 - 저장하지 않음');
       }
 
       console.log('[saveUserToFirestore] 저장할 데이터:', userDataToSave);
@@ -872,7 +898,7 @@ async function handleLogout() {
     if (mobileUserAvatar) {
       // 페이지 경로에 따라 기본 아바타 경로 설정
       const isInSubDir = window.location.pathname.includes('/pages/');
-      mobileUserAvatar.src = isInSubDir ? '../images/default-avatar.png' : 'images/default-avatar.png';
+      mobileUserAvatar.src = isInSubDir ? '../images/default-avatar.svg' : 'images/default-avatar.svg';
     }
     if (mobileUserName) {
       mobileUserName.textContent = '게스트';

@@ -254,6 +254,21 @@ function bindLangToggles() {
         localStorage.setItem("lang", lang);
         translate();
         updateActive(lang);
+        
+        // 일본어로 변경 시 기존 이벤트 배너 제거
+        if (lang === 'ja') {
+          const existingBanner = document.querySelector('.event-floating-banner');
+          if (existingBanner) {
+            console.log('일본어 변경: 기존 이벤트 배너 제거');
+            existingBanner.remove();
+          }
+        }
+        // 다른 언어로 변경 시 이벤트 배너 다시 생성 (필요한 경우)
+        else if (window.eventBannerInstance && !document.querySelector('.event-floating-banner')) {
+          console.log('언어 변경: 이벤트 배너 다시 생성 시도');
+          // 기존 EventBanner 인스턴스의 createFloatingBanner 메서드 호출
+          window.eventBannerInstance.createFloatingBanner();
+        }
       });
     };
   });
@@ -301,6 +316,21 @@ window.changeLanguage = (lang) => {
       localStorage.setItem("lang", lang);
       translate();
       updateActive(lang);
+      
+      // 일본어로 변경 시 기존 이벤트 배너 제거
+      if (lang === 'ja') {
+        const existingBanner = document.querySelector('.event-floating-banner');
+        if (existingBanner) {
+          console.log('일본어 변경: 기존 이벤트 배너 제거');
+          existingBanner.remove();
+        }
+      }
+      // 다른 언어로 변경 시 이벤트 배너 다시 생성 (필요한 경우)
+      else if (window.eventBannerInstance && !document.querySelector('.event-floating-banner')) {
+        console.log('언어 변경: 이벤트 배너 다시 생성 시도');
+        // 기존 EventBanner 인스턴스의 createFloatingBanner 메서드 호출
+        window.eventBannerInstance.createFloatingBanner();
+      }
     });
   } else {
     console.error('i18next가 아직 초기화되지 않았습니다');

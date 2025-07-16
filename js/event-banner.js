@@ -38,6 +38,12 @@ class EventBanner {
 
     // 2025 트렌드 플로팅 이벤트 배너 생성 - 전환율 최적화
     createFloatingBanner() {
+        // 일본어 선택 시 이벤트 배너 표시하지 않음
+        if (window.i18next && window.i18next.language === 'ja') {
+            console.log('일본어 선택 상태: 이벤트 배너 표시하지 않음');
+            return;
+        }
+
         // 배너 표시 조건 체크 (테스트를 위해 localStorage 체크 임시 제거)
         if (document.querySelector('.event-floating-banner') || 
             window.location.pathname.includes('event-july-2025.html')) {
@@ -358,10 +364,10 @@ class EventBanner {
 // 이벤트 배너 자동 초기화
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        new EventBanner();
+        window.eventBannerInstance = new EventBanner();
     });
 } else {
-    new EventBanner();
+    window.eventBannerInstance = new EventBanner();
 }
 
 // 전역으로 EventBanner 클래스 노출

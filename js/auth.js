@@ -449,9 +449,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === signupModal) {
       closeSignupModal();
     }
-    if (e.target === onboardingModal) {
-      closeOnboardingModal();
-    }
+    // 온보딩 모달은 배경 클릭으로 닫히지 않도록 제거
+    // 추가정보 입력이 완료되어야만 닫힐 수 있음
+    // if (e.target === onboardingModal) {
+    //   closeOnboardingModal();
+    // }
   });
 
   // 드롭다운 메뉴 토글
@@ -874,6 +876,13 @@ async function handleGoogleLogin() {
 
 // 로그아웃 처리
 async function handleLogout() {
+  // 온보딩 모달이 열려있는 경우 로그아웃 방지
+  if (onboardingModal && onboardingModal.style.display === 'flex') {
+    showNotification('회원가입을 완료하기 위해 추가 정보를 입력해 주세요.', true);
+    console.log('[handleLogout] 온보딩 완료 전까지는 로그아웃할 수 없습니다.');
+    return;
+  }
+  
   try {
     await signOut(auth);
     
@@ -1647,21 +1656,49 @@ function openOnboardingModal() {
       onboardingModal.classList.add('show');
     }, 10);
     document.body.style.overflow = 'hidden';
+    
+    // 브라우저 새로고침/뒤로가기 방지
+    window.addEventListener('beforeunload', preventOnboardingExit);
+    
+    // 브라우저 히스토리 조작 방지
+    history.pushState(null, null, location.href);
+    window.addEventListener('popstate', preventOnboardingExit);
   }
 }
 
-// 온보딩 모달 닫기
-function closeOnboardingModal() {
+// 온보딩 도중 페이지 이탈 방지 함수
+function preventOnboardingExit(e) {
+  if (onboardingModal && onboardingModal.style.display === 'flex') {
+    e.preventDefault();
+    e.returnValue = ''; // Chrome에서 필요
+    showNotification('회원가입을 완료하기 위해 추가 정보를 입력해 주세요.', true);
+    return '회원가입을 완료하기 위해 추가 정보를 입력해 주세요.';
+  }
+}
+
+// 온보딩 모달 닫기 (완료된 경우에만)
+function closeOnboardingModal(force = false) {
   if (onboardingModal) {
-    onboardingModal.classList.remove('show');
-    setTimeout(() => {
-      onboardingModal.style.display = 'none';
-      document.body.style.overflow = '';
-      clearOnboardingErrors(); // 온보딩 에러 메시지 초기화
-      onboardingForm.reset(); // 폼 초기화
-      onboardingTermsAgreeRequiredCheckbox.checked = false;
-      onboardingMarketingAgreeOptionalCheckbox.checked = false;
-    }, 300);
+    // force가 true인 경우(온보딩 완료 시)에만 모달을 닫음
+    if (force) {
+      onboardingModal.classList.remove('show');
+      setTimeout(() => {
+        onboardingModal.style.display = 'none';
+        document.body.style.overflow = '';
+        clearOnboardingErrors(); // 온보딩 에러 메시지 초기화
+        onboardingForm.reset(); // 폼 초기화
+        onboardingTermsAgreeRequiredCheckbox.checked = false;
+        onboardingMarketingAgreeOptionalCheckbox.checked = false;
+        
+        // 페이지 이탈 방지 이벤트 리스너 제거
+        window.removeEventListener('beforeunload', preventOnboardingExit);
+        window.removeEventListener('popstate', preventOnboardingExit);
+      }, 300);
+    } else {
+      // 강제로 닫으려고 시도하는 경우 경고 메시지 표시
+      showNotification('회원가입을 완료하기 위해 추가 정보를 입력해 주세요.', true);
+      console.log('[closeOnboardingModal] 온보딩 완료 전까지는 모달을 닫을 수 없습니다.');
+    }
   }
 }
 
@@ -1758,7 +1795,7 @@ async function handleOnboarding(e) {
 
     console.log('[handleOnboarding] 온보딩 완료');
     showNotification('회원가입이 완료되었습니다.');
-    closeOnboardingModal();
+    closeOnboardingModal(true); // 온보딩 완료 시에만 모달 닫기
     
     // 여기에 메인 페이지로 이동하는 로직 추가 가능
     // window.location.href = '/main';

@@ -36,15 +36,75 @@
       <!-- 메일 발송 폼 -->
       <div id="mail-form-container" class="hidden">
         <form id="mail-form" class="space-y-6 bg-gray-800 p-6 rounded-lg">
+          <!-- 받는 사람 이메일 섹션 -->
           <div>
-            <label for="to" class="block text-sm font-medium mb-2">받는 사람 이메일</label>
-            <input 
-              id="to" 
-              type="email" 
-              class="w-full p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent" 
-              placeholder="recipient@example.com"
-              required
-            />
+            <label class="block text-sm font-medium mb-2">받는 사람 이메일</label>
+            
+            <!-- 입력 방식 선택 탭 -->
+            <div class="flex mb-4 bg-gray-700 rounded-lg p-1">
+              <button 
+                type="button" 
+                id="tab-individual" 
+                class="flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors bg-mint-500 text-white"
+              >
+                개별 추가
+              </button>
+              <button 
+                type="button" 
+                id="tab-bulk" 
+                class="flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors text-gray-300 hover:text-white"
+              >
+                일괄 입력
+              </button>
+            </div>
+
+            <!-- 개별 추가 방식 -->
+            <div id="individual-mode">
+              <div class="space-y-2 mb-3" id="email-list">
+                <div class="flex gap-2 email-item">
+                  <input 
+                    type="email" 
+                    class="flex-1 p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent email-input" 
+                    placeholder="recipient@example.com"
+                  />
+                  <button 
+                    type="button" 
+                    class="px-3 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors remove-email"
+                    title="이메일 제거"
+                  >
+                    ❌
+                  </button>
+                </div>
+              </div>
+              <button 
+                type="button" 
+                id="add-email" 
+                class="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+              >
+                ➕ 이메일 추가
+              </button>
+              <div class="mt-2 text-sm text-gray-400">
+                💡 팁: 각 이메일 주소를 개별적으로 추가하고 관리할 수 있습니다.
+              </div>
+            </div>
+
+            <!-- 일괄 입력 방식 -->
+            <div id="bulk-mode" class="hidden">
+              <textarea 
+                id="bulk-emails" 
+                rows="4"
+                class="w-full p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent" 
+                placeholder="여러 이메일 주소를 입력하세요. 쉼표(,), 세미콜론(;) 또는 줄바꿈으로 구분해주세요.&#10;&#10;예시:&#10;user1@example.com, user2@example.com&#10;user3@example.com"
+              ></textarea>
+              <div class="mt-2 text-sm text-gray-400">
+                💡 팁: 쉼표(,), 세미콜론(;) 또는 줄바꿈으로 여러 이메일을 구분해주세요.
+              </div>
+            </div>
+
+            <!-- 이메일 개수 표시 -->
+            <div class="mt-2 text-sm text-mint-400" id="email-count">
+              📧 발송 대상: <span id="email-count-number">1</span>개 이메일
+            </div>
           </div>
           
           <div>
@@ -139,6 +199,134 @@
     const closePreview = document.getElementById("close-preview");
     const result = document.getElementById("result");
 
+    // 새로운 이메일 관련 DOM 요소들
+    const tabIndividual = document.getElementById("tab-individual");
+    const tabBulk = document.getElementById("tab-bulk");
+    const individualMode = document.getElementById("individual-mode");
+    const bulkMode = document.getElementById("bulk-mode");
+    const emailList = document.getElementById("email-list");
+    const addEmailBtn = document.getElementById("add-email");
+    const bulkEmails = document.getElementById("bulk-emails");
+    const emailCountNumber = document.getElementById("email-count-number");
+
+    // 이메일 유효성 검증 함수
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email.trim());
+    }
+
+    // 이메일 개수 업데이트 함수
+    function updateEmailCount() {
+      const emails = getAllEmails();
+      emailCountNumber.textContent = emails.length;
+    }
+
+    // 모든 이메일 주소 수집 함수
+    function getAllEmails() {
+      if (individualMode.classList.contains("hidden")) {
+        // 일괄 입력 모드
+        const bulkText = bulkEmails.value.trim();
+        if (!bulkText) return [];
+        
+        return bulkText
+          .split(/[,;\n]/)
+          .map(email => email.trim())
+          .filter(email => email && isValidEmail(email));
+      } else {
+        // 개별 추가 모드
+        const emailInputs = emailList.querySelectorAll(".email-input");
+        const emails = [];
+        emailInputs.forEach(input => {
+          const email = input.value.trim();
+          if (email && isValidEmail(email)) {
+            emails.push(email);
+          }
+        });
+        return emails;
+      }
+    }
+
+    // 이메일 아이템 생성 함수
+    function createEmailItem() {
+      const emailItem = document.createElement("div");
+      emailItem.className = "flex gap-2 email-item";
+      emailItem.innerHTML = `
+        <input 
+          type="email" 
+          class="flex-1 p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent email-input" 
+          placeholder="recipient@example.com"
+        />
+        <button 
+          type="button" 
+          class="px-3 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors remove-email"
+          title="이메일 제거"
+        >
+          ❌
+        </button>
+      `;
+
+      // 이메일 입력 시 개수 업데이트
+      const emailInput = emailItem.querySelector(".email-input");
+      emailInput.addEventListener("input", updateEmailCount);
+
+      // 제거 버튼 이벤트
+      const removeBtn = emailItem.querySelector(".remove-email");
+      removeBtn.addEventListener("click", () => {
+        if (emailList.children.length > 1) {
+          emailItem.remove();
+          updateEmailCount();
+        }
+      });
+
+      return emailItem;
+    }
+
+    // 탭 전환 함수
+    function switchTab(mode) {
+      if (mode === "individual") {
+        tabIndividual.classList.add("bg-mint-500", "text-white");
+        tabIndividual.classList.remove("text-gray-300");
+        tabBulk.classList.remove("bg-mint-500", "text-white");
+        tabBulk.classList.add("text-gray-300");
+        
+        individualMode.classList.remove("hidden");
+        bulkMode.classList.add("hidden");
+      } else {
+        tabBulk.classList.add("bg-mint-500", "text-white");
+        tabBulk.classList.remove("text-gray-300");
+        tabIndividual.classList.remove("bg-mint-500", "text-white");
+        tabIndividual.classList.add("text-gray-300");
+        
+        bulkMode.classList.remove("hidden");
+        individualMode.classList.add("hidden");
+      }
+      updateEmailCount();
+    }
+
+    // 이벤트 리스너들
+    tabIndividual.addEventListener("click", () => switchTab("individual"));
+    tabBulk.addEventListener("click", () => switchTab("bulk"));
+
+    // 이메일 추가 버튼
+    addEmailBtn.addEventListener("click", () => {
+      const newEmailItem = createEmailItem();
+      emailList.appendChild(newEmailItem);
+      newEmailItem.querySelector(".email-input").focus();
+      updateEmailCount();
+    });
+
+    // 일괄 입력 텍스트 변경 시 개수 업데이트
+    bulkEmails.addEventListener("input", updateEmailCount);
+
+    // 초기 이메일 입력 필드에 이벤트 추가
+    document.querySelector(".email-input").addEventListener("input", updateEmailCount);
+    document.querySelector(".remove-email").addEventListener("click", (e) => {
+      if (emailList.children.length > 1) {
+        e.target.closest(".email-item").remove();
+        updateEmailCount();
+      }
+    });
+
     // 인증 상태 변경 감지
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -187,39 +375,90 @@
     mailForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       
-      const to = document.getElementById("to").value.trim();
+      const emails = getAllEmails();
       const subject = document.getElementById("subject").value.trim();
       const html = document.getElementById("html").value;
 
-      if (!to || !subject || !html) {
-        showResult("모든 필드를 입력해주세요.", "error");
+      // 유효성 검증
+      if (emails.length === 0) {
+        showResult("❌ 유효한 이메일 주소를 하나 이상 입력해주세요.", "error");
         return;
       }
 
-      // 인증 상태 디버깅
-      const currentUser = auth.currentUser;
-      console.log("현재 사용자:", currentUser);
-      console.log("인증 토큰:", currentUser ? await currentUser.getIdToken() : "없음");
+      if (!subject || !html) {
+        showResult("❌ 제목과 메일 내용을 입력해주세요.", "error");
+        return;
+      }
 
-      // 전송할 데이터 디버깅
-      const mailData = { to, subject, html };
-      console.log("전송할 데이터:", mailData);
-      console.log("데이터 타입:", {
-        to: typeof to,
-        subject: typeof subject, 
-        html: typeof html
-      });
+      // 인증 상태 확인
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        showResult("❌ 로그인이 필요합니다.", "error");
+        return;
+      }
+
+      console.log("발송 대상 이메일:", emails);
+      console.log("이메일 개수:", emails.length);
+
+      // 전송할 데이터 준비
+      const mailData = { 
+        to: emails.length === 1 ? emails[0] : emails, // 단일 이메일이면 문자열, 여러 개면 배열
+        subject, 
+        html 
+      };
 
       sendBtn.disabled = true;
-      sendBtn.textContent = "📨 발송 중...";
+      sendBtn.textContent = `📨 ${emails.length}개 이메일로 발송 중...`;
 
       try {
         const sendMail = httpsCallable(functions, "sendMail");
         const result = await sendMail(mailData);
         console.log("Functions 응답:", result);
         
-        showResult(`✅ 메일이 성공적으로 발송되었습니다!\n받는 사람: ${to}`, "success");
+        const responseData = result.data;
+        const sentCount = responseData.count || emails.length;
+        const sentEmails = responseData.sentTo || emails;
+        
+        showResult(
+          `✅ 메일이 성공적으로 발송되었습니다!\n` +
+          `📧 발송 완료: ${sentCount}개 이메일\n` +
+          `📋 수신자: ${sentEmails.slice(0, 3).join(", ")}${sentEmails.length > 3 ? ` 외 ${sentEmails.length - 3}명` : ""}`, 
+          "success"
+        );
+        
+        // 폼 초기화
         mailForm.reset();
+        
+        // 개별 추가 모드라면 이메일 목록도 초기화
+        if (!individualMode.classList.contains("hidden")) {
+          emailList.innerHTML = `
+            <div class="flex gap-2 email-item">
+              <input 
+                type="email" 
+                class="flex-1 p-3 text-black rounded-lg border border-gray-300 focus:ring-2 focus:ring-mint-500 focus:border-transparent email-input" 
+                placeholder="recipient@example.com"
+              />
+              <button 
+                type="button" 
+                class="px-3 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors remove-email"
+                title="이메일 제거"
+              >
+                ❌
+              </button>
+            </div>
+          `;
+          // 이벤트 리스너 다시 추가
+          document.querySelector(".email-input").addEventListener("input", updateEmailCount);
+          document.querySelector(".remove-email").addEventListener("click", (e) => {
+            if (emailList.children.length > 1) {
+              e.target.closest(".email-item").remove();
+              updateEmailCount();
+            }
+          });
+        }
+        
+        updateEmailCount();
+        
       } catch (error) {
         console.error("메일 발송 오류:", error);
         console.error("오류 상세:", {
@@ -227,7 +466,12 @@
           message: error.message,
           details: error.details
         });
-        showResult(`❌ 메일 발송에 실패했습니다.\n오류: ${error.message}`, "error");
+        showResult(
+          `❌ 메일 발송에 실패했습니다.\n` +
+          `💬 오류 메시지: ${error.message}\n` +
+          `🎯 대상 이메일: ${emails.length}개`, 
+          "error"
+        );
       } finally {
         sendBtn.disabled = false;
         sendBtn.textContent = "📨 메일 발송";

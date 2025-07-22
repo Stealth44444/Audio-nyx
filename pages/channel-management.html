@@ -495,7 +495,15 @@
             <!-- 숏폼 컨텐츠 링크 테이블 섹션 -->
             <div class="content-links-section">
               <div class="content-links-header">
-                <h3 class="content-links-title" data-i18n="channelManagement.contentLinks.title">Audionyx 음원 사용 숏폼 컨텐츠 링크</h3>
+                <div class="content-links-title-area">
+                  <h3 class="content-links-title" data-i18n="channelManagement.contentLinks.title">Audionyx 음원 사용 숏폼 컨텐츠 링크</h3>
+                  <button id="toggle-content-links" class="btn-toggle-content">
+                    <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                    <span id="toggle-content-text" data-i18n="channelManagement.contentLinks.showLinks">목록 보기</span>
+                  </button>
+                </div>
                 <button id="add-content-link" class="btn-add-content">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="12" y1="5" x2="12" y2="19"/>
@@ -505,35 +513,62 @@
                 </button>
               </div>
               
-              <!-- 컨텐츠 링크 테이블 -->
-              <div class="content-table-wrapper">
-                <table class="content-table">
-                  <thead>
-                    <tr>
-                      <th data-i18n="channelManagement.contentLinks.contentUrl">컨텐츠 URL</th>
-                      <th data-i18n="channelManagement.contentLinks.channel">채널</th>
-                      <th data-i18n="channelManagement.contentLinks.audioTrack">사용된 음원</th>
-                      <th data-i18n="channelManagement.contentLinks.platform">플랫폼</th>
-                      <th data-i18n="channelManagement.contentLinks.addedDate">등록일</th>
-                      <th data-i18n="channelManagement.contentLinks.actions">관리</th>
-                    </tr>
-                  </thead>
-                  <tbody id="content-links-list">
-                    <!-- 컨텐츠 링크 목록이 JavaScript에 의해 여기에 추가됩니다 -->
-                  </tbody>
-                </table>
-              </div>
-              
-              <!-- 컨텐츠 링크 없음 메시지 -->
-              <div id="no-content-links" class="no-content-links">
-                <div class="empty-state">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
-                    <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
-                  </svg>
-                  <h3 data-i18n="channelManagement.contentLinks.noLinks">등록된 컨텐츠 링크가 없습니다</h3>
-                  <p data-i18n="channelManagement.contentLinks.noLinksDesc">Audionyx 음원을 사용한 숏폼 컨텐츠 링크를 등록하여 정확한 저작권료 산정에 도움을 주세요.</p>
-                  <button id="add-first-content-link" class="btn-primary" data-i18n="channelManagement.contentLinks.addFirstLink">첫 컨텐츠 링크 등록하기</button>
+              <!-- 컨텐츠 링크 테이블 컨테이너 (기본 숨김) -->
+              <div id="content-links-container" class="content-links-container hidden">
+                <!-- 컨텐츠 링크 테이블 -->
+                <div class="content-table-wrapper">
+                  <table class="content-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="channelManagement.contentLinks.contentUrl">컨텐츠 URL</th>
+                        <th data-i18n="channelManagement.contentLinks.channel">채널</th>
+                        <th data-i18n="channelManagement.contentLinks.audioTrack">사용된 음원</th>
+                        <th data-i18n="channelManagement.contentLinks.platform">플랫폼</th>
+                        <th data-i18n="channelManagement.contentLinks.addedDate">등록일</th>
+                        <th data-i18n="channelManagement.contentLinks.actions">관리</th>
+                      </tr>
+                    </thead>
+                    <tbody id="content-links-list">
+                      <!-- 컨텐츠 링크 목록이 JavaScript에 의해 여기에 추가됩니다 -->
+                    </tbody>
+                  </table>
+                </div>
+                
+                <!-- 페이지네이션 -->
+                <div id="content-pagination" class="content-pagination">
+                  <div class="pagination-info">
+                    <span id="pagination-info-text">1-10 of 50 items</span>
+                  </div>
+                  <div class="pagination-controls">
+                    <button id="prev-page" class="pagination-btn" disabled>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15,18 9,12 15,6"></polyline>
+                      </svg>
+                      이전
+                    </button>
+                    <div id="page-numbers" class="page-numbers">
+                      <!-- 페이지 번호들이 동적으로 생성됩니다 -->
+                    </div>
+                    <button id="next-page" class="pagination-btn">
+                      다음
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- 컨텐츠 링크 없음 메시지 -->
+                <div id="no-content-links" class="no-content-links">
+                  <div class="empty-state">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                      <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                    </svg>
+                    <h3 data-i18n="channelManagement.contentLinks.noLinks">등록된 컨텐츠 링크가 없습니다</h3>
+                    <p data-i18n="channelManagement.contentLinks.noLinksDesc">Audionyx 음원을 사용한 숏폼 컨텐츠 링크를 등록하여 정확한 저작권료 산정에 도움을 주세요.</p>
+                    <button id="add-first-content-link" class="btn-primary" data-i18n="channelManagement.contentLinks.addFirstLink">첫 컨텐츠 링크 등록하기</button>
+                  </div>
                 </div>
               </div>
             </div>

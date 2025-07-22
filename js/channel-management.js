@@ -1163,6 +1163,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 컨텐츠 링크 관련 변수
   let contentLinksData = [];
   let contentModalOpen = false;
+  
+  // 페이지네이션 관련 변수
+  let contentLinksCurrentPage = 1;
+  let contentLinksPerPage = 10;
+  let contentLinksVisible = false;
 
   // 컨텐츠 링크 초기화
   function initializeContentLinks() {
@@ -1173,6 +1178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelContentBtn = document.getElementById('cancel-content-link');
     const contentForm = document.getElementById('content-link-form');
     const contentUrlInput = document.getElementById('content-url');
+    const toggleContentBtn = document.getElementById('toggle-content-links');
     
     // 이벤트 리스너 추가
     if (addContentBtn) {
@@ -1181,6 +1187,23 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (addFirstContentBtn) {
       addFirstContentBtn.addEventListener('click', openContentModal);
+    }
+    
+    // 토글 버튼 이벤트 리스너
+    if (toggleContentBtn) {
+      toggleContentBtn.addEventListener('click', toggleContentLinksVisibility);
+    }
+    
+    // 페이지네이션 이벤트 리스너
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    
+    if (prevPageBtn) {
+      prevPageBtn.addEventListener('click', () => goToPage(contentLinksCurrentPage - 1));
+    }
+    
+    if (nextPageBtn) {
+      nextPageBtn.addEventListener('click', () => goToPage(contentLinksCurrentPage + 1));
     }
     
     if (closeContentModalBtn) {
@@ -1530,13 +1553,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 컨텐츠 링크 테이블 렌더링
+  // 컨텐츠 링크 테이블 렌더링 (페이지네이션 포함)
   function renderContentLinksTable() {
     console.log('renderContentLinksTable 호출됨 - 데이터 개수:', contentLinksData.length);
     
     const tableBody = document.getElementById('content-links-list');
     const noLinksEl = document.getElementById('no-content-links');
     const tableWrapper = document.querySelector('.content-table-wrapper');
+    const paginationEl = document.getElementById('content-pagination');
     
     console.log('DOM 요소 확인 - tableBody:', !!tableBody, 'noLinksEl:', !!noLinksEl, 'tableWrapper:', !!tableWrapper);
     
@@ -1549,6 +1573,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('컨텐츠 링크 없음 - 빈 상태 표시');
       tableWrapper.style.display = 'none';
       noLinksEl.style.display = 'block';
+      if (paginationEl) paginationEl.style.display = 'none';
       return;
     }
     
@@ -1556,7 +1581,15 @@ document.addEventListener('DOMContentLoaded', () => {
     tableWrapper.style.display = 'block';
     noLinksEl.style.display = 'none';
     
-    tableBody.innerHTML = contentLinksData.map(link => {
+    // 페이지네이션 계산
+    const totalItems = contentLinksData.length;
+    const totalPages = Math.ceil(totalItems / contentLinksPerPage);
+    const startIndex = (contentLinksCurrentPage - 1) * contentLinksPerPage;
+    const endIndex = Math.min(startIndex + contentLinksPerPage, totalItems);
+    const paginatedData = contentLinksData.slice(startIndex, endIndex);
+    
+    // 테이블 내용 렌더링 (페이지네이션된 데이터 사용)
+    tableBody.innerHTML = paginatedData.map(link => {
       // 채널 정보 가져오기
       const channel = channelsData.find(ch => ch.id === link.channelId);
       const channelDisplay = channel ? 
@@ -1597,7 +1630,116 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr>
       `;
     }).join('');
+    
+    // 페이지네이션 UI 업데이트
+    updatePagination(totalItems, totalPages);
   }
+
+  // 컨텐츠 링크 토글 기능
+  function toggleContentLinksVisibility() {
+    const container = document.getElementById('content-links-container');
+    const toggleBtn = document.getElementById('toggle-content-links');
+    const toggleText = document.getElementById('toggle-content-text');
+    const toggleIcon = toggleBtn.querySelector('.toggle-icon');
+    
+    if (!container || !toggleBtn || !toggleText || !toggleIcon) return;
+    
+    contentLinksVisible = !contentLinksVisible;
+    
+    if (contentLinksVisible) {
+      container.classList.remove('hidden');
+      toggleBtn.classList.add('expanded');
+      toggleText.textContent = '목록 숨기기';
+    } else {
+      container.classList.add('hidden');
+      toggleBtn.classList.remove('expanded');
+      toggleText.textContent = '목록 보기';
+    }
+  }
+
+  // 페이지네이션 UI 업데이트
+  function updatePagination(totalItems, totalPages) {
+    const paginationEl = document.getElementById('content-pagination');
+    const paginationInfo = document.getElementById('pagination-info-text');
+    const prevBtn = document.getElementById('prev-page');
+    const nextBtn = document.getElementById('next-page');
+    const pageNumbers = document.getElementById('page-numbers');
+    
+    if (!paginationEl || totalPages <= 1) {
+      if (paginationEl) paginationEl.style.display = 'none';
+      return;
+    }
+    
+    paginationEl.style.display = 'flex';
+    
+    // 페이지 정보 업데이트
+    const startItem = (contentLinksCurrentPage - 1) * contentLinksPerPage + 1;
+    const endItem = Math.min(contentLinksCurrentPage * contentLinksPerPage, totalItems);
+    if (paginationInfo) {
+      paginationInfo.textContent = `${startItem}-${endItem} of ${totalItems} items`;
+    }
+    
+    // 이전/다음 버튼 상태 업데이트
+    if (prevBtn) {
+      prevBtn.disabled = contentLinksCurrentPage <= 1;
+    }
+    if (nextBtn) {
+      nextBtn.disabled = contentLinksCurrentPage >= totalPages;
+    }
+    
+    // 페이지 번호 생성
+    if (pageNumbers) {
+      pageNumbers.innerHTML = generatePageNumbers(totalPages);
+    }
+  }
+
+  // 페이지 번호 생성
+  function generatePageNumbers(totalPages) {
+    const current = contentLinksCurrentPage;
+    const delta = 2; // 현재 페이지 주변에 보여줄 페이지 수
+    const range = [];
+    const rangeWithDots = [];
+    
+    for (let i = Math.max(2, current - delta); i <= Math.min(totalPages - 1, current + delta); i++) {
+      range.push(i);
+    }
+    
+    if (current - delta > 2) {
+      rangeWithDots.push(1, '...');
+    } else {
+      rangeWithDots.push(1);
+    }
+    
+    rangeWithDots.push(...range);
+    
+    if (current + delta < totalPages - 1) {
+      rangeWithDots.push('...', totalPages);
+    } else if (totalPages > 1) {
+      rangeWithDots.push(totalPages);
+    }
+    
+    return rangeWithDots.map(i => {
+      if (i === '...') {
+        return '<span class="page-ellipsis">...</span>';
+      }
+      
+      const isActive = i === current;
+      return `<button class="page-number ${isActive ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+    }).join('');
+  }
+
+  // 페이지 이동
+  function goToPage(page) {
+    const totalPages = Math.ceil(contentLinksData.length / contentLinksPerPage);
+    
+    if (page < 1 || page > totalPages) return;
+    
+    contentLinksCurrentPage = page;
+    renderContentLinksTable();
+  }
+
+  // 전역 함수로 노출 (HTML onclick에서 사용)
+  window.goToPage = goToPage;
 
   // 플랫폼 아이콘 가져오기
   function getPlatformIcon(platform) {

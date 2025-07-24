@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('issued-key-container').style.display = 'block';
         document.getElementById('issued-key').textContent = emojiKey;
         
-        console.log('채널 추가 성공:', docRef.id);
+        console.log('채널 추가 성공! 문서 ID:', currentUser.uid);
         
         // 등록 확인 후 모달 닫기
         setTimeout(() => {
@@ -1472,26 +1472,70 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    const contentLinkData = {
+    // 고유 ID 생성 (timestamp 기반)
+    const uniqueId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const newContentLink = {
+      id: uniqueId,
       channelId,
       channelUrl: selectedChannel.originalUrl || selectedChannel.channelUrl || selectedChannel.url || '',
       channelPlatform: selectedChannel.platform || 'youtube',
       contentUrl,
       audioTrack,
       platform: platformInfo.platform,
-      userId: currentUser.uid,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      createdAt: new Date() // 클라이언트 타임스탬프 사용
+    };
+    
+    // 유저 정보 수집
+    const userInfo = {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      displayName: currentUser.displayName || '익명 사용자',
+      photoURL: currentUser.photoURL || null
     };
     
     // 디버깅 로그
-    console.log('콘텐츠 링크 제출 시도:', contentLinkData);
+    console.log('콘텐츠 링크 제출 시도:', newContentLink);
     console.log('현재 사용자:', currentUser.uid);
     console.log('선택된 채널:', selectedChannel);
     
     try {
-      const docRef = await addDoc(collection(db, 'contentLinks'), contentLinkData);
-      console.log('컨텐츠 링크가 추가되었습니다:', docRef.id);
+      // 사용자별 contentLinks 문서 참조
+      const userContentLinksDocRef = doc(db, 'contentLinks', currentUser.uid);
+      
+      // 기존 문서가 있는지 확인
+      const userContentLinksDoc = await getDoc(userContentLinksDocRef);
+      
+      if (userContentLinksDoc.exists()) {
+        // 기존 문서에 contentLink 추가
+        const existingData = userContentLinksDoc.data();
+        const existingContentLinks = existingData.contentLinks || [];
+        
+        console.log('기존 컨텐츠 링크 수:', existingContentLinks.length);
+        
+        // 새 contentLink를 기존 배열에 추가
+        const updatedContentLinks = [...existingContentLinks, newContentLink];
+        
+        await updateDoc(userContentLinksDocRef, {
+          contentLinks: updatedContentLinks,
+          userInfo: userInfo, // 유저 정보 업데이트
+          updatedAt: serverTimestamp()
+        });
+        
+        console.log('기존 문서에 컨텐츠 링크 추가 성공!');
+      } else {
+        // 새 문서 생성
+        await setDoc(userContentLinksDocRef, {
+          userInfo: userInfo,
+          contentLinks: [newContentLink],
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+        
+        console.log('새 유저 컨텐츠 링크 문서 생성 성공!');
+      }
+      
+      console.log('Firestore 저장 성공! 사용자 ID:', currentUser.uid);
       
       showNotification('컨텐츠 링크가 성공적으로 등록되었습니다! 🎉', 'success');
       closeContentModal();
@@ -1514,42 +1558,222 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     try {
-      console.log('컨텐츠 링크 쿼리 시작 - userId:', currentUser.uid);
+      console.log('컨텐츠 링크 문서 로드 시작 - userId:', currentUser.uid);
       
-      const q = query(
-        collection(db, 'contentLinks'),
-        where('userId', '==', currentUser.uid)
-      );
+      // 현재 사용자의 contentLinks 문서를 직접 참조
+      const userContentLinksDocRef = doc(db, 'contentLinks', currentUser.uid);
+      const userContentLinksDoc = await getDoc(userContentLinksDocRef);
       
-      const querySnapshot = await getDocs(q);
-      console.log('쿼리 결과 문서 수:', querySnapshot.docs.length);
-      
-      // 모든 문서를 맵핑한 후 삭제되지 않은 것만 필터링
-      const allLinksData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      
-      // 소프트 삭제된 문서 제외 (deletedAt 필드가 없는 것만)
-      contentLinksData = allLinksData.filter(link => !link.deletedAt);
-      
-      console.log('전체 문서 수:', allLinksData.length);
-      console.log('활성 컨텐츠 링크 수:', contentLinksData.length);
-      console.log('로드된 컨텐츠 링크 데이터:', contentLinksData);
+      if (userContentLinksDoc.exists()) {
+        const userData = userContentLinksDoc.data();
+        const userContentLinks = userData.contentLinks || [];
+        
+        console.log('컨텐츠 링크 문서 발견, 링크 수:', userContentLinks.length);
+        console.log('유저 정보:', userData.userInfo);
+        
+        // contentLinks 배열을 contentLinksData에 할당
+        contentLinksData = userContentLinks.map((link) => ({
+          ...link,
+          userInfo: userData.userInfo // 유저 정보 포함
+        }));
+        
+        console.log('로드된 컨텐츠 링크 데이터:', contentLinksData);
+      } else {
+        console.log('컨텐츠 링크 문서가 존재하지 않음, 기존 개별 문서 마이그레이션 시도...');
+        
+        // 기존 개별 문서 형태가 있는지 확인하고 마이그레이션 시도
+        const migrationResult = await migrateOldContentLinks();
+        
+        if (migrationResult.success) {
+          console.log(`마이그레이션 완료: ${migrationResult.migratedCount}개 링크 변환됨`);
+          
+          // 마이그레이션 후 새로운 문서에서 데이터 로드
+          const newUserContentLinksDoc = await getDoc(userContentLinksDocRef);
+          if (newUserContentLinksDoc.exists()) {
+            const userData = newUserContentLinksDoc.data();
+            const userContentLinks = userData.contentLinks || [];
+            
+            contentLinksData = userContentLinks.map((link) => ({
+              ...link,
+              userInfo: userData.userInfo
+            }));
+            
+            console.log('마이그레이션 후 로드된 컨텐츠 링크 데이터:', contentLinksData);
+          } else {
+            contentLinksData = [];
+          }
+        } else {
+          console.log('마이그레이션할 기존 데이터가 없음');
+          contentLinksData = [];
+        }
+      }
       
       // 클라이언트에서 정렬 (createdAt 기준 내림차순)
       contentLinksData.sort((a, b) => {
-        const aTime = a.createdAt?.toDate?.() || new Date(0);
-        const bTime = b.createdAt?.toDate?.() || new Date(0);
-        return bTime - aTime;
+        const aTime = a.createdAt;
+        const bTime = b.createdAt;
+        
+        // createdAt이 없는 경우 처리
+        if (!aTime && !bTime) return 0;
+        if (!aTime) return 1;
+        if (!bTime) return -1;
+        
+        let aTimeValue, bTimeValue;
+        
+        // Firestore Timestamp 객체인 경우
+        if (aTime.toDate && bTime.toDate) {
+          aTimeValue = aTime.toDate().getTime();
+          bTimeValue = bTime.toDate().getTime();
+        }
+        // Date 객체인 경우
+        else if (aTime instanceof Date && bTime instanceof Date) {
+          aTimeValue = aTime.getTime();
+          bTimeValue = bTime.getTime();
+        }
+        // 문자열인 경우
+        else if (typeof aTime === 'string' && typeof bTime === 'string') {
+          aTimeValue = new Date(aTime).getTime();
+          bTimeValue = new Date(bTime).getTime();
+        }
+        // 타입이 다른 경우 Date로 변환 시도
+        else {
+          try {
+            aTimeValue = aTime.toDate ? aTime.toDate().getTime() : new Date(aTime).getTime();
+            bTimeValue = bTime.toDate ? bTime.toDate().getTime() : new Date(bTime).getTime();
+          } catch (error) {
+            console.warn('날짜 정렬 중 오류:', error);
+            return 0;
+          }
+        }
+        
+        return bTimeValue - aTimeValue; // 내림차순 (최신순)
       });
       
+      console.log('현재 사용자의 컨텐츠 링크 수:', contentLinksData.length);
       console.log('컨텐츠 링크 테이블 렌더링 시작');
       renderContentLinksTable();
       
     } catch (error) {
       console.error('컨텐츠 링크 로드 중 오류:', error);
       showNotification('컨텐츠 링크를 불러오는 중 오류가 발생했습니다.', 'error');
+    }
+  }
+
+  // 기존 개별 contentLinks 문서를 새로운 구조로 마이그레이션
+  async function migrateOldContentLinks() {
+    console.log('=== 기존 contentLinks 마이그레이션 시작 ===');
+    
+    if (!currentUser) {
+      console.error('마이그레이션: 사용자가 로그인하지 않음');
+      return { success: false, migratedCount: 0 };
+    }
+    
+    try {
+      // 먼저 현재 사용자 UID가 기존 개별 문서 ID와 동일한지 확인 (충돌 방지)
+      const currentUserDocRef = doc(db, 'contentLinks', currentUser.uid);
+      const currentUserDoc = await getDoc(currentUserDocRef);
+      
+      if (currentUserDoc.exists()) {
+        // 이미 새로운 구조의 문서가 존재하면 마이그레이션 불필요
+        console.log('마이그레이션: 이미 새로운 구조의 문서가 존재함');
+        return { success: false, migratedCount: 0 };
+      }
+      
+      // 현재 사용자의 기존 개별 contentLinks 문서들 조회
+      const oldContentLinksQuery = query(
+        collection(db, 'contentLinks'),
+        where('userId', '==', currentUser.uid)
+      );
+      
+      const oldContentLinksSnapshot = await getDocs(oldContentLinksQuery);
+      
+      if (oldContentLinksSnapshot.empty) {
+        console.log('마이그레이션: 기존 개별 문서가 없음');
+        return { success: false, migratedCount: 0 };
+      }
+      
+      console.log(`마이그레이션: ${oldContentLinksSnapshot.docs.length}개의 기존 문서 발견`);
+      
+      // 기존 문서들을 새로운 구조로 변환
+      const migratedContentLinks = [];
+      const documentsToDelete = [];
+      
+      oldContentLinksSnapshot.docs.forEach((docSnapshot) => {
+        const data = docSnapshot.data();
+        
+        // 고유 ID 생성 (기존 문서 ID 사용 또는 새로 생성)
+        const uniqueId = data.id || `migrated_${docSnapshot.id}_${Date.now()}`;
+        
+        const migratedLink = {
+          id: uniqueId,
+          channelId: data.channelId || '',
+          channelUrl: data.channelUrl || '',
+          channelPlatform: data.channelPlatform || 'youtube',
+          contentUrl: data.contentUrl || '',
+          audioTrack: data.audioTrack || '',
+          platform: data.platform || 'youtube',
+          createdAt: data.createdAt || new Date(),
+          // 마이그레이션 정보 추가
+          migratedAt: new Date(),
+          originalDocId: docSnapshot.id
+        };
+        
+        migratedContentLinks.push(migratedLink);
+        documentsToDelete.push(docSnapshot.id);
+      });
+      
+      // 유저 정보 수집
+      const userInfo = {
+        uid: currentUser.uid,
+        email: currentUser.email,
+        displayName: currentUser.displayName || '익명 사용자',
+        photoURL: currentUser.photoURL || null
+      };
+      
+      // 새로운 사용자별 문서 생성
+      const userContentLinksDocRef = doc(db, 'contentLinks', currentUser.uid);
+      
+      await setDoc(userContentLinksDocRef, {
+        userInfo: userInfo,
+        contentLinks: migratedContentLinks,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        migratedAt: serverTimestamp(),
+        migrationInfo: {
+          originalDocumentCount: oldContentLinksSnapshot.docs.length,
+          migratedAt: serverTimestamp()
+        }
+      });
+      
+      console.log(`마이그레이션: 새로운 문서 생성 완료 (${migratedContentLinks.length}개 링크)`);
+      
+      // 기존 개별 문서들 삭제 (선택사항 - 안전을 위해 주석 처리)
+      /*
+      console.log('마이그레이션: 기존 개별 문서들 삭제 중...');
+      const deletePromises = documentsToDelete.map(docId => 
+        deleteDoc(doc(db, 'contentLinks', docId))
+      );
+      await Promise.all(deletePromises);
+      console.log(`마이그레이션: ${documentsToDelete.length}개 기존 문서 삭제 완료`);
+      */
+      
+      console.log('=== 마이그레이션 성공 ===');
+      showNotification(`기존 데이터 ${migratedContentLinks.length}개를 새로운 구조로 변환했습니다.`, 'success');
+      
+      return { 
+        success: true, 
+        migratedCount: migratedContentLinks.length,
+        deletedCount: 0 // 실제로는 삭제하지 않음
+      };
+      
+    } catch (error) {
+      console.error('마이그레이션 중 오류 발생:', error);
+      console.error('오류 코드:', error.code);
+      console.error('오류 메시지:', error.message);
+      
+      showNotification('데이터 마이그레이션 중 오류가 발생했습니다.', 'error');
+      
+      return { success: false, migratedCount: 0, error: error.message };
     }
   }
 
@@ -1770,17 +1994,57 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
+    if (!currentUser) {
+      console.error('사용자가 로그인하지 않음');
+      showNotification('로그인이 필요합니다.', 'error');
+      return;
+    }
+    
     console.log('=== 컨텐츠 링크 삭제 시작 ===');
     console.log('삭제 대상 linkId:', linkId);
-    console.log('현재 사용자:', currentUser ? currentUser.uid : 'null');
+    console.log('현재 사용자:', currentUser.uid);
     
     try {
       console.log('Firestore 삭제 작업 시작...');
       
-      // 실제로 Firestore 컬렉션에서 문서 삭제
-      await deleteDoc(doc(db, 'contentLinks', linkId));
+      // 현재 사용자의 contentLinks 문서 참조
+      const userContentLinksDocRef = doc(db, 'contentLinks', currentUser.uid);
+      const userContentLinksDoc = await getDoc(userContentLinksDocRef);
       
-      console.log('✅ Firestore 삭제 완료!');
+      if (!userContentLinksDoc.exists()) {
+        console.error('사용자의 컨텐츠 링크 문서가 존재하지 않음');
+        showNotification('삭제하려는 링크가 존재하지 않습니다.', 'error');
+        return;
+      }
+      
+      const userData = userContentLinksDoc.data();
+      const existingContentLinks = userData.contentLinks || [];
+      
+      // 삭제할 링크가 존재하는지 확인
+      const linkIndex = existingContentLinks.findIndex(link => link.id === linkId);
+      
+      if (linkIndex === -1) {
+        console.error('삭제하려는 링크를 찾을 수 없음:', linkId);
+        showNotification('삭제하려는 링크가 존재하지 않습니다.', 'error');
+        // 최신 상태 반영을 위해 목록 새로고침
+        loadContentLinks();
+        return;
+      }
+      
+      console.log(`링크 발견됨 (인덱스: ${linkIndex}), 배열에서 제거 중...`);
+      
+      // 배열에서 해당 링크 제거
+      const updatedContentLinks = existingContentLinks.filter(link => link.id !== linkId);
+      
+      console.log(`업데이트된 링크 수: ${updatedContentLinks.length} (기존: ${existingContentLinks.length})`);
+      
+      // Firestore 문서 업데이트
+      await updateDoc(userContentLinksDocRef, {
+        contentLinks: updatedContentLinks,
+        updatedAt: serverTimestamp()
+      });
+      
+      console.log('✅ Firestore 업데이트 완료!');
       console.log('=== 컨텐츠 링크 삭제 성공 ===');
       showNotification('컨텐츠 링크가 완전히 삭제되었습니다.', 'success');
       
@@ -1797,11 +2061,11 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // 오류 상세 정보 로그
       if (error.code === 'permission-denied') {
-        console.error('🚫 권한 오류 - 사용자가 이 문서를 삭제할 권한이 없음');
-        console.error('현재 사용자 UID:', currentUser ? currentUser.uid : 'null');
+        console.error('🚫 권한 오류 - 사용자가 이 문서를 수정할 권한이 없음');
+        console.error('현재 사용자 UID:', currentUser.uid);
         showNotification('삭제 권한이 없습니다. 본인이 등록한 링크만 삭제할 수 있습니다.', 'error');
       } else if (error.code === 'not-found') {
-        console.error('📄 문서를 찾을 수 없음 - 이미 삭제되었거나 존재하지 않음');
+        console.error('📄 문서를 찾을 수 없음 - 사용자의 컨텐츠 링크 문서가 존재하지 않음');
         showNotification('삭제하려는 링크가 존재하지 않습니다.', 'error');
         // 목록 새로고침하여 최신 상태 반영
         loadContentLinks();

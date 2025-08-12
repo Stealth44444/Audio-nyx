@@ -72,20 +72,20 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Audionyx 프로듀서
+          <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
         </a>
         <a href="faq.html" class="dropdown-item">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          FAQ
+          <span data-i18n="navbar.faq">FAQ</span>
         </a>
         <a href="#" class="dropdown-item" id="btn-logout">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          로그아웃
+          <span data-i18n="navbar.logout">로그아웃</span>
         </a>
       </div>
     </div>
@@ -331,58 +331,58 @@
                   </svg>
                 </div>
                 <div class="notice-content">
-                  <p class="notice-title">💡 트랙 제목 입력 팁</p>
-                  <p class="notice-text">더 나은 맞춤 제작을 위해 <strong>유튜브 채널명</strong>을 트랙 제목에 포함하여 입력하는 것을 추천드립니다.</p>
-                  <p class="notice-example">예시: "[채널명] 브이로그 BGM", "[채널명] 오프닝 음악"</p>
+                  <p class="notice-title" data-i18n="trackProduction.form.tipTitle">💡 트랙 제목 입력 팁</p>
+                  <p class="notice-text" data-i18n="trackProduction.form.tipText">더 나은 맞춤 제작을 위해 <strong>유튜브 채널명</strong>을 트랙 제목에 포함하여 입력하는 것을 추천드립니다.</p>
+                  <p class="notice-example" data-i18n="trackProduction.form.tipExample">예시: "[채널명] 브이로그 BGM", "[채널명] 오프닝 음악"</p>
                 </div>
               </div>
               
               <div class="form-row">
             <div class="form-group">
-              <label for="track-title">트랙 제목 <span class="required">*</span></label>
-              <input type="text" id="track-title" placeholder="예: [내 채널명] 브이로그 BGM" required>
+              <label for="track-title"><span data-i18n="trackProduction.form.trackTitle">트랙 제목</span> <span class="required">*</span></label>
+              <input type="text" id="track-title" data-i18n-placeholder="trackProduction.form.trackTitlePlaceholder" placeholder="예: [내 채널명] 브이로그 BGM" required>
               <div class="error-message" id="title-error"></div>
             </div>
             
             <div class="form-group">
-              <label for="track-bpm">BPM <span class="required">*</span></label>
-                  <input type="number" id="track-bpm" placeholder="60-200" min="60" max="200" required>
+              <label for="track-bpm"><span data-i18n="trackProduction.form.bpm">BPM</span> <span class="required">*</span></label>
+                  <input type="number" id="track-bpm" data-i18n-placeholder="trackProduction.form.bpmPlaceholder" placeholder="60-200" min="60" max="200" required>
               <div class="error-message" id="bpm-error"></div>
                 </div>
             </div>
             
               <div class="form-row">
             <div class="form-group">
-              <label for="track-genre">장르 <span class="required">*</span></label>
+              <label for="track-genre"><span data-i18n="trackProduction.form.genre">장르</span> <span class="required">*</span></label>
               <select id="track-genre" required>
-                <option value="" disabled selected>장르를 선택해주세요</option>
-                <option value="신스웨이브">신스웨이브</option>
-                <option value="앰비언트">앰비언트</option>
-                <option value="일렉트로닉">일렉트로닉</option>
-                <option value="로파이">로파이</option>
-                <option value="팝">팝</option>
-                <option value="힙합">힙합</option>
-                <option value="재즈">재즈</option>
-                <option value="기타">기타</option>
+                <option value="" disabled selected data-i18n="trackProduction.form.genreSelect">장르를 선택해주세요</option>
+                <option value="신스웨이브" data-i18n="trackProduction.form.genres.synthwave">신스웨이브</option>
+                <option value="앰비언트" data-i18n="trackProduction.form.genres.ambient">앰비언트</option>
+                <option value="일렉트로닉" data-i18n="trackProduction.form.genres.electronic">일렉트로닉</option>
+                <option value="로파이" data-i18n="trackProduction.form.genres.lofi">로파이</option>
+                <option value="팝" data-i18n="trackProduction.form.genres.pop">팝</option>
+                <option value="힙합" data-i18n="trackProduction.form.genres.hiphop">힙합</option>
+                <option value="재즈" data-i18n="trackProduction.form.genres.jazz">재즈</option>
+                <option value="기타" data-i18n="trackProduction.form.genres.other">기타</option>
               </select>
               <div class="error-message" id="genre-error"></div>
             </div>
             
             <div class="form-group">
-                  <label for="track-email">음원 받을 이메일 <span class="required">*</span></label>
-                  <input type="email" id="track-email" placeholder="이메일 주소를 입력하세요" required>
+                  <label for="track-email"><span data-i18n="trackProduction.form.email">음원 받을 이메일</span> <span class="required">*</span></label>
+                  <input type="email" id="track-email" data-i18n-placeholder="trackProduction.form.emailPlaceholder" placeholder="이메일 주소를 입력하세요" required>
                   <div class="error-message" id="email-error"></div>
                 </div>
               </div>
               
               <div class="form-group full-width">
-              <label for="track-description">설명/요청 사항 <span class="required">*</span></label>
-                <textarea id="track-description" placeholder="원하는 음원의 분위기, 특징 등을 자세히 설명해주세요" rows="4" required></textarea>
+              <label for="track-description"><span data-i18n="trackProduction.form.description">설명/요청 사항</span> <span class="required">*</span></label>
+                <textarea id="track-description" data-i18n-placeholder="trackProduction.form.descriptionPlaceholder" placeholder="원하는 음원의 분위기, 특징 등을 자세히 설명해주세요" rows="4" required></textarea>
               <div class="error-message" id="description-error"></div>
             </div>
             
               <div class="form-group full-width">
-              <label for="track-ref-url">참고 영상 URL (선택)</label>
+              <label for="track-ref-url"><span data-i18n="trackProduction.form.refUrl">참고 영상 URL (선택)</span></label>
                               <input type="text" id="track-ref-url" placeholder="YouTube 등의 참고 영상 URL" data-i18n-placeholder="trackProduction.form.refUrlPlaceholder">
               <div class="error-message" id="url-error"></div>
             </div>
@@ -395,7 +395,7 @@
                     <path d="M2 2l7.586 7.586"/>
                     <circle cx="11" cy="11" r="2"/>
                   </svg>
-                  <span>요청 제출</span>
+                  <span data-i18n="trackProduction.form.submit">요청 제출</span>
                 </button>
             </div>
           </form>
@@ -425,7 +425,7 @@
           <!-- 로딩 상태 표시 -->
           <div id="request-loading" class="request-loading">
             <div class="loading-spinner-large"></div>
-            <p>요청 목록을 불러오는 중...</p>
+            <p data-i18n="trackProduction.loading">요청 목록을 불러오는 중...</p>
           </div>
           
           <!-- 요청 없음 메시지 -->
@@ -436,8 +436,8 @@
                 <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
                 <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
               </svg>
-              <h3>아직 요청이 없습니다</h3>
-              <p>위 폼을 통해 맞춤 트랙 제작을 요청해보세요.</p>
+              <h3 data-i18n="trackProduction.noRequests.title">아직 요청이 없습니다</h3>
+              <p data-i18n="trackProduction.noRequests.description">위 폼을 통해 맞춤 트랙 제작을 요청해보세요.</p>
             </div>
           </div>
           
@@ -446,11 +446,11 @@
             <table class="request-table">
               <thead>
                 <tr>
-                  <th>트랙 제목</th>
-                  <th>장르</th>
-                  <th>BPM</th>
-                  <th>상태</th>
-                  <th>요청일</th>
+                  <th data-i18n="trackProduction.table.trackTitle">트랙 제목</th>
+                  <th data-i18n="trackProduction.table.genre">장르</th>
+                  <th data-i18n="trackProduction.table.bpm">BPM</th>
+                  <th data-i18n="trackProduction.table.status">상태</th>
+                  <th data-i18n="trackProduction.table.requestDate">요청일</th>
                 </tr>
               </thead>
               <tbody id="request-list">

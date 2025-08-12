@@ -85,7 +85,7 @@ function mapTagToNewSystem(originalTag, type) {
   return null;
 }
 
-// 영문 태그를 한국어로 변환하는 매핑 시스템 (2025 업데이트)
+// 영문 태그를 한국어/일본어로 변환하는 매핑 시스템 (2025 업데이트)
 const tagKoreanMappings = {
   mood: {
     // === 새 태그 매핑 (우선순위) ===
@@ -276,11 +276,203 @@ const tagKoreanMappings = {
   }
 };
 
-// 영문 태그를 한국어로 변환하는 함수
-function convertTagToKorean(tag, type) {
+// 일본어 태그 매핑 시스템
+const tagJapaneseMappings = {
+  mood: {
+    // === 새 태그 매핑 (우선순위) ===
+    'joyful': '楽しい・明るい', // 밝고 경쾌한 긍정 에너지
+    'energetic': 'エネルギッシュ', // BPM 빠르고 활동적인 느낌
+    'inspiring': '感動・希望', // 용기·긍정·희망 고조
+    'chill': 'リラックス・チル', // 로파이·카페·브이로그용
+    'romantic': 'ロマンチック', // 사랑·달콤·따뜻함
+    'playful': '楽しい・可愛い', // 게임·코믹·키즈
+    'groovy': 'グルーヴィ・ファンキー', // 리듬·스윙·댄스
+    'epic': '壮大・スケール', // 영화 트레일러·게임 OST
+    'dramatic': 'ドラマチック', // 감정 기승전결, 서사
+    'dark': 'ダーク', // 음울·딥·고딕
+    'tense': '緊張・サスペンス', // 비트·펄스·몰입
+    'aggressive': '攻撃的・怒り', // 하드록·트랩·배틀
+    'mysterious': 'ミステリアス', // 몽환·SF·퍼즐
+    'sad': '悲しい・憂鬱', // 발라드·이별·회상
+    
+    // === 기존 태그 호환성 매핑 ===
+    'powerful': 'エネルギッシュ',
+    'exciting': 'エネルギッシュ',
+    'hopeful': '感動・希望',
+    'uplifting': '感動・希望',
+    'peaceful': 'リラックス・チル',
+    'carefree': 'リラックス・チル',
+    'love': 'ロマンチック',
+    'sexy': 'ロマンチック',
+    'funny': '楽しい・可愛い',
+    'serious': 'ドラマチック',
+    'angry': '攻撃的・怒り',
+    'scary': 'ミステリアス',
+    
+    // === 추가 호환 태그들 ===
+    'calm': 'リラックス・チル',
+    'melancholic': '悲しい・憂鬱',
+    'nostalgic': 'ロマンチック',
+    'cheerful': '楽しい・明るい',
+    'suspenseful': '緊張・サスペンス',
+    'cinematic': '壮大・スケール',
+    'ambient': 'リラックス・チル',
+    'emotional': 'ドラマチック',
+    'dreamy': 'ロマンチック',
+    'intense': '緊張・サスペンス',
+    'gentle': 'リラックス・チル',
+    'happy': '楽しい・明るい',
+    'relaxing': 'リラックス・チル',
+    'funky': 'グルーヴィ・ファンキー',
+    'moody': 'ダーク',
+    'gothic': 'ダーク',
+    'tension': '緊張・サスペンス',
+    'enigmatic': 'ミステリアス'
+  },
+  usecase: {
+    // === 새 태그 매핑 (우선순위) ===
+    'docu / education & science': 'ドキュメンタリー・教育・科学',
+    'docu_education': 'ドキュメンタリー・教育・科学',
+    'documentary_education': 'ドキュメンタリー・教育・科学',
+    'education_science': 'ドキュメンタリー・教育・科学',
+    
+    'travel & aerial scenic': '旅行・ドローン・風景',
+    'travel_aerial': '旅行・ドローン・風景',
+    'aerial_scenic': '旅行・ドローン・風景',
+    
+    'fashion & beauty': 'ファッション・ビューティー',
+    'fashion_beauty': 'ファッション・ビューティー',
+    
+    'lifestyle / vlog': 'Vlog・ライフスタイル',
+    'lifestyle_vlog': 'Vlog・ライフスタイル',
+    'vlog_lifestyle': 'Vlog・ライフスタイル',
+    
+    'gaming & esports': 'ゲーミング・eスポーツ',
+    'gaming_esports': 'ゲーミング・eスポーツ',
+    'gaming_e-sports': 'ゲーミング・eスポーツ',
+    
+    'tech & innovation': 'テック・産業・革新',
+    'tech_innovation': 'テック・産業・革新',
+    'technology_innovation': 'テック・産業・革新',
+    
+    'animation & narration': 'アニメーション・ナレーション',
+    'animation_narration': 'アニメーション・ナレーション',
+    
+    'party, events & entertainment': 'パーティー・イベント・娯楽',
+    'party_events': 'パーティー・イベント・娯楽',
+    'events_entertainment': 'パーティー・イベント・娯楽',
+    
+    'wellness & asmr': 'ウェルネス・瞑想・アンビエント',
+    'wellness_asmr': 'ウェルネス・瞑想・アンビエント',
+    'meditation_asmr': 'ウェルネス・瞑想・アンビエント',
+    
+    'motivation & sports': 'スポーツ・モチベーション',
+    'sports & motivation': 'スポーツ・モチベーション',
+    'sports_motivation': 'スポーツ・モチベーション',
+    
+    'pets & nature': 'ペット・動物・自然',
+    'pets_nature': 'ペット・動物・自然',
+    'animals_nature': 'ペット・動物・自然',
+    
+    'trailers & branding': 'トレーラー・イントロ・ロゴ',
+    'trailers_branding': 'トレーラー・イントロ・ロゴ',
+    'branding_intro': 'トレーラー・イントロ・ロゴ',
+    
+    'diy & how-to': 'DIY・チュートリアル',
+    'diy_howto': 'DIY・チュートリアル',
+    'tutorial_howto': 'DIY・チュートリアル',
+    
+    'holiday & seasonal': 'ホリデー・季節',
+    'holiday_seasonal': 'ホリデー・季節',
+    'seasonal_holiday': 'ホリデー・季節',
+    
+    'art & culture': 'アート・文化',
+    'art_culture': 'アート・文化',
+    'culture_art': 'アート・文化',
+    
+    'news & current affairs': 'ニュース・時事',
+    'news_affairs': 'ニュース・時事',
+    'current_affairs': 'ニュース・時事',
+    
+    'drive': 'ドライブ',
+    'automotive': 'ドライブ',
+    'car_review': 'ドライブ',
+    
+    // === 기존 단일 태그 호환성 매핑 ===
+    'documentary': 'ドキュメンタリー・教育・科学',
+    'education': 'ドキュメンタリー・教育・科学',
+    'science': 'ドキュメンタリー・教育・科学',
+    'study': 'ドキュメンタリー・教育・科学',
+    'travel': '旅行・ドローン・風景',
+    'drone': '旅行・ドローン・風景',
+    'aerial': '旅行・ドローン・風景',
+    'scenic': '旅行・ドローン・風景',
+    'fashion': 'ファッション・ビューティー',
+    'beauty': 'ファッション・ビューティー',
+    'runway': 'ファッション・ビューティー',
+    'lifestyle': 'Vlog・ライフスタイル',
+    'vlog': 'Vlog・ライフスタイル',
+    'daily': 'Vlog・ライフスタイル',
+    'gaming': 'ゲーミング・eスポーツ',
+    'esports': 'ゲーミング・eスポーツ',
+    'game': 'ゲーミング・eスポーツ',
+    'competitive': 'ゲーミング・eスポーツ',
+    'tech': 'テック・産業・革新',
+    'technology': 'テック・産業・革新',
+    'innovation': 'テック・産業・革新',
+    'unbox': 'テック・産業・革新',
+    'review': 'テック・産業・革新',
+    'animation': 'アニメーション・ナレーション',
+    'kids': 'アニメーション・ナレーション',
+    'cartoon': 'アニメーション・ナレーション',
+    'narration': 'アニメーション・ナレーション',
+    'party': 'パーティー・イベント・娯楽',
+    'event': 'パーティー・イベント・娯楽',
+    'celebration': 'パーティー・イベント・娯楽',
+    'entertainment': 'パーティー・イベント・娯楽',
+    'wellness': 'ウェルネス・瞑想・アンビエント',
+    'meditation': 'ウェルネス・瞑想・アンビエント',
+    'asmr': 'ウェルネス・瞑想・アンビエント',
+    'rain asmr': 'ウェルネス・瞑想・アンビエント',
+    'ambient': 'ウェルネス・瞑想・アンビエント',
+    'sports': 'スポーツ・モチベーション',
+    'fitness': 'スポーツ・モチベーション',
+    'workout': 'スポーツ・モチベーション',
+    'motivation': 'スポーツ・モチベーション',
+    'pets': 'ペット・動物・自然',
+    'nature': 'ペット・動物・自然',
+    'animals': 'ペット・動物・自然',
+    'trailer': 'トレーラー・イントロ・ロゴ',
+    'branding': 'トレーラー・イントロ・ロゴ',
+    'intro': 'トレーラー・イントロ・ロゴ',
+    'logo': 'トレーラー・イントロ・ロゴ',
+    'cinematic': 'トレーラー・イントロ・ロゴ',
+    'diy': 'DIY・チュートリアル',
+    'tutorial': 'DIY・チュートリアル',
+    'how-to': 'DIY・チュートリアル',
+    'recipe': 'DIY・チュートリアル',
+    'holiday': 'ホリデー・季節',
+    'seasonal': 'ホリデー・季節',
+    'christmas': 'ホリデー・季節',
+    'halloween': 'ホリデー・季節',
+    'art': 'アート・文化',
+    'culture': 'アート・文化',
+    'creative': 'アート・文化',
+    'performance': 'アート・文化',
+    'news': 'ニュース・時事',
+    'current affairs': 'ニュース・時事',
+    'business': 'ニュース・時事',
+    'car': 'ドライブ',
+    'transportation': 'ドライブ'
+  }
+};
+
+// 영문 태그를 현재 언어로 변환하는 함수
+function convertTagToLocalizedString(tag, type, language = 'ko') {
   if (!tag) return '';
   
-  const mappings = tagKoreanMappings[type];
+  // 언어에 따라 적절한 매핑 선택
+  const mappings = language === 'ja' ? tagJapaneseMappings[type] : tagKoreanMappings[type];
   if (!mappings) return tag;
   
   // 직접 매핑 확인
@@ -295,14 +487,24 @@ function convertTagToKorean(tag, type) {
   }
   
   // 부분 매칭 확인
-  for (const [englishTag, koreanTag] of Object.entries(mappings)) {
+  for (const [englishTag, localizedTag] of Object.entries(mappings)) {
     if (lowerTag.includes(englishTag.toLowerCase()) || englishTag.toLowerCase().includes(lowerTag)) {
-      return koreanTag;
+      return localizedTag;
     }
   }
   
   // 매핑이 없으면 원본 반환
   return tag;
+}
+
+// 하위 호환성을 위한 한국어 변환 함수
+function convertTagToKorean(tag, type) {
+  return convertTagToLocalizedString(tag, type, 'ko');
+}
+
+// 일본어 변환 함수
+function convertTagToJapanese(tag, type) {
+  return convertTagToLocalizedString(tag, type, 'ja');
 }
 
 // 검색어 자동완성 및 추천을 위한 데이터 구조
@@ -1386,17 +1588,20 @@ function renderTracksPage(page) {
               const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
               const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
               
+              // 현재 언어 가져오기
+              const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
+              
               const moodTags = moods.map(mood => ({
-                korean: convertTagToKorean(mood, 'mood'),
+                localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
                 type: 'mood'
               }));
               const usecaseTags = usecases.map(usecase => ({
-                korean: convertTagToKorean(usecase, 'usecase'),
+                localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage),
                 type: 'usecase'
               }));
               
               return [...moodTags, ...usecaseTags].map(tag => 
-                `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.korean}">${tag.korean}</span>`
+                `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
               ).join('');
             })()}
           </div>
@@ -1664,22 +1869,28 @@ function showMiniPlayer(track, mainWavesurfer) {
     const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
     const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
     
+    // 현재 언어 가져오기
+    const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
+    
     const moodTags = moods.map(mood => ({
-      korean: convertTagToKorean(mood, 'mood'),
+      localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
       type: 'mood'
     }));
     const usecaseTags = usecases.map(usecase => ({
-      korean: convertTagToKorean(usecase, 'usecase'), 
+      localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage), 
       type: 'usecase'
     }));
     
     const allTags = [...moodTags, ...usecaseTags];
     
+    // 태그 없음 텍스트도 현재 언어에 맞게 표시
+    const noTagsText = currentLanguage === 'ja' ? 'タグなし' : '태그 없음';
+    
     miniPlayerTags.innerHTML = allTags.length > 0 
       ? allTags.map(tag => 
-          `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.korean}">${tag.korean}</span>`
+          `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
         ).join('')
-      : '<span class="findmusic-item-tag">태그 없음</span>';
+      : `<span class="findmusic-item-tag">${noTagsText}</span>`;
   }
   
   // 시간 정보
@@ -2267,3 +2478,96 @@ function playTrack(trackElement, wavesurfer) {
 
 // 중복된 DOMContentLoaded 이벤트 리스너 제거됨
 // 검색 박스 등장 애니메이션은 initializePage 함수 내에서 처리
+
+// 언어 변경 시 트랙 태그들을 업데이트하는 함수
+function updateTrackTagsForLanguageChange() {
+  console.log('[updateTrackTagsForLanguageChange] 언어 변경으로 인한 태그 업데이트 시작');
+  
+  const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
+  console.log('[updateTrackTagsForLanguageChange] 현재 언어:', currentLanguage);
+  
+  // 트랙 아이템들의 태그 업데이트
+  const trackItems = document.querySelectorAll('.findmusic-track-list-item');
+  trackItems.forEach(trackItem => {
+    const trackId = trackItem.getAttribute('data-track-id');
+    const trackData = tracks.find(t => t.id === trackId) || filteredTracks.find(t => t.id === trackId);
+    
+    if (trackData) {
+      const tagsContainer = trackItem.querySelector('.findmusic-item-tags');
+      if (tagsContainer) {
+        const moods = trackData.mood ? trackData.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
+        const usecases = trackData.usecase ? trackData.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
+        
+        const moodTags = moods.map(mood => ({
+          localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
+          type: 'mood'
+        }));
+        const usecaseTags = usecases.map(usecase => ({
+          localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage),
+          type: 'usecase'
+        }));
+        
+        const allTags = [...moodTags, ...usecaseTags];
+        
+        tagsContainer.innerHTML = allTags.length > 0 
+          ? allTags.map(tag => 
+              `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
+            ).join('')
+          : '';
+      }
+    }
+  });
+  
+  // 미니플레이어 태그도 업데이트
+  const miniPlayerElement = document.getElementById('mini-player');
+  if (miniPlayerElement && miniPlayerElement.classList.contains('active')) {
+    const miniPlayerTags = document.getElementById('mini-player-tags');
+    const miniPlayerTitle = document.getElementById('mini-player-title');
+    
+    if (miniPlayerTags && miniPlayerTitle) {
+      const currentTitle = miniPlayerTitle.textContent;
+      const trackData = tracks.find(t => t.title === currentTitle) || filteredTracks.find(t => t.title === currentTitle);
+      
+      if (trackData) {
+        const moods = trackData.mood ? trackData.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
+        const usecases = trackData.usecase ? trackData.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
+        
+        const moodTags = moods.map(mood => ({
+          localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
+          type: 'mood'
+        }));
+        const usecaseTags = usecases.map(usecase => ({
+          localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage),
+          type: 'usecase'
+        }));
+        
+        const allTags = [...moodTags, ...usecaseTags];
+        const noTagsText = currentLanguage === 'ja' ? 'タグなし' : '태그 없음';
+        
+        miniPlayerTags.innerHTML = allTags.length > 0 
+          ? allTags.map(tag => 
+              `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
+            ).join('')
+          : `<span class="findmusic-item-tag">${noTagsText}</span>`;
+      }
+    }
+  }
+  
+  console.log('[updateTrackTagsForLanguageChange] 태그 업데이트 완료');
+}
+
+// 언어 변경 이벤트 리스너 등록
+document.addEventListener('DOMContentLoaded', function() {
+  // 언어 토글 버튼에 이벤트 리스너 추가
+  const languageOptions = document.querySelectorAll('.language-option, .mobile-language-option');
+  languageOptions.forEach(option => {
+    option.addEventListener('click', function() {
+      // 언어 변경 후 태그 업데이트를 위해 약간의 지연을 둠
+      setTimeout(() => {
+        updateTrackTagsForLanguageChange();
+      }, 100);
+    });
+  });
+  
+  console.log('[find-music.js] 언어 변경 이벤트 리스너 등록 완료');
+});

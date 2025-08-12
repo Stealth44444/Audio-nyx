@@ -70,6 +70,7 @@
     "insightsTitle": "Audionyx 트랙으로<br>당신이 <strong>놓친 수익을</strong> 찾아보세요",
     "insightsSubtitle": "지금까지 <strong>놓쳤던 모든 수익 기회</strong>를 되돌려 드립니다",
     "insightsCta": "3단계 확인하기",
+    "chartTitle": "1 쇼츠 당 조회수별 실수익 비교 (₩)",
     "mobileRevenueTitle": "Audionyx로<br>당신의 수익이 달라집니다",
     "mobileRevenueSubtitle": "같은 조회수, 더 많은 수익<br>지금까지 놓쳤던 음원 수익을 되찾으세요",
     "whyTitle": "Why Audionyx?",
@@ -230,7 +231,8 @@
     "process": {
       "title": "채널 관리 프로세스 안내",
       "headline": "이모지 키로 간편하게 다양한 채널 인증",
-      "description": "Audionyx는 YouTube, TikTok, Instagram 등 다양한 플랫폼의 채널을 이모지 키를 통해 안전하고 간편하게 인증할 수 있는 시스템을 제공합니다. 채널 등록부터 수익 정산까지, 모든 과정이 자동화되어 있어 번거로운 절차 없이 바로 수익화를 시작할 수 있습니다."
+      "description": "Audionyx는 YouTube, TikTok, Instagram 등 다양한 플랫폼의 채널을 이모지 키를 통해 안전하고 간편하게 인증할 수 있는 시스템을 제공합니다. 채널 등록부터 수익 정산까지, 모든 과정이 자동화되어 있어 번거로운 절차 없이 바로 수익화를 시작할 수 있습니다.",
+      "copyrightNotice": "크리에이터님께 입금될 정확한 음원 저작권료를 상정하기 위하여 Audionyx 음원을 사용하신 숏폼 컨텐츠 링크를 제공해주셔야 합니다."
     },
 
     "registration": {
@@ -347,6 +349,7 @@
       "addButton": "컨텐츠 링크 추가",
       "addFirstButton": "첫 컨텐츠 링크 추가",
       "addLink": "링크 추가",
+      "showLinks": "목록 보기",
       "table": {
         "contentUrl": "컨텐츠 URL",
         "audioTrack": "사용된 음원",
@@ -406,6 +409,18 @@
       "pending": "대기중",
       "working": "제작중",
       "done": "완료"
+    },
+    "loading": "요청 목록을 불러오는 중...",
+    "noRequests": {
+      "title": "아직 요청이 없습니다",
+      "description": "위 폼을 통해 맞춤 트랙 제작을 요청해보세요."
+    },
+    "table": {
+      "trackTitle": "트랙 제목",
+      "genre": "장르",
+      "bpm": "BPM",
+      "status": "상태",
+      "requestDate": "요청일"
     }
   },
   "faq": {

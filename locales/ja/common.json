@@ -25,12 +25,12 @@
   },
   "hero": {
     "fixed": "FREE TRACKS + EARN",
-    "main": "ショートに音源収益をプラス。",
-    "desc": "YouTubeが著作権者に支払った音楽ライセンス費用をAUDIONYXがクリエイターに提供する方式で音源収益が発生します。",
+    "main": "ショートに音源収入をプラス。",
+    "desc": "YouTubeが著作権者に支払った音楽ライセンス費用をAUDIONYXがクリエイターに提供する方式で音源収入が発生します。",
     "cta": "今すぐ始める"
   },
   "footer": {
-    "tagline": "ショート動画楽曲収益化プラットフォーム",
+    "tagline": "ショート動画楽曲収入化プラットフォーム",
     "service": "サービス",
     "findMusic": "楽曲検索",
     "withdraw": "口座登録",
@@ -62,18 +62,19 @@
   "brand": {
     "title": "ブランド紹介",
     "heroTitle": "ブランド紹介",
-    "heroSubtitle": "クリエイター向け音源収益化プラットフォーム",
+    "heroSubtitle": "クリエイター向け音源収入化プラットフォーム",
     "heroCta": "Go Tracks",
     "aboutTitle": "Audionyxとは？",
-    "aboutHeadline": "音源収益も、動画収益も<br>Audionyx一つで全て手に入れましょう",
-    "aboutDescription": "YouTubeはショートで発生する総収益を<br>「音源著作権者」と「動画クリエイター」に分けて支払います。<br>Audionyx音源を使用すると、著作権料の<strong>一部</strong>をAudionyxが代わりに受け取り<span class=\"no-break\">再び還元するため</span>動画収益 + 音源収益を同時に獲得できます。",
-    "insightsTitle": "Audionyxトラックで<br>あなたが<strong>逃した収益を</strong>見つけましょう",
-    "insightsSubtitle": "これまで<strong>逃していた全ての収益機会</strong>を取り戻します",
+          "aboutHeadline": "音源収入も、動画収入も<br>Audionyx一つで全て手に入れましょう",
+    "aboutDescription": "YouTubeはショートで発生する総収入を<br>「音源著作権者」と「動画クリエイター」に分けて支払います。<br>Audionyx音源を使用すると、著作権料の<strong>一部</strong>をAudionyxが代わりに受け取り<span class=\"no-break\">再び還元するため</span>動画収入 + 音源収入を同時に獲得できます。",
+          "insightsTitle": "Audionyxトラックで<br>あなたが<strong>逃した収入を</strong>見つけましょう",
+      "insightsSubtitle": "これまで<strong>逃していた全ての収入機会</strong>を取り戻します",
     "insightsCta": "3ステップを確認",
-    "mobileRevenueTitle": "Audionyxで<br>あなたの収益が変わります",
-    "mobileRevenueSubtitle": "同じ再生数、より多くの収益<br>これまで逃していた音源収益を取り戻しましょう",
+    "chartTitle": "1ショート当たり再生数別実収入比較 (¥)",
+          "mobileRevenueTitle": "Audionyxで<br>あなたの収入が変わります",
+      "mobileRevenueSubtitle": "同じ再生数、より多くの収入<br>これまで逃していた音源収入を取り戻しましょう",
     "whyTitle": "Why Audionyx?",
-    "whySubtitle": "Audionyxと共に始める新しい収益創出の3つの核心",
+          "whySubtitle": "Audionyxと共に始める新しい収入創出の3つの核心",
     "feature1Label": "FREE TO USE",
     "feature1Title": "All Tracks Free",
     "feature1Desc": "最高のプロデューサーによる<br>ハイクオリティ音源無料使用",
@@ -82,33 +83,33 @@
     "feature2Desc": "全ての音源<br>著作権/CID完璧保証",
     "feature3Label": "HIGH ROYALTY",
     "feature3Title": "Most Royalty is Yours",
-    "feature3Desc": "音源を使用するだけで<br>収益の一部を獲得",
-    "multiplatformTitle": "マルチプラットフォーム収益化",
-    "multiplatformHeadline": "TikTok · Instagram · Facebook<br>全てのプラットフォームで収益を享受",
-    "multiplatformDesc": "Audionyx音源一つでShortsだけでなくReels、TikTok、Facebook Videoまで<br><strong>全てのチャンネルで同じ比率で収益を享受できます。</strong>",
-    "howWorksSubtitle": "簡単な3ステップで収益化開始",
+          "feature3Desc": "音源を使用するだけで<br>収入の一部を獲得",
+          "multiplatformTitle": "マルチプラットフォーム収入化",
+      "multiplatformHeadline": "TikTok · Instagram · Facebook<br>全てのプラットフォームで収入を享受",
+      "multiplatformDesc": "Audionyx音源一つでShortsだけでなくReels、TikTok、Facebook Videoまで<br><strong>全てのチャンネルで同じ比率で収入を享受できます。</strong>",
+          "howWorksSubtitle": "簡単な3ステップで収入化開始",
     "howWorksTitle": "How It Works",
     "step1Title": "Step 1  ·  音源選択",
     "step1Desc": "トラックを試聴して<b>Copy CID</b>",
     "step2Title": "Step 2  ·  動画アップロード",
     "step2Desc": "Shortsアップロード時<br><b>音源CID</b>を貼り付け",
     "step3Title": "Step 3  ·  自動入金",
-    "step3Desc": "収益の一部が<b>毎月</b>自動入金",
+          "step3Desc": "収入の一部が<b>毎月</b>自動入金",
     "previewTitle": "Right Now",
-    "previewHeadline": "ハイクオリティ音源トラックを使用して<br>新しい収益パイプラインを作りましょう",
-    "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収益の一部を獲得できます。</strong>"
+          "previewHeadline": "ハイクオリティ音源トラックを使用して<br>新しい収入パイプラインを作りましょう",
+      "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収入の一部を獲得できます。</strong>"
   },
   "withdraw": {
-    "title": "収益出金 | Audionyx",
-    "processTitle": "収益出金プロセスのご案内",
+    "title": "収入出金 | Audionyx",
+    "processTitle": "収入出金プロセスのご案内",
     "processHeadline": "四半期末、自動で口座に入金",
-    "processDesc": "AudionyxはYouTube、Shortsなど全てのチャンネルの収益を集計し、登録された口座に四半期末自動入金いたします。口座登録だけで、別途申請なしに四半期ごとに収益を受け取れます。",
+    "processDesc": "AudionyxはYouTube、Shortsなど全てのチャンネルの収入を集計し、登録された口座に四半期末自動入金いたします。口座登録だけで、別途申請なしに四半期ごとに収入を受け取れます。",
     "settlementTitle": "精算詳細情報",
     "settlementSubtitle": "正確な精算のため、以下の情報をご確認ください",
     "step1Title": "精算周期",
     "step1Desc": "四半期別精算システム<br>3月末、6月末、9月末、12月末<br>自動入金処理",
     "step2Title": "入金条件",
-    "step2Desc": "最小入金額1円から<br>収益発生時自動精算<br>別途申請不要",
+          "step2Desc": "最小入金額1円から<br>収入発生時自動精算<br>別途申請不要",
     "step3Title": "源泉税",
     "step3Desc": "法定源泉税3.3%控除<br>控除後実受領額入金<br>税務処理自動化",
     "noticeTitle": "口座登録時の注意事項",
@@ -135,23 +136,10 @@
     "accountInfo": "口座番号",
     "holderInfo": "口座名義人",
     "updatedInfo": "最終修正日",
-    "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収益を正確に集計して入金いたします。",
+    "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収入を正確に集計して入金いたします。",
     "trustSecurity": "安全な暗号化",
     "trustMonitoring": "24時間モニタリング",
-    "trustEmail": "入金通知メール送信",
-    "bankCodeLabel": "銀行コード",
-    "bankCodePlaceholder": "4桁の銀行コードを入力",
-    "branchCodeLabel": "支店コード", 
-    "branchCodePlaceholder": "3桁の支店コードを入力",
-    "accountTypeLabel": "口座種別",
-    "accountTypePlaceholder": "口座種別を選択",
-    "accountTypeOrdinary": "普通",
-    "accountTypeCurrent": "当座",
-    "accountTypeSavings": "貯蓄",
-    "accountNumberLabel": "口座番号",
-    "accountNumberPlaceholder": "7桁の口座番号を入力",
-    "accountHolderKanaLabel": "名義カナ",
-    "accountHolderKanaPlaceholder": "カタカナで口座名義を入力"
+    "trustEmail": "入金通知メール送信"
   },
   "findMusic": {
     "title": "音源検索 | Audionyx",
@@ -236,6 +224,40 @@
       "onboardingTitle": "追加情報入力",
       "onboardingSubtitle": "Audionyxサービス利用のため<br>追加情報を入力してください",
       "onboardingCompleteButton": "完了"
+    },
+    "moods": {
+      "energetic": "エネルギッシュ",
+      "inspiring": "感動・希望",
+      "chill": "リラックス・チル",
+      "romantic": "ロマンチック",
+      "playful": "楽しい・可愛い",
+      "groovy": "グルーヴィ・ファンキー",
+      "epic": "壮大・スケール",
+      "dramatic": "ドラマチック",
+      "dark": "ダーク",
+      "tense": "緊張・サスペンス",
+      "aggressive": "攻撃的・怒り",
+      "mysterious": "ミステリアス",
+      "sad": "悲しい・憂鬱"
+    },
+    "usecases": {
+      "docu_education": "ドキュメンタリー・教育・科学",
+      "travel_aerial": "旅行・ドローン・風景",
+      "fashion_beauty": "ファッション・ビューティー",
+      "lifestyle_vlog": "Vlog・ライフスタイル",
+      "gaming_esports": "ゲーミング・eスポーツ",
+      "tech_innovation": "テック・産業・革新",
+      "animation_narration": "アニメーション・ナレーション",
+      "party_events": "パーティー・イベント・娯楽",
+      "wellness_asmr": "ウェルネス・瞑想・アンビエント",
+      "sports_motivation": "スポーツ・モチベーション",
+      "pets_nature": "ペット・動物・自然",
+      "trailers_branding": "トレーラー・イントロ・ロゴ",
+      "diy_howto": "DIY・チュートリアル",
+      "holiday_seasonal": "ホリデー・季節",
+      "art_culture": "アート・文化",
+      "news_affairs": "ニュース・時事",
+      "drive": "ドライブ"
     }
   },
   "channelManagement": {
@@ -243,7 +265,8 @@
     "process": {
       "title": "チャンネル管理プロセスガイド",
       "headline": "絵文字キーで簡単に多様なチャンネル認証",
-      "description": "AudionyxはYouTube、TikTok、Instagramなど様々なプラットフォームのチャンネルを絵文字キーを通じて安全で簡単に認証できるシステムを提供します。チャンネル登録から収益精算まで、すべてのプロセスが自動化されており、面倒な手続きなしですぐに収益化を始めることができます。"
+      "description": "AudionyxはYouTube、TikTok、Instagramなど様々なプラットフォームのチャンネルを絵文字キーを通じて安全で簡単に認証できるシステムを提供します。チャンネル登録から収入精算まで、すべてのプロセスが自動化されており、面倒な手続きなしですぐに収入化を始めることができます。",
+      "copyrightNotice": "クリエイター様に入金される正確な音源著作権料を算定するため、Audionyx音源を使用されたショートフォームコンテンツリンクをご提供いただく必要があります。"
     },
 
     "registration": {
@@ -294,7 +317,7 @@
       "instagramDesc": "プロフィール紹介文に絵文字キーを追加してください。",
       "instagramSteps": "プロフィール編集 → 紹介 → 絵文字キー追加",
       "autoVerification": "自動審査完了",
-      "autoVerificationDesc": "設定完了後、システムが自動的に審査を進行し、承認と同時に収益化が開始されます。",
+      "autoVerificationDesc": "設定完了後、システムが自動的に審査を進行し、承認と同時に収入化が開始されます。",
       "registrationComplete": "登録完了",
       "verificationInProgress": "審査進行中",
       "approvalComplete": "承認完了",
@@ -322,7 +345,7 @@
       "step2Title": "絵文字キー発行",
       "step2Desc": "固有の絵文字キーが<br>自動的に発行されて<br>所有権を認証します。",
       "step3Title": "自動検証完了",
-      "step3Desc": "システムが自動的に<br>チャンネルを検証し<br>検証完了後すぐに<br>収益化が開始されます。"
+      "step3Desc": "システムが自動的に<br>チャンネルを検証し<br>検証完了後すぐに<br>収入化が開始されます。"
     },
     "status": {
       "verified": "検査完了",
@@ -356,10 +379,11 @@
     },
     "contentLinks": {
       "title": "Audionyx楽曲使用ショートフォームコンテンツリンク",
-      "subtitle": "登録されたコンテンツリンクを通じて正確な収益精算が行われます",
+      "subtitle": "登録されたコンテンツリンクを通じて正確な収入精算が行われます",
       "addButton": "コンテンツリンク追加",
       "addFirstButton": "初回コンテンツリンク追加",
       "addLink": "リンク追加",
+      "showLinks": "リスト表示",
       "table": {
         "contentUrl": "コンテンツURL",
         "audioTrack": "使用楽曲",
@@ -397,7 +421,7 @@
     "process": {
       "title": "トラック制作とは？",
       "headline": "CID登録完全無料、商用利用可能",
-      "description": "Audionyxチームの国内最高のプロデューサーが直接トラックを制作します。<br>制作リクエストは誰でも可能で、商用利用と収益創出がすべて許可されています。<br>より多くの方にサービスを提供するため、<strong>1ユーザーあたり最大2回まで</strong>リクエスト可能です。<br>YouTubeおよびすべてのプラットフォームCID登録が完全無料で提供されます。<br>リクエスト-制作-使用すべて無料で、該当音源から著作権収益が発生した場合、ロイヤリティの一部はお客様に還元されます。"
+      "description": "Audionyxチームの国内最高のプロデューサーが直接トラックを制作します。<br>制作リクエストは誰でも可能で、商用利用と収入創出がすべて許可されています。<br>より多くの方にサービスを提供するため、<strong>1ユーザーあたり最大2回まで</strong>リクエスト可能です。<br>YouTubeおよびすべてのプラットフォームCID登録が完全無料で提供されます。<br>リクエスト-制作-使用すべて無料で、該当音源から著作権収入が発生した場合、ロイヤリティの一部はお客様に還元されます。"
     },
     "steps": {
       "step1Title": "リクエスト書作成",
@@ -410,7 +434,32 @@
     "form": {
       "title": "カスタム制作リクエスト",
       "subtitle": "希望する音源の情報を入力してください",
-      "refUrlPlaceholder": "YouTubeなどの参考動画URL"
+      "trackTitle": "トラック名",
+      "trackTitlePlaceholder": "例：[チャンネル名] ブイログBGM",
+      "bpm": "BPM",
+      "bpmPlaceholder": "60-200",
+      "genre": "ジャンル",
+      "genreSelect": "ジャンルを選択してください",
+      "genres": {
+        "synthwave": "シンセウェーブ",
+        "ambient": "アンビエント",
+        "electronic": "エレクトロニック",
+        "lofi": "ローファイ",
+        "pop": "ポップ",
+        "hiphop": "ヒップホップ",
+        "jazz": "ジャズ",
+        "other": "その他"
+      },
+      "email": "音源受信メール",
+      "emailPlaceholder": "メールアドレスを入力してください",
+      "description": "説明・要望事項",
+      "descriptionPlaceholder": "希望する音源の雰囲気、特徴などを詳しく説明してください",
+      "refUrl": "参考映像URL（任意）",
+      "refUrlPlaceholder": "YouTubeなどの参考動画URL",
+      "submit": "リクエスト送信",
+      "tipTitle": "💡 トラック名入力のコツ",
+      "tipText": "より良いカスタム制作のために、<strong>YouTubeチャンネル名</strong>をトラック名に含めて入力することをお勧めします。",
+      "tipExample": "例：「[チャンネル名] ブイログBGM」、「[チャンネル名] オープニング音楽」"
     },
     "requestList": {
       "title": "マイリクエスト一覧"
@@ -419,6 +468,18 @@
       "pending": "待機中",
       "working": "制作中",
       "done": "完了"
+    },
+    "loading": "リクエスト一覧を読み込み中...",
+    "noRequests": {
+      "title": "まだリクエストがありません",
+      "description": "上記フォームからカスタムトラック制作をリクエストしてみてください。"
+    },
+    "table": {
+      "trackTitle": "トラック名",
+      "genre": "ジャンル",
+      "bpm": "BPM",
+      "status": "ステータス",
+      "requestDate": "リクエスト日"
     }
   },
   "faq": {
@@ -431,7 +492,7 @@
       "channel": "チャンネル管理",
       "music": "楽曲・著作権",
       "production": "トラック制作",
-      "revenue": "収益・決済",
+      "revenue": "収入・決済",
       "producer": "プロデューサー",
       "support": "技術サポート"
     },
@@ -439,11 +500,11 @@
       "overview": {
         "what_is_audionyx": {
           "question": "Audionyxはどのようなサービスですか？",
-          "answer": "Audionyxは、クリエイターが著作権の心配なく使用できる高品質な楽曲を提供し、楽曲使用による収益をクリエイターと共有するプラットフォームです。"
+          "answer": "Audionyxは、クリエイターが著作権の心配なく使用できる高品質な楽曲を提供し、楽曲使用による収入をクリエイターと共有するプラットフォームです。"
         },
         "service_cost": {
           "question": "サービス利用に費用は発生しますか？",
-          "answer": "Audionyxのすべてのサービスは無料でご利用いただけます。楽曲ダウンロード、チャンネル登録、収益分配など、すべての機能を追加費用なしでご利用できます。"
+          "answer": "Audionyxのすべてのサービスは無料でご利用いただけます。楽曲ダウンロード、チャンネル登録、収入分配など、すべての機能を追加費用なしでご利用できます。"
         },
         "login_required": {
           "question": "ログインなしでもサービスを利用できますか？",
@@ -451,7 +512,7 @@
         },
         "longform_usage": {
           "question": "Audionyx楽曲をロングフォーム動画でも使用できますか？",
-          "answer": "可能です。ただし、Shortsとは異なり、ロングフォーム動画の場合は収益分配率が異なる可能性があり、詳細な条件は別途お知らせいたします。"
+          "answer": "可能です。ただし、Shortsとは異なり、ロングフォーム動画の場合は収入分配率が異なる可能性があり、詳細な条件は別途お知らせいたします。"
         },
         "other_platforms": {
           "question": "YouTube以外のプラットフォームでも決済されますか？",
@@ -479,7 +540,7 @@
         },
         "channel_suspension": {
           "question": "チャンネルに問題が発生したり停止されたらどうなりますか？",
-          "answer": "チャンネルが停止されても、ユーザーがAudionyxに借金を負う必要は全くありません。チャンネル停止時は該当チャンネルの楽曲収益が0円になるだけで、これまでに発生した収益に対する返還義務や追加費用の支払い義務はありません。チャンネル運営はクリエイターの責任であり、YouTubeポリシー違反によるチャンネル制裁時でも金銭的負担は発生しません。"
+          "answer": "チャンネルが停止されても、ユーザーがAudionyxに借金を負う必要は全くありません。チャンネル停止時は該当チャンネルの楽曲収入が0円になるだけで、これまでに発生した収入に対する返還義務や追加費用の支払い義務はありません。チャンネル運営はクリエイターの責任であり、YouTubeポリシー違反によるチャンネル制裁時でも金銭的負担は発生しません。"
         },
         "multiple_channels": {
           "question": "複数のチャンネルを登録できますか？",
@@ -501,7 +562,7 @@
         },
         "remix_allowed": {
           "question": "Audionyxビートをリミックスしたり歌詞を付けても大丈夫ですか？",
-          "answer": "二次創作は許可されており、原曲と同じ収益分配条件が適用されます。ただし、原曲のクレジット表記は必須であり、不適切な歌詞やコンテンツは制裁される可能性があります。"
+          "answer": "二次創作は許可されており、原曲と同じ収入分配条件が適用されます。ただし、原曲のクレジット表記は必須であり、不適切な歌詞やコンテンツは制裁される可能性があります。"
         },
         "volume_detection": {
           "question": "BGMの音量を下げるとCIDが検出されませんか？",
@@ -528,8 +589,8 @@
           "answer": "口座登録ページで、銀行、口座番号、口座名義人を入力して登録できます。登録された口座情報はセキュリティのため一部がマスキングされて表示され、いつでも修正できます。"
         },
         "revenue_distribution": {
-          "question": "収益はどのように分配されますか？",
-          "answer": "楽曲を使用した動画の収益に応じて、クリエイターとAudionyxが収益を分配します。具体的な分配比率と決済周期は別途ご案内いたします。"
+          "question": "収入はどのように分配されますか？",
+          "answer": "楽曲を使用した動画の収入に応じて、クリエイターとAudionyxが収入を分配します。具体的な分配比率と決済周期は別途ご案内いたします。"
         },
         "account_security": {
           "question": "口座情報は安全に保管されますか？",
@@ -554,7 +615,7 @@
         },
         "deleted_video_revenue": {
           "question": "動画が削除されましたが、既に受け取ったロイヤリティを返還する必要がありますか？",
-          "answer": "支給された金額は回収されません。ただし、決済基準日以降に削除された動画の収益は今後の決済から除外されます。"
+          "answer": "支給された金額は回収されません。ただし、決済基準日以降に削除された動画の収入は今後の決済から除外されます。"
         }
       },
       "producer": {
@@ -586,7 +647,7 @@
   "producer": {
     "title": "Audionyxプロデューサー | Audionyx",
     "headline": "プロデューサー募集",
-    "description": "Audionyxと一緒に音源を制作し、収益を創出しましょう。",
+    "description": "Audionyxと一緒に音源を制作し、収入を創出しましょう。",
     "hero": {
       "title": "AUDIONYX PRODUCER",
       "subtitle": "音楽の新しい体験を創造するプロデューシング専門家と一緒にしませんか",

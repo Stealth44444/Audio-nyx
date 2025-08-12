@@ -422,6 +422,32 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderTotalRevenueChart() {
         const ctx = document.getElementById('totalRevenueChart');
         if (!ctx) return;
+        
+        // 현재 언어 감지
+        const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
+        
+        // 언어별 라벨 설정
+        const labels = {
+            ko: {
+                withAudionyx: 'Audionyx 사용',
+                withoutAudionyx: 'Audionyx 미사용',
+                viewCounts: ['100만','300만','500만','700만','1000만','3000만','5000만'],
+                currency: '₩',
+                difference: '차이 금액',
+                increaseRate: '증가율'
+            },
+            ja: {
+                withAudionyx: 'Audionyx使用',
+                withoutAudionyx: 'Audionyx未使用',
+                viewCounts: ['100万','300万','500万','700万','1000万','3000万','5000万'],
+                currency: '¥',
+                difference: '差額',
+                increaseRate: '増加率'
+            }
+        };
+
+        const currentLabels = labels[currentLanguage] || labels.ko;
+        
         // ===== 새 단가 기준 =====
         const AVG_PREMIUM_UNIT = 0.6038;     // FAQ 평균 (원 / 프리미엄 뷰)
         const PREMIUM_RATIO    = 0.2933;     // 프리미엄 뷰 비율
@@ -441,10 +467,10 @@ document.addEventListener('DOMContentLoaded', function() {
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['100만','300만','500만','700만','1000만','3000만','5000만'],
+                labels: currentLabels.viewCounts,
                 datasets: [
                     {
-                        label: 'Audionyx 사용',
+                        label: currentLabels.withAudionyx,
                         data: audionyxData,
                         borderColor: '#3EB489',
                         backgroundColor: 'rgba(62,180,137,0.10)',
@@ -458,7 +484,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         pointHoverBorderWidth: 3,
                     },
                     {
-                        label: 'Audionyx 미사용',
+                        label: currentLabels.withoutAudionyx,
                         data: baselineData,
                         borderColor: '#ffffff',
                         backgroundColor: 'rgba(255,255,255,0.08)',
@@ -493,19 +519,19 @@ document.addEventListener('DOMContentLoaded', function() {
                             label: function(context) {
                                 const label = context.dataset.label;
                                 const value = context.parsed.y;
-                                return `${label}: ₩${value.toLocaleString()}`;
+                                return `${label}: ${currentLabels.currency}${value.toLocaleString()}`;
                             },
                             afterBody: function(tooltipItems) {
                                 if (tooltipItems.length === 2) {
-                                    const audionyxValue = tooltipItems.find(item => item.dataset.label === 'Audionyx 사용')?.parsed.y || 0;
-                                    const baseValue = tooltipItems.find(item => item.dataset.label === 'Audionyx 미사용')?.parsed.y || 0;
+                                    const audionyxValue = tooltipItems.find(item => item.dataset.label === currentLabels.withAudionyx)?.parsed.y || 0;
+                                    const baseValue = tooltipItems.find(item => item.dataset.label === currentLabels.withoutAudionyx)?.parsed.y || 0;
                                     const difference = audionyxValue - baseValue;
                                     const increaseRate = baseValue > 0 ? ((difference / baseValue) * 100).toFixed(1) : 0;
                                     
                                     return [
                                         '',
-                                        `차이 금액: +₩${difference.toLocaleString()}`,
-                                        `증가율: +${increaseRate}%`
+                                        `${currentLabels.difference}: +${currentLabels.currency}${difference.toLocaleString()}`,
+                                        `${currentLabels.increaseRate}: +${increaseRate}%`
                                     ];
                                 }
                                 return [];
@@ -529,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             color: '#fff', 
                             font: { weight: 'bold' },
                             callback: function(value) {
-                                return '₩' + value.toLocaleString();
+                                return currentLabels.currency + value.toLocaleString();
                             }
                         },
                         grid: { color: 'rgba(40,40,40,0.7)' }
@@ -1367,6 +1393,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 800);
         }
     }
+
+
+
+    // 언어 변경 시 차트 업데이트 함수
+    function updateChartForLanguageChange() {
+        const chartCanvas = document.getElementById('totalRevenueChart');
+        if (chartCanvas) {
+            // 기존 차트 제거
+            const existingChart = Chart.getChart(chartCanvas);
+            if (existingChart) {
+                existingChart.destroy();
+            }
+            
+            // 새로운 언어로 차트 재생성
+            setTimeout(() => {
+                renderTotalRevenueChart();
+            }, 100);
+        }
+    }
+
+    // 언어 변경 이벤트 리스너 등록
+    const languageOptions = document.querySelectorAll('.language-option');
+    languageOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            setTimeout(updateChartForLanguageChange, 200);
+        });
+    });
 
     // 모든 애니메이션 설정 실행
     setupInsightsAnimations();

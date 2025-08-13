@@ -221,7 +221,7 @@
                 <path d="M12 2v20M2 12h20"/>
                 <circle cx="12" cy="12" r="4"/>
               </svg>
-              <span>바로 제작 요청</span>
+              <span data-i18n="trackProduction.cta.requestNow">바로 제작 요청</span>
             </a>
             
             <a href="producer.html" class="btn-producer-check" style="margin: 0;">
@@ -309,7 +309,10 @@
               <!-- 요청 현황 표시 -->
               <div id="request-status-bar" class="request-status-bar" style="display: none;">
                 <div class="request-count-info">
-                  <span id="current-request-count">0</span> / 2회 요청
+                  <span id="current-request-count">0</span>
+                  <span class="count-separator"> / </span>
+                  <span id="max-requests-count">2</span>
+                  <span data-i18n="trackProduction.limit.requestsLabel">회 요청</span>
                 </div>
                 <div class="request-limit-warning" id="limit-warning" style="display: none;">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">

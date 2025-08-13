@@ -1873,11 +1873,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contentLinksVisible) {
       container.classList.remove('hidden');
       toggleBtn.classList.add('expanded');
-      toggleText.textContent = '목록 숨기기';
+      toggleText.textContent = (window.i18next && window.i18next.t('channelManagement.contentLinks.hideLinks')) || '목록 숨기기';
     } else {
       container.classList.add('hidden');
       toggleBtn.classList.remove('expanded');
-      toggleText.textContent = '목록 보기';
+      toggleText.textContent = (window.i18next && window.i18next.t('channelManagement.contentLinks.showLinks')) || '목록 보기';
     }
   }
 
@@ -2970,4 +2970,13 @@ function toggleGuideSection(show = true) {
       guideSection.style.display = 'none';
     }, 300);
   }
-} 
+}
+
+// 언어 변경 시 토글 라벨 동기화
+window.syncDynamicI18n = function() {
+  const toggleText = document.getElementById('toggle-content-text');
+  const toggleBtn = document.getElementById('toggle-content-links');
+  if (!toggleText || !toggleBtn) return;
+  const isExpanded = toggleBtn.classList.contains('expanded');
+  toggleText.textContent = (window.i18next && window.i18next.t(isExpanded ? 'channelManagement.contentLinks.hideLinks' : 'channelManagement.contentLinks.showLinks')) || toggleText.textContent;
+};

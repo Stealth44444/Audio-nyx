@@ -59,6 +59,9 @@
     "withdraw": "정산",
     "production": "제작"
   },
+  "common": {
+    "loading": "처리 중..."
+  },
   "brand": {
     "title": "브랜드 소개",
     "heroTitle": "브랜드 소개",
@@ -89,6 +92,8 @@
     "multiplatformDesc": "Audionyx 음원 하나면 Shorts뿐 아니라 Reels, TikTok, Facebook Video까지<br><strong>모든 채널에서 동일 비율로 수익을 누릴 수 있습니다.</strong>",
     "howWorksSubtitle": "간단한 3단계로 수익화 시작",
     "howWorksTitle": "How It Works",
+    "estimatedRoyalty": "예상 로열티",
+    "freeTracksCta": "무료 음원 찾아보기",
     "step1Title": "Step 1  ·  음원 고르기",
     "step1Desc": "트랙 감상하고 <b>Copy CID</b>",
     "step2Title": "Step 2  ·  영상 업로드",
@@ -268,10 +273,10 @@
       "verificationTitle": "실시간 자동 검수 시스템",
       "verificationStatus": "실시간",
       "generalTime": "일반 검수 시간",
-      "generalTimeValue": "1-3분",
+      "generalTimeValue": "1-3시간",
       "maxTime": "최대 대기 시간",
       "maxTimeValue": "24시간",
-      "notice": "주말 및 공휴일에는 검수가 진행되지 않으며, 다음 영업일에 순차적으로 처리됩니다.",
+      "notice": "업무 시간 이후 신청된 채널 검수는 익일에 처리됩니다. 주말 및 공휴일에는 검수가 진행되지 않으며, 다음 영업일에 순차적으로 처리됩니다.",
       "emojiTitle": "이모지 키 설정 가이드",
       "emojiStatus": "튜토리얼",
       "emojiKeyCopy": "이모지 키 복사",
@@ -348,9 +353,10 @@
       "subtitle": "등록하신 컨텐츠 링크를 통해 정확한 수익 정산이 이루어집니다",
       "addButton": "컨텐츠 링크 추가",
       "addFirstButton": "첫 컨텐츠 링크 추가",
-      "addLink": "링크 추가",
-      "showLinks": "목록 보기",
-      "table": {
+            "addLink": "링크 추가",
+       "hideLinks": "목록 숨기기",
+       "showLinks": "목록 보기",
+       "table": {
         "contentUrl": "컨텐츠 URL",
         "audioTrack": "사용된 음원",
         "platform": "플랫폼",
@@ -397,9 +403,17 @@
       "step3Title": "이메일 발송",
       "step3Desc": "제작 완료된 음원을<br>등록하신 이메일 주소로<br>고품질 파일로 발송해 드립니다."
     },
+    "cta": {
+      "requestNow": "바로 제작 요청"
+    },
+    "limit": {
+      "requestsLabel": "회 요청",
+      "exceeded": "요청 횟수 초과"
+    },
     "form": {
       "title": "맞춤 제작 요청",
       "subtitle": "원하는 음원의 정보를 입력해 주세요",
+      "submit": "요청 제출",
       "refUrlPlaceholder": "YouTube 등의 참고 영상 URL"
     },
     "requestList": {

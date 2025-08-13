@@ -254,6 +254,12 @@ function bindLangToggles() {
         localStorage.setItem("lang", lang);
         translate();
         updateActive(lang);
+        // 언어 변경 후 동적으로 제어되는 일부 UI 텍스트 동기화
+        try {
+          if (typeof window.syncDynamicI18n === 'function') {
+            window.syncDynamicI18n();
+          }
+        } catch (e) { /* no-op */ }
       });
     };
   });

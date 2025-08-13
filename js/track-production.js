@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 제한 관련 DOM 요소
   const requestStatusBar = document.getElementById('request-status-bar');
   const currentRequestCount = document.getElementById('current-request-count');
+  const maxRequestsCount = document.getElementById('max-requests-count');
   const limitWarning = document.getElementById('limit-warning');
   const formCard = document.querySelector('.form-card');
   
@@ -134,6 +135,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentUser = { uid: 'anonymous', isAnonymous: true }; // 기본값을 익명 사용자로 설정
   const MAX_REQUESTS = 2; // 최대 요청 횟수
   let userRequestCount = 0; // 사용자 현재 요청 횟수
+  if (maxRequestsCount) {
+    maxRequestsCount.textContent = MAX_REQUESTS;
+  }
+
+  // 언어 변경 후 동적 텍스트 동기화 훅
+  window.syncDynamicI18n = function() {
+    // 제출 버튼 라벨
+    if (submitBtn && !submitBtn.disabled) {
+      submitBtn.textContent = (window.i18next && window.i18next.t('trackProduction.form.submit')) || submitBtn.textContent;
+    }
+    // 제한 경고 문구
+    if (limitWarning && limitWarning.style.display !== 'none') {
+      const span = limitWarning.querySelector('span');
+      if (span) span.textContent = (window.i18next && window.i18next.t('trackProduction.limit.exceeded')) || span.textContent;
+    }
+    // 요청 카운트 단위 라벨은 HTML 내 data-i18n로 translate()가 처리
+  };
   
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -169,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
           <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" stroke-width="2"/>
         </svg>
-        <span>요청 횟수 초과</span>
+        <span>${(window.i18next && window.i18next.t('trackProduction.limit.exceeded')) || '요청 횟수 초과'}</span>
       `;
       
       // 입력 필드 비활성화
@@ -193,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <path d="M2 2l7.586 7.586"/>
           <circle cx="11" cy="11" r="2"/>
         </svg>
-        <span>요청 제출</span>
+        <span>${(window.i18next && window.i18next.t('trackProduction.form.submit')) || '요청 제출'}</span>
       `;
       
       // 입력 필드 활성화
@@ -242,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       // 로딩 상태 표시
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="loading-spinner"></span> 처리 중...';
+      submitBtn.innerHTML = `<span class="loading-spinner"></span> ${(window.i18next && window.i18next.t('common.loading')) || '처리 중...'}`;
       
       console.log('Firestore에 트랙 요청 데이터 추가 시도...');
       
@@ -300,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       // 버튼 상태 복구
       submitBtn.disabled = false;
-      submitBtn.textContent = '요청 제출';
+      submitBtn.textContent = (window.i18next && window.i18next.t('trackProduction.form.submit')) || '요청 제출';
     }
   });
   

@@ -59,6 +59,9 @@
     "withdraw": "決済",
     "production": "制作"
   },
+  "common": {
+    "loading": "処理中..."
+  },
   "brand": {
     "title": "ブランド紹介",
     "heroTitle": "ブランド紹介",
@@ -89,6 +92,8 @@
       "multiplatformDesc": "Audionyx音源一つでShortsだけでなくReels、TikTok、Facebook Videoまで<br><strong>全てのチャンネルで同じ比率で収入を享受できます。</strong>",
           "howWorksSubtitle": "簡単な3ステップで収入化開始",
     "howWorksTitle": "How It Works",
+    "estimatedRoyalty": "予想ロイヤリティ",
+    "freeTracksCta": "無料トラックを探す",
     "step1Title": "Step 1  ·  音源選択",
     "step1Desc": "トラックを試聴して<b>Copy CID</b>",
     "step2Title": "Step 2  ·  動画アップロード",
@@ -225,6 +230,9 @@
       "onboardingSubtitle": "Audionyxサービス利用のため<br>追加情報を入力してください",
       "onboardingCompleteButton": "完了"
     },
+    "common": {
+      "loading": "処理中..."
+    },
     "moods": {
       "energetic": "エネルギッシュ",
       "inspiring": "感動・希望",
@@ -302,10 +310,10 @@
       "verificationTitle": "リアルタイム自動審査システム",
       "verificationStatus": "リアルタイム",
       "generalTime": "一般審査時間",
-      "generalTimeValue": "1-3分",
+      "generalTimeValue": "1-3時間",
       "maxTime": "最大待機時間",
       "maxTimeValue": "24時間",
-      "notice": "週末および祝日は審査が行われず、次の営業日に順次処理されます。",
+      "notice": "営業時間外に申請されたチャンネル審査は翌日に処理されます。週末および祝日は審査が行われず、次の営業日に順次処理されます。",
       "emojiTitle": "絵文字キー設定ガイド",
       "emojiStatus": "チュートリアル",
       "emojiKeyCopy": "絵文字キーコピー",
@@ -383,6 +391,7 @@
       "addButton": "コンテンツリンク追加",
       "addFirstButton": "初回コンテンツリンク追加",
       "addLink": "リンク追加",
+      "hideLinks": "リストを隠す",
       "showLinks": "リスト表示",
       "table": {
         "contentUrl": "コンテンツURL",
@@ -430,6 +439,13 @@
       "step2Desc": "最高の専門プロデューサーチームが<br>リクエスト事項に合った高品質<br>音源を丁寧に制作します。",
       "step3Title": "メール送信",
       "step3Desc": "制作完了した音源を<br>登録されたメールアドレスに<br>高品質ファイルで送信いたします。"
+    },
+    "cta": {
+      "requestNow": "今すぐ制作依頼"
+    },
+    "limit": {
+      "requestsLabel": "回 依頼",
+      "exceeded": "依頼回数の上限"
     },
     "form": {
       "title": "カスタム制作リクエスト",

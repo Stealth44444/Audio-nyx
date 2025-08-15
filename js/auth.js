@@ -509,6 +509,9 @@ document.addEventListener('DOMContentLoaded', () => {
       mobileUserProfile.classList.remove('active');
     }
   });
+
+  // 초기 로드 시 언어별 입력 규칙 반영
+  try { updatePhoneFieldPattern(); } catch (_) {}
 });
 
 // 사용자 상태 변경 감지
@@ -944,6 +947,8 @@ function openAuthModal() {
       console.log('[openAuthModal] show 클래스 추가 완료');
     }, 10);
     document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+    // 언어별 입력 규칙 즉시 반영
+    try { updatePhoneFieldPattern(); } catch (_) {}
     console.log('[openAuthModal] 모달 열기 완료');
   } else {
     console.error('[openAuthModal] authModal 요소를 찾을 수 없습니다');
@@ -977,6 +982,8 @@ function openSignupModal() {
       console.log('[openSignupModal] show 클래스 추가 완료');
     }, 10);
     document.body.style.overflow = 'hidden';
+    // 언어별 입력 규칙 즉시 반영
+    try { updatePhoneFieldPattern(); } catch (_) {}
     console.log('[openSignupModal] 회원가입 모달 열기 완료');
   } else {
     console.error('[openSignupModal] signupModal 요소를 찾을 수 없습니다');
@@ -1049,7 +1056,14 @@ function isValidEmail(email) {
 }
 
 function isValidPhoneNumber(phone) {
-  // 010-XXXX-XXXX 형식과 01XXXXXXXXX 형식 모두 지원
+  const lang = getCurrentLang();
+  if (lang === 'ja') {
+    // 일본 휴대전화: 070/080/090-XXXX-XXXX 또는 하이픈 없는 11자리
+    const reHyphen = /^0(70|80|90)-[0-9]{4}-[0-9]{4}$/;
+    const rePlain = /^0(70|80|90)[0-9]{8}$/;
+    return reHyphen.test(phone) || rePlain.test(phone);
+  }
+  // 기본(KO): 010-XXXX-XXXX 또는 010XXXXXXXX
   const re1 = /^010-[0-9]{4}-[0-9]{4}$/;
   const re2 = /^010[0-9]{8}$/;
   return re1.test(phone) || re2.test(phone);
@@ -1057,10 +1071,18 @@ function isValidPhoneNumber(phone) {
 
 // 전화번호 자동 포맷팅 함수
 function formatPhoneNumber(phone) {
-  // 숫자만 추출
-  const numbers = phone.replace(/\D/g, '');
-  
-  // 11자리 숫자인 경우에만 포맷팅
+  const lang = getCurrentLang();
+  const numbers = (phone || '').replace(/\D/g, '');
+
+  if (lang === 'ja') {
+    // 일본 휴대전화: 070/080/090 + 8 digits => 3-4-4로 포맷
+    if (numbers.length === 11 && /^(070|080|090)/.test(numbers)) {
+      return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
+    }
+    return phone;
+  }
+
+  // 한국: 010 + 8 digits => 3-4-4
   if (numbers.length === 11 && numbers.startsWith('010')) {
     return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7)}`;
   }
@@ -1219,8 +1241,8 @@ async function handleSignup(e) {
     console.log('[handleSignup] nickname 유효성 검사 실패');
   }
   if (!isValidPhoneNumber(phone)) {
-    showError(signupPhoneError, '전화번호 형식이 올바르지 않습니다 (010-XXXX-XXXX 또는 01XXXXXXXXX).');
-    showNotification('전화번호 형식이 올바르지 않습니다.', true);
+    showError(signupPhoneError, getPhoneInvalidMessage());
+    showNotification(getPhoneInvalidMessage(), true);
     isValid = false;
     console.log('[handleSignup] phone 유효성 검사 실패');
   }
@@ -1289,8 +1311,8 @@ async function handleSignup(e) {
     console.log('[handleSignup] 닉네임 중복 확인 실패');
   }
   if (!isPhoneUnique) {
-    showError(signupPhoneError, '이미 등록된 전화번호입니다.');
-    showNotification('이미 등록된 전화번호입니다.', true);
+    showError(signupPhoneError, getPhoneDuplicateMessage());
+    showNotification(getPhoneDuplicateMessage(), true);
     isValid = false;
     console.log('[handleSignup] 전화번호 중복 확인 실패');
   }
@@ -1656,6 +1678,8 @@ function openOnboardingModal() {
       onboardingModal.classList.add('show');
     }, 10);
     document.body.style.overflow = 'hidden';
+    // 언어별 입력 규칙 즉시 반영
+    try { updatePhoneFieldPattern(); } catch (_) {}
     
     // 브라우저 새로고침/뒤로가기 방지
     window.addEventListener('beforeunload', preventOnboardingExit);
@@ -1914,6 +1938,13 @@ window.verifyUserToken = verifyUserToken;
 // 현재 사용자 상태를 전역으로 관리
 window.currentUser = null;
 
+// i18n 동기화 훅: 언어 변경 시 로그인/회원가입 입력 규칙 업데이트
+try {
+  window.syncDynamicI18n = function() {
+    try { updatePhoneFieldPattern(); } catch (_) {}
+  };
+} catch (_) {}
+
 // 모바일 로그인 버튼 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', function() {
   // 모바일 로그인 버튼 이벤트 리스너
@@ -1934,3 +1965,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// 현재 선택된 언어 반환 유틸
+function getCurrentLang() {
+  try {
+    return (window.i18next && window.i18next.language) || localStorage.getItem('lang') || (navigator.language && navigator.language.startsWith('ja') ? 'ja' : 'ko');
+  } catch (_) {
+    return 'ko';
+  }
+}
+
+// 언어별 전화번호 pattern 적용
+function updatePhoneFieldPattern() {
+  const lang = getCurrentLang();
+  const signupPhone = document.getElementById('signup-phone');
+  const onboardingPhone = document.getElementById('onboarding-phone');
+
+  // KO: 010-XXXX-XXXX 또는 010XXXXXXXX
+  // JA: 070/080/090-XXXX-XXXX 또는 070/080/090XXXXXXXX
+  const koPattern = '010-[0-9]{4}-[0-9]{4}|010[0-9]{8}';
+  const jaPattern = '0(70|80|90)-[0-9]{4}-[0-9]{4}|0(70|80|90)[0-9]{8}';
+
+  const pattern = lang === 'ja' ? jaPattern : koPattern;
+
+  if (signupPhone) signupPhone.setAttribute('pattern', pattern);
+  if (onboardingPhone) onboardingPhone.setAttribute('pattern', pattern);
+
+  // UX 보조: placeholder, inputmode 동기화
+  const placeholderKo = '예: 010-1234-5678 또는 010XXXXXXXX';
+  const placeholderJa = '例: 090-1234-5678 または 090XXXXXXXX';
+  const placeholder = lang === 'ja' ? placeholderJa : placeholderKo;
+  if (signupPhone) {
+    signupPhone.setAttribute('placeholder', placeholder);
+    signupPhone.setAttribute('inputmode', 'tel');
+  }
+  if (onboardingPhone) {
+    onboardingPhone.setAttribute('placeholder', placeholder);
+    onboardingPhone.setAttribute('inputmode', 'tel');
+  }
+}
+
+// 에러 메시지(최소 범위) - 언어별
+function getPhoneInvalidMessage() {
+  return getCurrentLang() === 'ja'
+    ? '電話番号の形式が正しくありません（例: 090-1234-5678 または 090XXXXXXXX）。'
+    : '전화번호 형식이 올바르지 않습니다 (010-XXXX-XXXX 또는 010XXXXXXXX).';
+}
+
+function getPhoneDuplicateMessage() {
+  return getCurrentLang() === 'ja'
+    ? '既に登録されている電話番号です。'
+    : '이미 등록된 전화번호입니다.';
+}

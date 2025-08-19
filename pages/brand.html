@@ -767,24 +767,24 @@
       <button class="auth-modal-close" id="auth-modal-close">&times;</button>
       
       <div class="auth-modal-header">
-        <h2 class="auth-modal-title">로그인 / 회원가입</h2>
-        <p class="auth-modal-subtitle">Audionyx의 모든 서비스를 이용하려면<br>로그인이 필요합니다</p>
+        <h2 class="auth-modal-title" data-i18n="findMusic.auth.title">로그인 / 회원가입</h2>
+        <p class="auth-modal-subtitle" data-i18n-html="findMusic.auth.subtitle">Audionyx의 모든 서비스를 이용하려면<br>로그인이 필요합니다</p>
       </div>
       
       <div class="auth-methods">
         <!-- 이메일/아이디 및 비밀번호 로그인 폼 -->
         <form id="email-login-form" autocomplete="off">
           <div class="form-group">
-            <label for="login-email-id">아이디 또는 이메일</label>
-            <input type="text" id="login-email-id" placeholder="아이디 또는 이메일 주소" required autocomplete="username">
+            <label for="login-email-id" data-i18n="findMusic.auth.emailLabel">아이디 또는 이메일</label>
+            <input type="text" id="login-email-id" data-i18n-placeholder="findMusic.auth.emailPlaceholder" placeholder="아이디 또는 이메일 주소" required autocomplete="username">
             <div class="error-message" id="login-email-id-error"></div>
           </div>
           <div class="form-group">
-            <label for="login-password">비밀번호</label>
-            <input type="password" id="login-password" placeholder="비밀번호" required autocomplete="current-password">
+            <label for="login-password" data-i18n="findMusic.auth.passwordLabel">비밀번호</label>
+            <input type="password" id="login-password" data-i18n-placeholder="findMusic.auth.passwordPlaceholder" placeholder="비밀번호" required autocomplete="current-password">
             <div class="error-message" id="login-password-error"></div>
           </div>
-          <button type="submit" class="btn-primary auth-submit-btn">로그인</button>
+          <button type="submit" class="btn-primary auth-submit-btn" data-i18n="findMusic.auth.loginButton">로그인</button>
         </form>
 
         <div class="auth-divider">
@@ -799,13 +799,13 @@
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
           </svg>
-          Google 계정으로 계속하기
+          <span data-i18n="findMusic.auth.googleButton">Google 계정으로 계속하기</span>
         </button>
       </div>
       
       <div class="auth-modal-footer">
-        <p>Audionyx가 처음이신가요? <a href="#" id="show-signup-modal-link" class="signup-link">회원가입 하기</a></p>
-        <p>로그인 시 <a href="#" onclick="event.preventDefault()">이용약관</a> 및 <a href="#" onclick="event.preventDefault()">개인정보처리방침</a>에 동의하게 됩니다</p>
+        <p><span data-i18n="findMusic.auth.signupLinkText">Audionyx가 처음이신가요?</span> <a href="#" id="show-signup-modal-link" class="signup-link" data-i18n="findMusic.auth.signupLink">회원가입 하기</a></p>
+        <p data-i18n-html="findMusic.auth.footerText">로그인 시 <a href="#" onclick="event.preventDefault()">이용약관</a> 및 <a href="#" onclick="event.preventDefault()">개인정보처리방침</a>에 동의하게 됩니다</p>
       </div>
     </div>
   </div>
@@ -816,44 +816,44 @@
       <button class="auth-modal-close" id="signup-modal-close">&times;</button>
 
       <div class="auth-modal-header">
-        <h2 class="auth-modal-title">회원가입</h2>
-        <p class="auth-modal-subtitle">Audionyx에 오신 것을 환영합니다!<br>간단한 정보 입력으로 시작하세요</p>
+        <h2 class="auth-modal-title" data-i18n="findMusic.auth.signupTitle">회원가입</h2>
+        <p class="auth-modal-subtitle" data-i18n-html="findMusic.auth.signupSubtitle">Audionyx에 오신 것을 환영합니다!<br>간단한 정보 입력으로 시작하세요</p>
       </div>
 
       <div class="auth-methods">
         <form id="signup-form" autocomplete="off">
           <div class="form-group">
-            <label for="signup-nickname">이름 (닉네임)</label>
-            <input type="text" id="signup-nickname" placeholder="2~16자" required minlength="2" maxlength="16" autocomplete="name">
+            <label for="signup-nickname" data-i18n="findMusic.auth.nicknameLabel">이름 (닉네임)</label>
+            <input type="text" id="signup-nickname" data-i18n-placeholder="findMusic.auth.nicknamePlaceholder" placeholder="2~16자" required minlength="2" maxlength="16" autocomplete="name">
             <div class="error-message" id="signup-nickname-error"></div>
           </div>
           <div class="form-group">
-            <label for="signup-phone">전화번호</label>
-            <input type="tel" id="signup-phone" placeholder="010-XXXX-XXXX 또는 01XXXXXXXXX" pattern="010-[0-9]{4}-[0-9]{4}|010[0-9]{8}" required autocomplete="tel">
+            <label for="signup-phone" data-i18n="findMusic.auth.phoneLabel">전화번호</label>
+            <input type="tel" id="signup-phone" data-i18n-placeholder="findMusic.auth.phonePlaceholder" placeholder="010-XXXX-XXXX 또는 01XXXXXXXXX" pattern="010-[0-9]{4}-[0-9]{4}|010[0-9]{8}" required autocomplete="tel">
             <div class="error-message" id="signup-phone-error"></div>
           </div>
           <div class="form-group">
-            <label for="signup-email">이메일</label>
-            <input type="email" id="signup-email" placeholder="이메일 주소" required autocomplete="email">
+            <label for="signup-email" data-i18n="findMusic.auth.signupEmailLabel">이메일</label>
+            <input type="email" id="signup-email" data-i18n-placeholder="findMusic.auth.signupEmailPlaceholder" placeholder="이메일 주소" required autocomplete="email">
             <div class="error-message" id="signup-email-error"></div>
           </div>
           <div class="form-group" id="signup-username-group">
-            <label for="signup-username">아이디</label>
+            <label for="signup-username" data-i18n="findMusic.auth.usernameLabel">아이디</label>
             <div class="signup-username-input-wrapper">
-              <input type="text" id="signup-username" placeholder="4~20자 (영문, 숫자)" required minlength="4" maxlength="20" pattern="[a-zA-Z0-9]+" autocomplete="new-username">
-              <button type="button" class="check-duplicate-btn" id="check-username-duplicate">중복 확인</button>
+              <input type="text" id="signup-username" data-i18n-placeholder="findMusic.auth.usernamePlaceholder" placeholder="4~20자 (영문, 숫자)" required minlength="4" maxlength="20" pattern="[a-zA-Z0-9]+" autocomplete="new-username">
+              <button type="button" class="check-duplicate-btn" id="check-username-duplicate" data-i18n="findMusic.auth.checkDuplicate">중복 확인</button>
             </div>
             <div class="error-message" id="signup-username-error"></div>
             <div class="success-message" id="signup-username-success" style="display: none;"></div>
           </div>
           <div class="form-group">
-            <label for="signup-password">비밀번호</label>
-            <input type="password" id="signup-password" placeholder="8자 이상 (영문, 숫자, 특수문자)" required minlength="8" autocomplete="new-password">
+            <label for="signup-password" data-i18n="findMusic.auth.signupPasswordLabel">비밀번호</label>
+            <input type="password" id="signup-password" data-i18n-placeholder="findMusic.auth.signupPasswordPlaceholder" placeholder="8자 이상 (영문, 숫자, 특수문자)" required minlength="8" autocomplete="new-password">
             <div class="error-message" id="signup-password-error"></div>
           </div>
           <div class="form-group">
-            <label for="signup-password-confirm">비밀번호 확인</label>
-            <input type="password" id="signup-password-confirm" placeholder="비밀번호 재입력" required autocomplete="new-password">
+            <label for="signup-password-confirm" data-i18n="findMusic.auth.confirmPasswordLabel">비밀번호 확인</label>
+            <input type="password" id="signup-password-confirm" data-i18n-placeholder="findMusic.auth.confirmPasswordPlaceholder" placeholder="비밀번호 재입력" required autocomplete="new-password">
             <div class="error-message" id="signup-password-confirm-error"></div>
           </div>
 
@@ -861,20 +861,20 @@
             <label class="checkbox-container">
               <input type="checkbox" id="terms-agree-required" required>
               <span class="checkmark"></span>
-              이용약관 및 개인정보처리방침 동의 (필수)
+              <span data-i18n="findMusic.auth.termsAgreement">이용약관 및 개인정보처리방침 동의 (필수)</span>
             </label>
             <label class="checkbox-container">
               <input type="checkbox" id="marketing-agree-optional">
               <span class="checkmark"></span>
-              마케팅 정보 수신 동의 (선택)
+              <span data-i18n="findMusic.auth.marketingOptional">마케팅 정보 수신 동의 (선택)</span>
             </label>
           </div>
 
-          <button type="submit" class="btn-primary auth-submit-btn">회원가입</button>
+          <button type="submit" class="btn-primary auth-submit-btn" data-i18n="findMusic.auth.signupButton">회원가입</button>
         </form>
       </div>
       <div class="auth-modal-footer">
-        <p>이미 계정이 있으신가요? <a href="#" id="show-login-modal-link" class="login-link">로그인 하기</a></p>
+        <p><span data-i18n="findMusic.auth.loginLinkText">이미 계정이 있으신가요?</span> <a href="#" id="show-login-modal-link" class="login-link" data-i18n="findMusic.auth.loginLink">로그인 하기</a></p>
       </div>
     </div>
   </div>
@@ -883,8 +883,8 @@
   <div id="onboarding-modal" class="auth-modal">
     <div class="auth-modal-content">
                   <div class="auth-modal-header">
-                <h2 class="auth-modal-title">추가 정보 입력</h2>
-                <p class="auth-modal-subtitle">Audionyx 서비스 이용을 위해<br>추가 정보를 입력해 주세요</p>
+                <h2 class="auth-modal-title" data-i18n="findMusic.auth.onboardingTitle">추가 정보 입력</h2>
+                <p class="auth-modal-subtitle" data-i18n-html="findMusic.auth.onboardingSubtitle">Audionyx 서비스 이용을 위해<br>추가 정보를 입력해 주세요</p>
                 <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-top: 16px; color: #856404; font-size: 14px;">
                     <strong>⚠️ 필수 단계:</strong> 회원가입을 완료하려면 모든 정보를 입력해야 합니다.
                 </div>
@@ -893,20 +893,20 @@
       <div class="auth-methods">
         <form id="onboarding-form" autocomplete="off">
           <div class="form-group">
-            <label for="onboarding-nickname">이름 (닉네임)</label>
-            <input type="text" id="onboarding-nickname" placeholder="2~16자" required minlength="2" maxlength="16" autocomplete="name">
+            <label for="onboarding-nickname" data-i18n="findMusic.auth.nicknameLabel">이름 (닉네임)</label>
+            <input type="text" id="onboarding-nickname" data-i18n-placeholder="findMusic.auth.nicknamePlaceholder" placeholder="2~16자" required minlength="2" maxlength="16" autocomplete="name">
             <div class="error-message" id="onboarding-nickname-error"></div>
           </div>
           <div class="form-group">
-            <label for="onboarding-phone">전화번호</label>
-            <input type="tel" id="onboarding-phone" placeholder="010-XXXX-XXXX 또는 01XXXXXXXXX" pattern="010-[0-9]{4}-[0-9]{4}|010[0-9]{8}" required autocomplete="tel">
+            <label for="onboarding-phone" data-i18n="findMusic.auth.phoneLabel">전화번호</label>
+            <input type="tel" id="onboarding-phone" data-i18n-placeholder="findMusic.auth.phonePlaceholder" placeholder="010-XXXX-XXXX 또는 01XXXXXXXXX" pattern="010-[0-9]{4}-[0-9]{4}|010[0-9]{8}" required autocomplete="tel">
             <div class="error-message" id="onboarding-phone-error"></div>
           </div>
           <div class="form-group" id="onboarding-username-group">
-            <label for="onboarding-username">아이디</label>
+            <label for="onboarding-username" data-i18n="findMusic.auth.usernameLabel">아이디</label>
             <div class="signup-username-input-wrapper">
-              <input type="text" id="onboarding-username" placeholder="4~20자 (영문, 숫자)" required minlength="4" maxlength="20" pattern="[a-zA-Z0-9]+" autocomplete="new-username">
-              <button type="button" class="check-duplicate-btn" id="check-onboarding-username-duplicate">중복 확인</button>
+              <input type="text" id="onboarding-username" data-i18n-placeholder="findMusic.auth.usernamePlaceholder" placeholder="4~20자 (영문, 숫자)" required minlength="4" maxlength="20" pattern="[a-zA-Z0-9]+" autocomplete="new-username">
+              <button type="button" class="check-duplicate-btn" id="check-onboarding-username-duplicate" data-i18n="findMusic.auth.checkDuplicate">중복 확인</button>
             </div>
             <div class="error-message" id="onboarding-username-error"></div>
             <div class="success-message" id="onboarding-username-success" style="display: none;"></div>
@@ -916,16 +916,16 @@
             <label class="checkbox-container">
               <input type="checkbox" id="onboarding-terms-agree-required" required>
               <span class="checkmark"></span>
-              이용약관 및 개인정보처리방침 동의 (필수)
+              <span data-i18n="findMusic.auth.termsAgreement">이용약관 및 개인정보처리방침 동의 (필수)</span>
             </label>
             <label class="checkbox-container">
               <input type="checkbox" id="onboarding-marketing-agree-optional">
               <span class="checkmark"></span>
-              마케팅 정보 수신 동의 (선택)
+              <span data-i18n="findMusic.auth.marketingOptional">마케팅 정보 수신 동의 (선택)</span>
             </label>
           </div>
 
-          <button type="submit" class="btn-primary auth-submit-btn">완료</button>
+          <button type="submit" class="btn-primary auth-submit-btn" data-i18n="findMusic.auth.onboardingCompleteButton">완료</button>
         </form>
       </div>
     </div>

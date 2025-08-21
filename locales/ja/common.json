@@ -60,7 +60,8 @@
     "production": "制作"
   },
   "common": {
-    "loading": "処理中..."
+    "loading": "処理中...",
+    "close": "閉じる"
   },
   "brand": {
     "title": "ブランド紹介",
@@ -423,6 +424,13 @@
       "detectedPlatform": "検出されたプラットフォーム",
       "cancel": "キャンセル",
       "add": "リンク追加"
+    },
+    "banner": {
+      "title": "あっ！まだチャンネル登録が済んでいませんね？",
+      "description": "今すぐチャンネルを登録して収益化を始めましょう！",
+      "ctaLong": "チャンネル登録へ",
+      "ctaShort": "チャンネル登録",
+      "mobileText": "チャンネル登録"
     }
   },
   "trackProduction": {

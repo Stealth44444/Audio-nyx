@@ -681,6 +681,16 @@ onAuthStateChanged(auth, async (user) => {
     // 로그인 시 네비게이션 접근 권한 업데이트
     updateNavigationAccessOnLogin(user);
     closeAuthModal(); // 로그인 성공 시 모달 닫기
+    // 회원가입 플로우에서 로그인된 경우 자동 이동 처리
+    try {
+      if (sessionStorage.getItem('redirectToChannelAfterLogin') === '1') {
+        sessionStorage.removeItem('redirectToChannelAfterLogin');
+        window.location.href = '/pages/channel-management.html?openChannelModal=1';
+      }
+    } catch (_) {}
+
+    // 가입 이후에도 채널 미등록 사용자에게 배너 지속 노출
+    try { maybeShowChannelBanner(user.uid); } catch (_) {}
   } else {
     // Firebase 로그아웃 상태 - UI 초기화
     
@@ -739,6 +749,10 @@ onAuthStateChanged(auth, async (user) => {
     
     // 로그아웃 시 네비게이션 접근 권한 재설정
     updateNavigationAccess(null);
+
+    // 로그아웃 시 배너 제거
+    const existing = document.querySelector('.post-signup-banner');
+    if (existing) existing.remove();
   }
 });
 
@@ -1368,6 +1382,7 @@ async function handleSignup(e) {
     }
 
     showNotification('회원가입이 완료되었습니다!');
+    try { sessionStorage.setItem('postSignupPrompt', 'channel'); } catch (_) {}
     closeSignupModal();
     openAuthModal(); // 회원가입 완료 후 로그인 모달 자동 오픈
   } catch (error) {
@@ -1670,6 +1685,112 @@ if (typeof window !== 'undefined') {
   requireAuthPage();
 }
 
+function renderPostSignupBanner() {
+  if (document.querySelector('.post-signup-banner')) return;
+  const banner = document.createElement('div');
+  banner.className = 'post-signup-banner';
+  banner.setAttribute('role', 'status');
+
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  const t = (key, fallback) => {
+    try {
+      if (window.i18next && typeof window.i18next.t === 'function') {
+        const v = window.i18next.t(key);
+        return v && v !== key ? v : (fallback || key);
+      }
+    } catch (_) {}
+    return fallback || key;
+  };
+
+  const icon = document.createElement('div');
+  icon.className = 'banner-icon';
+  icon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+
+  const text = document.createElement('div');
+  text.className = 'banner-text';
+  if (isMobile) {
+    text.textContent = t('channelManagement.banner.mobileText', '채널 등록');
+  } else {
+    const title = t('channelManagement.banner.title', '엇! 아직 채널 등록 안 하셨네요?');
+    const desc = t('channelManagement.banner.description', '지금 채널을 등록하고 수익창출 시작해보세요!');
+    text.innerHTML = `<strong>${title}</strong><br>${desc}`;
+  }
+
+  const cta = document.createElement('button');
+  cta.type = 'button';
+  cta.className = 'banner-cta';
+  cta.textContent = isMobile ? t('channelManagement.banner.ctaShort', '채널 등록') : t('channelManagement.banner.ctaLong', '채널 등록하러 가기');
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'banner-close';
+  closeBtn.setAttribute('aria-label', t('common.close', '닫기'));
+  closeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+  banner.appendChild(icon);
+  banner.appendChild(text);
+  banner.appendChild(cta);
+  banner.appendChild(closeBtn);
+  document.body.appendChild(banner);
+
+  const dismiss = () => {
+    if (banner && banner.parentNode) {
+      banner.classList.add('hide');
+      setTimeout(() => banner.parentNode && banner.parentNode.removeChild(banner), 260);
+    }
+  };
+
+  closeBtn.addEventListener('click', dismiss);
+  cta.addEventListener('click', () => {
+    try {
+      const isOnChannelPage = /\/pages\/channel-management\.html$/.test(window.location.pathname);
+      if (auth && auth.currentUser) {
+        if (isOnChannelPage) {
+          // 같은 페이지면 모달 대신 등록 섹션으로 스크롤
+          const target = document.querySelector('.channel-list-section') || document.getElementById('register-channel-btn') || document.getElementById('channel-list');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          }
+        } else {
+          // 채널 관리 페이지로 이동 후 스크롤
+          window.location.href = '/pages/channel-management.html?scrollTo=channelTable';
+        }
+      } else {
+        sessionStorage.setItem('redirectToChannelAfterLogin', '1');
+        openAuthModal();
+      }
+    } catch (_) {
+      try { sessionStorage.setItem('redirectToChannelAfterLogin', '1'); } catch (_) {}
+      openAuthModal();
+    } finally {
+      dismiss();
+    }
+  });
+}
+
+// 로그인 사용자의 채널 보유 여부에 따라 배너 노출
+async function maybeShowChannelBanner(uid) {
+  try {
+    if (!uid) return;
+    // 배너는 채널 관리 페이지에서만 표시
+    if (!/\/pages\/channel-management\.html$/.test(window.location.pathname)) return;
+    if (document.querySelector('.post-signup-banner')) return;
+    const userChannelDocRef = doc(db, 'channels', uid);
+    const snap = await getDoc(userChannelDocRef);
+    const hasChannels = snap.exists() && Array.isArray(snap.data().channels) && snap.data().channels.length > 0;
+    if (!hasChannels) {
+      renderPostSignupBanner();
+    } else {
+      const existing = document.querySelector('.post-signup-banner');
+      if (existing) existing.remove();
+    }
+  } catch (e) {
+    // 실패 시에는 조용히 무시
+  }
+}
+
 // 온보딩 모달 열기
 function openOnboardingModal() {
   if (onboardingModal) {
@@ -1819,7 +1940,9 @@ async function handleOnboarding(e) {
 
     console.log('[handleOnboarding] 온보딩 완료');
     showNotification('회원가입이 완료되었습니다.');
+    try { sessionStorage.setItem('postSignupPrompt', 'channel'); } catch (_) {}
     closeOnboardingModal(true); // 온보딩 완료 시에만 모달 닫기
+    try { maybeShowChannelBanner(currentUser.uid); } catch (_) {}
     
     // 여기에 메인 페이지로 이동하는 로직 추가 가능
     // window.location.href = '/main';

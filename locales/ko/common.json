@@ -60,7 +60,8 @@
     "production": "제작"
   },
   "common": {
-    "loading": "처리 중..."
+    "loading": "처리 중...",
+    "close": "닫기"
   },
   "brand": {
     "title": "브랜드 소개",
@@ -386,6 +387,13 @@
       "detectedPlatform": "감지된 플랫폼",
       "cancel": "취소",
       "add": "링크 추가"
+    },
+    "banner": {
+      "title": "엇! 아직 채널 등록 안 하셨네요?",
+      "description": "지금 채널을 등록하고 수익창출 시작해보세요!",
+      "ctaLong": "채널 등록하러 가기",
+      "ctaShort": "채널 등록",
+      "mobileText": "채널 등록"
     }
   },
   "trackProduction": {

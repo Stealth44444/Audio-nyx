@@ -229,6 +229,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 초기 실행
   ensureInputFieldEnabled();
+  // URL 파라미터로 모달 자동 오픈 처리 (회원가입 직후 유도)
+  try {
+    const params = new URLSearchParams(window.location.search);
+    // 테이블 스크롤 유도 파라미터
+    if (params.get('scrollTo') === 'channelTable') {
+      setTimeout(() => {
+        const section = document.querySelector('.channel-list-section') || document.getElementById('channel-list');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  } catch (_) {}
   
   // 모달이 열릴 때마다 확인
   const observer = new MutationObserver((mutations) => {
@@ -258,6 +269,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (user) {
       currentUser = user;
       console.log('로그인된 사용자:', user.uid);
+      // URL 파라미터에 따라 최초 진입 시 테이블로 스크롤
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('scrollTo') === 'channelTable') {
+          setTimeout(() => {
+            const section = document.querySelector('.channel-list-section') || document.getElementById('channel-list');
+            if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 300);
+        }
+      } catch (_) {}
       
       // 채널 목록 실시간 업데이트 설정
       setupChannelListener();
@@ -508,6 +529,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
         closeModal();
         }, 2000);
+        
+        // 채널 미등록 배너가 떠있다면 제거
+        try {
+          const banner = document.querySelector('.post-signup-banner');
+          if (banner) banner.remove();
+        } catch (_) {}
         
         // 서버 API 호출 (Cloud Function)
         try {
@@ -915,6 +942,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   function openModal() {
     console.log('모달 열기');
+    // 모달 열릴 때 배너 숨김
+    try {
+      const banner = document.querySelector('.post-signup-banner');
+      if (banner) banner.remove();
+    } catch (_) {}
     modal.style.display = 'flex';
     
     // 입력 필드 초기화

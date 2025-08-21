@@ -1687,6 +1687,19 @@ if (typeof window !== 'undefined') {
 
 function renderPostSignupBanner() {
   if (document.querySelector('.post-signup-banner')) return;
+  // 1시간 스누즈 체크 (유저별 키 우선)
+  try {
+    const uid = (auth && auth.currentUser && auth.currentUser.uid) || null;
+    const keys = uid ? [`channelBannerSnoozeUntil:${uid}`, 'channelBannerSnoozeUntil'] : ['channelBannerSnoozeUntil'];
+    const now = Date.now();
+    for (const key of keys) {
+      const untilStr = localStorage.getItem(key);
+      const until = untilStr ? parseInt(untilStr, 10) : 0;
+      if (until && now < until) {
+        return; // 스누즈 중이면 표시하지 않음
+      }
+    }
+  } catch (_) {}
   const banner = document.createElement('div');
   banner.className = 'post-signup-banner';
   banner.setAttribute('role', 'status');
@@ -1708,9 +1721,7 @@ function renderPostSignupBanner() {
 
   const text = document.createElement('div');
   text.className = 'banner-text';
-  if (isMobile) {
-    text.textContent = t('channelManagement.banner.mobileText', '채널 등록');
-  } else {
+  {
     const title = t('channelManagement.banner.title', '엇! 아직 채널 등록 안 하셨네요?');
     const desc = t('channelManagement.banner.description', '지금 채널을 등록하고 수익창출 시작해보세요!');
     text.innerHTML = `<strong>${title}</strong><br>${desc}`;
@@ -1741,6 +1752,15 @@ function renderPostSignupBanner() {
   };
 
   closeBtn.addEventListener('click', dismiss);
+  // 닫기(X) 클릭 시 1시간 스누즈 저장 (유저별 키 우선 저장)
+  closeBtn.addEventListener('click', () => {
+    try {
+      const uid = (auth && auth.currentUser && auth.currentUser.uid) || null;
+      const key = uid ? `channelBannerSnoozeUntil:${uid}` : 'channelBannerSnoozeUntil';
+      const until = Date.now() + 60 * 60 * 1000; // 1시간
+      localStorage.setItem(key, String(until));
+    } catch (_) {}
+  });
   cta.addEventListener('click', () => {
     try {
       const isOnChannelPage = /\/pages\/channel-management\.html$/.test(window.location.pathname);
@@ -1774,8 +1794,7 @@ function renderPostSignupBanner() {
 async function maybeShowChannelBanner(uid) {
   try {
     if (!uid) return;
-    // 배너는 채널 관리 페이지에서만 표시
-    if (!/\/pages\/channel-management\.html$/.test(window.location.pathname)) return;
+    // 사이트 전역 표시 (페이지 제한 제거)
     if (document.querySelector('.post-signup-banner')) return;
     const userChannelDocRef = doc(db, 'channels', uid);
     const snap = await getDoc(userChannelDocRef);

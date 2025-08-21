@@ -5,6 +5,17 @@
         bottom: 80px; /* 모바일 하단 네비 영역 고려 */
     }
 }
+
+/* 데스크탑에서 채널톡 버튼과 겹치지 않도록 우측 여백 확보 */
+@media (min-width: 769px) {
+    .post-signup-banner {
+        right: 120px; /* 채널톡 런처 영역 회피용 여백 */
+        justify-content: flex-start;
+    }
+    .post-signup-banner .banner-text { margin-right: 8px; }
+    .post-signup-banner .banner-cta { margin-left: 6px; }
+    .post-signup-banner .banner-close { margin-left: 6px; }
+}
 /* === 공통 디자인 시스템 변수 === */
 :root {
     /* 색상 */

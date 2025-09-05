@@ -103,7 +103,14 @@
           "step3Desc": "収入の一部が<b>毎月</b>自動入金",
     "previewTitle": "Right Now",
           "previewHeadline": "ハイクオリティ音源トラックを使用して<br>新しい収入パイプラインを作りましょう",
-      "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収入の一部を獲得できます。</strong>"
+      "previewDesc": "Audionyxのプレミアムトラックで今すぐ始めましょう <strong>全ての音源が無料で、収入の一部を獲得できます。</strong>",
+    "views": "再生数",
+    "vs": {
+      "before": "Audionyx未使用",
+      "after": "Audionyx使用",
+      "onlyVideo": "動画収入のみ",
+      "videoPlusMusic": "動画+楽曲収入"
+    }
   },
   "withdraw": {
     "title": "収入出金 | Audionyx",
@@ -294,6 +301,11 @@
         "processing": "処理中"
       }
     },
+    "pagination": {
+      "info": "1-10 / 50 件",
+      "prev": "前へ",
+      "next": "次へ"
+    },
     "channelList": {
       "title": "登録済みチャンネル一覧",
       "noChannels": "登録されたチャンネルがありません",
@@ -423,7 +435,9 @@
       "trackHelp": "コンテンツで使用した正確なAudionyx楽曲タイトルまたはCIDコードを入力してください",
       "detectedPlatform": "検出されたプラットフォーム",
       "cancel": "キャンセル",
-      "add": "リンク追加"
+      "add": "リンク追加",
+      "trackPlaceholder": "楽曲タイトルまたはCIDを入力...",
+      "detectedPlatformAuto": "自動検出"
     },
     "banner": {
       "title": "あっ！まだチャンネル登録が済んでいませんね？",

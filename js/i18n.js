@@ -56,6 +56,8 @@ class SimpleI18n {
           mobile: { home: "ホーム", music: "音源", channel: "チャンネル", withdraw: "精算", production: "制作" },
           brand: { title: "ブランド紹介", heroTitle: "ブランド紹介", heroSubtitle: "クリエイター向け音源収益化プラットフォーム", heroCta: "Go Tracks", aboutTitle: "Audionyxとは？", aboutHeadline: "音源収益も、動画収益も<br>Audionyx一つで全て手に入れましょう", whyTitle: "Why Audionyx?", whySubtitle: "Audionyxと共に始める新しい収益創出の3つの核心" }
         };
+      } else if (lang === 'en') {
+        this.translations[lang] = { navbar: { home: "Home", brand: "Brand", withdraw: "Bank Account", findMusic: "Find Music", channel: "Channel Management", track: "Track Production", login: "Login", producer: "Audionyx Producer", faq: "FAQ", logout: "Logout" }, hero: { fixed: "FREE TRACKS + EARN", main: "Add music earnings to your Shorts.", desc: "Music licensing fees that YouTube pays to rights holders are shared by AUDIONYX with creators, generating music revenue.", cta: "Get Started" }, footer: { tagline: "Short-form music monetization platform", service: "Services", company: "Company", contact: "Contact", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" }, mobile: { home: "Home", music: "Music", channel: "Channel", withdraw: "Payouts", production: "Production" }, brand: { title: "Brand", heroTitle: "Brand", heroSubtitle: "A music monetization platform for creators", heroCta: "Go Tracks", aboutTitle: "What is Audionyx?", aboutHeadline: "Keep both music revenue and video revenue<br>with Audionyx", whyTitle: "Why Audionyx?", whySubtitle: "3 pillars to open up new revenue with Audionyx" } };
       }
       console.log(`폴백 번역 데이터 사용: ${lang}`);
     }
@@ -119,8 +121,7 @@ async function initI18n() {
     console.log('i18next 초기화 시작...');
     
     const saved = localStorage.getItem("lang");
-    const fallback = navigator.language.startsWith("ja") ? "ja" : "ko";
-    const initialLang = saved || fallback;
+    const initialLang = saved || "ja";
     
     console.log('초기 언어 설정:', initialLang);
 
@@ -136,6 +137,8 @@ async function initI18n() {
     translate();
     bindLangToggles();
     updateActive(i18next.language);
+    // 문서 lang 동기화
+    try { document.documentElement.setAttribute('lang', i18next.language); } catch (e) {}
     
   } catch (error) {
     console.error('i18next 초기화 실패:', error);
@@ -254,6 +257,7 @@ function bindLangToggles() {
         localStorage.setItem("lang", lang);
         translate();
         updateActive(lang);
+        try { document.documentElement.setAttribute('lang', lang); } catch (e) {}
         // 언어 변경 후 동적으로 제어되는 일부 UI 텍스트 동기화
         try {
           if (typeof window.syncDynamicI18n === 'function') {

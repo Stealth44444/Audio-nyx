@@ -98,7 +98,12 @@
     "step1Title": "Step 1  ·  音源選択",
     "step1Desc": "トラックを試聴して<b>Copy CID</b>",
     "step2Title": "Step 2  ·  動画アップロード",
-    "step2Desc": "Shortsアップロード時<br><b>音源CID</b>を貼り付け",
+    "step2Desc": "プラットフォーム別入力ガイド",
+    "step2Guide": {
+      "youtube": "YouTube Shorts：トラック右側の<b>ISRC</b>をコピーし、アップロード時に<b>貼り付け</b>",
+      "tiktok": "TikTok：<b>曲名</b>または<b>曲名/アーティスト名</b>で検索して選択",
+      "reels": "Instagram Reels：<b>曲名</b>または<b>曲名/アーティスト名</b>で検索して選択"
+    },
     "step3Title": "Step 3  ·  自動入金",
           "step3Desc": "収入の一部が<b>毎月</b>自動入金",
     "previewTitle": "Right Now",
@@ -152,7 +157,14 @@
     "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収入を正確に集計して入金いたします。",
     "trustSecurity": "安全な暗号化",
     "trustMonitoring": "24時間モニタリング",
-    "trustEmail": "入金通知メール送信"
+    "trustEmail": "入金通知メール送信",
+    "banner": {
+      "title": "入金を受け取るため、口座登録を完了してください",
+      "description": "チャンネル登録は完了しています。口座を登録すると自動入金が開始されます。",
+      "ctaLong": "口座登録ページへ",
+      "ctaShort": "口座を登録",
+      "mobileText": "口座を登録"
+    }
   },
   "findMusic": {
     "title": "音源検索 | Audionyx",

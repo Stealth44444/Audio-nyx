@@ -105,7 +105,12 @@
     "step1Title": "Step 1  ·  음원 고르기",
     "step1Desc": "트랙 감상하고 <b>Copy CID</b>",
     "step2Title": "Step 2  ·  영상 업로드",
-    "step2Desc": "Shorts 업로드 시<br><b>음원 CID</b> 붙여넣기",
+    "step2Desc": "플랫폼별 입력 가이드",
+    "step2Guide": {
+      "youtube": "YouTube Shorts: 음원 검색 시 트랙 우측의 <b>ISRC</b> 코드를 복사해 업로드 시 <b>붙여넣기</b>",
+      "tiktok": "TikTok: 음원 검색 시 <b>곡 제목</b> 또는 <b>곡 제목/아티스트명</b>을 입력하여 선택",
+      "reels": "Instagram Reels: 음원 검색 시 <b>곡 제목</b> 또는 <b>곡 제목/아티스트명</b>을 입력하여 선택"
+    },
     "step3Title": "Step 3  ·  자동 입금",
     "step3Desc": "수익의 대부분이 <b>매달 </b> 자동 입금",
     "previewTitle": "Right Now",
@@ -152,7 +157,14 @@
     "infoDesc": "오디오닉스는 분기 말, 등록된 계좌로 자동 입금합니다. 채널별 수익을 정확히 집계하여 입금해 드립니다.",
     "trustSecurity": "안전한 암호화",
     "trustMonitoring": "24시간 모니터링",
-    "trustEmail": "입금 알림 이메일 발송"
+    "trustEmail": "입금 알림 이메일 발송",
+    "banner": {
+      "title": "정산을 받으려면 계좌 등록을 완료하세요",
+      "description": "채널 등록은 완료되었습니다. 이제 계좌를 등록하면 자동 입금이 시작됩니다.",
+      "ctaLong": "계좌 등록 페이지로",
+      "ctaShort": "계좌 등록",
+      "mobileText": "계좌 등록"
+    }
   },
   "findMusic": {
     "title": "음원 찾기 | Audionyx",

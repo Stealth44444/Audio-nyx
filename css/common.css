@@ -2083,7 +2083,8 @@ ul {
 }
 
 /* === 가입 직후/미등록 유저 채널 등록 배너 === */
-.post-signup-banner {
+.post-signup-banner,
+.payout-signup-banner {
     position: fixed;
     left: 16px;
     right: 16px;
@@ -2110,11 +2111,13 @@ ul {
     animation: banner-in 300ms ease forwards;
 }
 
-.post-signup-banner.hide {
+.post-signup-banner.hide,
+.payout-signup-banner.hide {
     animation: banner-out 250ms ease forwards;
 }
 
-.post-signup-banner .banner-icon {
+.post-signup-banner .banner-icon,
+.payout-signup-banner .banner-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2127,17 +2130,20 @@ ul {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.post-signup-banner .banner-text {
+.post-signup-banner .banner-text,
+.payout-signup-banner .banner-text {
     flex: 1;
     font-size: 0.95rem;
     line-height: 1.35;
 }
 
-.post-signup-banner .banner-text strong {
+.post-signup-banner .banner-text strong,
+.payout-signup-banner .banner-text strong {
     font-weight: 700;
 }
 
-.post-signup-banner .banner-cta {
+.post-signup-banner .banner-cta,
+.payout-signup-banner .banner-cta {
     background: #0b1721;
     color: #fff;
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -2149,12 +2155,14 @@ ul {
     box-shadow: 0 6px 18px rgba(11, 23, 33, 0.45);
 }
 
-.post-signup-banner .banner-cta:hover {
+.post-signup-banner .banner-cta:hover,
+.payout-signup-banner .banner-cta:hover {
     transform: translateY(-1px);
     box-shadow: 0 8px 22px rgba(11, 23, 33, 0.55);
 }
 
-.post-signup-banner .banner-close {
+.post-signup-banner .banner-close,
+.payout-signup-banner .banner-close {
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.85);
@@ -2167,7 +2175,8 @@ ul {
     transition: background 0.2s ease;
 }
 
-.post-signup-banner .banner-close:hover {
+.post-signup-banner .banner-close:hover,
+.payout-signup-banner .banner-close:hover {
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -2182,7 +2191,8 @@ ul {
 }
 
 @media (max-width: 480px) {
-    .post-signup-banner {
+    .post-signup-banner,
+    .payout-signup-banner {
         left: 10px;
         right: 10px;
         /* 모바일 하단 네비를 가리지 않도록 상단으로 띄움 */
@@ -2190,7 +2200,8 @@ ul {
         padding: 12px 12px;
         gap: 10px;
     }
-    .post-signup-banner .banner-text { font-size: 0.9rem; }
+    .post-signup-banner .banner-text,
+    .payout-signup-banner .banner-text { font-size: 0.9rem; }
 }
 
 /* General input styles for forms within auth modals */

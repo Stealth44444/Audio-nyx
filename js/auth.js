@@ -689,8 +689,9 @@ onAuthStateChanged(auth, async (user) => {
       }
     } catch (_) {}
 
-    // 가입 이후에도 채널 미등록 사용자에게 배너 지속 노출
+    // 배너 노출: 채널 미등록 배너 또는 계좌 미등록 배너
     try { maybeShowChannelBanner(user.uid); } catch (_) {}
+    try { maybeShowPayoutBanner(user.uid); } catch (_) {}
   } else {
     // Firebase 로그아웃 상태 - UI 초기화
     
@@ -1790,6 +1791,127 @@ function renderPostSignupBanner() {
   });
 }
 
+// 계좌 등록 안내 배너 렌더링
+function renderPayoutSignupBanner() {
+  if (document.querySelector('.payout-signup-banner')) return;
+  // 1시간 스누즈 체크 (유저별 키 우선)
+  try {
+    const uid = (auth && auth.currentUser && auth.currentUser.uid) || null;
+    const keys = uid ? [`payoutBannerSnoozeUntil:${uid}`, 'payoutBannerSnoozeUntil'] : ['payoutBannerSnoozeUntil'];
+    const now = Date.now();
+    for (const key of keys) {
+      const untilStr = localStorage.getItem(key);
+      const until = untilStr ? parseInt(untilStr, 10) : 0;
+      if (until && now < until) return;
+    }
+  } catch (_) {}
+
+  const banner = document.createElement('div');
+  banner.className = 'payout-signup-banner';
+  banner.setAttribute('role', 'status');
+
+  const isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  const t = (key, fallback) => {
+    try {
+      if (window.i18next && typeof window.i18next.t === 'function') {
+        const v = window.i18next.t(key);
+        return v && v !== key ? v : (fallback || key);
+      }
+    } catch (_) {}
+    return fallback || key;
+  };
+
+  const icon = document.createElement('div');
+  icon.className = 'banner-icon';
+  icon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"/><path d="M12 2v20"/></svg>';
+
+  const text = document.createElement('div');
+  text.className = 'banner-text';
+  {
+    const title = t('withdraw.banner.title', '정산을 받으려면 계좌 등록을 완료하세요');
+    const desc = t('withdraw.banner.description', '채널 등록은 완료되었습니다. 이제 계좌를 등록하면 자동 입금이 시작됩니다.');
+    text.innerHTML = `<strong>${title}</strong><br>${desc}`;
+  }
+
+  const cta = document.createElement('button');
+  cta.type = 'button';
+  cta.className = 'banner-cta';
+  cta.textContent = isMobile ? t('withdraw.banner.ctaShort', '계좌 등록') : t('withdraw.banner.ctaLong', '계좌 등록 페이지로');
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'banner-close';
+  closeBtn.setAttribute('aria-label', t('common.close', '닫기'));
+  closeBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+  banner.appendChild(icon);
+  banner.appendChild(text);
+  banner.appendChild(cta);
+  banner.appendChild(closeBtn);
+  document.body.appendChild(banner);
+
+  const dismiss = () => {
+    if (banner && banner.parentNode) {
+      banner.classList.add('hide');
+      setTimeout(() => banner.parentNode && banner.parentNode.removeChild(banner), 260);
+    }
+  };
+
+  closeBtn.addEventListener('click', () => {
+    dismiss();
+    try {
+      const uid = (auth && auth.currentUser && auth.currentUser.uid) || null;
+      const key = uid ? `payoutBannerSnoozeUntil:${uid}` : 'payoutBannerSnoozeUntil';
+      const until = Date.now() + 60 * 60 * 1000; // 1시간
+      localStorage.setItem(key, String(until));
+    } catch (_) {}
+  });
+
+  cta.addEventListener('click', () => {
+    try {
+      const isOnWithdrawPage = /\/pages\/withdraw\.html$/.test(window.location.pathname);
+      if (isOnWithdrawPage) {
+        const target = document.getElementById('withdraw-form-wrapper') || document.getElementById('withdraw-form');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.location.href = '/pages/withdraw.html';
+      }
+    } finally {
+      dismiss();
+    }
+  });
+}
+
+// 채널 등록은 완료했지만 계좌 정보가 없는 경우 배너 노출
+async function maybeShowPayoutBanner(uid) {
+  try {
+    if (!uid) return;
+    if (document.querySelector('.payout-signup-banner')) return;
+
+    // 채널 유무 확인
+    const channelRef = doc(db, 'channels', uid);
+    const channelSnap = await getDoc(channelRef);
+    const hasChannels = channelSnap.exists() && Array.isArray(channelSnap.data().channels) && channelSnap.data().channels.length > 0;
+    if (!hasChannels) return; // 채널이 없으면 기존 채널 등록 배너 우선
+
+    // 계좌 유무 확인
+    const accountRef = doc(db, 'user_withdraw_accounts', uid);
+    const accountSnap = await getDoc(accountRef);
+    const hasAccount = accountSnap.exists() && (
+      (accountSnap.data().bank && accountSnap.data().account) ||
+      (accountSnap.data().bankCode && accountSnap.data().accountNumber)
+    );
+
+    if (!hasAccount) {
+      renderPayoutSignupBanner();
+    } else {
+      const existing = document.querySelector('.payout-signup-banner');
+      if (existing) existing.remove();
+    }
+  } catch (e) {
+    // 조용히 무시
+  }
+}
 // 로그인 사용자의 채널 보유 여부에 따라 배너 노출
 async function maybeShowChannelBanner(uid) {
   try {

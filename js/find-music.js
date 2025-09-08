@@ -470,31 +470,39 @@ const tagJapaneseMappings = {
 // 영문 태그를 현재 언어로 변환하는 함수
 function convertTagToLocalizedString(tag, type, language = 'ko') {
   if (!tag) return '';
-  
-  // 언어에 따라 적절한 매핑 선택
+
+  // 우선 내부 표준 키로 매핑 (예: powerful -> energetic, unbox -> tech_innovation 등)
+  const mappedKey = mapTagToNewSystem(tag, type) || tag;
+
+  // 영어: i18n 사전에 등록된 공식 라벨 사용
+  if (language === 'en' && typeof window !== 'undefined' && window.i18next) {
+    const i18nKey = type === 'mood' ? `findMusic.moods.${mappedKey}` : `findMusic.usecases.${mappedKey}`;
+    const translated = window.i18next.t(i18nKey);
+    if (translated && translated !== i18nKey) return translated;
+    // i18n에 없으면 원본 태그 또는 표준 키를 자연어 형태로 반환
+    return String(mappedKey).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  // 일본어/한국어: 사전 매핑 사용
   const mappings = language === 'ja' ? tagJapaneseMappings[type] : tagKoreanMappings[type];
-  if (!mappings) return tag;
-  
-  // 직접 매핑 확인
-  if (mappings[tag]) {
-    return mappings[tag];
-  }
-  
-  // 소문자로 변환해서 확인
-  const lowerTag = tag.toLowerCase();
-  if (mappings[lowerTag]) {
-    return mappings[lowerTag];
-  }
-  
-  // 부분 매칭 확인
+  if (!mappings) return mappedKey;
+
+  // 직접 키 매핑
+  if (mappings[mappedKey]) return mappings[mappedKey];
+
+  // 소문자 키 매핑
+  const lowerTag = String(mappedKey).toLowerCase();
+  if (mappings[lowerTag]) return mappings[lowerTag];
+
+  // 부분 매칭
   for (const [englishTag, localizedTag] of Object.entries(mappings)) {
-    if (lowerTag.includes(englishTag.toLowerCase()) || englishTag.toLowerCase().includes(lowerTag)) {
+    if (lowerTag.includes(String(englishTag).toLowerCase()) || String(englishTag).toLowerCase().includes(lowerTag)) {
       return localizedTag;
     }
   }
-  
-  // 매핑이 없으면 원본 반환
-  return tag;
+
+  // 매핑이 없으면 표준 키 반환
+  return mappedKey;
 }
 
 // 하위 호환성을 위한 한국어 변환 함수

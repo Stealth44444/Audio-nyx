@@ -1579,7 +1579,7 @@ ul {
     .mobile-auth-buttons {
         display: flex;
         position: absolute;
-        left: calc(50% + 4rem);
+        left: calc(50% + 1.75rem);
         top: 50%;
         transform: translateY(-50%);
         /* 인증 상태 확인 중 깜빡임 방지 */
@@ -1597,7 +1597,7 @@ ul {
     .mobile-auth-loading {
         display: flex;
         position: absolute;
-        left: calc(50% + 4rem);
+        left: calc(50% + 1.75rem);
         top: 50%;
         transform: translateY(-50%);
         opacity: 1;
@@ -1634,7 +1634,7 @@ ul {
         align-items: center;
         gap: 0.3rem;
         position: absolute;
-        left: calc(50% + 4rem);
+        left: calc(50% + 1.75rem);
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
@@ -1959,14 +1959,14 @@ ul {
     }
 
     .mobile-user-profile {
-        left: calc(50% + 3rem) !important;
+        left: calc(50% + 1.5rem) !important;
         padding: 0.25rem 0.4rem !important;
         gap: 0.25rem !important;
     }
 
     .mobile-auth-buttons,
     .mobile-auth-loading {
-        left: calc(50% + 3rem) !important;
+        left: calc(50% + 1.5rem) !important;
     }
 
     .mobile-user-avatar {
@@ -1984,12 +1984,12 @@ ul {
 /* 매우 작은 화면 (360px 이하)에서 로고 옆 간격 더 줄이기 */
 @media (max-width: 360px) {
     .mobile-user-profile {
-        left: calc(50% + 2.5rem) !important;
+        left: calc(50% + 1.25rem) !important;
     }
 
     .mobile-auth-buttons,
     .mobile-auth-loading {
-        left: calc(50% + 2.5rem) !important;
+        left: calc(50% + 1.25rem) !important;
     }
 
     /* Removed existing .auth-modal-content media query here to consolidate */

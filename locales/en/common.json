@@ -306,6 +306,7 @@
       "autoVerificationDesc": "Once setup is complete, the system verifies automatically and monetization starts immediately upon approval.",
       "registrationComplete": "Registered",
       "verificationInProgress": "Verifying",
+      "urlValidation": "Automatically validates each platform's URL format<br>to ensure accurate registration.",
       "verificationPending": "Pending",
       "approvalComplete": "Approved",
       "faqTitle": "Frequently Asked Questions",

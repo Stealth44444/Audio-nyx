@@ -105,12 +105,7 @@
     "step1Title": "Step 1  ·  음원 고르기",
     "step1Desc": "트랙 감상하고 <b>Copy CID</b>",
     "step2Title": "Step 2  ·  영상 업로드",
-    "step2Desc": "플랫폼별 입력 가이드",
-    "step2Guide": {
-      "youtube": "YouTube Shorts: 음원 검색 시 트랙 우측의 <b>ISRC</b> 코드를 복사해 업로드 시 <b>붙여넣기</b>",
-      "tiktok": "TikTok: 음원 검색 시 <b>곡 제목</b> 또는 <b>곡 제목/아티스트명</b>을 입력하여 선택",
-      "reels": "Instagram Reels: 음원 검색 시 <b>곡 제목</b> 또는 <b>곡 제목/아티스트명</b>을 입력하여 선택"
-    },
+    "step2Desc": "Shorts 업로드 시<br><b>음원 CID</b> 붙여넣기",
     "step3Title": "Step 3  ·  자동 입금",
     "step3Desc": "수익의 대부분이 <b>매달 </b> 자동 입금",
     "previewTitle": "Right Now",
@@ -157,14 +152,7 @@
     "infoDesc": "오디오닉스는 분기 말, 등록된 계좌로 자동 입금합니다. 채널별 수익을 정확히 집계하여 입금해 드립니다.",
     "trustSecurity": "안전한 암호화",
     "trustMonitoring": "24시간 모니터링",
-    "trustEmail": "입금 알림 이메일 발송",
-    "banner": {
-      "title": "정산을 받으려면 계좌 등록을 완료하세요",
-      "description": "채널 등록은 완료되었습니다. 이제 계좌를 등록하면 자동 입금이 시작됩니다.",
-      "ctaLong": "계좌 등록 페이지로",
-      "ctaShort": "계좌 등록",
-      "mobileText": "계좌 등록"
-    }
+    "trustEmail": "입금 알림 이메일 발송"
   },
   "findMusic": {
     "title": "음원 찾기 | Audionyx",
@@ -201,17 +189,14 @@
     "player": {
       "close": "닫기",
       "play": "재생",
+      "pause": "일시정지",
+      "download": "다운로드",
+      "favorite": "즐겨찾기",
       "genre": "장르",
       "mood": "무드",
       "usecase": "용도",
       "cid": "CID:",
       "copyCid": "Content ID 복사"
-    },
-    "player": {
-      "play": "재생",
-      "pause": "일시정지",
-      "download": "다운로드",
-      "favorite": "즐겨찾기"
     },
     "auth": {
       "title": "로그인 / 회원가입",
@@ -332,7 +317,9 @@
     },
     "steps": {
       "step1Title": "채널 URL 등록",
+      "step1Subtitle": "YouTube, TikTok, Instagram",
       "step1Desc": "채널 URL을 입력하여<br>등록을 시작합니다.",
+      "step1Details": "각 플랫폼의 URL 형식을 자동으로<br>검증하여 정확한 등록을 보장합니다.",
       "step2Title": "이모지 키 발급",
       "step2Desc": "고유한 이모지 키가<br>자동으로 발급되어<br>소유권을 인증합니다.",
       "step3Title": "자동 검증 완료",
@@ -347,14 +334,15 @@
       "addChannel": "채널 등록",
       "platformSelect": "플랫폼 선택",
       "youtubeChannelUrl": "YouTube 채널 URL",
-      "channelUrlPlaceholder": "https://www.youtube.com/c/채널명",
+      "channelUrlPlaceholder": "https://www.youtube.com/c/채널명 또는 @핸들명",
       "helpText": "YouTube 채널 URL 또는 @핸들을 입력하세요",
       "issuedKeyLabel": "발급된 이모지 키",
       "copy": "복사",
       "cancel": "취소",
       "register": "등록하기",
       "copyTitle": "이모지 키 복사",
-      "keyHelpText": "YouTube 채널 설명란에 위 키를 붙여넣으세요"
+      "keyHelpText": "YouTube 채널 설명란에 위 키를 붙여넣으세요",
+      "verificationPending": "검사중"
     },
     "common": {
       "loading": "채널 정보를 불러오는 중...",
@@ -369,10 +357,6 @@
       "prev": "이전",
       "next": "다음"
     },
-    "contentModal": {
-      "trackPlaceholder": "음원 제목 또는 CID 코드 입력...",
-      "detectedPlatformAuto": "자동 감지됨"
-    },
     "copyrightNotice": {
       "title": "중요 안내",
       "text": "크리에이터님께 입금될 정확한 음원 저작권료를 상정하기 위하여 Audionyx 음원을 사용하신 숏폼 컨텐츠 링크를 제공해주셔야 합니다."
@@ -382,10 +366,10 @@
       "subtitle": "등록하신 컨텐츠 링크를 통해 정확한 수익 정산이 이루어집니다",
       "addButton": "컨텐츠 링크 추가",
       "addFirstButton": "첫 컨텐츠 링크 추가",
-            "addLink": "링크 추가",
-       "hideLinks": "목록 숨기기",
-       "showLinks": "목록 보기",
-       "table": {
+      "addLink": "링크 추가",
+      "hideLinks": "목록 숨기기",
+      "showLinks": "목록 보기",
+      "table": {
         "contentUrl": "컨텐츠 URL",
         "audioTrack": "사용된 음원",
         "platform": "플랫폼",
@@ -412,7 +396,9 @@
       "audioTrack": "사용된 Audionyx 음원",
       "selectTrack": "음원을 선택하세요",
       "trackHelp": "컨텐츠에서 사용된 정확한 Audionyx 음원 제목 또는 CID 코드를 입력하세요",
+      "trackPlaceholder": "음원 제목 또는 CID 코드 입력...",
       "detectedPlatform": "감지된 플랫폼",
+      "detectedPlatformAuto": "자동 감지됨",
       "cancel": "취소",
       "add": "링크 추가"
     },
@@ -449,8 +435,23 @@
     "form": {
       "title": "맞춤 제작 요청",
       "subtitle": "원하는 음원의 정보를 입력해 주세요",
+      "trackTitleLabel": "트랙 제목",
+      "trackTitlePlaceholder": "예: [내 채널명] 브이로그 BGM",
+      "bpmLabel": "BPM",
+      "bpmPlaceholder": "60-200",
+      "genreLabel": "장르",
+      "genrePlaceholder": "장르를 선택해주세요",
+      "emailLabel": "음원 받을 이메일",
+      "emailPlaceholder": "이메일 주소를 입력하세요",
+      "descriptionLabel": "설명/요청 사항",
+      "descriptionPlaceholder": "원하는 음원의 분위기, 특징 등을 자세히 설명해주세요",
+      "refUrlLabel": "참고 영상 URL (선택)",
+      "refUrlPlaceholder": "YouTube 등의 참고 영상 URL",
       "submit": "요청 제출",
-      "refUrlPlaceholder": "YouTube 등의 참고 영상 URL"
+      "required": "*",
+      "optional": "(선택)",
+      "titleTip": "더 나은 맞춤 제작을 위해 유튜브 채널명을 트랙 제목에 포함하여 입력하는 것을 추천드립니다.",
+      "titleExample": "예시: \"[채널명] 브이로그 BGM\", \"[채널명] 오프닝 음악\""
     },
     "requestList": {
       "title": "내 요청 목록"

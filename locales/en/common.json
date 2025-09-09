@@ -278,10 +278,6 @@
       "prev": "Prev",
       "next": "Next"
     },
-    "contentModal": {
-      "trackPlaceholder": "Enter track title or CID...",
-      "detectedPlatformAuto": "Auto detected"
-    },
     "guide": {
       "verificationTitle": "Real-time Auto Verification",
       "verificationStatus": "Real-time",
@@ -306,8 +302,6 @@
       "autoVerificationDesc": "Once setup is complete, the system verifies automatically and monetization starts immediately upon approval.",
       "registrationComplete": "Registered",
       "verificationInProgress": "Verifying",
-      "urlValidation": "Automatically validates each platform's URL format<br>to ensure accurate registration.",
-      "verificationPending": "Pending",
       "approvalComplete": "Approved",
       "faqTitle": "Frequently Asked Questions",
       "helpStatus": "Help",
@@ -316,72 +310,117 @@
     },
     "faq": {
       "howEmojiKeyWorks": "How does the emoji key work?",
-      "howEmojiKeyWorksAnswer": "The emoji key is a unique identifier used to verify channel ownership. The system automatically scans your channel description to check whether the key exists.",
-      "whyVerificationFails": "Why does verification fail?",
-      "whyVerificationFailsAnswer": "Verification may fail if the emoji key is not placed in the correct location or the channel URL is incorrect. After setting the key, please allow some time for detection.",
-      "multipleChannels": "Can I register channels on multiple platforms?",
-      "multipleChannelsAnswer": "Yes. You can register and manage channels across YouTube, TikTok, Instagram, and more. A unique emoji key is issued for each platform."
+      "howEmojiKeyWorksAnswer": "The emoji key is a unique identifier to confirm channel ownership. Our system automatically scans the channel description to detect the key.",
+      "whyVerificationFails": "Why can verification fail?",
+      "whyVerificationFailsAnswer": "Verification can fail if the emoji key is not placed correctly or the channel URL is invalid. It may also take a little time for changes to be detected.",
+      "multipleChannels": "Can I register multiple platform channels?",
+      "multipleChannelsAnswer": "Yes. You can register and manage multiple channels across YouTube, TikTok, Instagram, etc. Each platform is issued a unique emoji key."
     },
     "steps": {
-      "step1Title": "Register Channel URL",
-      "step1Desc": "Enter your channel URL to start registration.",
-      "step2Title": "Issue Emoji Key",
-      "step2Desc": "A unique emoji key is issued automatically to certify ownership.",
+      "step1Title": "Channel URL Registration",
+      "step1Subtitle": "YouTube, TikTok, Instagram",
+      "step1Desc": "Enter your channel URL<br>to start registration.",
+      "step1Details": "Automatically validates URL format<br>for each platform to ensure accurate registration.",
+      "step2Title": "Emoji Key Generation",
+      "step2Desc": "A unique emoji key is<br>automatically generated<br>to verify ownership.",
       "step3Title": "Auto Verification Complete",
-      "step3Desc": "The system verifies your channel automatically. Monetization starts immediately after approval."
+      "step3Desc": "The system automatically<br>verifies your channel and<br>monetization starts immediately<br>after verification."
     },
     "channelList": {
       "title": "Registered Channels",
+      "noChannels": "No registered channels",
+      "platform": "Platform",
+      "channelName": "Channel Name",
+      "status": "Status",
+      "registeredDate": "Registered Date",
+      "actions": "Actions",
       "channelUrl": "Channel URL",
       "emojiKey": "Emoji Key",
-      "registeredDate": "Registered",
-      "status": "Status",
-      "noChannels": "No channels registered",
-      "noChannelsDesc": "Click the 'Add Channel' button above to register your first channel.",
+      "noChannelsDesc": "Click the 'Register Channel' button above to register your first channel.",
       "registerFirstChannel": "Register First Channel"
     },
-    "contentLinks": {
-      "title": "Short‑form Content Links Using Audionyx Music",
-      "subtitle": "Accurate payout is calculated using the links you register",
-      "addLink": "Add Link",
-      "hideLinks": "Hide List",
-      "showLinks": "Show List",
-      "table": {
-        "contentUrl": "Content URL",
-        "channel": "Channel",
-        "audioTrack": "Track Used",
-        "platform": "Platform",
-        "addedDate": "Added",
-        "actions": "Actions"
-      },
-      "noLinks": "No content links registered",
-      "noLinksDesc": "Register links to short‑form content using Audionyx tracks to help us calculate accurate royalties.",
-      "addFirstLink": "Add First Content Link"
-    },
-    "banner": {
-      "title": "Oops! Haven’t registered your channel yet?",
-      "description": "Register your channel now and start monetizing!",
-      "ctaLong": "Go to Channel Registration",
-      "ctaShort": "Register Channel",
-      "mobileText": "Register Channel"
-    },
-    "modal": {
-      "title": "Add Channel",
+    "registration": {
+      "title": "Channel Registration",
       "addChannel": "Add Channel",
-      "platformSelect": "Select Platform",
-      "youtubeChannelUrl": "YouTube Channel URL",
-      "channelUrlPlaceholder": "https://www.youtube.com/c/yourchannel",
-      "helpText": "Enter your YouTube channel URL or @handle",
-      "issuedKeyLabel": "Issued Emoji Key",
-      "copy": "Copy",
-      "cancel": "Cancel",
-      "register": "Register",
-      "copyTitle": "Copy Emoji Key",
-      "keyHelpText": "Paste the key above into your channel description"
+      "selectPlatform": "Select Platform",
+      "channelUrl": "Channel URL",
+      "channelUrlPlaceholder": "Enter your channel URL",
+      "emojiKey": "Emoji Key",
+      "copyEmojiKey": "Copy Emoji Key",
+      "verifyChannel": "Verify Channel",
+      "status": {
+        "pending": "Pending Review",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "processing": "Processing"
+      }
     },
     "status": {
       "verified": "Verified",
       "failed": "Failed"
+    },
+    "modal": {
+      "title": "Channel Registration",
+      "addChannel": "Register Channel",
+      "platformSelect": "Select Platform",
+      "youtubeChannelUrl": "YouTube Channel URL",
+      "channelUrlPlaceholder": "https://www.youtube.com/c/channelname or @handle",
+      "helpText": "Enter YouTube channel URL or @handle",
+      "issuedKeyLabel": "Generated Emoji Key",
+      "copy": "Copy",
+      "cancel": "Cancel",
+      "register": "Register",
+      "copyTitle": "Copy Emoji Key",
+      "keyHelpText": "Paste this key into your YouTube channel description",
+      "verificationPending": "Verifying"
+    },
+    "contentLinks": {
+      "title": "Audionyx Track Usage Short-form Content Links",
+      "subtitle": "Accurate revenue settlement is performed through your registered content links",
+      "addButton": "Add Content Link",
+      "addFirstButton": "Add First Content Link",
+      "addLink": "Add Link",
+      "hideLinks": "Hide List",
+      "showLinks": "View List",
+      "table": {
+        "contentUrl": "Content URL",
+        "audioTrack": "Used Track",
+        "platform": "Platform",
+        "uploadDate": "Date Added",
+        "actions": "Actions"
+      },
+      "noLinks": "No registered content links",
+      "noLinksDesc": "Please register short-form content links using Audionyx tracks to help with accurate royalty calculation. Without registering your video links, royalty estimation and payment may be difficult.",
+      "addFirstLink": "Register First Content Link",
+      "contentUrl": "Content URL",
+      "audioTrack": "Used Track",
+      "platform": "Platform",
+      "addedDate": "Date Added",
+      "actions": "Actions"
+    },
+    "contentModal": {
+      "title": "Add Content Link",
+      "channelSelect": "Channel Used",
+      "selectChannel": "Select a channel",
+      "channelHelp": "Please select the channel where you uploaded the content",
+      "contentUrl": "Content URL",
+      "contentUrlPlaceholder": "Enter YouTube, TikTok, Instagram video URL",
+      "contentUrlHelp": "Enter URLs for YouTube Shorts, TikTok, Instagram Reels, etc.",
+      "audioTrack": "Used Audionyx Track",
+      "selectTrack": "Select a track",
+      "trackHelp": "Enter the exact Audionyx track title or CID code used in your content",
+      "trackPlaceholder": "Enter track title or CID...",
+      "detectedPlatform": "Detected Platform",
+      "detectedPlatformAuto": "Auto detected",
+      "cancel": "Cancel",
+      "add": "Add Link"
+    },
+    "banner": {
+      "title": "Oops! Haven't registered your channel yet?",
+      "description": "Register your channel now and start monetizing!",
+      "ctaLong": "Go to Channel Registration",
+      "ctaShort": "Register Channel",
+      "mobileText": "Register Channel"
     }
   },
   "trackProduction": {
@@ -404,32 +443,23 @@
     "form": {
       "title": "Custom Production Request",
       "subtitle": "Enter the details of your desired music",
-      "trackTitle": "Track Title",
-      "trackTitlePlaceholder": "e.g., [Your Channel] Vlog BGM",
-      "bpm": "BPM",
+      "trackTitleLabel": "Track Title",
+      "trackTitlePlaceholder": "e.g., [My Channel] Vlog BGM",
+      "bpmLabel": "BPM",
       "bpmPlaceholder": "60-200",
-      "genre": "Genre",
-      "genreSelect": "Select a genre",
-      "genres": {
-        "synthwave": "Synthwave",
-        "ambient": "Ambient",
-        "electronic": "Electronic",
-        "lofi": "Lo‑fi",
-        "pop": "Pop",
-        "hiphop": "Hip‑hop",
-        "jazz": "Jazz",
-        "other": "Other"
-      },
-      "email": "Email to receive track",
+      "genreLabel": "Genre",
+      "genrePlaceholder": "Select a genre",
+      "emailLabel": "Email for Track Delivery",
       "emailPlaceholder": "Enter your email address",
-      "description": "Description / Requests",
-      "descriptionPlaceholder": "Describe the mood and characteristics you want in detail",
-      "refUrl": "Reference video URL (optional)",
+      "descriptionLabel": "Description / Requirements",
+      "descriptionPlaceholder": "Please describe the desired mood, characteristics, etc. of the track in detail",
+      "refUrlLabel": "Reference Video URL (Optional)",
       "refUrlPlaceholder": "Reference video URL (e.g., YouTube)",
       "submit": "Submit Request",
-      "tipTitle": "💡 Tips for entering track titles",
-      "tipText": "For better customization, we recommend including your YouTube channel name in the track title.",
-      "tipExample": "e.g., \"[Channel Name] Vlog BGM\", \"[Channel Name] Opening Music\""
+      "required": "*",
+      "optional": "(Optional)",
+      "titleTip": "For better customization, we recommend including your YouTube channel name in the track title.",
+      "titleExample": "Examples: \"[Channel Name] Vlog BGM\", \"[Channel Name] Opening Music\""
     },
     "requestList": { "title": "My Requests" },
     "status": { "pending": "Pending", "working": "In Progress", "done": "Done" },
@@ -450,153 +480,6 @@
       "revenue": "Revenue & Payout",
       "producer": "Producer",
       "support": "Support"
-    },
-    "questions": {
-      "overview": {
-        "what_is_audionyx": {
-          "question": "What is Audionyx?",
-          "answer": "Audionyx provides high‑quality, copyright‑safe music for creators and shares music revenue with creators when our tracks are used."
-        },
-        "service_cost": {
-          "question": "Does it cost to use the service?",
-          "answer": "All Audionyx services are free. You can use features such as track discovery, channel registration, and revenue sharing at no extra cost."
-        },
-        "login_required": {
-          "question": "Can I use the service without logging in?",
-          "answer": "You can browse Find Music and Brand pages without logging in. However, Channel Management, Track Production requests, and Bank Account registration require login."
-        },
-        "longform_usage": {
-          "question": "Can I use Audionyx music in long‑form videos?",
-          "answer": "Yes. Revenue sharing ratios may differ from Shorts. Details will be announced separately."
-        },
-        "other_platforms": {
-          "question": "Is settlement supported outside YouTube?",
-          "answer": "Twitch and AfreecaTV are not yet supported for auto settlement but will be gradually added in late 2025. TikTok and Instagram Reels are under review."
-        }
-      },
-      "signup": {
-        "social_to_email": {
-          "question": "Can I add email login in addition to social login?",
-          "answer": "In Account Settings > Login Methods, set an email and password to add an extra login option. Your existing social login remains available."
-        },
-        "withdraw_data": {
-          "question": "If I re‑register after deleting my account, is previous payout history restored?",
-          "answer": "If you re‑register within 30 days, previous payout and channel info are restored. After 30 days, the account is treated as new and previous data cannot be recovered."
-        }
-      },
-      "channel": {
-        "registration_requirements": {
-          "question": "Are there subscriber or view requirements to register a channel?",
-          "answer": "No. Audionyx welcomes every creator. You can register your channel and use our services regardless of subscribers, views, or channel age."
-        },
-        "how_to_register": {
-          "question": "How do I register my channel?",
-          "answer": "On the Channel Management page, click ‘Add Channel’ and enter your YouTube channel URL. After registration, a unique emoji key is issued. Add this key to your channel description to complete verification."
-        },
-        "channel_suspension": {
-          "question": "What happens if my channel has issues or is suspended?",
-          "answer": "You do not owe Audionyx anything. If a channel is suspended, its music revenue simply becomes zero. There is no obligation to return past payouts and no extra fees. Channel policy compliance is your responsibility."
-        },
-        "multiple_channels": {
-          "question": "Can I register multiple channels?",
-          "answer": "Yes. You can register multiple YouTube channels under one account. A unique emoji key is issued for each channel and managed separately."
-        }
-      },
-      "music": {
-        "find_music_feature": {
-          "question": "How do I use the Find Music feature?",
-          "answer": "On the Find Music page, use filters by genre, mood, and use‑case or enter keywords to search. You can preview each track and check its character via waveform visualization. Autocomplete helps you find results faster."
-        },
-        "download_music": {
-          "question": "Can I download tracks?",
-          "answer": "Currently only preview is available. Download functionality will be added in a future update."
-        },
-        "copyright_issues": {
-          "question": "Are there copyright issues when using your tracks?",
-          "answer": "All tracks are original works produced by our in‑house producer team. Audionyx registers copyrights directly and obtains ISRCs. You can use our music with confidence. Complete channel registration and verification before use."
-        },
-        "remix_allowed": {
-          "question": "Can I remix Audionyx beats or add vocals?",
-          "answer": "Derivative works are allowed under the same revenue share as the original. Credit to the original track is required. Inappropriate lyrics or content may be restricted."
-        },
-        "volume_detection": {
-          "question": "If I lower the background music volume, will CID fail to detect?",
-          "answer": "Detection works reliably at −18 LUFS or higher. Very low volume (below −24 LUFS) may reduce detection accuracy; please keep a reasonable level."
-        }
-      },
-      "production": {
-        "how_to_request": {
-          "question": "How do I request Track Production?",
-          "answer": "On the Track Production page, enter title, BPM, genre, and details of your desired music and provide a reference URL and contact. You can request without logging in and check status in real time."
-        },
-        "production_cost": {
-          "question": "Is there a cost for Track Production?",
-          "answer": "Submitting a request is free. Production feasibility and conditions will be reviewed and guided individually."
-        },
-        "request_status": {
-          "question": "How can I check request status?",
-          "answer": "See ‘My Requests’ at the bottom of the Track Production page. Status shows as Pending, In Progress, or Done."
-        }
-      },
-      "revenue": {
-        "account_registration": {
-          "question": "How do I register a bank account?",
-          "answer": "On the Payouts page, enter bank, account number, and account holder to register. For security, parts of the number are masked and you can edit anytime."
-        },
-        "revenue_distribution": {
-          "question": "How is revenue distributed?",
-          "answer": "Revenue from videos using our music is shared between the creator and Audionyx. Detailed share ratios and payout schedules will be announced separately."
-        },
-        "account_security": {
-          "question": "Is my account information stored securely?",
-          "answer": "Yes. All account data is encrypted and displayed with masking on screen."
-        },
-        "settlement_schedule": {
-          "question": "When can I see my report and when is the payout deposited?",
-          "answer": "We provide a settlement report by the end of the second month after upload (M+2). Deposits are made by the end of the third month (M+3).",
-          "example": "Example (monthly basis):\nJan 15: Video using Audionyx track uploaded\nBy Mar 30: Settlement report provided (sales from 1/15–1/31)\nBy Apr 30: Deposit made (sales from 1/15–1/31)"
-        },
-        "minimum_payment": {
-          "question": "What is the minimum payout amount?",
-          "answer": "We settle even 1 KRW—payouts are processed monthly."
-        },
-        "tax_deduction": {
-          "question": "My settlement amount differs from the actual deposit.",
-          "answer": "Settlement amounts are before withholding tax. 3.3% withholding tax is deducted from the settlement amount."
-        },
-        "paypal_overseas": {
-          "question": "For overseas residents, can I receive payouts via PayPal?",
-          "answer": "We plan to introduce PayPal payouts in 2025 Q4. Currently, only domestic bank accounts are supported."
-        },
-        "deleted_video_revenue": {
-          "question": "My video was deleted—do I have to return the royalty already paid?",
-          "answer": "Paid amounts are not clawed back. However, revenue from videos deleted after the settlement cutoff will be excluded from future settlements."
-        }
-      },
-      "producer": {
-        "external_requirements": {
-          "question": "Are there requirements for external producers?",
-          "answer": "Submit at least three tracks as a portfolio and relevant experience. We review and will contact you. No strict genre limits, but quality aligned with the Audionyx brand is required."
-        },
-        "project_file_sales": {
-          "question": "Can I sell DAW project files as well?",
-          "answer": "From 2026, the ‘Producer Store’ will allow selling MIDI, stems, and project files. Currently, only finished tracks can be registered."
-        }
-      },
-      "support": {
-        "login_issues": {
-          "question": "What should I do if I can’t log in?",
-          "answer": "Multiple login methods are available: Google, Kakao, Naver, email, phone. If one fails, try another. Clear browser cache or try a different browser if issues persist."
-        },
-        "audio_playback_issues": {
-          "question": "What if audio won’t play?",
-          "answer": "Browser autoplay policies may block playback. Refresh the page or click another track first, then try again."
-        },
-        "additional_inquiries": {
-          "question": "How can I contact support?",
-          "answer": "Leave your contact when requesting a track or use the email you provided for channel registration. Dedicated support channels will be added later."
-        }
-      }
     }
   },
   "producer": {

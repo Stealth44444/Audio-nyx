@@ -98,12 +98,7 @@
     "step1Title": "Step 1  ·  音源選択",
     "step1Desc": "トラックを試聴して<b>Copy CID</b>",
     "step2Title": "Step 2  ·  動画アップロード",
-    "step2Desc": "プラットフォーム別入力ガイド",
-    "step2Guide": {
-      "youtube": "YouTube Shorts：トラック右側の<b>ISRC</b>をコピーし、アップロード時に<b>貼り付け</b>",
-      "tiktok": "TikTok：<b>曲名</b>または<b>曲名/アーティスト名</b>で検索して選択",
-      "reels": "Instagram Reels：<b>曲名</b>または<b>曲名/アーティスト名</b>で検索して選択"
-    },
+    "step2Desc": "Shortsアップロード時<br><b>音源CID</b>を貼り付け",
     "step3Title": "Step 3  ·  自動入金",
           "step3Desc": "収入の一部が<b>毎月</b>自動入金",
     "previewTitle": "Right Now",
@@ -157,14 +152,7 @@
     "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収入を正確に集計して入金いたします。",
     "trustSecurity": "安全な暗号化",
     "trustMonitoring": "24時間モニタリング",
-    "trustEmail": "入金通知メール送信",
-    "banner": {
-      "title": "入金を受け取るため、口座登録を完了してください",
-      "description": "チャンネル登録は完了しています。口座を登録すると自動入金が開始されます。",
-      "ctaLong": "口座登録ページへ",
-      "ctaShort": "口座を登録",
-      "mobileText": "口座を登録"
-    }
+    "trustEmail": "入金通知メール送信"
   },
   "findMusic": {
     "title": "音源検索 | Audionyx",
@@ -318,6 +306,30 @@
       "prev": "前へ",
       "next": "次へ"
     },
+    "contentLinks": {
+      "title": "Audionyx楽曲使用ショートフォームコンテンツリンク",
+      "subtitle": "登録されたコンテンツリンクを通じて正確な収益精算が行われます",
+      "addButton": "コンテンツリンク追加",
+      "addFirstButton": "最初のコンテンツリンク追加",
+      "addLink": "リンク追加",
+      "hideLinks": "リスト非表示",
+      "showLinks": "リスト表示",
+      "table": {
+        "contentUrl": "コンテンツURL",
+        "audioTrack": "使用楽曲",
+        "platform": "プラットフォーム",
+        "uploadDate": "登録日",
+        "actions": "管理"
+      },
+      "noLinks": "登録されたコンテンツリンクがありません",
+      "noLinksDesc": "Audionyx楽曲を使用したショートフォームコンテンツリンクを登録して正確な著作権料算定にお役立てください。クリエイター様の動画リンクを登録されない場合、著作権料算定が困難で受領が難しくなります。",
+      "addFirstLink": "最初のコンテンツリンク登録",
+      "contentUrl": "コンテンツURL",
+      "audioTrack": "使用楽曲",
+      "platform": "プラットフォーム",
+      "addedDate": "登録日",
+      "actions": "管理"
+    },
     "channelList": {
       "title": "登録済みチャンネル一覧",
       "noChannels": "登録されたチャンネルがありません",
@@ -379,6 +391,45 @@
       "step2Desc": "固有の絵文字キーが<br>自動的に発行されて<br>所有権を認証します。",
       "step3Title": "自動検証完了",
       "step3Desc": "システムが自動的に<br>チャンネルを検証し<br>検証完了後すぐに<br>収入化が開始されます。"
+    },
+    "steps": {
+      "step1Title": "チャンネルURL登録",
+      "step1Subtitle": "YouTube, TikTok, Instagram",
+      "step1Desc": "チャンネルURLを入力して<br>登録を開始します。",
+      "step1Details": "各プラットフォームのURL形式を自動的に<br>検証して正確な登録を保証します。",
+      "step2Title": "絵文字キー発行",
+      "step2Desc": "固有の絵文字キーが<br>自動的に発行され<br>所有権を認証します。",
+      "step3Title": "自動検証完了",
+      "step3Desc": "システムが自動的に<br>チャンネルを検証し<br>検証完了後すぐに<br>収益化が始まります。"
+    },
+    "channelList": {
+      "title": "登録済みチャンネル一覧",
+      "noChannels": "登録されたチャンネルがありません",
+      "platform": "プラットフォーム",
+      "channelName": "チャンネル名",
+      "status": "ステータス",
+      "registeredDate": "登録日",
+      "actions": "アクション",
+      "channelUrl": "チャンネルURL",
+      "emojiKey": "絵文字キー",
+      "noChannelsDesc": "上部の「チャンネル登録」ボタンをクリックして最初のチャンネルを登録してみてください。",
+      "registerFirstChannel": "最初のチャンネル登録"
+    },
+    "registration": {
+      "title": "チャンネル登録",
+      "addChannel": "チャンネル追加",
+      "selectPlatform": "プラットフォーム選択",
+      "channelUrl": "チャンネルURL",
+      "channelUrlPlaceholder": "チャンネルURLを入力してください",
+      "emojiKey": "絵文字キー",
+      "copyEmojiKey": "絵文字キーコピー",
+      "verifyChannel": "チャンネル認証",
+      "status": {
+        "pending": "審査待ち",
+        "approved": "承認済み",
+        "rejected": "拒否",
+        "processing": "処理中"
+      }
     },
     "status": {
       "verified": "検査完了",
@@ -484,12 +535,20 @@
     "form": {
       "title": "カスタム制作リクエスト",
       "subtitle": "希望する音源の情報を入力してください",
-      "trackTitle": "トラック名",
-      "trackTitlePlaceholder": "例：[チャンネル名] ブイログBGM",
-      "bpm": "BPM",
+      "trackTitleLabel": "トラック名",
+      "trackTitlePlaceholder": "例：[私のチャンネル] ブイログBGM",
+      "bpmLabel": "BPM",
       "bpmPlaceholder": "60-200",
-      "genre": "ジャンル",
-      "genreSelect": "ジャンルを選択してください",
+      "genreLabel": "ジャンル",
+      "genrePlaceholder": "ジャンルを選択してください",
+      "emailLabel": "音源受信メール",
+      "emailPlaceholder": "メールアドレスを入力してください",
+      "descriptionLabel": "説明・要望事項",
+      "descriptionPlaceholder": "希望する音源の雰囲気、特徴などを詳しく説明してください",
+      "refUrlLabel": "参考動画URL（任意）",
+      "refUrlPlaceholder": "YouTube等の参考動画URL",
+      "required": "*",
+      "optional": "（任意）",
       "genres": {
         "synthwave": "シンセウェーブ",
         "ambient": "アンビエント",

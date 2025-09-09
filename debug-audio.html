@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audionyx 음원 디버그 도구</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .debug-section {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3eb489;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success { background: #1a5634; border: 1px solid #3eb489; }
+        .status.error { background: #5c1a1a; border: 1px solid #ff4444; }
+        .status.warning { background: #5c4a1a; border: 1px solid #ffa500; }
+        .status.info { background: #1a3a5c; border: 1px solid #4499ff; }
+        button {
+            background: #3eb489;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2a9d69; }
+        button:disabled { background: #666; cursor: not-allowed; }
+        pre {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        .audio-test {
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        audio {
+            width: 100%;
+            margin: 10px 0;
+        }
+        .waveform-container {
+            height: 60px;
+            background: #333;
+            border-radius: 4px;
+            margin: 10px 0;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 Audionyx 음원 디버그 도구</h1>
+    <p>음원 재생 문제를 진단하고 해결하는 도구입니다.</p>
+
+    <div class="debug-section">
+        <h2>1. 기본 환경 체크</h2>
+        <button onclick="checkEnvironment()">환경 검사</button>
+        <div id="env-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>2. Firebase 연결 테스트</h2>
+        <button onclick="testFirebaseConnection()">Firebase 연결 테스트</button>
+        <div id="firebase-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>3. Storage 파일 목록 테스트</h2>
+        <button onclick="testStorageFiles()">Storage 파일 목록 가져오기</button>
+        <div id="storage-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>4. 음원 다운로드 테스트</h2>
+        <button onclick="testAudioDownload()">음원 URL 테스트</button>
+        <div id="audio-download-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>5. WaveSurfer 테스트</h2>
+        <button onclick="testWaveSurfer()">WaveSurfer 로드 테스트</button>
+        <div id="wavesurfer-results"></div>
+        <div id="waveform-test" class="waveform-container"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>6. 직접 오디오 재생 테스트</h2>
+        <button onclick="testDirectAudio()">HTML5 Audio 테스트</button>
+        <div id="direct-audio-results"></div>
+    </div>
+
+    <!-- Firebase 및 스크립트 로드 -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js';
+        import { getStorage, ref, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js';
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
+        import WaveSurfer from 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js';
+
+        // Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyBP926ULg9wNUNGjQy0fMjRxUeS4XyeG6M",
+            authDomain: "audionyx-a7b2e.firebaseapp.com",
+            projectId: "audionyx-a7b2e",
+            storageBucket: "audionyx-a7b2e.firebasestorage.app",
+            messagingSenderId: "1002069862376",
+            appId: "1:1002069862376:web:669c93bca8ab2f1d09665d",
+            measurementId: "G-P6GNNYLJ38"
+        };
+
+        // Firebase 초기화
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+        const db = getFirestore(app);
+
+        // 전역으로 노출하여 버튼에서 사용할 수 있도록 함
+        window.storage = storage;
+        window.db = db;
+        window.getDownloadURL = getDownloadURL;
+        window.ref = ref;
+        window.listAll = listAll;
+        window.collection = collection;
+        window.getDocs = getDocs;
+        window.WaveSurfer = WaveSurfer;
+
+        console.log('🚀 Firebase 및 모듈 초기화 완료');
+    </script>
+
+    <script>
+        function addStatus(containerId, type, message) {
+            const container = document.getElementById(containerId);
+            const status = document.createElement('div');
+            status.className = `status ${type}`;
+            status.innerHTML = message;
+            container.appendChild(status);
+        }
+
+        function clearResults(containerId) {
+            document.getElementById(containerId).innerHTML = '';
+        }
+
+        function checkEnvironment() {
+            clearResults('env-results');
+            
+            // 브라우저 정보
+            addStatus('env-results', 'info', `
+                <strong>브라우저:</strong> ${navigator.userAgent}<br>
+                <strong>온라인 상태:</strong> ${navigator.onLine ? '온라인' : '오프라인'}<br>
+                <strong>현재 URL:</strong> ${window.location.href}<br>
+                <strong>프로토콜:</strong> ${window.location.protocol}<br>
+                <strong>호스트:</strong> ${window.location.host}
+            `);
+
+            // Audio 지원 확인
+            const audio = new Audio();
+            const supportedFormats = [];
+            if (audio.canPlayType('audio/mpeg')) supportedFormats.push('MP3');
+            if (audio.canPlayType('audio/wav')) supportedFormats.push('WAV');
+            if (audio.canPlayType('audio/mp4')) supportedFormats.push('M4A');
+
+            addStatus('env-results', 'success', `
+                <strong>지원 오디오 포맷:</strong> ${supportedFormats.join(', ')}<br>
+                <strong>Web Audio API:</strong> ${window.AudioContext ? '지원' : '미지원'}<br>
+                <strong>Fetch API:</strong> ${window.fetch ? '지원' : '미지원'}
+            `);
+
+            // CORS 테스트
+            if (window.location.protocol === 'file:') {
+                addStatus('env-results', 'warning', '⚠️ file:// 프로토콜에서 실행 중입니다. CORS 문제가 발생할 수 있습니다.');
+            }
+        }
+
+        async function testFirebaseConnection() {
+            clearResults('firebase-results');
+            
+            try {
+                addStatus('firebase-results', 'info', '🔍 Firebase 연결 테스트 중...');
+                
+                // Firestore 연결 테스트
+                const testCollection = window.collection(window.db, 'track_new');
+                const snapshot = await window.getDocs(testCollection);
+                
+                addStatus('firebase-results', 'success', `
+                    ✅ Firestore 연결 성공<br>
+                    <strong>track_new 컬렉션:</strong> ${snapshot.size}개 문서 발견
+                `);
+
+                // Storage 연결 테스트
+                const storageRef = window.ref(window.storage, '');
+                addStatus('firebase-results', 'success', '✅ Firebase Storage 연결 성공');
+
+            } catch (error) {
+                addStatus('firebase-results', 'error', `
+                    ❌ Firebase 연결 실패<br>
+                    <strong>오류:</strong> ${error.message}<br>
+                    <pre>${error.stack}</pre>
+                `);
+            }
+        }
+
+        async function testStorageFiles() {
+            clearResults('storage-results');
+            
+            try {
+                addStatus('storage-results', 'info', '📁 Storage 파일 목록 가져오는 중...');
+                
+                // track 폴더 확인
+                const trackRef = window.ref(window.storage, 'track');
+                const trackList = await window.listAll(trackRef);
+                
+                if (trackList.items.length > 0) {
+                    addStatus('storage-results', 'success', `
+                        ✅ track 폴더에서 ${trackList.items.length}개 파일 발견<br>
+                        <strong>처음 5개 파일:</strong><br>
+                        ${trackList.items.slice(0, 5).map(item => `• ${item.name}`).join('<br>')}
+                    `);
+                } else {
+                    addStatus('storage-results', 'warning', '⚠️ track 폴더가 비어있습니다.');
+                    
+                    // 루트 폴더 확인
+                    const rootRef = window.ref(window.storage, '');
+                    const rootList = await window.listAll(rootRef);
+                    
+                    const audioFiles = rootList.items.filter(item => {
+                        const name = item.name.toLowerCase();
+                        return name.endsWith('.mp3') || name.endsWith('.wav') || name.endsWith('.m4a');
+                    });
+                    
+                    if (audioFiles.length > 0) {
+                        addStatus('storage-results', 'info', `
+                            📁 루트 폴더에서 ${audioFiles.length}개 오디오 파일 발견<br>
+                            ${audioFiles.slice(0, 5).map(item => `• ${item.name}`).join('<br>')}
+                        `);
+                    }
+                }
+
+            } catch (error) {
+                addStatus('storage-results', 'error', `
+                    ❌ Storage 파일 목록 가져오기 실패<br>
+                    <strong>오류:</strong> ${error.message}<br>
+                    <pre>${error.stack}</pre>
+                `);
+            }
+        }
+
+        async function testAudioDownload() {
+            clearResults('audio-download-results');
+            
+            try {
+                addStatus('audio-download-results', 'info', '🎵 테스트 음원 URL 가져오는 중...');
+                
+                // 먼저 파일 목록을 가져와서 첫 번째 파일로 테스트
+                const trackRef = window.ref(window.storage, 'track');
+                const trackList = await window.listAll(trackRef);
+                
+                if (trackList.items.length === 0) {
+                    addStatus('audio-download-results', 'warning', '⚠️ 테스트할 음원 파일이 없습니다.');
+                    return;
+                }
+
+                const firstFile = trackList.items[0];
+                const downloadURL = await window.getDownloadURL(firstFile);
+                
+                addStatus('audio-download-results', 'success', `
+                    ✅ 음원 URL 생성 성공<br>
+                    <strong>파일:</strong> ${firstFile.name}<br>
+                    <strong>URL:</strong> <a href="${downloadURL}" target="_blank" style="color: #4499ff;">${downloadURL.substring(0, 80)}...</a>
+                `);
+
+                // 실제 파일 다운로드 테스트
+                const response = await fetch(downloadURL, { method: 'HEAD' });
+                addStatus('audio-download-results', 'success', `
+                    ✅ 파일 접근 성공<br>
+                    <strong>상태:</strong> ${response.status} ${response.statusText}<br>
+                    <strong>Content-Type:</strong> ${response.headers.get('content-type')}<br>
+                    <strong>Content-Length:</strong> ${response.headers.get('content-length')} bytes
+                `);
+
+                // HTML5 Audio로 테스트
+                const audio = new Audio(downloadURL);
+                audio.addEventListener('loadedmetadata', () => {
+                    addStatus('audio-download-results', 'success', `
+                        ✅ HTML5 Audio 로드 성공<br>
+                        <strong>재생 시간:</strong> ${audio.duration.toFixed(2)}초
+                    `);
+                });
+                audio.addEventListener('error', (e) => {
+                    addStatus('audio-download-results', 'error', `
+                        ❌ HTML5 Audio 로드 실패<br>
+                        <strong>오류:</strong> ${e.target.error.message}
+                    `);
+                });
+
+            } catch (error) {
+                addStatus('audio-download-results', 'error', `
+                    ❌ 음원 다운로드 테스트 실패<br>
+                    <strong>오류:</strong> ${error.message}<br>
+                    <pre>${error.stack}</pre>
+                `);
+            }
+        }
+
+        async function testWaveSurfer() {
+            clearResults('wavesurfer-results');
+            
+            try {
+                addStatus('wavesurfer-results', 'info', '🌊 WaveSurfer 초기화 중...');
+                
+                // WaveSurfer 인스턴스 생성
+                const container = document.getElementById('waveform-test');
+                container.innerHTML = ''; // 이전 내용 정리
+                
+                const wavesurfer = window.WaveSurfer.create({
+                    container: container,
+                    waveColor: 'rgba(255, 255, 255, 0.6)',
+                    progressColor: '#ff6b35',
+                    height: 60,
+                    barWidth: 2,
+                    barGap: 1,
+                    cursorWidth: 0,
+                    interact: true,
+                    normalize: true
+                });
+
+                addStatus('wavesurfer-results', 'success', '✅ WaveSurfer 인스턴스 생성 성공');
+
+                // 테스트 음원 로드
+                const trackRef = window.ref(window.storage, 'track');
+                const trackList = await window.listAll(trackRef);
+                
+                if (trackList.items.length > 0) {
+                    const testFile = trackList.items[0];
+                    const downloadURL = await window.getDownloadURL(testFile);
+                    
+                    wavesurfer.on('ready', () => {
+                        addStatus('wavesurfer-results', 'success', `
+                            ✅ WaveSurfer 음원 로드 성공<br>
+                            <strong>파일:</strong> ${testFile.name}<br>
+                            <strong>재생 시간:</strong> ${wavesurfer.getDuration().toFixed(2)}초
+                        `);
+                    });
+
+                    wavesurfer.on('error', (error) => {
+                        addStatus('wavesurfer-results', 'error', `
+                            ❌ WaveSurfer 로드 실패<br>
+                            <strong>오류:</strong> ${error.message}
+                        `);
+                    });
+
+                    wavesurfer.load(downloadURL);
+                } else {
+                    addStatus('wavesurfer-results', 'warning', '⚠️ 테스트할 음원 파일이 없습니다.');
+                }
+
+            } catch (error) {
+                addStatus('wavesurfer-results', 'error', `
+                    ❌ WaveSurfer 테스트 실패<br>
+                    <strong>오류:</strong> ${error.message}<br>
+                    <pre>${error.stack}</pre>
+                `);
+            }
+        }
+
+        async function testDirectAudio() {
+            clearResults('direct-audio-results');
+            
+            try {
+                addStatus('direct-audio-results', 'info', '🎧 HTML5 Audio 테스트 중...');
+                
+                // 테스트 음원 가져오기
+                const trackRef = window.ref(window.storage, 'track');
+                const trackList = await window.listAll(trackRef);
+                
+                if (trackList.items.length === 0) {
+                    addStatus('direct-audio-results', 'warning', '⚠️ 테스트할 음원 파일이 없습니다.');
+                    return;
+                }
+
+                const testFile = trackList.items[0];
+                const downloadURL = await window.getDownloadURL(testFile);
+                
+                // HTML5 Audio 요소 생성
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.src = downloadURL;
+                
+                const audioContainer = document.createElement('div');
+                audioContainer.innerHTML = `<strong>테스트 파일:</strong> ${testFile.name}<br>`;
+                audioContainer.appendChild(audio);
+                
+                document.getElementById('direct-audio-results').appendChild(audioContainer);
+                
+                audio.addEventListener('loadedmetadata', () => {
+                    addStatus('direct-audio-results', 'success', `
+                        ✅ HTML5 Audio 로드 성공<br>
+                        <strong>재생 시간:</strong> ${audio.duration.toFixed(2)}초<br>
+                        위의 플레이어로 음원을 재생해보세요.
+                    `);
+                });
+
+                audio.addEventListener('error', (e) => {
+                    addStatus('direct-audio-results', 'error', `
+                        ❌ HTML5 Audio 로드 실패<br>
+                        <strong>오류 코드:</strong> ${e.target.error.code}<br>
+                        <strong>오류 메시지:</strong> ${e.target.error.message}
+                    `);
+                });
+
+                audio.addEventListener('canplay', () => {
+                    addStatus('direct-audio-results', 'success', '✅ 음원 재생 준비 완료');
+                });
+
+            } catch (error) {
+                addStatus('direct-audio-results', 'error', `
+                    ❌ HTML5 Audio 테스트 실패<br>
+                    <strong>오류:</strong> ${error.message}<br>
+                    <pre>${error.stack}</pre>
+                `);
+            }
+        }
+    </script>
+</body>
+</html>

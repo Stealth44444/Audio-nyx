@@ -9,7 +9,7 @@ import './auth.js';
 
 console.log("[find-music.js] 스크립트 최상단 실행됨"); // 최상단 로그 추가
 
-// Firebase Storage 파일 목록 캐시
+// Firebase Storage 파일 목록 캐시 (버킷명 변경으로 인해 초기화)
 let storageTrackFiles = [];
 
 // 전역 변수
@@ -634,8 +634,27 @@ async function initializePage() {
     
     // Firebase에서 트랙 데이터 로드
     console.log("[JS SCRIPT] loadTracksFromFirebase 함수 호출 시도...");
+    
+    // 사용자에게 진행 상황 알림
+    if (loadingElement) {
+      loadingElement.innerHTML = `
+        <div class="loading-spinner-large"></div>
+        <p>Firebase에서 음원 데이터를 불러오는 중...</p>
+        <small>잠시만 기다려주세요</small>
+      `;
+    }
+    
     const loadedTracksFromFirebase = await loadTracksFromFirebase();
     console.log("[JS SCRIPT] loadTracksFromFirebase 함수 완료. 로드된 트랙 수:", loadedTracksFromFirebase.length);
+    
+    // 로드 완료 후 상태 업데이트
+    if (loadingElement && loadedTracksFromFirebase.length > 0) {
+      loadingElement.innerHTML = `
+        <div class="loading-spinner-large"></div>
+        <p>음원 파일을 처리하는 중...</p>
+        <small>${loadedTracksFromFirebase.length}개의 트랙을 발견했습니다</small>
+      `;
+    }
     
     // 로딩 표시 비활성화
     if (loadingElement) {
@@ -684,21 +703,79 @@ async function initializePage() {
   } catch (error) {
     console.error("[JS SCRIPT] 초기화 중 오류 발생:", error);
     
+    // 오류 타입에 따른 구체적인 메시지
+    let errorTitle = "음원 로딩 오류";
+    let errorDescription = error.message;
+    let suggestions = [];
+    
+    if (error.message?.includes('network') || error.message?.includes('fetch')) {
+      errorTitle = "네트워크 연결 오류";
+      errorDescription = "인터넷 연결을 확인해주세요";
+      suggestions = [
+        "인터넷 연결 상태를 확인해주세요",
+        "페이지를 새로고침해보세요",
+        "잠시 후 다시 시도해주세요"
+      ];
+    } else if (error.message?.includes('Firebase') || error.message?.includes('storage')) {
+      errorTitle = "Firebase 서비스 오류";
+      errorDescription = "서버 연결에 문제가 있습니다";
+      suggestions = [
+        "Firebase 서비스 상태를 확인해주세요",
+        "관리자에게 문의해주세요",
+        "잠시 후 다시 시도해주세요"
+      ];
+    } else if (error.message?.includes('CORS') || error.message?.includes('Access')) {
+      errorTitle = "접근 권한 오류";
+      errorDescription = "브라우저 보안 정책으로 인한 문제입니다";
+      suggestions = [
+        "다른 브라우저로 시도해보세요",
+        "시크릿 모드로 접속해보세요",
+        "브라우저를 최신 버전으로 업데이트해주세요"
+      ];
+    } else {
+      suggestions = [
+        "페이지를 새로고침해주세요",
+        "브라우저를 다시 시작해보세요",
+        "관리자에게 문의해주세요"
+      ];
+    }
+    
     const loadingElement = document.getElementById('findmusic-loading');
     if (loadingElement) {
       loadingElement.innerHTML = `
-        <div style="color: #FF5555; text-align: center;">
-          <h3>음원 로딩 오류</h3>
-          <p>${error.message}</p>
-          <p>콘솔(F12)의 '[JS SCRIPT]' 로그를 확인하고, 페이지를 새로고침하거나 관리자에게 문의해주세요.</p>
+        <div style="color: #FF5555; text-align: center; max-width: 600px; margin: 0 auto;">
+          <h3>${errorTitle}</h3>
+          <p style="margin: 16px 0; font-size: 16px;">${errorDescription}</p>
+          <div style="background: #2a2a2a; border-radius: 8px; padding: 16px; margin: 20px 0; text-align: left;">
+            <h4 style="color: #FFA500; margin: 0 0 12px 0;">해결 방법:</h4>
+            <ul style="margin: 0; padding-left: 20px; color: #ccc;">
+              ${suggestions.map(suggestion => `<li style="margin: 8px 0;">${suggestion}</li>`).join('')}
+            </ul>
+          </div>
+          <button onclick="location.reload()" style="
+            background: #3eb489; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 14px;
+            margin-top: 16px;
+          ">페이지 새로고침</button>
+          <details style="margin-top: 20px; text-align: left; font-size: 12px; color: #888;">
+            <summary style="cursor: pointer; color: #aaa;">기술적 세부사항</summary>
+            <pre style="background: #1a1a1a; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; font-size: 10px;">${error.stack || error.message}</pre>
+          </details>
         </div>
       `;
     }
+    
     const gridContainer = document.getElementById('findmusic-grid');
     if (gridContainer) {
       gridContainer.innerHTML = `
         <div class="findmusic-no-results">
-          <p>음원을 불러오는 중 오류가 발생했습니다: ${error.message}</p>
+          <p>${errorTitle}: ${errorDescription}</p>
+          <p>위의 해결 방법을 시도해보세요</p>
         </div>
       `;
     }
@@ -719,6 +796,9 @@ async function getStorageTrackFiles() {
   console.log('[getStorageTrackFiles] Storage bucket:', storage._config?.bucket);
   
   try {
+    // Firebase Storage 연결 테스트
+    console.log('[getStorageTrackFiles] Firebase Storage 연결 테스트 중...');
+    
     const trackRef = ref(storage, 'track');
     console.log('[getStorageTrackFiles] Track 참조 생성 완료:', trackRef);
     
@@ -732,6 +812,33 @@ async function getStorageTrackFiles() {
     if (listResult.items.length === 0) {
       console.warn('[getStorageTrackFiles] ⚠️ track 폴더에 파일이 하나도 없습니다!');
       console.warn('[getStorageTrackFiles] Firebase Console에서 Storage 확인 필요');
+      
+      // 빈 폴더인 경우 루트에서 파일을 찾아보기
+      console.log('[getStorageTrackFiles] 루트 폴더에서 음원 파일 찾기 시도...');
+      const rootRef = ref(storage, '');
+      const rootListResult = await listAll(rootRef);
+      
+      console.log('[getStorageTrackFiles] 루트 폴더 내용:', {
+        items: rootListResult.items.length,
+        prefixes: rootListResult.prefixes.map(prefix => prefix.name)
+      });
+      
+      // 루트에서 음원 파일 확장자를 가진 파일들만 필터링
+      const audioFiles = rootListResult.items.filter(item => {
+        const name = item.name.toLowerCase();
+        return name.endsWith('.mp3') || name.endsWith('.wav') || name.endsWith('.m4a');
+      });
+      
+      if (audioFiles.length > 0) {
+        console.log('[getStorageTrackFiles] 루트에서 발견된 음원 파일:', audioFiles.length, '개');
+        storageTrackFiles = audioFiles.map(item => ({
+          name: item.name,
+          path: item.fullPath,
+          normalizedName: normalizeFileName(item.name)
+        }));
+        return storageTrackFiles;
+      }
+      
       return [];
     }
     
@@ -754,6 +861,18 @@ async function getStorageTrackFiles() {
       code: error.code,
       stack: error.stack
     });
+    
+    // Storage 접근 권한 문제일 수 있으므로 테스트 파일로 확인
+    try {
+      console.log('[getStorageTrackFiles] Storage 접근 권한 테스트 중...');
+      const testRef = ref(storage, 'test.txt');
+      await getDownloadURL(testRef);
+      console.log('[getStorageTrackFiles] Storage 접근 권한: OK');
+    } catch (testError) {
+      console.error('[getStorageTrackFiles] Storage 접근 권한 오류:', testError);
+      console.error('[getStorageTrackFiles] CORS 또는 인증 문제일 가능성이 높습니다.');
+    }
+    
     return [];
   }
 }
@@ -805,13 +924,18 @@ async function getStorageUrl(filePath) {
   try {
     const fileRef = ref(storage, filePath);
     const url = await getDownloadURL(fileRef);
-    // console.log(`[getStorageUrl] 성공: ${filePath}`);
+    console.log(`[getStorageUrl] 성공: ${filePath} -> ${url}`);
     return url;
   } catch (error) {
     if (error.code === 'storage/object-not-found') {
       console.warn(`[getStorageUrl] 경고: Storage에 파일 없음: ${filePath}`);
     } else {
       console.error(`[getStorageUrl] 오류: ${filePath} URL 가져오기 실패`, error);
+      console.error('[getStorageUrl] 오류 상세:', {
+        code: error.code,
+        message: error.message,
+        serverResponse: error.serverResponse
+      });
     }
     return ''; // 파일이 없거나 오류 발생 시 빈 문자열 반환
   }
@@ -867,6 +991,11 @@ async function loadTracksFromFirebase() {
   
   if (storageFiles.length === 0) {
     console.warn('[loadTracksFromFirebase] ⚠️ Storage에 파일이 하나도 없습니다! Firebase Console을 확인해주세요.');
+    console.warn('[loadTracksFromFirebase] 가능한 원인:');
+    console.warn('1. Firebase Storage 버킷에 track 폴더가 없음');
+    console.warn('2. Storage 보안 규칙으로 인한 접근 거부');
+    console.warn('3. 네트워크 연결 문제');
+    console.warn('4. CORS 정책 위반');
   }
   
   try {
@@ -2142,38 +2271,76 @@ function initializeWaveform(waveContainer) {
 
   wavesurfer.load(waveContainer.dataset.src);
   
-  wavesurfer.on('error', err => {
+  wavesurfer.on('error', async (err) => {
     console.error(`[initializeWaveform] ERROR 이벤트 발생: ${waveContainer.dataset.src}`, err);
     
     // 현재 재시도 횟수 가져오기
     const retryCount = parseInt(waveContainer.dataset.retryCount) || 0;
+    const trackId = trackItem.getAttribute('data-track-id');
+    const trackData = tracks.find(t => t.id === trackId) || filteredTracks.find(t => t.id === trackId);
     
-    // 404 오류이고 재시도 횟수가 남아있는 경우 다른 확장자 시도
-    if ((err && err.status === 404) && retryCount < maxRetries) {
-      const currentSrc = waveContainer.dataset.src;
-      const trackId = trackItem.getAttribute('data-track-id');
-      const trackData = tracks.find(t => t.id === trackId) || filteredTracks.find(t => t.id === trackId);
+    // CORS 또는 404 오류이고 재시도 횟수가 남아있는 경우 다른 방법 시도
+    if (retryCount < maxRetries && trackData) {
+      console.log(`[Track ${trackData.title}] 오류 재시도 (${retryCount + 1}/${maxRetries})`);
       
-      if (trackData && trackData.title) {
+      let newSrc = '';
+      
+      if (retryCount === 0) {
+        // 첫 번째 재시도: 다른 확장자 시도
         const newExtension = extensions[retryCount];
-        const newSrc = getStorageUrl(`track/${trackData.title}${newExtension}`);
-        
-        console.log(`[Track ${trackData.title}] 대체 확장자 시도 (${retryCount + 1}/${maxRetries}): ${newExtension}`);
-        console.log(`[Track ${trackData.title}] 새 URL: ${newSrc}`);
-        
+        try {
+          newSrc = await getStorageUrl(`track/${trackData.title}${newExtension}`);
+          console.log(`[Track ${trackData.title}] 다른 확장자 시도: ${newExtension}`);
+        } catch (error) {
+          console.log(`[Track ${trackData.title}] 확장자 변경 실패: ${newExtension}`);
+        }
+      } else if (retryCount === 1) {
+        // 두 번째 재시도: 정규화된 파일명으로 시도
+        const normalizedTitle = normalizeFileName(trackData.title);
+        try {
+          newSrc = await getStorageUrl(`track/${normalizedTitle}.mp3`);
+          console.log(`[Track ${trackData.title}] 정규화된 파일명 시도: ${normalizedTitle}`);
+        } catch (error) {
+          console.log(`[Track ${trackData.title}] 정규화된 파일명 실패: ${normalizedTitle}`);
+        }
+      } else if (retryCount === 2) {
+        // 세 번째 재시도: 데모 오디오 파일 사용 (있다면)
+        try {
+          newSrc = await getStorageUrl('demo/sample.mp3');
+          console.log(`[Track ${trackData.title}] 데모 파일 사용`);
+        } catch (error) {
+          console.log(`[Track ${trackData.title}] 데모 파일도 없음`);
+        }
+      }
+      
+      if (newSrc && newSrc !== waveContainer.dataset.src) {
         waveContainer.dataset.retryCount = (retryCount + 1).toString();
         waveContainer.dataset.src = newSrc;
         
+        console.log(`[Track ${trackData.title}] 새 URL로 재시도: ${newSrc}`);
+        
         // 새 URL로 다시 로드 시도
-        wavesurfer.load(newSrc);
-        return; // 이벤트 처리 종료, 재시도 중
+        try {
+          wavesurfer.load(newSrc);
+          return; // 재시도 중이므로 여기서 종료
+        } catch (loadError) {
+          console.error(`[Track ${trackData.title}] 재로드 실패:`, loadError);
+        }
       }
     }
     
     // 재시도 실패 또는 다른 오류인 경우
-    const errorMessage = err && err.status === 404 ? 
-      '오디오 파일을 찾을 수 없습니다' : 
-      '오디오 로드 실패';
+    let errorMessage = '오디오 로드 실패';
+    
+    if (err) {
+      if (err.status === 404 || err.code === 'storage/object-not-found') {
+        errorMessage = '오디오 파일을 찾을 수 없습니다';
+      } else if (err.name === 'TypeError' || err.message?.includes('CORS')) {
+        errorMessage = '오디오 파일 접근 권한 문제';
+      } else if (err.message?.includes('network')) {
+        errorMessage = '네트워크 연결 문제';
+      }
+    }
     
     waveContainer.innerHTML = `<div class="findmusic-wave-error">${errorMessage}</div>`;
     
@@ -2191,18 +2358,17 @@ function initializeWaveform(waveContainer) {
     }
     
     // 트랙 데이터에 오류 상태 표시
-    const trackId = trackItem.getAttribute('data-track-id');
-    const trackData = tracks.find(t => t.id === trackId) || filteredTracks.find(t => t.id === trackId);
     if (trackData) {
       trackData.hasAudioError = true;
-      console.warn(`[Track ${trackData.title}] 오디오 로드 완전 실패 - 모든 확장자 시도 완료`);
+      console.warn(`[Track ${trackData.title}] 오디오 로드 완전 실패 - 모든 재시도 완료`);
       console.warn(`[Track ${trackData.title}] 최종 URL: ${waveContainer.dataset.src}`);
       console.warn(`[Track ${trackData.title}] 원본 storagePath: ${trackData.storagePath || 'N/A'}`);
       console.warn(`[Track ${trackData.title}] 매칭된 파일명: ${trackData.actualFileName || 'N/A'}`);
-      console.warn(`[Track ${trackData.title}] Storage 매칭 성공 여부: ${trackData.actualFileName !== 'N/A' ? 'Yes' : 'No'}`);
+      console.warn(`[Track ${trackData.title}] 오류 타입: ${err?.name || 'Unknown'}`);
+      console.warn(`[Track ${trackData.title}] 오류 메시지: ${err?.message || 'Unknown'}`);
       
       // 404 오류인 경우 디버깅 정보 출력
-      if (err && err.status === 404) {
+      if (err && (err.status === 404 || err.code === 'storage/object-not-found')) {
         // Storage 파일 목록 다시 가져오기 (캐시된 것 사용)
         getStorageTrackFiles().then(storageFiles => {
           debugStorageFileNotFound(trackData.storagePath || `track/${trackData.title}.mp3`, storageFiles);

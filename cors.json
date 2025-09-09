@@ -9,7 +9,8 @@
       "https://papaya-maamoul-62acf0.netlify.app",
       "https://poetic-profiterole-f81277.netlify.app",
       "https://audionyx-a7b2e.web.app",
-      "https://audio-nyx.com"
+      "https://audio-nyx.com",
+      "https://www.audio-nyx.com" 
     ],
     "method": ["GET", "HEAD", "OPTIONS"],
     "responseHeader": [

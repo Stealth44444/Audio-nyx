@@ -103,12 +103,7 @@
     "step1Title": "Step 1 · Pick a Track",
     "step1Desc": "Listen and click <b>Copy CID</b>",
     "step2Title": "Step 2 · Upload Video",
-    "step2Desc": "Platform‑specific input guide",
-    "step2Guide": {
-      "youtube": "YouTube Shorts: Copy the track’s <b>ISRC</b> on the right and <b>paste</b> it when uploading",
-      "tiktok": "TikTok: Search and select by <b>track title</b> or <b>title/artist</b>",
-      "reels": "Instagram Reels: Search and select by <b>track title</b> or <b>title/artist</b>"
-    },
+    "step2Desc": "Paste the <b>music CID</b> when uploading Shorts",
     "step3Title": "Step 3 · Auto Deposit",
     "step3Desc": "Most of your revenue is <b>auto‑deposited monthly</b>",
     "previewTitle": "Right Now",
@@ -144,13 +139,6 @@
     "trustSecurity": "Secure Encryption",
     "trustMonitoring": "24/7 Monitoring",
     "trustEmail": "Deposit Email Alerts",
-    "banner": {
-      "title": "Complete your bank account to receive payouts",
-      "description": "You’ve registered channels. Add a bank account to start receiving deposits.",
-      "ctaLong": "Go to Bank Account",
-      "ctaShort": "Add Account",
-      "mobileText": "Add Account"
-    },
     "noticeTitle": "Important Notice for Bank Account Registration",
     "noticeDesc1": "Channel registration must be completed before adding a bank account.",
     "noticeDesc2": "Please enter the account holder and account number accurately. Incorrect information may delay payouts due to re‑settlement processing."

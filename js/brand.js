@@ -1,6 +1,5 @@
 // === Firebase 및 Firestore 모듈 Import ===
-import { app, db, storage } from './firebase.js';
-import { ref, getDownloadURL, listAll } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js';
+import { app, db } from './firebase.js';
 import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
 
 // === 2024 모바일 UI/UX 트렌드 적용 - 터치 최적화 및 성능 개선 ===
@@ -1166,173 +1165,67 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // === 전역 재생 상태 ===
+    // === 전역 재생 시뮬레이션 변수 ===
     let currentPlayButton = null;
-    let currentAudio = null;
-    let cardToAudio = new Map(); // 카드 요소 -> HTMLAudioElement
-
-    // Storage에서 파일 목록을 기반으로 카드 타이틀과 매칭하여 URL을 미리 로드 (Firestore 미사용)
-    let storageFilesCache = null; // [{name, fullPath}]
-    function normalizeTitle(str = '') {
-        return (str || '')
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '') // 영숫자만 남기기
-            .trim();
-    }
-
-    function findBestStorageMatch(title, files) {
-        if (!title || !files || !files.length) return null;
-        const target = normalizeTitle(title);
-        let best = null;
-        let bestScore = -1;
-        for (const f of files) {
-            const base = f.name.replace(/\.[^.]+$/, '');
-            const norm = normalizeTitle(base);
-            if (!norm) continue;
-            let score = 0;
-            if (norm === target) score = 100;
-            else if (norm.includes(target) || target.includes(norm)) score = 70;
-            else if (norm.startsWith(target) || target.startsWith(norm)) score = 60;
-            if (score > bestScore) { bestScore = score; best = f; }
-        }
-        return best;
-    }
-
-    async function loadStorageFiles() {
-        if (storageFilesCache) return storageFilesCache;
-        try {
-            const trackRef = ref(storage, 'track');
-            const list = await listAll(trackRef);
-            storageFilesCache = list.items.map(item => ({ name: item.name, fullPath: item.fullPath }));
-            console.log('[Brand] Storage 파일 수:', storageFilesCache.length);
-            return storageFilesCache;
-        } catch (e) {
-            console.error('[Brand] Storage 목록 로드 실패:', e?.code, e?.message);
-            storageFilesCache = [];
-            return storageFilesCache;
-        }
-    }
-
-    async function preloadBrandTrackUrls() {
-        const cards = Array.from(document.querySelectorAll('.track-card[data-track]'));
-        if (cards.length === 0) return;
-        const files = await loadStorageFiles();
-        for (const card of cards) {
-            const title = card.querySelector('.track-name')?.textContent?.trim();
-            if (!title) continue;
-            const match = findBestStorageMatch(title, files);
-            if (match) {
-                try {
-                    const url = await getDownloadURL(ref(storage, match.fullPath));
-                    card.dataset.audioUrl = url;
-                    console.log('[Brand] 매칭 성공 →', title, '=>', match.name);
-                } catch (e) {
-                    console.warn('[Brand] URL 생성 실패:', match.fullPath, e?.code, e?.message);
-                }
-            } else {
-                console.warn('[Brand] 스토리지 매칭 실패:', title);
-            }
-        }
-    }
-
-    // 재생 버튼 인터랙션 (실제 오디오 재생)
+    let currentSimulationTimer = null;
+    
+    // 재생 버튼 인터랙션 (시뮬레이션 모드)
     function setupPlayButtonInteractions() {
-        // URL 프리로드 시도 (비동기)
-        preloadBrandTrackUrls();
-
-        document.addEventListener('click', async function(e) {
+        console.log('[Brand] 🎵 재생 시뮬레이션 모드로 설정됨');
+        
+        // 이벤트 위임을 사용하여 동적으로 생성된 버튼도 처리
+        document.addEventListener('click', function(e) {
             const playButton = e.target.closest('.track-play-btn');
             if (!playButton) return;
-
+            
             e.preventDefault();
             e.stopPropagation();
-
-            const card = playButton.closest('.track-card');
-            if (!card) return;
-
-            // 기존 재생 중인 오디오 정지
+            
+            // 현재 재생 중인 다른 버튼이 있으면 정지
             if (currentPlayButton && currentPlayButton !== playButton) {
-                setPlayingState(currentPlayButton, false);
-            }
-            if (currentAudio && currentAudio !== cardToAudio.get(card)) {
-                try { currentAudio.pause(); } catch (_) {}
-            }
-
-            // 카드에 매핑된 오디오 가져오기 (없으면 생성)
-            let audio = cardToAudio.get(card);
-            if (!audio) {
-                let url = card.dataset.audioUrl || '';
-                if (!url) {
-                    // 프리로드가 아직 안 끝났을 수 있으니 Storage 매칭 재시도
-                    try {
-                        const files = await loadStorageFiles();
-                        const title = card.querySelector('.track-name')?.textContent?.trim();
-                        const match = findBestStorageMatch(title, files);
-                        if (match) {
-                            url = await getDownloadURL(ref(storage, match.fullPath));
-                        }
-                    } catch (err) {
-                        console.error('[Brand] 즉시 Storage 매칭 실패:', err?.code, err?.message);
-                    }
+                resetPlayButton(currentPlayButton);
+                if (currentSimulationTimer) {
+                    clearTimeout(currentSimulationTimer);
                 }
-                if (!url) {
-                    console.warn('[Brand] 오디오 URL을 찾지 못해 시뮬레이션으로 대체');
-                    // URL이 없으면 시뮬레이션 동작으로 폴백
-                    toggleSimulatedPlayback(playButton);
-                    return;
-                }
-                audio = new Audio(url);
-                audio.preload = 'none';
-                audio.addEventListener('ended', () => {
-                    if (currentPlayButton === playButton) {
-                        setPlayingState(playButton, false);
-                        currentPlayButton = null;
-                        currentAudio = null;
-                    }
-                });
-                audio.addEventListener('error', (ev) => {
-                    console.error('[Brand] <audio> 재생 오류:', url, ev);
-                });
-                cardToAudio.set(card, audio);
             }
-
-            // 토글 재생
-            if (currentPlayButton === playButton && currentAudio && !currentAudio.paused) {
-                currentAudio.pause();
-                setPlayingState(playButton, false);
+            
+            // 같은 버튼을 다시 클릭한 경우 정지
+            if (currentPlayButton === playButton) {
+                resetPlayButton(playButton);
+                if (currentSimulationTimer) {
+                    clearTimeout(currentSimulationTimer);
+                }
                 currentPlayButton = null;
-                currentAudio = null;
-            } else {
-                try {
-                    await audio.play();
-                    currentPlayButton = playButton;
-                    currentAudio = audio;
-                    setPlayingState(playButton, true);
-                } catch (err) {
-                    console.error('[Brand] 재생 실패, 시뮬레이션으로 폴백:', err?.name, err?.message);
-                    toggleSimulatedPlayback(playButton);
-                }
+                currentSimulationTimer = null;
+                return;
             }
+            
+            // 재생 시뮬레이션 시작
+            simulateAudioPlayback(playButton);
         });
     }
-
-    // 폴백: 간단 시뮬레이션 토글
-    let simulateTimers = new WeakMap();
-    function toggleSimulatedPlayback(playButton) {
-        const prevTimer = simulateTimers.get(playButton);
-        if (prevTimer) {
-            clearTimeout(prevTimer);
-            simulateTimers.delete(playButton);
-            setPlayingState(playButton, false);
-            return;
-        }
+    
+    // 재생 시뮬레이션 함수 (실제 오디오 파일 없이 UI만 변경)
+    function simulateAudioPlayback(playButton) {
+        const trackName = playButton.closest('.track-card').querySelector('.track-name')?.textContent || '음원';
+        console.log(`[Brand] 🎵 "${trackName}" 재생 시뮬레이션 시작`);
+        
+        currentPlayButton = playButton;
         setPlayingState(playButton, true);
-        const t = setTimeout(() => {
-            setPlayingState(playButton, false);
-            simulateTimers.delete(playButton);
-        }, 30000);
-        simulateTimers.set(playButton, t);
+        
+        // 30초 후 자동 정지 (실제 트랙 길이 시뮬레이션)
+        currentSimulationTimer = setTimeout(() => {
+            console.log(`[Brand] 🎵 "${trackName}" 재생 시뮬레이션 완료`);
+            if (currentPlayButton === playButton) {
+                resetPlayButton(playButton);
+                currentPlayButton = null;
+                currentSimulationTimer = null;
+            }
+        }, 30000); // 30초
     }
+    
+    // 시뮬레이션 모드 - 오디오 관련 함수들 제거됨
+    // 실제 오디오 파일 없이 UI 시뮬레이션만 사용
     
     // 재생 상태 설정
     function setPlayingState(playButton, isPlaying) {

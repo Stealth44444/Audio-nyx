@@ -445,31 +445,47 @@
     function updateEmailCount() {
       const emails = getAllEmails();
       emailCountNumber.textContent = emails.length;
+      // 중복 제거로 인해 실제 전송 대상 수 표시가 변경될 수 있으므로, 안내 메시지를 업데이트하려면 이 지점에서 후속 UI 업데이트 가능
     }
 
-    // 모든 이메일 주소 수집 함수
+    // 모든 이메일 주소 수집 함수 (중복 제거 포함)
     function getAllEmails() {
+      const seen = new Set();
+      const result = [];
+
       if (individualMode.classList.contains("hidden")) {
         // 일괄 입력 모드
         const bulkText = bulkEmails.value.trim();
         if (!bulkText) return [];
-        
-        return bulkText
+
+        const parsed = bulkText
           .split(/[,;\n]/)
           .map(email => email.trim())
           .filter(email => email && isValidEmail(email));
+
+        for (const email of parsed) {
+          const key = email.toLowerCase();
+          if (!seen.has(key)) {
+            seen.add(key);
+            result.push(email);
+          }
+        }
       } else {
         // 개별 추가 모드
         const emailInputs = emailList.querySelectorAll(".email-input");
-        const emails = [];
         emailInputs.forEach(input => {
           const email = input.value.trim();
           if (email && isValidEmail(email)) {
-            emails.push(email);
+            const key = email.toLowerCase();
+            if (!seen.has(key)) {
+              seen.add(key);
+              result.push(email);
+            }
           }
         });
-        return emails;
       }
+
+      return result;
     }
 
     // 이메일 아이템 생성 함수

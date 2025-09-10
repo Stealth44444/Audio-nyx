@@ -17,6 +17,36 @@ import {
 // auth.js 로드 (인증 관련 UI 처리)
 import './auth.js';
 
+// 사용자 프로필 문서가 없으면 최소 필드로 자동 생성
+async function ensureUserProfile(uid) {
+  try {
+    const userRef = doc(db, 'users', uid);
+    const snap = await getDoc(userRef);
+    if (snap.exists()) return true;
+
+    // 현재 인증 사용자 정보로 최소 문서 생성 (규칙 요건 충족: uid, email, createdAt)
+    const u = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser : null;
+    if (!u || u.uid !== uid) return false;
+
+    await setDoc(userRef, {
+      uid,
+      email: u.email || '',
+      createdAt: serverTimestamp(),
+      // 선택 필드 (규칙상 문자열 허용)
+      displayName: u.displayName || '',
+      nickname: '',
+      phone: '',
+      username: '',
+      provider: (u.providerData && u.providerData.some(p => p.providerId === 'google.com')) ? 'google' : 'emailpassword'
+    });
+
+    return true;
+  } catch (e) {
+    console.error('[ensureUserProfile] 사용자 문서 자동 생성 실패:', e);
+    return false;
+  }
+}
+
 // === 페이지 애니메이션 (브랜드 페이지와 일관성) ===
 function initializeAnimations() {
     const animatedElements = document.querySelectorAll('[data-animate]');
@@ -549,14 +579,17 @@ async function fetchAccountData(uid) {
 // Firebase에 계좌 정보 저장
 async function saveAccountData(uid, data) {
   try {
-    // 먼저 사용자 문서가 존재하는지 확인
+    // 사용자 문서 보장 (없으면 자동 생성)
     const userRef = doc(db, 'users', uid);
-    const userSnap = await getDoc(userRef);
-    
+    let userSnap = await getDoc(userRef);
     if (!userSnap.exists()) {
-      console.warn('[saveAccountData] 사용자 문서가 없습니다. 회원가입 과정을 완료해야 합니다.');
-      showToast('계좌 등록을 위해 회원가입을 먼저 완료해주세요.', 'error');
-      return false;
+      const created = await ensureUserProfile(uid);
+      if (!created) {
+        console.warn('[saveAccountData] 사용자 문서 자동 생성 실패');
+        showToast('계좌 등록을 위해 회원가입 정보를 확인해주세요.', 'error');
+        return false;
+      }
+      userSnap = await getDoc(userRef);
     }
     
     // 채널 정보 확인

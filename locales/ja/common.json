@@ -152,7 +152,14 @@
     "infoDesc": "Audionyxは四半期末、登録された口座に自動入金いたします。チャンネル別収入を正確に集計して入金いたします。",
     "trustSecurity": "安全な暗号化",
     "trustMonitoring": "24時間モニタリング",
-    "trustEmail": "入金通知メール送信"
+    "trustEmail": "入金通知メール送信",
+    "banner": {
+      "title": "まだ口座登録がお済みではありませんか？",
+      "description": "今すぐ口座を登録して、自動で入金を受け取りましょう。",
+      "ctaLong": "口座登録ページへ",
+      "ctaShort": "口座登録",
+      "mobileText": "口座登録"
+    }
   },
   "findMusic": {
     "title": "音源検索 | Audionyx",

@@ -125,7 +125,38 @@
     "step3Desc": "3.3% withholding tax<br>Deposit net of tax<br>Automated tax process",
     "pageTitle": "Bank Account",
     "formTitle": "Register / Edit Account",
+    "bankLabel": "Select Bank",
+    "bankPlaceholder": "Please select a bank",
+    "accountLabel": "Account Number",
+    "accountPlaceholder": "Digits only, no '-'",
+    "accountConfirmLabel": "Confirm Account Number",
+    "accountConfirmPlaceholder": "Re‑enter account number",
+    "holderLabel": "Account Holder",
+    "holderPlaceholder": "Enter account holder name",
+    "submitBtn": "Register Account",
     "showFormBtn": "Register Account",
+
+    "bankCodeLabel": "Bank Code",
+    "bankCodePlaceholder": "Enter 4‑digit bank code",
+    "branchCodeLabel": "Branch Code",
+    "branchCodePlaceholder": "Enter 3‑digit branch code",
+    "accountTypeLabel": "Account Type",
+    "accountTypePlaceholder": "Select account type",
+    "accountTypeOrdinary": "Ordinary",
+    "accountTypeCurrent": "Current",
+    "accountTypeSavings": "Savings",
+    "accountNumberLabel": "Account Number",
+    "accountNumberPlaceholder": "Enter 7‑digit account number",
+    "accountHolderKanaLabel": "Holder (Kana)",
+    "accountHolderKanaPlaceholder": "Enter in Katakana",
+
+    "banner": {
+      "title": "Need to register your bank account?",
+      "description": "Register your bank account now to receive payouts automatically.",
+      "ctaLong": "Go to Bank Account",
+      "ctaShort": "Register Account",
+      "mobileText": "Register Account"
+    },
     "channelNoticeTitle": "Channel Registration Required",
     "channelNoticeDesc": "Please register a channel first on the Channel Management page, then try again.",
     "channelRegisterBtn": "Go to Channel Registration",
@@ -306,7 +337,9 @@
       "faqTitle": "Frequently Asked Questions",
       "helpStatus": "Help",
       "needMoreHelp": "Need more help?",
-      "contactSupport": "Contact Support"
+      "contactSupport": "Contact Support",
+      "urlValidation": "Automatically validates URL format<br>for each platform to ensure accurate registration.",
+      "verificationPending": "Verifying"
     },
     "faq": {
       "howEmojiKeyWorks": "How does the emoji key work?",
@@ -443,16 +476,23 @@
     "form": {
       "title": "Custom Production Request",
       "subtitle": "Enter the details of your desired music",
+      "trackTitle": "Track Title",
       "trackTitleLabel": "Track Title",
       "trackTitlePlaceholder": "e.g., [My Channel] Vlog BGM",
       "bpmLabel": "BPM",
+      "bpm": "BPM",
       "bpmPlaceholder": "60-200",
+      "genre": "Genre",
       "genreLabel": "Genre",
       "genrePlaceholder": "Select a genre",
+      "genreSelect": "Select a genre",
+      "email": "Email for Track Delivery",
       "emailLabel": "Email for Track Delivery",
       "emailPlaceholder": "Enter your email address",
+      "description": "Description / Requirements",
       "descriptionLabel": "Description / Requirements",
       "descriptionPlaceholder": "Please describe the desired mood, characteristics, etc. of the track in detail",
+      "refUrl": "Reference Video URL (Optional)",
       "refUrlLabel": "Reference Video URL (Optional)",
       "refUrlPlaceholder": "Reference video URL (e.g., YouTube)",
       "submit": "Submit Request",
@@ -480,6 +520,153 @@
       "revenue": "Revenue & Payout",
       "producer": "Producer",
       "support": "Support"
+    },
+    "questions": {
+      "overview": {
+        "what_is_audionyx": {
+          "question": "What is Audionyx?",
+          "answer": "Audionyx provides high‑quality music that creators can use without copyright concerns and shares the resulting music revenue with creators."
+        },
+        "service_cost": {
+          "question": "Is there any cost to use the service?",
+          "answer": "All Audionyx services are free to use. Music download, channel registration, revenue sharing, and all features are available at no extra cost."
+        },
+        "login_required": {
+          "question": "Can I use the service without logging in?",
+          "answer": "The Find Music and Brand pages are available without login. However, Channel Management, Track Production requests, and Bank Account registration require login."
+        },
+        "longform_usage": {
+          "question": "Can I use Audionyx tracks in long‑form videos?",
+          "answer": "Yes. Unlike Shorts, revenue share for long‑form videos may differ. Detailed conditions will be announced separately."
+        },
+        "other_platforms": {
+          "question": "Is payout supported on platforms other than YouTube?",
+          "answer": "Twitch and AfreecaTV are not yet supported for auto settlement but are planned for H2 2025. TikTok and Instagram Reels are under review."
+        }
+      },
+      "signup": {
+        "social_to_email": {
+          "question": "Can I switch from social login to email login?",
+          "answer": "In Account Settings > Login Methods, set an email and password to add an additional login method. Your social login remains available."
+        },
+        "withdraw_data": {
+          "question": "If I re‑register after account deletion, will my previous settlement data be restored?",
+          "answer": "If you re‑register within 30 days, previous settlement history and channel registrations are restored. After 30 days, it’s treated as a new account and past data won’t be restored."
+        }
+      },
+      "channel": {
+        "registration_requirements": {
+          "question": "Are there requirements such as subscribers or views to register a channel?",
+          "answer": "No. Audionyx welcomes all creators. Anyone can register a channel and use the service without any conditions like subscribers, views, or channel age."
+        },
+        "how_to_register": {
+          "question": "How do I register my channel?",
+          "answer": "On the Channel Management page, click ‘Register Channel’ and enter your YouTube channel URL. A unique emoji key will be issued. Add this key to your channel description to complete verification."
+        },
+        "channel_suspension": {
+          "question": "What happens if my channel has issues or gets suspended?",
+          "answer": "Even if your channel is suspended, you do not owe Audionyx any money. The channel’s music revenue simply becomes 0. There is no obligation to return previously paid revenue or pay additional fees. Channel operation is the creator’s responsibility, and no financial burden occurs even for penalties due to policy violations."
+        },
+        "multiple_channels": {
+          "question": "Can I register multiple channels?",
+          "answer": "Yes, you can register multiple YouTube channels under a single account. Each channel receives a unique emoji key and is managed individually."
+        }
+      },
+      "music": {
+        "find_music_feature": {
+          "question": "How do I use the Find Music feature?",
+          "answer": "On the Find Music page, filter by genre, mood, or use‑case, or search by keyword to find tracks. You can preview tracks and see waveforms to understand characteristics. Autocomplete helps search faster."
+        },
+        "download_music": {
+          "question": "Can I download tracks?",
+          "answer": "Currently, only preview is available. Download capability will be added in a future update."
+        },
+        "copyright_issues": {
+          "question": "Are there copyright issues when using the music?",
+          "answer": "All Audionyx tracks are original works produced by our in‑house producer team. We register copyrights and issue ISRCs for all tracks. There are no legal copyright issues. However, channel registration and verification are required before use."
+        },
+        "remix_allowed": {
+          "question": "Can I remix an Audionyx beat or add vocals?",
+          "answer": "Derivative works are allowed and follow the same revenue sharing conditions as the original. Credit to the original is required, and inappropriate lyrics or content may be restricted."
+        },
+        "volume_detection": {
+          "question": "If I lower the background volume, will CID fail to detect?",
+          "answer": "At volumes above −18 LUFS it’s recognized normally. If the volume is too low (below −24 LUFS), detection accuracy may drop. Maintain an appropriate level."
+        }
+      },
+      "production": {
+        "how_to_request": {
+          "question": "How do I request Track Production?",
+          "answer": "On the Track Production page, provide the title, BPM, genre, and detailed description of the desired music, plus a reference URL and contact. You can request without logging in and track status in real time."
+        },
+        "production_cost": {
+          "question": "Is there any cost for Track Production?",
+          "answer": "Submitting a production request is free. We will review each request and inform you about feasibility and conditions."
+        },
+        "request_status": {
+          "question": "How can I check the status of my request?",
+          "answer": "Check the ‘My Requests’ section at the bottom of the Track Production page. Statuses are ‘Pending’, ‘In Progress’, and ‘Done’."
+        }
+      },
+      "revenue": {
+        "account_registration": {
+          "question": "How do I register a bank account?",
+          "answer": "On the Bank Account page, enter bank, account number, and account holder to register. For security, account numbers are partially masked on screen and can be edited anytime."
+        },
+        "revenue_distribution": {
+          "question": "How is revenue shared?",
+          "answer": "Revenue from videos using the music is shared between the creator and Audionyx. Specific share ratios and cycles will be announced separately."
+        },
+        "account_security": {
+          "question": "Is my account information stored securely?",
+          "answer": "Yes. All account data is encrypted and stored securely. When displayed, part of the account number is masked."
+        },
+        "settlement_schedule": {
+          "question": "When can I see my settlement report and when is the payout deposited?",
+          "answer": "We provide a settlement report by the end of M+2 from the upload date of your content using Audionyx music, and deposit by the end of M+3.",
+          "example": "Example (settled monthly by the following basis):\nJan 15 Upload a video using Audionyx music\nBy Mar 30 Settlement report provided (sales 1/15–1/31)\nBy Apr 30 Deposit made (sales 1/15–1/31)"
+        },
+        "minimum_payment": {
+          "question": "What is the minimum payout amount?",
+          "answer": "Audionyx settles monthly even for as little as 1 KRW."
+        },
+        "tax_deduction": {
+          "question": "The settlement amount differs from the actual deposit.",
+          "answer": "The settlement amount is pre‑withholding. 3.3% withholding tax is deducted before deposit."
+        },
+        "paypal_overseas": {
+          "question": "For overseas residents, can I receive payouts via PayPal?",
+          "answer": "We plan to introduce PayPal payouts in Q4 2025. Currently, payouts are only available to domestic bank accounts."
+        },
+        "deleted_video_revenue": {
+          "question": "If the video is deleted, do I need to return royalties already received?",
+          "answer": "No. Paid amounts are not reclaimed. However, revenue from videos deleted after the settlement cutoff date will be excluded from future settlements."
+        }
+      },
+      "producer": {
+        "external_requirements": {
+          "question": "Are there requirements for registering as an external producer?",
+          "answer": "Submit at least 3 tracks in your portfolio with relevant experience. We’ll review and contact you. There’s no genre/style restriction, but quality must fit the Audionyx brand."
+        },
+        "project_file_sales": {
+          "question": "Can I sell DAW project files?",
+          "answer": "Starting in 2026, the ‘Producer Store’ will enable sales of MIDI, stems, and project files. For now, only completed tracks can be registered."
+        }
+      },
+      "support": {
+        "login_issues": {
+          "question": "Login isn’t working. What should I do?",
+          "answer": "We provide multiple login methods: Google, Kakao, Naver, email, phone. If one fails, try another. If problems persist, clear your browser cache or try a different browser."
+        },
+        "audio_playback_issues": {
+          "question": "What if tracks do not play?",
+          "answer": "Browser autoplay policies may prevent playback. Refresh the page or click another track first, then try again."
+        },
+        "additional_inquiries": {
+          "question": "How can I contact support for additional inquiries?",
+          "answer": "Leave your contact when requesting Track Production, or reach us via the email provided during channel registration. Dedicated support channels will be added later."
+        }
+      }
     }
   },
   "producer": {

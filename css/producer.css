@@ -988,6 +988,49 @@ body {
     }
 }
 
+/* === 연락 링크 레이아웃 (카카오/인스타/라인) === */
+.contact-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.contact-icon {
+    width: 22px;
+    height: 22px;
+    color: currentColor;
+}
+
+.contact-link:hover {
+    transform: translateY(-2px);
+    background: var(--bg-card-hover);
+}
+
+.contact-link-label { font-weight: 600; }
+
+.contact-link.kakao { border-color: rgba(254, 229, 0, 0.35); }
+.contact-link.instagram { border-color: rgba(225, 48, 108, 0.35); }
+.contact-link.line { border-color: rgba(0, 185, 0, 0.35); }
+
+@media (max-width: 768px) {
+    .contact-links { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 768px) {
     .hero-section {
         height: 70vh;

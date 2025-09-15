@@ -174,6 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function checkRequestLimit(requestCount) {
     userRequestCount = requestCount;
     
+    // 상태 바 요소가 없으면(레이아웃 제거) 제한 UI 없이 로직만 처리
+    if (!requestStatusBar || !currentRequestCount || !limitWarning || !formCard || !submitBtn) {
+      return requestCount < MAX_REQUESTS;
+    }
+    
     // 상태 바 표시
     requestStatusBar.style.display = 'flex';
     currentRequestCount.textContent = requestCount;
@@ -226,10 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // 폼 제출 처리
+  // 폼 제출 처리 (재확인 모달 선표시)
   requestForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    console.log('트랙 요청 폼 제출됨');
+    console.log('트랙 요청 폼 제출 시도 - 재확인 모달 표시');
     
     // currentUser가 항상 객체를 가지므로 null 체크 불필요
     // if (!currentUser) {
@@ -257,68 +262,89 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    try {
-      // 로딩 상태 표시
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<span class="loading-spinner"></span> ${(window.i18next && window.i18next.t('common.loading')) || '처리 중...'}`;
-      
-      console.log('Firestore에 트랙 요청 데이터 추가 시도...');
-      
-      // 사용자 정보 가져오기
-      let userInfo = {
-        nickname: '',
-        phone: ''
-      };
-      
-      try {
-        if (currentUser && !currentUser.isAnonymous) {
-          // 로그인한 사용자인 경우 users 컬렉션에서 정보 가져오기
-          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            userInfo.nickname = userData.nickname || '';
-            userInfo.phone = userData.phone || '';
-            console.log('사용자 정보 가져오기 성공:', userInfo);
-          } else {
-            console.log('사용자 문서가 존재하지 않습니다.');
+    // 재확인 모달 표시
+    const confirmModal = document.getElementById('confirm-submit-modal');
+    const confirmClose = document.getElementById('confirm-modal-close');
+    const confirmCancel = document.getElementById('confirm-cancel');
+    const confirmAgree = document.getElementById('confirm-agree');
+    const confirmSubmit = document.getElementById('confirm-submit');
+
+    if (!confirmModal) return;
+    
+    function openConfirm() {
+      confirmModal.style.display = 'flex';
+      setTimeout(() => confirmModal.classList.add('show'), 10);
+    }
+    function closeConfirm() {
+      confirmModal.classList.remove('show');
+      setTimeout(() => confirmModal.style.display = 'none', 200);
+    }
+
+    openConfirm();
+
+    // 동의 체크에 따라 버튼 활성화
+    if (confirmAgree) {
+      confirmAgree.checked = false;
+      confirmSubmit.disabled = true;
+      confirmAgree.addEventListener('change', () => {
+        confirmSubmit.disabled = !confirmAgree.checked;
+      }, { once: false });
+    }
+
+    // 닫기/취소
+    if (confirmClose) confirmClose.addEventListener('click', closeConfirm, { once: true });
+    if (confirmCancel) confirmCancel.addEventListener('click', closeConfirm, { once: true });
+
+    // 확정 제출 핸들러
+    if (confirmSubmit) {
+      confirmSubmit.addEventListener('click', async () => {
+        if (!confirmAgree || !confirmAgree.checked) return;
+        closeConfirm();
+        try {
+          // 로딩 상태 표시
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<span class="loading-spinner"></span> ${(window.i18next && window.i18next.t('common.loading')) || '처리 중...'}`;
+          console.log('Firestore에 트랙 요청 데이터 추가 시도...');
+
+          // 사용자 정보 가져오기
+          let userInfo = { nickname: '', phone: '' };
+          try {
+            if (currentUser && !currentUser.isAnonymous) {
+              const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+              if (userDoc.exists()) {
+                const userData = userDoc.data();
+                userInfo.nickname = userData.nickname || '';
+                userInfo.phone = userData.phone || '';
+              }
+            }
+          } catch (userError) {
+            console.error('사용자 정보 가져오기 오류:', userError);
           }
+
+          const docRef = await addDoc(collection(db, 'track_requests'), {
+            uid: currentUser.uid,
+            title,
+            bpm,
+            genre,
+            description,
+            refUrl: refUrl || null,
+            status: '미제작',
+            email,
+            userNickname: userInfo.nickname,
+            userPhone: userInfo.phone,
+            createdAt: serverTimestamp()
+          });
+          console.log('트랙 요청 추가 성공:', docRef.id);
+          showNotification('트랙 제작 요청이 성공적으로 등록되었습니다.');
+          resetForm();
+        } catch (error) {
+          console.error('트랙 요청 등록 중 오류 발생:', error);
+          showNotification('요청 등록 중 오류가 발생했습니다. 다시 시도해주세요.', true);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = (window.i18next && window.i18next.t('trackProduction.form.submit')) || '요청 제출';
         }
-      } catch (userError) {
-        console.error('사용자 정보 가져오기 오류:', userError);
-        // 사용자 정보를 가져오지 못해도 요청은 계속 진행
-      }
-      
-      // Firestore에 요청 추가
-      const docRef = await addDoc(collection(db, 'track_requests'), {
-        uid: currentUser.uid, // 로그인 사용자 또는 'anonymous'
-        title: title,
-        bpm: bpm,
-        genre: genre,
-        description: description,
-        refUrl: refUrl || null,
-        status: '미제작',
-        email: email,
-        // 사용자 정보 추가
-        userNickname: userInfo.nickname,
-        userPhone: userInfo.phone,
-        createdAt: serverTimestamp()
-      });
-      
-      console.log('트랙 요청 추가 성공:', docRef.id);
-      
-      // 성공 메시지 표시
-      showNotification('트랙 제작 요청이 성공적으로 등록되었습니다.');
-      
-      // 폼 초기화
-      resetForm();
-      
-    } catch (error) {
-      console.error('트랙 요청 등록 중 오류 발생:', error);
-      showNotification('요청 등록 중 오류가 발생했습니다. 다시 시도해주세요.', true);
-    } finally {
-      // 버튼 상태 복구
-      submitBtn.disabled = false;
-      submitBtn.textContent = (window.i18next && window.i18next.t('trackProduction.form.submit')) || '요청 제출';
+      }, { once: true });
     }
   });
   

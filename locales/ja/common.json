@@ -186,6 +186,10 @@
       "totalTracks": "合計{count}トラック",
       "trackLibrary": "トラックライブラリ"
     },
+    "usageHint": {
+      "reels": "Reels 使用時は 曲名/アーティスト名 で検索",
+      "shorts": "YouTube Shorts 使用時は コードをコピー または 曲名/アーティスト名 で検索"
+    },
     "sort": {
       "recommended": "おすすめ順",
       "relevance": "関連度順",

@@ -196,6 +196,10 @@
       "totalTracks": "{count} tracks total",
       "trackLibrary": "Track Library"
     },
+    "usageHint": {
+      "reels": "For Reels, search by track title/artist name",
+      "shorts": "For YouTube Shorts, copy the code or search by track title/artist name"
+    },
     "sort": {
       "recommended": "Recommended",
       "relevance": "Relevance",

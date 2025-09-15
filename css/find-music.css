@@ -836,6 +836,10 @@ body {
 
 .findmusic-tracks-header {
   margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .findmusic-tracks-title {
@@ -852,6 +856,65 @@ body {
 
 .findmusic-tracks-title:hover {
   color: var(--color-primary);
+}
+
+/* Track Library 우측 사용 가이드 */
+.findmusic-tracks-header-right {
+  margin-bottom: 1.25rem; /* 타이틀 베이스라인과 자연스럽게 정렬 */
+}
+
+.findmusic-usage-hint {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.findmusic-usage-hint .usage-line {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 포인트 네온 도트 */
+.findmusic-usage-hint .usage-line::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(62,180,137,0.9) 0%, rgba(62,180,137,0.25) 60%, transparent 70%);
+  box-shadow: 0 0 6px rgba(62,180,137,0.25);
+  flex: none;
+}
+
+.findmusic-usage-hint:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(62, 180, 137, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+}
+
+@media (max-width: 768px) {
+  .findmusic-tracks-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .findmusic-tracks-header-right {
+    margin-bottom: 0;
+    width: 100%;
+  }
+  .findmusic-usage-hint {
+    width: 100%;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 }
 
 /* 로딩 스피너 */

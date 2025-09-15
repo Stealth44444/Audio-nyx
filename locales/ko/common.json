@@ -179,6 +179,10 @@
       "totalTracks": "총 {count}개의 트랙",
       "trackLibrary": "Track Library"
     },
+    "usageHint": {
+      "reels": "릴스 사용 시 곡 제목/아티스트 명으로 검색",
+      "shorts": "유튜브 쇼츠 사용 시 코드 복사 또는 곡 제목/아티스트 명으로 검색"
+    },
     "sort": {
       "recommended": "추천순",
       "relevance": "정확도순",

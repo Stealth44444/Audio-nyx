@@ -82,6 +82,52 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log("[main.js] 전역 입력 필드 활성화 완료");
+    
+    // 공지 모달 (2025-09-15) 지속 표기 로직: '다시 보지 않기' 전까지 표시
+    try {
+        const NOTICE_KEY = 'notice_20250915_dismissed_v2';
+        const modal = document.getElementById('notice-modal-20250915');
+        const btnClose = document.getElementById('notice-modal-close-20250915');
+        const btnDismiss = document.getElementById('notice-modal-dismiss-20250915');
+        const cta = document.getElementById('notice-modal-cta-20250915');
+        
+        if (modal && !localStorage.getItem(NOTICE_KEY)) {
+            // 메인 진입 시마다 노출 (닫더라도 재방문 시 다시 표시)
+            modal.style.display = 'flex';
+            document.body.classList.add('no-scroll');
+            requestAnimationFrame(() => modal.classList.add('show'));
+        }
+        
+        function hideNoticeModal() {
+            if (!modal) return;
+            modal.classList.remove('show');
+            setTimeout(() => { 
+                modal.style.display = 'none'; 
+                document.body.classList.remove('no-scroll');
+            }, 200);
+        }
+        
+        if (btnClose) {
+            btnClose.addEventListener('click', () => hideNoticeModal());
+        }
+        
+        if (btnDismiss) {
+            btnDismiss.addEventListener('click', () => {
+                localStorage.setItem(NOTICE_KEY, '1');
+                hideNoticeModal();
+            });
+        }
+        // CTA 클릭 시에는 해제 키를 저장하지 않음 (지속 표시)
+        
+        // 오버레이 클릭으로 닫기
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) hideNoticeModal();
+            });
+        }
+    } catch (e) {
+        console.warn('[main.js] 공지 모달 초기화 중 오류', e);
+    }
 });
 
 // 전역 테스트 함수 추가

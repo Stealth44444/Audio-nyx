@@ -67,6 +67,73 @@
     box-sizing: border-box;
 }
 
+/* === 공지 모달 (2025-09-15) === */
+.notice-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100000;
+    padding: 20px;
+}
+
+.notice-modal.show { opacity: 1; display: flex !important; }
+
+.notice-modal-content {
+    background: linear-gradient(135deg, rgba(12, 12, 12, 0.98) 0%, rgba(22, 50, 40, 0.9) 100%);
+    border: 1px solid rgba(168, 230, 206, 0.2);
+    border-radius: 20px;
+    width: 92%;
+    max-width: 520px;
+    padding: 24px;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.45), 0 0 60px rgba(62, 180, 137, 0.12);
+}
+
+.notice-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+}
+
+.notice-modal-body h2 { margin-bottom: 8px; }
+.notice-modal-body p { color: rgba(255,255,255,0.8); margin-bottom: 16px; }
+
+.notice-modal-actions { display: flex; gap: 10px; }
+.notice-modal-actions .btn-primary { flex: 1; text-align: center; }
+.notice-modal-actions .btn-secondary { 
+    padding: 12px 16px; 
+    border-radius: 10px; 
+    background: rgba(255,255,255,0.08); 
+    border: 1px solid rgba(255,255,255,0.2); 
+    color: #fff; 
+    cursor: pointer; 
+}
+
+@media (max-width: 480px) {
+    .notice-modal-content { padding: 20px; max-width: 94%; }
+    .notice-modal-body h2 { font-size: 1.1rem; }
+    .notice-modal-body p { font-size: 0.95rem; }
+    .notice-modal-actions { flex-direction: column; }
+    .notice-modal-actions .btn-primary, .notice-modal-actions .btn-secondary { width: 100%; }
+}
+
+/* 모달 표시 시 배경 스크롤 방지 */
+body.no-scroll { overflow: hidden; }
+
 /* === 전역 입력 필드 수정 === */
 input[type="text"],
 input[type="email"],

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[제안] AUDIONYX 오리지널 음원으로, 크리에이터님의 새로운 도약을 응원합니다</title>
+    <style>
+        /* CSS Reset */
+        table { border-collapse: collapse; }
+        td { vertical-align: top; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Main Styles */
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+        }
+        
+        /* FLYER STYLE TOP PANEL */
+        .flyer-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .flyer-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.95);
+            color: #ff6b35;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .main-headline {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        .sub-headline {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            font-weight: 500;
+        }
+        
+        
+        /* Content Sections */
+        .content-section {
+            padding: 40px 35px;
+        }
+        
+        .greeting {
+            margin-bottom: 35px;
+            line-height: 2.0;
+            font-size: 16px;
+        }
+        
+        .greeting strong {
+            color: #ff6b35;
+            font-size: 18px;
+        }
+        
+        .service-highlight {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            margin: 30px 0;
+            border-left: 6px solid #ff6b35;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .service-title {
+            color: #ff6b35;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.4;
+        }
+        
+        .service-title::before {
+            content: '🎵';
+            font-size: 28px;
+        }
+        
+        .conversion-badges {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .conversion-badge {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0 6px 16px rgba(255,107,53,0.4);
+            transform: perspective(1px) translateZ(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .conversion-badge:hover {
+            transform: translateY(-2px);
+        }
+        
+        .revenue-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 3px solid #ffc107;
+            padding: 30px;
+            margin: 35px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(255,193,7,0.3);
+        }
+        
+        .revenue-title {
+            color: #856404;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ffc107;
+            padding-bottom: 10px;
+        }
+        
+        .revenue-highlight {
+            background: rgba(220,53,69,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+            margin: 20px 0;
+        }
+        
+        .services-section {
+            background: #f8f9fa;
+            padding: 35px;
+            margin: 35px 0;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .services-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ff6b35;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 3px solid #ff6b35;
+            padding-bottom: 15px;
+        }
+        
+        .service-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 5px solid #ff6b35;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .service-item h4 {
+            color: #ff6b35;
+            margin-bottom: 12px;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        
+        .service-item p {
+            line-height: 1.8;
+            font-size: 15px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+            color: white;
+            padding: 50px 35px;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+        
+        .cta-subtitle {
+            font-size: 18px;
+            margin-bottom: 40px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #ff6b35;
+            padding: 18px 35px;
+            text-decoration: none;
+            border-radius: 35px;
+            font-weight: bold;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .cta-button:hover {
+            background: #ff6b35;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .primary-cta {
+            background: #ffc107 !important;
+            color: #000 !important;
+            font-size: 20px !important;
+            padding: 22px 40px !important;
+            border: 3px solid #ffc107 !important;
+        }
+        
+        .primary-cta:hover {
+            background: #ffb300 !important;
+            color: #000 !important;
+            border: 3px solid #ffb300 !important;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px 35px;
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .footer-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ff6b35;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            color: #ff6b35;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .closing-message {
+            text-align: center;
+            font-size: 17px;
+            font-weight: 500;
+            margin: 40px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+            line-height: 2.0;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border: none;
+                border-radius: 0;
+            }
+            
+            .flyer-header {
+                padding: 20px 15px;
+            }
+            
+            .main-headline {
+                font-size: 20px;
+                line-height: 1.4;
+            }
+            
+            .sub-headline {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            
+            .impact-banner {
+                padding: 15px 10px;
+                font-size: 16px;
+                letter-spacing: 1px;
+            }
+            
+            .content-section {
+                padding: 25px 15px;
+            }
+            
+            .greeting {
+                font-size: 15px;
+                line-height: 2.0;
+            }
+            
+            .service-highlight,
+            .revenue-section,
+            .services-section {
+                padding: 20px 15px;
+                margin: 20px 0;
+            }
+            
+            .service-title {
+                font-size: 18px;
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .service-title::before {
+                font-size: 24px;
+            }
+            
+            .revenue-title {
+                font-size: 18px;
+            }
+            
+            .services-title {
+                font-size: 20px;
+            }
+            
+            .service-item {
+                padding: 15px;
+            }
+            
+            .service-item h4 {
+                font-size: 16px;
+            }
+            
+            .service-item p {
+                font-size: 14px;
+            }
+            
+            .conversion-badges {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                margin: 25px 0;
+            }
+            
+            .conversion-badge {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: 80%;
+                text-align: center;
+            }
+            
+            .badges {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .badge {
+                padding: 6px 12px;
+                font-size: 12px;
+                width: 90%;
+                text-align: center;
+            }
+            
+            .closing-message {
+                padding: 20px 15px;
+                font-size: 15px;
+                line-height: 2.0;
+            }
+            
+            .cta-section {
+                padding: 35px 15px;
+            }
+            
+            .cta-title {
+                font-size: 22px;
+                line-height: 1.4;
+            }
+            
+            .cta-subtitle {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            
+            .cta-buttons {
+                gap: 15px;
+                width: 100%;
+            }
+            
+            .cta-button {
+                padding: 15px 25px;
+                font-size: 15px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .primary-cta {
+                font-size: 17px !important;
+                padding: 18px 30px !important;
+            }
+            
+            .footer {
+                padding: 25px 15px;
+                font-size: 14px;
+            }
+            
+            .social-links {
+                margin: 15px 0;
+            }
+            
+            .social-links a {
+                margin: 0 8px;
+                font-size: 14px;
+                display: inline-block;
+                margin-bottom: 8px;
+            }
+        }
+        
+        /* Extra Small Mobile */
+        @media (max-width: 375px) {
+            .flyer-header { padding: 15px 10px; }
+            .main-headline { font-size: 18px; }
+            .sub-headline { font-size: 14px; }
+            .impact-banner { font-size: 14px; padding: 12px 8px; }
+            .content-section { padding: 20px 10px; }
+            .greeting { font-size: 14px; }
+            .service-highlight,
+            .revenue-section,
+            .services-section { padding: 15px 10px; }
+            .service-title { font-size: 16px; }
+            .cta-title { font-size: 20px; }
+            .cta-button { padding: 12px 20px; font-size: 14px; }
+            .primary-cta { font-size: 16px !important; padding: 15px 25px !important; }
+            .conversion-badge { font-size: 13px; padding: 10px 15px; }
+        }
+        
+        /* Large Mobile / Small Tablet */
+        @media (min-width: 601px) and (max-width: 768px) {
+            .email-container { max-width: 95%; margin: 10px auto; }
+            .content-section { padding: 35px 25px; }
+            .main-headline { font-size: 26px; }
+            .conversion-badges { gap: 15px; }
+            .conversion-badge { padding: 14px 22px; }
+        }
+    </style>
+    <!--[if mso]>
+    <style>
+      body, table, td, a { font-family: 'Malgun Gothic', sans-serif !important; }
+    </style>
+    <![endif]-->
+</head>
+<body>
+    <div class="email-container">
+        <!-- FLYER STYLE TOP PANEL -->
+        <div class="flyer-header">
+            <div class="badges">
+                <span class="badge">🌏 3개국 동시 서비스</span>
+                <span class="badge">💯 모든 서비스 완전 무료</span>
+                <span class="badge">💰 음원 사용 무료 / 수익은 크리에이터에게</span>
+            </div>
+            <h1 class="main-headline">음악 하나로 콘텐츠의 품격을 높이고<br>새로운 수익을 창출하세요!</h1>
+            <p class="sub-headline">AUDIONYX에서 크리에이터님만을 위한<br><strong>세상에 하나뿐인 맞춤형 음원</strong>을 제작해 드립니다.</p>
+            <a href="https://audio-nyx.com/pages/track-production.html" class="cta-button" target="_blank" style="display:inline-block; margin-top: 12px;">
+                🎧 개인 음원 페이지 바로가기
+            </a>
+        </div>
+        
+
+        
+        <!-- Main Content -->
+        <div class="content-section">
+            <div class="greeting">
+                <p><strong>크리에이터님께</strong></p>
+                <br>
+                <p>안녕하세요, <strong>AUDIONYX 프로덕션 팀 총책임자 sony</strong>입니다.</p>
+                <br>
+                <p>콘텐츠를 더욱 특별하게 만들고 싶어 하는 크리에이터님의 고민에<br>저희가 함께하고자 합니다.</p>
+            </div>
+            
+            <!-- Conversion Badges -->
+            <div class="conversion-badges">
+                <span class="conversion-badge">💥 콘텐츠 <strong>완성도 급상승</strong></span>
+                <span class="conversion-badge">🆓 전 서비스 <strong>무료</strong></span>
+                <span class="conversion-badge">🌏 <strong>3개국</strong> 동시 서비스</span>
+                <span class="conversion-badge">💰 음원 사용 <strong>무료</strong> / 수익은 <strong>크리에이터에게</strong></span>
+            </div>
+            
+            <!-- Service Highlight -->
+            <div class="service-highlight">
+                <div class="service-title">콘텐츠의 가치를 높이는 가장 확실한 방법</div>
+                <p>최근 변경된 음원 협업 시스템에 대한 걱정이 많으실 겁니다. AUDIONYX는 크리에이터님이 이러한 변화 속에서도 <strong>안정적으로 수익을 창출</strong>할 수 있도록 돕는 파트너입니다.</p>
+                <br>
+                <p>저희는 단순히 음원을 제공하는 것을 넘어, 크리에이터님의 <strong>콘텐츠 정체성을 가장 잘 드러낼 수 있는 1:1 맞춤형 오리지널 음원 제작</strong>을 핵심 서비스로 운영하고 있습니다.</p>
+            </div>
+            
+            <!-- Revenue Section -->
+            <div class="revenue-section">
+                <div class="revenue-title">💰 쇼츠 음원 수익 분배 안내</div>
+                <p><strong>YouTube Shorts, TikTok, Instagram 릴스</strong> 등 쇼츠에서 AUDIONYX 음원이 사용될 경우, 해당 음원에서 발생한 수익이 <strong>공식 파트너십</strong>을 통해 저희에게 지급됩니다.</p>
+                <br>
+                <div class="revenue-highlight">
+                    <p><strong>저희는 이 수익을 독점하지 않습니다.</strong> 음원 사용으로 발생한 수익의 <strong>90% 이상</strong>을 크리에이터님께 환원합니다.</p>
+                </div>
+                <p>이 시스템은 <strong>오직 크리에이터님에게만 속하는 맞춤형 음원</strong>이기에, 다른 음원들 속에서 더욱 <strong>안정적이고 독점적인 수익 창출</strong>이 가능합니다.</p>
+            </div>
+            
+            <!-- Transparency Section -->
+            <div class="service-highlight">
+                <div class="service-title">✅ 공정·투명 운영 약속</div>
+                <p>• <strong>분기당 1회</strong> 투명한 정산서와 함께 수익을 지급합니다.<br>
+                   • <strong>정산 기준, 단가, 지급 일정</strong>을 사전에 안내합니다.<br>
+                   • 모든 트랙은 <strong>정식 저작권 등록</strong> 및 각 플랫폼 정책 준수를 통해 <strong>법적·저작권 분쟁을 예방</strong>합니다.<br>
+                   • 이슈 발생 시 <strong>원인·대응·재발 방지</strong>를 신속히 공지합니다.</p>
+            </div>
+            
+            <!-- Services Section -->
+            <div class="services-section">
+                <h3 class="services-title">🎵 AUDIONYX의 2가지 이용 방식</h3>
+                <p style="text-align: center; margin-bottom: 30px; font-size: 16px; line-height: 1.8;"><strong>모든 크리에이터분들께</strong> 두 가지 음원 활용 방식을 제공합니다.</p>
+                
+                <div class="service-item">
+                    <h4>🎨 1:1 맞춤형 오리지널 음원 제작</h4>
+                    <p>콘텐츠의 개성을 돋보이게 하는 <strong>세상에 하나뿐인 음악</strong>을 함께 만들어 보세요.</p>
+                    <br>
+                    <p>오직 크리에이터님만을 위한 음악은 <strong>콘텐츠의 고유성</strong>을 강화하고, <strong>안정적인 수익</strong>을 보장하는 가장 확실한 방법입니다.</p>
+                </div>
+                
+                <div class="service-item">
+                    <h4>🎼 AUDIONYX 오리지널 음원 자유 이용</h4>
+                    <p>AUDIONYX가 자체 제작한, <strong>저작권 걱정 없는 오리지널 음원</strong>을 마음껏 활용해 보세요.</p>
+                    <br>
+                    <p>콘텐츠를 더욱 <strong>풍성하고 매력적</strong>으로 만들어 드립니다.</p>
+                </div>
+                
+                <p style="text-align: center; margin-top: 25px; font-weight: bold; font-size: 16px; line-height: 1.8;">자세한 내용은 공식 사이트의 <strong style="color: #ff6b35; font-size: 18px;">브랜드 소개</strong>에서 확인하실 수 있습니다.</p>
+            </div>
+            
+            <div class="closing-message">
+                <p><strong>'이런 장르나 분위기의 음악이 있었으면 좋겠다'</strong> 하는 새로운 아이디어가 있다면,<br><strong>편하게 답장으로 연락 주세요.</strong></p>
+                <br>
+                <p style="color: #ff6b35; font-size: 19px;"><strong>AUDIONYX는 크리에이터님과의 소중한 인연을 기다립니다.</strong></p>
+            </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <div class="cta-title">🚀 지금 바로 시작해 볼까요?</div>
+            <p class="cta-subtitle"><strong>아래 버튼을 통해 공식 사이트로 이동하여</strong><br><strong>자세한 내용을 확인해 주세요</strong></p>
+            
+            <div class="cta-buttons">
+                <a href="https://audio-nyx.com/" class="cta-button primary-cta" target="_blank">
+                    📱 공식 사이트 바로가기
+                </a>
+                <a href="https://audio-nyx.com/pages/brand.html" class="cta-button" target="_blank">
+                    🎵 브랜드 소개 보기
+                </a>
+                <a href="http://pf.kakao.com/_xemxoxen" class="cta-button" target="_blank">
+                    <span style="display:inline-flex; align-items:center; gap:8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" fill="#FEE500"/>
+                            <path d="M12 7c-3.314 0-6 2.043-6 4.563 0 1.54.99 2.892 2.5 3.684L8 17l2.207-1.32c.57.1 1.17.153 1.793.153 3.314 0 6-2.043 6-4.563C18 9.043 15.314 7 12 7z" fill="#000"/>
+                        </svg>
+                        바로 문의하기
+                    </span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-title">AUDIONYX Production Team</p>
+            <p><strong>총책임자: sony</strong></p>
+            
+            <div class="social-links">
+                <a href="https://audio-nyx.com/" target="_blank">🌐 공식 사이트</a>
+                <a href="https://www.instagram.com/audio_nyx" target="_blank" aria-label="Instagram" style="display:inline-flex; align-items:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5z" stroke="#ff6b35" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="3.5" stroke="#ff6b35" stroke-width="2"/>
+                        <circle cx="17.5" cy="6.5" r="1.2" fill="#ff6b35"/>
+                    </svg>
+                    Instagram
+                </a>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 13px; color: #999;">
+                본 메일 수신에 동의하지 않으셨다면, 번거로우시겠지만 삭제 부탁드립니다.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+

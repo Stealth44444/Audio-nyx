@@ -322,6 +322,15 @@
                   <span>🇯🇵</span>
                   일본 콜드메일
                 </button>
+                <button 
+                  type="button" 
+                  id="tpl-kr-coldmail"
+                  class="audionyx-btn-secondary px-4 py-2 rounded-lg text-xs font-medium inline-flex items-center gap-2 transition-all"
+                  title="한국 크리에이터 콜드 메일 템플릿 삽입"
+                >
+                  <span>🇰🇷</span>
+                  한국 콜드메일
+                </button>
                 <!-- 향후 템플릿 확장 자리: 자동 루프 생성 예정 -->
               </div>
             </div>
@@ -415,14 +424,12 @@
     const result = document.getElementById("result");
     const htmlTextarea = document.getElementById("html");
     const tplBtnJpColdmail = document.getElementById("tpl-jp-coldmail");
+    const tplBtnKrColdmail = document.getElementById("tpl-kr-coldmail");
 
     // 템플릿 정의 (향후 확장 가능 구조)
     const mailTemplates = [
-      {
-        id: "jp-coldmail",
-        label: "🇯🇵 일본 콜드메일 템플릿",
-        path: "/japan-creator-coldmail.html"
-      }
+      { id: "jp-coldmail", label: "🇯🇵 일본 콜드메일 템플릿", path: "/japan-creator-coldmail.html" },
+      { id: "kr-coldmail", label: "🇰🇷 한국 콜드메일 템플릿", path: "/korea-creator-coldmail.html" }
     ];
 
     // 새로운 이메일 관련 DOM 요소들
@@ -582,6 +589,9 @@
     // 단일 버튼 바인딩 (향후 루프로 일반화 가능)
     tplBtnJpColdmail.addEventListener("click", () => {
       loadTemplateIntoEditor("/japan-creator-coldmail.html");
+    });
+    tplBtnKrColdmail.addEventListener("click", () => {
+      loadTemplateIntoEditor("/korea-creator-coldmail.html");
     });
 
     // 인증 상태 변경 감지

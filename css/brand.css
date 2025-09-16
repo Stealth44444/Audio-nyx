@@ -2526,6 +2526,7 @@ ul {
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         -ms-overflow-style: none;
+        overscroll-behavior-x: contain;
     }
     
     .mobile-flows-container::-webkit-scrollbar {
@@ -2545,6 +2546,9 @@ ul {
         overflow: hidden;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         touch-action: manipulation;
+        contain: layout paint style;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     
     .mobile-flow-card::before {
@@ -2803,6 +2807,8 @@ ul {
         color: var(--color-primary);
         margin-bottom: var(--mobile-spacing-xs);
         line-height: 1.3;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     
     .mobile-flow-description {
@@ -2810,6 +2816,8 @@ ul {
         color: rgba(255, 255, 255, 0.8);
         line-height: 1.4;
         margin: 0;
+        word-break: keep-all;
+        overflow-wrap: break-word;
     }
     
     /* 프로그레스 인디케이터 */

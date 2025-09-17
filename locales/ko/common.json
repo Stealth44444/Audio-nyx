@@ -330,8 +330,10 @@
       "step3Desc": "시스템이 자동으로<br>채널을 검증하고<br>검증 완료 후 즉시<br>수익화가 시작됩니다."
     },
     "status": {
+      "pending": "검사중",
       "verified": "검사완료",
-      "failed": "검증실패"
+      "missingEmoji": "이모지 키 누락",
+      "recheckUrl": "Url 재확인"
     },
     "modal": {
       "title": "채널 등록",

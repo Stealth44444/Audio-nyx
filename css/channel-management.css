@@ -819,6 +819,15 @@ footer,
   background: #dc3545;
 }
 
+/* 새 상태 배지 색상 (범례용) */
+.status-missing-emoji .status-dot {
+  background: #0d6efd; /* 파랑 */
+}
+
+.status-recheck-url .status-dot {
+  background: #6c757d; /* 회색 */
+}
+
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
@@ -901,7 +910,9 @@ footer,
 
 .channel-card-header .tag-pending,
 .channel-card-header .tag-verified,
-.channel-card-header .tag-rejected {
+.channel-card-header .tag-rejected,
+.channel-card-header .tag-missing-emoji,
+.channel-card-header .tag-recheck-url {
     flex-shrink: 0;
 }
 
@@ -1825,7 +1836,9 @@ footer,
 /* === 상태 뱃지 스타일 === */
 .tag-pending,
 .tag-verified,
-.tag-rejected {
+.tag-rejected,
+.tag-missing-emoji,
+.tag-recheck-url {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -1875,6 +1888,31 @@ footer,
     height: 8px;
     border-radius: 50%;
     background: #dc3545;
+}
+
+/* 새 태그 스타일 */
+.tag-missing-emoji {
+  color: #0d6efd;
+}
+
+.tag-missing-emoji::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0d6efd;
+}
+
+.tag-recheck-url {
+  color: #6c757d;
+}
+
+.tag-recheck-url::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6c757d;
 }
 
 .footer-heading { color: #fff !important; } 

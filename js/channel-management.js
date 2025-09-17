@@ -870,7 +870,8 @@ document.addEventListener('DOMContentLoaded', () => {
     switch(status) {
       case '검사중': return 'status-pending';
       case '검사완료': return 'status-verified';
-      case '검증실패': return 'status-rejected';
+      case '이모지 키 누락': return 'status-missing-emoji';
+      case 'Url 재확인': return 'status-recheck-url';
       default: return 'status-pending';
     }
   }
@@ -881,8 +882,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return { bg: 'rgba(255, 193, 7, 0.1)', text: '#ffc107', border: 'rgba(255, 193, 7, 0.2)' };
       case '검사완료': 
         return { bg: 'rgba(40, 167, 69, 0.1)', text: '#28a745', border: 'rgba(40, 167, 69, 0.2)' };
-      case '검증실패': 
-        return { bg: 'rgba(220, 53, 69, 0.1)', text: '#dc3545', border: 'rgba(220, 53, 69, 0.2)' };
+      case '이모지 키 누락': 
+        return { bg: 'rgba(13, 110, 253, 0.1)', text: '#0d6efd', border: 'rgba(13, 110, 253, 0.2)' };
+      case 'Url 재확인': 
+        return { bg: 'rgba(108, 117, 125, 0.1)', text: '#6c757d', border: 'rgba(108, 117, 125, 0.2)' };
       default: 
         return { bg: 'rgba(255, 193, 7, 0.1)', text: '#ffc107', border: 'rgba(255, 193, 7, 0.2)' };
     }
@@ -901,8 +904,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return `<span class="tag-pending">검사중</span>`;
     } else if (status === '검사완료') {
       return `<span class="tag-verified">검사완료</span>`;
-    } else if (status === '검증실패') {
-      return `<span class="tag-rejected">검증실패</span>`;
+    } else if (status === '이모지 키 누락') {
+      return `<span class="tag-missing-emoji">이모지 키 누락</span>`;
+    } else if (status === 'Url 재확인') {
+      return `<span class="tag-recheck-url">Url 재확인</span>`;
     } else {
       return `<span>${status}</span>`;
     }

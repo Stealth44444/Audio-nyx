@@ -1299,6 +1299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!modal) return;
     
     contentModalOpen = true;
+    try { document.body.classList.add('modal-open'); } catch (_) {}
     modal.style.display = 'flex';
     
     // 애니메이션 효과
@@ -1316,8 +1317,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('모달 초기화 시작');
       console.log('현재 channelsData 상태:', channelsData);
       loadChannelOptions();        // 채널 목록 로드
-      loadAudionyxTracks();       // 음원 목록 로드
-      setupAudioTrackAutocomplete(); // 자동완성 설정
+      // 음원 자동완성 제거됨
     }, 100);
     
     // 모든 입력 필드 강제 활성화
@@ -1391,6 +1391,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!modal) return;
     
     contentModalOpen = false;
+    try { document.body.classList.remove('modal-open'); } catch (_) {}
     modal.classList.remove('show');
     
     const modalContent = modal.querySelector('.modal-content');
@@ -1483,7 +1484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formData = new FormData(e.target);
     const channelId = formData.get('channel-select');
     const contentUrl = formData.get('content-url');
-    const audioTrack = formData.get('audio-track');
+    // 사용된 음원 입력 필드 제거에 따라 값 수집 안 함
     
     // 유효성 검증
     if (!channelId) {
@@ -1496,10 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    if (!audioTrack) {
-      showNotification('음원을 입력해주세요.', 'error');
-      return;
-    }
+    // 음원 입력 필드 유효성 검사 제거
     
     const platformInfo = detectPlatformFromUrl(contentUrl);
     
@@ -1522,7 +1520,6 @@ document.addEventListener('DOMContentLoaded', () => {
       channelUrl: selectedChannel.originalUrl || selectedChannel.channelUrl || selectedChannel.url || '',
       channelPlatform: selectedChannel.platform || 'youtube',
       contentUrl,
-      audioTrack,
       platform: platformInfo.platform,
       createdAt: new Date() // 클라이언트 타임스탬프 사용
     };
@@ -1751,7 +1748,7 @@ document.addEventListener('DOMContentLoaded', () => {
           channelUrl: data.channelUrl || '',
           channelPlatform: data.channelPlatform || 'youtube',
           contentUrl: data.contentUrl || '',
-          audioTrack: data.audioTrack || '',
+          // audioTrack 제거됨
           platform: data.platform || 'youtube',
           createdAt: data.createdAt || new Date(),
           // 마이그레이션 정보 추가
@@ -1873,7 +1870,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ${channelDisplay}
             </div>
           </td>
-          <td>${link.audioTrack || '미지정'}</td>
+          
           <td>
             <div class="content-platform-badge ${link.platform}">
               ${getPlatformIcon(link.platform)}

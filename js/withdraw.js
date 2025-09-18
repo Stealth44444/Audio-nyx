@@ -640,6 +640,40 @@ function toggleForm() {
   if (formWrapper.style.display === 'none' || !formWrapper.style.display) {
     formWrapper.style.display = 'block';
     showFormBtn.textContent = '취소';
+
+    // 모바일 키보드 자동 노출: 폼 오픈 시 첫 입력란에 포커스
+    try {
+      setTimeout(() => {
+        let targetInput = null;
+        if (currentLanguage === 'ko') {
+          // 한국 계좌: 숫자 입력 필드에 포커스
+          targetInput = accountInput || holderInput;
+          if (targetInput) {
+            targetInput.setAttribute('inputmode', 'numeric');
+            targetInput.setAttribute('enterkeyhint', 'next');
+            targetInput.setAttribute('autocomplete', 'off');
+            targetInput.setAttribute('autocapitalize', 'off');
+            targetInput.setAttribute('autocorrect', 'off');
+          }
+        } else {
+          // 일본 계좌: 은행 코드부터 입력
+          targetInput = bankCodeInput || accountNumberInput;
+          if (targetInput) {
+            targetInput.setAttribute('inputmode', 'numeric');
+            targetInput.setAttribute('enterkeyhint', 'next');
+            targetInput.setAttribute('autocomplete', 'off');
+            targetInput.setAttribute('autocapitalize', 'off');
+            targetInput.setAttribute('autocorrect', 'off');
+          }
+        }
+
+        if (targetInput) {
+          // iOS 대응: 스크롤로 입력란을 살짝 올린 뒤 포커스
+          try { targetInput.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {}
+          targetInput.focus();
+        }
+      }, 120);
+    } catch (_) {}
   } else {
     formWrapper.style.display = 'none';
     showFormBtn.textContent = formMode === 'register' ? '계좌 등록하기' : '계좌 수정하기';

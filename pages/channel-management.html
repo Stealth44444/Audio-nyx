@@ -530,7 +530,7 @@
                       <tr>
                         <th data-i18n="channelManagement.contentLinks.contentUrl">컨텐츠 URL</th>
                         <th data-i18n="channelManagement.contentLinks.channel">채널</th>
-                        <th data-i18n="channelManagement.contentLinks.audioTrack">사용된 음원</th>
+                        
                         <th data-i18n="channelManagement.contentLinks.platform">플랫폼</th>
                         <th data-i18n="channelManagement.contentLinks.addedDate">등록일</th>
                         <th data-i18n="channelManagement.contentLinks.actions">관리</th>
@@ -713,7 +713,7 @@
           <!-- 컨텐츠 URL 입력 -->
           <div class="form-group">
             <label for="content-url" data-i18n="channelManagement.contentModal.contentUrl">컨텐츠 URL</label>
-            <input type="url" id="content-url" name="content-url" data-i18n-placeholder="channelManagement.contentModal.contentUrlPlaceholder" placeholder="https://youtube.com/shorts/..." required>
+            <input type="url" id="content-url" name="content-url" data-i18n-placeholder="channelManagement.contentModal.contentUrlPlaceholder" placeholder="https://youtube.com/shorts/..." required inputmode="url" enterkeyhint="done" autocomplete="off" autocapitalize="off" autocorrect="off" autofocus>
             <div class="url-help-text">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <circle cx="12" cy="12" r="10"/>
@@ -723,19 +723,7 @@
             </div>
           </div>
           
-          <!-- 사용된 음원 입력 (자동완성) -->
-          <div class="form-group">
-            <label for="audio-track" data-i18n="channelManagement.contentModal.audioTrack">사용된 Audionyx 음원</label>
-            <div class="audio-track-input-container">
-              <input type="text" id="audio-track" name="audio-track" placeholder="음원 제목 또는 CID 코드 입력..." required autocomplete="off">
-              <div class="audio-track-suggestions" id="audio-track-suggestions">
-                <!-- 자동완성 목록이 여기에 표시됩니다 -->
-              </div>
-            </div>
-            <div class="help-text">
-              <span data-i18n="channelManagement.contentModal.trackHelp">컨텐츠에서 사용된 정확한 Audionyx 음원 제목 또는 CID 코드를 입력하세요</span>
-            </div>
-          </div>
+          
           
           <!-- 플랫폼 자동 감지 -->
           <div class="form-group">

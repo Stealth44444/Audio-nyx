@@ -1166,6 +1166,14 @@ footer,
     padding: 4rem 2rem;
 }
 
+/* 모달 열릴 때 백그라운드 스크롤/무빙 방지 */
+body.modal-open {
+    overflow: hidden !important;
+    height: 100vh !important;
+    position: relative !important;
+    overscroll-behavior: contain !important;
+}
+
 .modal-backdrop {
     position: absolute;
     top: 0;

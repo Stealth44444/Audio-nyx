@@ -354,7 +354,7 @@
                     </div>
                     <div class="form-group">
                       <label for="account" data-i18n="withdraw.accountLabel">계좌번호</label>
-                      <input type="text" id="account" name="account" data-i18n="withdraw.accountPlaceholder" placeholder="'-' 없이 숫자만 입력하세요">
+                      <input type="text" id="account" name="account" data-i18n="withdraw.accountPlaceholder" placeholder="'-' 없이 숫자만 입력하세요" inputmode="numeric" enterkeyhint="next" autocomplete="off" autocapitalize="off" autocorrect="off">
                       <div class="account-format-guide" id="account-format-guide" style="display: none;">
                         <div class="format-info">
                           <span class="format-label">입력 형식:</span>
@@ -371,7 +371,7 @@
                     </div>
                     <div class="form-group">
                       <label for="holder" data-i18n="withdraw.holderLabel">예금주</label>
-                      <input type="text" id="holder" name="holder" data-i18n="withdraw.holderPlaceholder" placeholder="예금주 이름을 입력하세요">
+                      <input type="text" id="holder" name="holder" data-i18n="withdraw.holderPlaceholder" placeholder="예금주 이름을 입력하세요" inputmode="text" enterkeyhint="done" autocomplete="off" autocapitalize="off" autocorrect="off">
                       <div class="error-message" id="holder-error"></div>
                     </div>
                   </div>

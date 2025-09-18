@@ -1288,9 +1288,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 컨텐츠 링크 데이터 로드
     loadContentLinks();
-    
-    // 오디오닉스 음원 목록 로드
-    loadAudionyxTracks();
   }
 
   // 컨텐츠 링크 모달 열기
@@ -1514,13 +1511,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 고유 ID 생성 (timestamp 기반)
     const uniqueId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
+    const normalizedPlatform = (platformInfo && platformInfo.platform)
+      || (selectedChannel && selectedChannel.platform)
+      || 'other';
+
     const newContentLink = {
       id: uniqueId,
       channelId,
       channelUrl: selectedChannel.originalUrl || selectedChannel.channelUrl || selectedChannel.url || '',
       channelPlatform: selectedChannel.platform || 'youtube',
       contentUrl,
-      platform: platformInfo.platform,
+      platform: normalizedPlatform,
       createdAt: new Date() // 클라이언트 타임스탬프 사용
     };
     
@@ -1646,7 +1647,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       
-      // 클라이언트에서 정렬 (createdAt 기준 내림차순)
+      // 플랫폼 보정 + 정렬 (createdAt 기준 내림차순)
+      contentLinksData = contentLinksData.map((link) => ({
+        ...link,
+        platform: link.platform || link.channelPlatform || 'other'
+      }));
+
       contentLinksData.sort((a, b) => {
         const aTime = a.createdAt;
         const bTime = b.createdAt;

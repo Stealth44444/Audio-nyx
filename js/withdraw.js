@@ -717,6 +717,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // 폼 토글 버튼 이벤트
   showFormBtn?.addEventListener('click', toggleForm);
   
+  // 페이지 진입 직후 모바일에서 스크롤/포커스 유도: 폼이 열려있는 경우 키보드 자동 노출
+  try {
+    if (formWrapper && formWrapper.style.display === 'block') {
+      setTimeout(() => {
+        const target = accountInput || holderInput;
+        if (target) {
+          try { target.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {}
+          target.focus();
+        }
+      }, 200);
+    }
+  } catch (_) {}
+  
   // 언어 토글 이벤트
   languageOptions.forEach(option => {
     option.addEventListener('click', (e) => {

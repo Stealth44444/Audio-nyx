@@ -729,6 +729,32 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 200);
     }
   } catch (_) {}
+
+  // 모바일에서 필드 터치 시 즉시 키보드 노출 보조
+  const attachMobileFocusHelpers = (el, options = {}) => {
+    if (!el) return;
+    try {
+      const { inputmode = null, enterkeyhint = null } = options;
+      if (inputmode) el.setAttribute('inputmode', inputmode);
+      if (enterkeyhint) el.setAttribute('enterkeyhint', enterkeyhint);
+      el.setAttribute('autocomplete', 'off');
+      el.setAttribute('autocapitalize', 'off');
+      el.setAttribute('autocorrect', 'off');
+    } catch (_) {}
+    const handler = () => {
+      setTimeout(() => {
+        try { el.focus({ preventScroll: false }); } catch (_) { el.focus(); }
+        try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {}
+      }, 0);
+    };
+    el.addEventListener('click', handler, { passive: true });
+    el.addEventListener('touchend', handler, { passive: true });
+    el.addEventListener('pointerdown', handler, { passive: true });
+  };
+
+  attachMobileFocusHelpers(accountInput, { inputmode: 'numeric', enterkeyhint: 'next' });
+  attachMobileFocusHelpers(holderInput, { inputmode: 'text', enterkeyhint: 'done' });
+  attachMobileFocusHelpers(accountConfirmInput, { inputmode: 'numeric', enterkeyhint: 'done' });
   
   // 언어 토글 이벤트
   languageOptions.forEach(option => {

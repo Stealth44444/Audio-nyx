@@ -1370,11 +1370,33 @@ document.addEventListener('DOMContentLoaded', () => {
       if (contentUrlInput) {
         console.log('Content URL 입력 필드 설정');
         contentUrlInput.addEventListener('input', handleContentUrlChange);
-        
+        // 모바일 키보드 유도 속성
+        try {
+          contentUrlInput.setAttribute('inputmode', 'url');
+          contentUrlInput.setAttribute('enterkeyhint', 'done');
+          contentUrlInput.setAttribute('autocomplete', 'off');
+          contentUrlInput.setAttribute('autocapitalize', 'off');
+          contentUrlInput.setAttribute('autocorrect', 'off');
+        } catch (_) {}
+
+        // 터치/클릭 시 키보드가 즉시 뜨도록 포커스 보조
+        const ensureFocus = (el) => {
+          const handler = () => {
+            setTimeout(() => {
+              try { el.focus({ preventScroll: false }); } catch (_) { el.focus(); }
+              try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {}
+            }, 0);
+          };
+          el.addEventListener('click', handler, { passive: true });
+          el.addEventListener('touchend', handler, { passive: true });
+          el.addEventListener('pointerdown', handler, { passive: true });
+        };
+        ensureFocus(contentUrlInput);
+
         setTimeout(() => {
           contentUrlInput.focus();
           console.log('Content URL 필드 포커스됨');
-        }, 100);
+        }, 120);
       }
     }, 150);
     

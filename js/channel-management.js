@@ -1270,6 +1270,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contentUrlInput) {
       contentUrlInput.addEventListener('input', handleContentUrlChange);
     }
+
+    // 모바일: 채널 선택 후 다음 입력란에서 키보드가 뜨지 않는 문제 우회
+    const channelSelectEl = document.getElementById('channel-select');
+    if (channelSelectEl) {
+      const releaseSelectFocus = () => {
+        try { channelSelectEl.blur(); } catch (_) {}
+      };
+      channelSelectEl.addEventListener('change', () => {
+        releaseSelectFocus();
+        // 다음 입력란을 자연스럽게 보이도록 살짝 스크롤 유도
+        setTimeout(() => {
+          const urlEl = document.getElementById('content-url');
+          if (urlEl) {
+            try { urlEl.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {}
+          }
+        }, 50);
+      }, { passive: true });
+      channelSelectEl.addEventListener('touchend', releaseSelectFocus, { passive: true });
+      channelSelectEl.addEventListener('pointerdown', releaseSelectFocus, { passive: true });
+    }
     
     // 컨텐츠 링크 테이블 이벤트 위임 설정
     const contentLinksTable = document.getElementById('content-links-list');

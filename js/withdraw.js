@@ -838,7 +838,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (accountInput.value) {
       validateAccountNumber(selectedBank, accountInput.value);
     }
+    // 모바일: select 사용 후 다음 입력란에서 키보드가 안 뜨는 문제 우회
+    try { bankSelect.blur(); } catch (_) {}
+    setTimeout(() => {
+      if (accountInput) {
+        try { accountInput.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (_) {}
+      }
+    }, 50);
   });
+
+  // 추가적으로 select 터치 해제 시 강제 blur로 iOS 포커스 갱신
+  const releaseSelectFocus = () => { try { bankSelect.blur(); } catch (_) {} };
+  bankSelect?.addEventListener('touchend', releaseSelectFocus, { passive: true });
+  bankSelect?.addEventListener('pointerdown', releaseSelectFocus, { passive: true });
   
   // 계좌번호 입력 시 숫자만 허용 및 재확인 필드 표시
   accountInput?.addEventListener('input', (e) => {

@@ -372,6 +372,8 @@ footer,
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    /* 터치 장치에서 클릭/포커스 지연 방지 */
+    touch-action: manipulation;
 }
 
 .form-group input:focus,
@@ -649,11 +651,11 @@ footer,
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        /* transform 제거: iOS에서 입력 포커스/롱프레스 위치 오류 방지 */
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        /* transform 제거: iOS에서 입력 포커스/롱프레스 위치 오류 방지 */
     }
 }
 
@@ -692,6 +694,21 @@ footer,
         padding: 0.2rem 0.4rem;
     }
     
+    /* iOS 입력 포커스/롱프레스 위치 오류 방지: 입력 주변 컨테이너 변형/블러 제거 */
+    #withdraw-form-wrapper,
+    .account-fields,
+    .card {
+        transform: none !important;
+        -webkit-transform: none !important;
+    }
+    
+    /* 입력 및 셀렉트의 블러 제거로 합성 이슈 회피 */
+    .form-group input,
+    .form-group select {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
     /* 채널 상태 안내 모바일 스타일 */
     .channel-status-notice {
         padding: 1.25rem;

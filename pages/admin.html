@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audionyx Admin</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <style>
+        /* 관리자 전용 디자인 - 업무 효율성 중심 */
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #f8fafc; color: #1e293b; margin: 0; }
+        .admin-container { max-width: 1400px; margin: 16px auto; padding: 0 16px; }
+        .admin-title { font-size: 28px; font-weight: 700; margin-bottom: 20px; color: #0f172a; }
+        .gate { max-width: 420px; margin: 80px auto; padding: 32px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        .gate h2 { margin: 0 0 8px 0; font-size: 24px; color: #0f172a; }
+        .gate .desc { color: #64748b; margin-bottom: 20px; font-size: 15px; }
+        .gate input { width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; transition: border-color 0.2s; }
+        .gate input:focus { outline: none; border-color: #3b82f6; }
+        .gate button { margin-top: 16px; width: 100%; padding: 14px; background: #3b82f6; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 16px; transition: background 0.2s; }
+        .gate button:hover { background: #2563eb; }
+        .gate .error { color: #dc2626; margin-top: 12px; font-size: 14px; display: none; font-weight: 500; }
+
+        .admin-app { display: none; }
+        .admin-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
+        .admin-grid.fullwidth-left { grid-template-columns: 1fr 0; }
+        .panel { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .panel h3 { margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #0f172a; }
+        .row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+        .row input[type="text"] { flex: 1; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.2s; }
+        .row input[type="text"]:focus { outline: none; border-color: #3b82f6; }
+        .row button { padding: 10px 16px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 8px; cursor: pointer; font-weight: 500; color: #475569; transition: all 0.2s; }
+        .row button:hover { background: #e2e8f0; border-color: #cbd5e1; }
+        .btn-logout { padding: 10px 16px; border: 0; background: linear-gradient(90deg, #ef4444, #f97316); color: #fff; border-radius: 999px; font-weight: 700; box-shadow: 0 4px 12px rgba(239,68,68,0.25); }
+        .btn-logout:hover { filter: brightness(1.05); transform: translateY(-1px); }
+        .doc-list { list-style: none; margin: 0; padding: 0; max-height: 520px; overflow: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .doc-list li { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding: 12px 16px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; font-size: 14px; color: #374151; }
+        .doc-list li:last-child { border-bottom: none; }
+        .doc-list li:hover { background: #f8fafc; }
+        .doc-actions button { margin-left: 8px; }
+        .editor { display: grid; grid-template-rows: auto 1fr auto; gap: 12px; min-height: 640px; }
+        .editor textarea { width: 100%; height: 100%; resize: vertical; min-height: 420px; font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; font-size: 14px; border: 2px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #fafbfc; color: #1e293b; line-height: 1.5; }
+        .editor textarea:focus { outline: none; border-color: #3b82f6; background: #ffffff; }
+        .badge { display: inline-block; padding: 4px 10px; font-size: 12px; border-radius: 999px; background: #dcfce7; color: #166534; font-weight: 600; }
+        .muted { color: #64748b; font-size: 13px; }
+        .danger { background: #fef2f2 !important; color: #dc2626 !important; border-color: #fecaca !important; }
+
+        /* 컬렉션 프리셋 버튼들 */
+        .collection-presets { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .preset-btn { padding: 12px 16px; background: #f8fafc; color: #475569; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; text-align: center; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+        .preset-btn:hover { background: #e2e8f0; border-color: #cbd5e1; transform: translateY(-1px); }
+        .preset-btn.active { background: #3b82f6; color: #ffffff; border-color: #3b82f6; box-shadow: 0 4px 12px rgba(59,130,246,0.25); }
+
+        /* 테이블 뷰 스타일 */
+        .table-view { display: none; }
+        .table-view.active { display: block; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 16px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        .data-table th, .data-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #f1f5f9; }
+        .data-table th { background: #f8fafc; font-weight: 700; position: sticky; top: 0; color: #1e293b; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .data-table tbody { max-height: 480px; overflow: auto; }
+        .data-table tr { transition: background-color 0.15s; }
+        .data-table tr:hover { background: #f8fafc; }
+        .data-table td { color: #334155; }
+        .table-actions { display: flex; gap: 6px; }
+        .table-actions button { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: 1px solid; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .table-actions .btn-edit { color: #0f766e; border-color: #5eead4; background: #f0fdfa; }
+        .table-actions .btn-edit:hover { background: #ccfbf1; }
+        .table-actions .btn-delete { color: #dc2626; border-color: #fca5a5; background: #fef2f2; }
+        .table-actions .btn-delete:hover { background: #fee2e2; }
+        .table-actions .btn-approve { color: #059669; border-color: #6ee7b7; background: #ecfdf5; }
+        .table-actions .btn-approve:hover { background: #d1fae5; }
+        .table-actions .btn-reject { color: #dc2626; border-color: #fca5a5; background: #fef2f2; }
+        .table-actions .btn-reject:hover { background: #fee2e2; }
+        /* Y/E/U 빠른 액션 버튼 색상 (뱃지와 일치) */
+        .table-actions .btn-quick { font-weight: 700; width: 32px; text-align: center; padding: 6px 0; }
+        .table-actions .btn-y { color: #166534; border-color: #86efac; background: #dcfce7; }
+        .table-actions .btn-y:hover { background: #bbf7d0; }
+        .table-actions .btn-e { color: #5b21b6; border-color: #c4b5fd; background: #ede9fe; }
+        .table-actions .btn-e:hover { background: #ddd6fe; }
+        .table-actions .btn-u { color: #1e40af; border-color: #93c5fd; background: #dbeafe; }
+        .table-actions .btn-u:hover { background: #bfdbfe; }
+
+        /* 필터/검색 영역 */
+        .filter-controls { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+        .filter-controls input[type="text"] { min-width: 240px; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .filter-controls input[type="text"]:focus { outline: none; border-color: #3b82f6; }
+        .filter-controls select { padding: 10px 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; background: #ffffff; }
+        .filter-controls select:focus { outline: none; border-color: #3b82f6; }
+
+        /* 상태 배지들 */
+        .status-badge { padding: 4px 8px; font-size: 12px; border-radius: 6px; font-weight: 600; }
+        .status-active { background: #dcfce7; color: #166534; }
+        .status-pending { background: #fef9c3; color: #a16207; }
+        .status-rejected { background: #fee2e2; color: #b91c1c; }
+        /* 요청된 색상 규칙 */
+        .status-검사완료 { background: #dcfce7; color: #166534; }
+        .status-이모지키누락, .status-이모지_키_누락 { background: #ede9fe; color: #5b21b6; }
+        .status-검사중, .status-검사_중 { background: #fef9c3; color: #a16207; }
+        .status-검사실패, .status-검사_실패 { background: #fee2e2; color: #b91c1c; }
+        .status-URL재확인, .status-URL_재확인 { background: #dbeafe; color: #1e40af; }
+        /* 트랙 요청 전용 상태 */
+        .status-제작중 { background: #dbeafe; color: #1e40af; }
+        .status-미제작 { background: #fef9c3; color: #a16207; }
+
+        /* 공통: 편집 패널 비활성 모드 (사용자/채널 등) */
+        .no-editor-mode #left-panel { grid-column: 1 / span 2; }
+        .no-editor-mode #editor-panel { display: none !important; }
+        .no-editor-mode .table-scroll { max-height: 70vh !important; }
+        /* 사용자 테이블: 전역 테이블 스타일과 동일하게 사용 (커스텀 제거) */
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-title">AUDIONYX Database Manager</div>
+
+        <!-- 비밀번호 게이트 -->
+        <div id="admin-gate" class="gate">
+            <h2>접근 비밀번호</h2>
+            <div class="desc">관리자 전용 페이지입니다. 비밀번호를 입력해 주세요.</div>
+            <input id="admin-passcode" type="password" placeholder="비밀번호">
+            <button id="admin-enter-btn">입장</button>
+            <div id="admin-gate-error" class="error">비밀번호가 올바르지 않습니다.</div>
+        </div>
+
+        <!-- 관리자 앱 -->
+        <div id="admin-app" class="admin-app">
+            <div class="panel" style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <span class="badge">Firestore 연결</span>
+                    <span id="project-id" class="muted" style="margin-left:0;"></span>
+                    <span id="admin-auth-badge" class="badge" style="background:#fee2e2; color:#b91c1c;">ADMIN: OFF</span>
+                    <span id="admin-email" class="muted"></span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button id="btn-admin-login" type="button" class="btn-approve" aria-label="관리자 로그인">관리자 로그인</button>
+                    <button id="btn-admin-logout" type="button" class="btn-logout" style="display:none;" aria-label="로그아웃">로그아웃</button>
+                </div>
+            </div>
+
+            <!-- 컬렉션 프리셋 버튼들 -->
+            <div class="panel" style="margin-bottom:12px;">
+                <h3>빠른 컬렉션 접근</h3>
+                <div class="collection-presets">
+                    <div class="preset-btn" data-collection="users">👥 사용자</div>
+                    <div class="preset-btn" data-collection="channels">📺 채널</div>
+                    <div class="preset-btn" data-collection="contentLinks">🔗 콘텐츠링크</div>
+                    <div class="preset-btn" data-collection="track_requests" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">🎵 트랙요청</div>
+                    <div class="preset-btn" data-collection="track_new">🎼 음원DB</div>
+                    <div class="preset-btn" data-collection="user_withdraw_accounts" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">💳 계좌등록</div>
+                </div>
+            </div>
+
+            <div class="admin-grid">
+                <!-- 왼쪽: 컬렉션/문서 리스트 -->
+                <div id="left-panel" class="panel">
+                    <h3>컬렉션 탐색</h3>
+                    <div class="row">
+                        <input id="collection-input" type="text" placeholder="컬렉션 이름 입력 (예: users)">
+                        <button id="btn-load-collection">불러오기</button>
+                    </div>
+                    
+                    <!-- 기본 문서 리스트 뷰 -->
+                    <div id="basic-view">
+                        <ul id="doc-list" class="doc-list"></ul>
+                    </div>
+
+                    <!-- 테이블 뷰들 -->
+                    <div id="table-view-users" class="table-view">
+                        <div class="filter-controls">
+                            <input type="text" id="filter-users" placeholder="사용자 검색 (이름, 이메일, 아이디)">
+                            <select id="filter-users-provider">
+                                <option value="">모든 가입방식</option>
+                                <option value="google">구글</option>
+                                <option value="emailpassword">이메일</option>
+                            </select>
+                            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                                <span class="muted">등록 고객 수</span>
+                                <span id="users-count" class="badge">0</span>
+                            </div>
+                        </div>
+                        <div class="table-scroll" style="max-height:520px; overflow:auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>이메일</th>
+                                        <th>아이디</th>
+                                        <th>전화번호</th>
+                                        <th>가입방식</th>
+                                        <th>가입일</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="table-view-channels" class="table-view">
+                        <div class="filter-controls">
+                            <input type="text" id="filter-channels" placeholder="채널 검색 (URL, 플랫폼)">
+                            <select id="filter-channels-status">
+                                <option value="">모든 상태</option>
+                                <option value="검사중">검사중</option>
+                                <option value="승인됨">승인됨</option>
+                                <option value="거부됨">거부됨</option>
+                                <option value="이모지키누락">이모지 키 누락</option>
+                                <option value="URL재확인">URL 재확인</option>
+                            </select>
+                            <select id="filter-channels-sort">
+                                <option value="recent">최신순</option>
+                                <option value="status">상태순 (검사중 → 키누락 → 재확인 → 완료)</option>
+                            </select>
+                            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                                <span class="muted">등록 채널 수</span>
+                                <span id="channels-count" class="badge">0</span>
+                            </div>
+                        </div>
+                        <div class="table-scroll" style="max-height:520px; overflow:auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>사용자</th>
+                                        <th>채널 URL</th>
+                                        <th>플랫폼</th>
+                                        <th>이모지키</th>
+                                        <th>등록일</th>
+                                        <th>액션</th>
+                                        <th style="text-align:right;">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="channels-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="table-view-track_requests" class="table-view">
+                        <div class="filter-controls">
+                            <input type="text" id="filter-track-requests" placeholder="트랙 요청 검색">
+                            <select id="filter-track-requests-status">
+                                <option value="">모든 상태</option>
+                                <option value="pending">대기중</option>
+                                <option value="approved">승인됨</option>
+                                <option value="rejected">거부됨</option>
+                                <option value="제작중">제작중</option>
+                                <option value="미제작">미제작</option>
+                            </select>
+                            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                                <span class="muted">요청</span><span id="track-requests-count" class="badge">0</span>
+                                <span class="muted">제작중</span><span id="track-inprod-count" class="badge" style="background:#dbeafe;color:#1e40af;">0</span>
+                                <span class="muted">미제작</span><span id="track-notprod-count" class="badge" style="background:#fef9c3;color:#a16207;">0</span>
+                            </div>
+                        </div>
+                        <div class="table-scroll" style="max-height:520px; overflow:auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>사용자</th>
+                                        <th>요청자 이메일</th>
+                                        <th>장르</th>
+                                        <th>레퍼런스 URL</th>
+                                        <th>요청 내용</th>
+                                        <th>요청일</th>
+                                        <th>상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="track-requests-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="table-view-contentLinks" class="table-view">
+                        <div class="filter-controls">
+                            <input type="text" id="filter-content-links" placeholder="콘텐츠링크 검색 (URL, 플랫폼)">
+                            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                                <span class="muted">등록 링크 수</span>
+                                <span id="content-links-count" class="badge">0</span>
+                            </div>
+                        </div>
+                        <div class="table-scroll" style="max-height:520px; overflow:auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>사용자</th>
+                                        <th>링크 URL</th>
+                                        <th>플랫폼</th>
+                                        <th>등록일</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="content-links-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="table-view-track_new" class="table-view">
+                        <div class="filter-controls">
+                            <input type="text" id="filter-tracks" placeholder="음원 검색 (제목, 아티스트)">
+                            <select id="filter-tracks-genre">
+                                <option value="">모든 장르</option>
+                                <option value="pop">팝</option>
+                                <option value="rock">록</option>
+                                <option value="jazz">재즈</option>
+                                <option value="electronic">일렉트로닉</option>
+                            </select>
+                        </div>
+                        <div class="table-scroll" style="max-height:520px; overflow:auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>제목</th>
+                                        <th>아티스트</th>
+                                        <th>장르</th>
+                                        <th>재생시간</th>
+                                        <th>등록일</th>
+                                        <th>액션</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tracks-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="table-view-user_withdraw_accounts" class="table-view">
+                        <div class="filter-controls">
+                            <input type="text" id="filter-accounts" placeholder="계좌 검색 (은행, 예금주)">
+                        </div>
+                        <div class="table-scroll" style="max-height:520px; overflow:auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>사용자</th>
+                                        <th>은행</th>
+                                        <th>계좌번호</th>
+                                        <th>예금주</th>
+                                        <th>등록일</th>
+                                        <th>콘텐츠 링크</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accounts-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 오른쪽: JSON 편집기 -->
+                <div id="editor-panel" class="panel editor">
+                    <div class="row">
+                        <h3 style="margin:0;">문서 편집</h3>
+                        <span id="current-path" class="muted" style="margin-left:8px;"></span>
+                    </div>
+                    <textarea id="doc-json" placeholder='{"field":"value"}' spellcheck="false"></textarea>
+                    <div class="row" style="justify-content: space-between;">
+                        <div class="row" style="margin:0;">
+                            <input id="new-doc-id" type="text" placeholder="새 문서 ID (비우면 자동 생성)" style="min-width:260px;">
+                            <button id="btn-create-doc">문서 생성</button>
+                        </div>
+                        <div>
+                            <button id="btn-save-doc">저장 (merge)</button>
+                            <button id="btn-refresh-doc">새로고침</button>
+                            <button id="btn-delete-doc" class="danger">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/firebase.js"></script>
+    <script type="module" src="../js/admin.js"></script>
+</body>
+</html>
+
+

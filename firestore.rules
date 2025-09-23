@@ -8,7 +8,10 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return isSignedIn() && request.auth.token.admin == true;
+      return isSignedIn() && (
+        request.auth.token.admin == true ||
+        request.auth.token.email == 'audionyx369@gmail.com'
+      );
     }
     
     function isOwner(uid) {
@@ -30,6 +33,12 @@ service cloud.firestore {
       allow create, update: if isSignedIn() 
                            && request.auth.uid == userId
                            && hasValidUserChannelData();
+      
+      // 관리자 업데이트: 변경된 키가 channels/updatedAt 뿐인지 검사, userInfo는 불변, 배열 길이 불변
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).changedKeys().hasOnly(['channels','updatedAt'])
+                    && request.resource.data.userInfo == resource.data.userInfo
+                    && request.resource.data.channels.size() == resource.data.channels.size();
       
       // 채널 문서 삭제: 관리자 또는 문서 소유자만
       allow delete: if isAdmin() || isOwner(userId);
@@ -61,8 +70,10 @@ service cloud.firestore {
     /* ───────── ② contentLinks 컬렉션 ─────────
        사용자별 컨텐츠 링크 (문서 ID = 사용자 UID) */
     match /contentLinks/{userId} {
-      // 읽기: 본인 컨텐츠 링크 문서만 읽기 가능
-      allow read: if isOwner(userId);
+      // 읽기: 관리자 또는 본인만
+      allow read: if isAdmin() || isOwner(userId);
+      // 컬렉션 리스트 조회: 관리자만
+      allow list: if isAdmin();
       
       // 생성/수정: 로그인된 사용자 본인만, 유저 정보 포함
       allow create, update: if isSignedIn() 
@@ -127,8 +138,10 @@ service cloud.firestore {
     /* ───────── ④ user_withdraw_accounts 컬렉션 ─────────
        사용자 정산 계좌 */
     match /user_withdraw_accounts/{userId} {
-      // 읽기: 본인만 (데이터 검증 불필요)
-      allow read: if isOwner(userId);
+      // 읽기: 관리자 또는 본인만 (데이터 검증 불필요)
+      allow read: if isAdmin() || isOwner(userId);
+      // 컬렉션 리스트 조회: 관리자만
+      allow list: if isAdmin();
       
       // 쓰기: 본인 + 데이터 검증
       allow write: if isOwner(userId) && hasValidWithdrawAccountData();

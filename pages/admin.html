@@ -21,7 +21,7 @@
         .gate .error { color: #dc2626; margin-top: 12px; font-size: 14px; display: none; font-weight: 500; }
 
         .admin-app { display: none; }
-        .admin-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         .admin-grid.fullwidth-left { grid-template-columns: 1fr 0; }
         .panel { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .panel h3 { margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #0f172a; }
@@ -145,7 +145,7 @@
                     <div class="preset-btn" data-collection="contentLinks">🔗 콘텐츠링크</div>
                     <div class="preset-btn" data-collection="track_requests" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">🎵 트랙요청</div>
                     <div class="preset-btn" data-collection="track_new">🎼 음원DB</div>
-                    <div class="preset-btn" data-collection="user_withdraw_accounts" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">💳 계좌등록</div>
+                    <div class="preset-btn" data-collection="user_withdraw_accounts" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">💳 고객 계좌</div>
                 </div>
             </div>
 
@@ -291,36 +291,72 @@
                     </div>
 
                     <div id="table-view-track_new" class="table-view">
-                        <div class="filter-controls">
+                        <details id="tracks-collection-panel" open class="panel" style="margin-bottom:12px;">
+                            <summary style="cursor:pointer; font-weight:700; font-size:16px;">컬렉션 탐색</summary>
+                            <div class="filter-controls" style="margin-top:12px;">
                             <input type="text" id="filter-tracks" placeholder="음원 검색 (제목, 아티스트)">
-                            <select id="filter-tracks-genre">
-                                <option value="">모든 장르</option>
-                                <option value="pop">팝</option>
-                                <option value="rock">록</option>
-                                <option value="jazz">재즈</option>
-                                <option value="electronic">일렉트로닉</option>
-                            </select>
-                        </div>
+                            
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span class="muted">총 트랙</span>
+                                <span id="tracks-count" class="badge">0</span>
+                            </div>
+                            </div>
                         <div class="table-scroll" style="max-height:520px; overflow:auto;">
                             <table class="data-table">
                                 <thead>
                                     <tr>
                                         <th>제목</th>
                                         <th>아티스트</th>
-                                        <th>장르</th>
                                         <th>재생시간</th>
+                                        <th>파일</th>
+                                        <th>용량</th>
                                         <th>등록일</th>
-                                        <th>액션</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tracks-tbody"></tbody>
                             </table>
                         </div>
+                        </details>
+
+                        <details id="tracks-upload-panel" class="panel">
+                            <summary style="cursor:pointer; font-weight:700; font-size:16px;">음원 업로드 매니저</summary>
+                            <div class="row" style="margin-top:12px; flex-wrap:wrap; gap:12px;">
+                                <input id="bulk-tracks-file" type="file" accept=".mp3,audio/mpeg" multiple />
+                                <input id="bulk-covers-file" type="file" accept="image/*" multiple />
+                                <input id="bulk-meta-file" type="file" accept=".xlsx,.xls,.csv" />
+                            </div>
+                            <div class="panel" style="margin-top:8px;">
+                                <h3 style="margin:0 0 8px 0; font-size:14px;">메타데이터 파일 업로드 (Excel/CSV)</h3>
+                                <div class="row" style="align-items:center; gap:8px;"><small class="muted">지원 컬럼 예: title, mood, use-case, ISRC, Primary Artist, Genre, Release Date, C-Line, C-Year, P-Line, P-Year, Track P-Line, Track P-Year, Track ID, Track Listing, mood 1, mood 2, usecase1~3</small></div>
+                                <div class="row" style="justify-content:flex-end; margin-top:8px; gap:8px;">
+                                    <button id="btn-validate-audio" type="button">검증</button>
+                                    <button id="btn-run-audio-upload" type="button" disabled>업로드 실행</button>
+                                </div>
+                            </div>
+                            <div id="upload-validate-panel" class="panel" style="display:none; margin-top:8px;">
+                                <h3 style="margin:0 0 8px 0; font-size:14px;">검증 결과</h3>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <div>
+                                        <span class="muted">진행률</span>
+                                        <span id="upload-progress-text" class="badge">0%</span>
+                                    </div>
+                                    <div style="display:flex; gap:8px; align-items:center;">
+                                        <span class="muted">성공</span><span id="upload-success-count" class="badge">0</span>
+                                        <span class="muted">실패</span><span id="upload-fail-count" class="badge" style="background:#fee2e2;color:#b91c1c;">0</span>
+                                    </div>
+                                </div>
+                                <ul id="upload-validate-list" style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px;"></ul>
+                            </div>
+                        </details>
                     </div>
 
                     <div id="table-view-user_withdraw_accounts" class="table-view">
                         <div class="filter-controls">
                             <input type="text" id="filter-accounts" placeholder="계좌 검색 (은행, 예금주)">
+                            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                                <span class="muted">총 계좌</span>
+                                <span id="accounts-count" class="badge">0</span>
+                            </div>
                         </div>
                         <div class="table-scroll" style="max-height:520px; overflow:auto;">
                             <table class="data-table">
@@ -340,29 +376,12 @@
                     </div>
                 </div>
 
-                <!-- 오른쪽: JSON 편집기 -->
-                <div id="editor-panel" class="panel editor">
-                    <div class="row">
-                        <h3 style="margin:0;">문서 편집</h3>
-                        <span id="current-path" class="muted" style="margin-left:8px;"></span>
-                    </div>
-                    <textarea id="doc-json" placeholder='{"field":"value"}' spellcheck="false"></textarea>
-                    <div class="row" style="justify-content: space-between;">
-                        <div class="row" style="margin:0;">
-                            <input id="new-doc-id" type="text" placeholder="새 문서 ID (비우면 자동 생성)" style="min-width:260px;">
-                            <button id="btn-create-doc">문서 생성</button>
-                        </div>
-                        <div>
-                            <button id="btn-save-doc">저장 (merge)</button>
-                            <button id="btn-refresh-doc">새로고침</button>
-                            <button id="btn-delete-doc" class="danger">삭제</button>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script type="module" src="../js/firebase.js"></script>
     <script type="module" src="../js/admin.js"></script>
 </body>

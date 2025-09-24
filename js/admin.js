@@ -1,5 +1,5 @@
 // js/admin.js
-import { db } from './firebase.js';
+import { db, storage } from './firebase.js';
 import {
   collection,
   getDocs,
@@ -23,6 +23,12 @@ import {
   signInWithRedirect,
   getRedirectResult
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
+import {
+  ref as storageRef,
+  getMetadata,
+  uploadBytesResumable,
+  getDownloadURL
+} from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js';
 
 const PASSCODE = '6974';
 const SESSION_KEY = 'audionyx_admin_unlocked';
@@ -39,13 +45,14 @@ const collectionInput = document.getElementById('collection-input');
 const loadCollectionBtn = document.getElementById('btn-load-collection');
 const docListEl = document.getElementById('doc-list');
 
-const currentPathEl = document.getElementById('current-path');
-const docJsonEl = document.getElementById('doc-json');
-const newDocIdEl = document.getElementById('new-doc-id');
-const createDocBtn = document.getElementById('btn-create-doc');
-const saveDocBtn = document.getElementById('btn-save-doc');
-const refreshDocBtn = document.getElementById('btn-refresh-doc');
-const deleteDocBtn = document.getElementById('btn-delete-doc');
+// 편집 패널 제거됨: 관련 엘리먼트 참조는 안전하게 null 처리
+const currentPathEl = null;
+const docJsonEl = null;
+const newDocIdEl = null;
+const createDocBtn = null;
+const saveDocBtn = null;
+const refreshDocBtn = null;
+const deleteDocBtn = null;
 
 let currentCollectionName = '';
 let currentDocId = '';
@@ -107,6 +114,59 @@ function toMillis(value) {
   const d = new Date(value);
   const t = d.getTime();
   return isNaN(t) ? 0 : t;
+}
+
+// 안전 키 선택 유틸 (공백 포함 키 지원)
+function pick(obj, candidateKeys) {
+  if (!obj) return undefined;
+  for (const key of candidateKeys) {
+    if (key in obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
+      return obj[key];
+    }
+  }
+  return undefined;
+}
+
+function formatDurationSeconds(totalSeconds) {
+  if (typeof totalSeconds !== 'number' || !isFinite(totalSeconds) || totalSeconds <= 0) return '-';
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = Math.round(totalSeconds % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+async function assertAdminOrThrow() {
+  const auth = getAuth();
+  const user = auth.currentUser;
+  if (!user) throw new Error('관리자 로그인이 필요합니다. 오른쪽 상단의 "관리자 로그인"으로 로그인하세요.');
+  const token = await user.getIdTokenResult();
+  const isAdmin = (!!token.claims.admin) || (user.email === 'audionyx369@gmail.com');
+  if (!isAdmin) throw new Error('관리자 권한이 없습니다. 관리자 계정으로 로그인해 주세요.');
+}
+
+function normalizeBaseName(name) {
+  if (!name) return '';
+  const noQuery = name.split('?')[0];
+  const parts = noQuery.split('/');
+  const last = parts[parts.length - 1] || '';
+  return (last.replace(/\.[^.]+$/, '')).trim();
+}
+
+async function buildTrackIndex() {
+  const index = {};
+  const snap = await getDocs(collection(db, 'track_new'));
+  snap.forEach(d => {
+    const t = d.data();
+    const candidates = [
+      t['Track Title'], t['Release Title'], t.title, t.trackTitle, t.name,
+      normalizeBaseName(t.storagePath || t.path || t.filePath || ''),
+      normalizeBaseName(t.downloadUrl || t.url || '')
+    ].filter(Boolean);
+    candidates.forEach(c => {
+      const key = c.toString().toLowerCase();
+      if (key) index[key] = { id: d.id, data: t };
+    });
+  });
+  return index;
 }
 
 function unlock() {
@@ -217,8 +277,6 @@ function initAdminAuth() {
 async function loadCollection(collectionName) {
   currentCollectionName = collectionName;
   currentDocId = '';
-  currentPathEl.textContent = '';
-  docJsonEl.value = '';
   docListEl.innerHTML = '';
 
   if (!collectionName) return;
@@ -257,9 +315,7 @@ async function loadCollection(collectionName) {
       const actions = document.createElement('span');
       actions.className = 'doc-actions';
 
-      const openBtn = document.createElement('button');
-      openBtn.textContent = '열기';
-      openBtn.addEventListener('click', () => loadDocument(item.id));
+      // 편집 패널 제거: '열기' 버튼 삭제
 
       const delBtn = document.createElement('button');
       delBtn.textContent = '삭제';
@@ -267,15 +323,11 @@ async function loadCollection(collectionName) {
       delBtn.addEventListener('click', async () => {
         if (!confirm(`문서 삭제: ${item.id} \n정말 삭제하시겠습니까?`)) return;
         await deleteDoc(doc(db, currentCollectionName, item.id));
-        if (item.id === currentDocId) {
-          currentDocId = '';
-          docJsonEl.value = '';
-          currentPathEl.textContent = '';
-        }
+        currentDocId = '';
         await loadCollection(currentCollectionName);
       });
 
-      actions.appendChild(openBtn);
+      // 열기 버튼 제거됨
       actions.appendChild(delBtn);
       li.appendChild(left);
       li.appendChild(actions);
@@ -286,79 +338,15 @@ async function loadCollection(collectionName) {
   }
 }
 
-async function loadDocument(docId) {
-  if (!currentCollectionName || !docId) return;
-  try {
-    const ref = doc(db, currentCollectionName, docId);
-    const snap = await getDoc(ref);
-    currentDocId = docId;
-    currentPathEl.textContent = `${currentCollectionName}/${docId}`;
-    if (snap.exists()) {
-      const data = snap.data();
-      docJsonEl.value = JSON.stringify(data, null, 2);
-    } else {
-      docJsonEl.value = '{}';
-    }
-  } catch (err) {
-    alert('문서 로드 실패: ' + (err?.message || err));
-  }
-}
+// 편집 패널 제거에 따라 상세 문서 열기 기능은 비활성화
 
-async function createDocument() {
-  if (!currentCollectionName) {
-    alert('먼저 컬렉션을 입력 후 불러오세요.');
-    return;
-  }
-  let json; try { json = docJsonEl.value.trim() ? JSON.parse(docJsonEl.value) : {}; } catch (e) { alert('유효한 JSON이 아닙니다.'); return; }
-  const newId = newDocIdEl.value.trim();
-  try {
-    if (newId) {
-      await setDoc(doc(db, currentCollectionName, newId), json, { merge: true });
-      currentDocId = newId;
-    } else {
-      const res = await addDoc(collection(db, currentCollectionName), json);
-      currentDocId = res.id;
-    }
-    newDocIdEl.value = '';
-    await loadCollection(currentCollectionName);
-    await loadDocument(currentDocId);
-  } catch (err) {
-    alert('문서 생성 실패: ' + (err?.message || err));
-  }
-}
+// 문서 생성/편집/저장 UI 제거
 
-async function saveDocument() {
-  if (!currentCollectionName || !currentDocId) {
-    alert('열린 문서가 없습니다. 먼저 문서를 선택하거나 새로 생성하세요.');
-    return;
-  }
-  let json; try { json = docJsonEl.value.trim() ? JSON.parse(docJsonEl.value) : {}; } catch (e) { alert('유효한 JSON이 아닙니다.'); return; }
-  try {
-    await setDoc(doc(db, currentCollectionName, currentDocId), json, { merge: true });
-    alert('저장되었습니다.');
-  } catch (err) {
-    alert('저장 실패: ' + (err?.message || err));
-  }
-}
+// 편집 저장 제거
 
-async function refreshDocument() {
-  if (!currentCollectionName || !currentDocId) return;
-  await loadDocument(currentDocId);
-}
+// 새로고침 제거
 
-async function deleteCurrentDocument() {
-  if (!currentCollectionName || !currentDocId) return;
-  if (!confirm(`문서 삭제: ${currentCollectionName}/${currentDocId} \n정말 삭제하시겠습니까?`)) return;
-  try {
-    await deleteDoc(doc(db, currentCollectionName, currentDocId));
-    currentDocId = '';
-    docJsonEl.value = '';
-    currentPathEl.textContent = '';
-    await loadCollection(currentCollectionName);
-  } catch (err) {
-    alert('삭제 실패: ' + (err?.message || err));
-  }
-}
+// 현재 문서 삭제 UI 제거
 
 function bindEvents() {
   loadCollectionBtn.addEventListener('click', () => {
@@ -367,10 +355,7 @@ function bindEvents() {
   collectionInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') loadCollectionBtn.click();
   });
-  createDocBtn.addEventListener('click', createDocument);
-  saveDocBtn.addEventListener('click', saveDocument);
-  refreshDocBtn.addEventListener('click', refreshDocument);
-  deleteDocBtn.addEventListener('click', deleteCurrentDocument);
+  // 편집 패널 관련 이벤트 제거
 }
 
 function showProjectInfo() {
@@ -448,9 +433,19 @@ async function loadUsersTable() {
       return bDate - aDate;
     });
 
-    // 가입방식 필터
+    // 검색/가입방식 필터
     const providerFilter = (document.getElementById('filter-users-provider')?.value || '').trim();
-    const filteredUsers = providerFilter ? users.filter(u => (u.provider || '').toLowerCase() === providerFilter.toLowerCase()) : users;
+    const keyword = (document.getElementById('filter-users')?.value || '').toLowerCase();
+    let filteredUsers = providerFilter ? users.filter(u => (u.provider || '').toLowerCase() === providerFilter.toLowerCase()) : users;
+    if (keyword) {
+      filteredUsers = filteredUsers.filter(u => (
+        (u.displayName || '').toLowerCase().includes(keyword) ||
+        (u.nickname || '').toLowerCase().includes(keyword) ||
+        (u.username || '').toLowerCase().includes(keyword) ||
+        (u.email || '').toLowerCase().includes(keyword) ||
+        (u.phone || '').toLowerCase().includes(keyword)
+      ));
+    }
 
     filteredUsers.forEach(user => {
       const row = document.createElement('tr');
@@ -773,39 +768,422 @@ async function loadTracksTable() {
       tracks.push({ id: d.id, ...d.data() });
     });
 
-    // 등록일 기준 최신순 정렬
-    tracks.sort((a, b) => {
-      const aDate = a.createdAt?.toDate?.() || new Date(0);
-      const bDate = b.createdAt?.toDate?.() || new Date(0);
-      return bDate - aDate;
-    });
+    // 등록일 기준 최신순 정렬 (다양한 타입 허용)
+    tracks.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
 
-    tracks.forEach(track => {
+    // 제목 검색 필터
+    const keyword = (document.getElementById('filter-tracks')?.value || '').toLowerCase().trim();
+    const filtered = keyword
+      ? tracks.filter(t => {
+          const storagePath = t.storagePath || t.path || t.filePath || '';
+          const fileObj = t.file || t.asset || null;
+          const nameCandidates = [
+            t['Track Title'], t['Release Title'], t.title, t.trackTitle, t.name,
+            fileObj?.name,
+            storagePath ? storagePath.split('/').pop() : '',
+            (t.url || t.downloadUrl || '').split('?')[0].split('/').pop()
+          ].filter(Boolean);
+          const titleResolved = (nameCandidates[0] || '').toString().toLowerCase();
+          return titleResolved.includes(keyword);
+        })
+      : tracks;
+
+    // 총 개수 뱃지
+    const tracksCountEl = document.getElementById('tracks-count');
+    if (tracksCountEl) tracksCountEl.textContent = String(tracks.length);
+
+    filtered.forEach(track => {
       const row = document.createElement('tr');
-      const createdAt = track.createdAt?.toDate?.() || null;
-      const createdStr = createdAt ? createdAt.toLocaleDateString('ko-KR') : '-';
-      const duration = track.duration ? `${Math.floor(track.duration / 60)}:${(track.duration % 60).toString().padStart(2, '0')}` : '-';
+      // 생성일 파싱
+      const createdMs = toMillis(track.createdAt || track.uploadedAt || track.updatedAt);
+      const createdStr = createdMs ? new Date(createdMs).toLocaleDateString('ko-KR') : '-';
+
+      // 파일명/경로 추출
+      const storagePath = track.storagePath || track.path || track.filePath || '';
+      const fileObj = track.file || track.asset || null;
+      const nameCandidates = [
+        track.fileName,
+        track.storageFileName,
+        track.originalFileName,
+        track.sourceFileName,
+        fileObj?.name,
+        storagePath ? storagePath.split('/').pop() : '',
+        (track.url || track.downloadUrl || '').split('?')[0].split('/').pop()
+      ].filter(Boolean);
+      let fileName = nameCandidates[0] || '';
+      if (!fileName && (track.title || track.trackTitle || track.name)) {
+        // 파일명이 없고 제목만 있을 때 제목을 기반으로 유추
+        fileName = `${(track.title || track.trackTitle || track.name).toString()}`;
+      }
+      // 확장자 제거해서 제목 후보로도 사용
+      const fileBase = fileName.includes('.') ? fileName.replace(/\.[^.]+$/, '') : fileName;
+
+      // 파일 크기
+      const sizeRaw = (
+        typeof track.fileSize === 'number' ? track.fileSize :
+        typeof track.size === 'number' ? track.size :
+        typeof track.bytes === 'number' ? track.bytes :
+        (fileObj && typeof fileObj.size === 'number' ? fileObj.size : null)
+      );
+      const fileSize = (typeof sizeRaw === 'number')
+        ? `${(sizeRaw/1024/1024).toFixed(1)} MB`
+        : (track.fileSizeLabel || track.sizeLabel || '-');
+
+      // 제목/아티스트/장르 해석 (공백 포함 키 우선)
+      const title = (
+        track['Track Title'] || track['Release Title'] || track.title || track.trackTitle || track.name || fileBase || '-'
+      );
+      const artist = (
+        track['Primary Artist'] || track['Artist'] || track.artist || track.artistName || track.singer || track.writer || track.uploader ||
+        (track.metadata && (track.metadata.artist || track.metadata.artistName)) ||
+        (track.meta && (track.meta.artist || track.meta.artistName)) || '-'
+      );
+      const genre = (
+        track['Genre'] || track.genre || track.category || track.tag || (track.metadata && track.metadata.genre) || (track.meta && track.meta.genre) || '-'
+      );
+
+      // 재생시간 해석 (seconds/ms/length 등 다양한 필드 지원)
+      const durSecCandidates = [
+        track.duration,
+        track.durationSec,
+        track.durationSeconds,
+        track.length,
+        track.lengthSec,
+        track.lengthSeconds,
+        (typeof track.durationMs === 'number' ? Math.round(track.durationMs/1000) : null),
+        (typeof track.msDuration === 'number' ? Math.round(track.msDuration/1000) : null),
+        (track.metadata && typeof track.metadata.duration === 'number' ? track.metadata.duration : null),
+        (track.meta && typeof track.meta.duration === 'number' ? track.meta.duration : null),
+        // 포맷이 "mm:ss" 형식일 경우
+        (typeof track.durationLabel === 'string' && /^\d{1,2}:\d{2}$/.test(track.durationLabel) ? (function(lbl){ const [m,s]=lbl.split(':').map(n=>parseInt(n,10)); return m*60+s; })(track.durationLabel) : null)
+      ].filter((v) => typeof v === 'number' && isFinite(v) && v > 0);
+      const durSec = durSecCandidates.length ? durSecCandidates[0] : null;
+      const duration = (typeof durSec === 'number')
+        ? `${Math.floor(durSec / 60)}:${Math.round(durSec % 60).toString().padStart(2, '0')}`
+        : '-';
       
       row.innerHTML = `
-        <td>${track.title || '-'}</td>
-        <td>${track.artist || '-'}</td>
-        <td>${track.genre || '-'}</td>
+        <td>${title}</td>
+        <td>${artist}</td>
         <td>${duration}</td>
+        <td>${fileName || '-'}</td>
+        <td>${fileSize}</td>
         <td>${createdStr}</td>
-        <td>
-          <div class="table-actions">
-            <button class="btn-edit" onclick="loadDocument('${track.id}')">편집</button>
-            <button class="btn-delete" onclick="deleteTrackWithConfirm('${track.id}')">삭제</button>
-          </div>
-        </td>
+        
       `;
       tbody.appendChild(row);
+
+      // 파일 용량이 없고 storagePath가 있으면 Storage 메타데이터로 채우기
+      if ((!sizeRaw || isNaN(sizeRaw)) && storagePath) {
+        try {
+          const sref = storageRef(storage, storagePath);
+          getMetadata(sref).then((meta) => {
+            if (meta && typeof meta.size === 'number') {
+              const mb = (meta.size / 1024 / 1024).toFixed(1) + ' MB';
+              const sizeCell = row.children[4];
+              if (sizeCell) sizeCell.textContent = mb;
+            }
+          }).catch(() => {});
+        } catch (_) {}
+      }
+
+      // 재생시간이 없고 downloadUrl이 있으면 오디오 메타로 채우기
+      if (duration === '-' && (track.downloadUrl || track.url)) {
+        try {
+          const audio = new Audio();
+          audio.preload = 'metadata';
+          audio.src = track.downloadUrl || track.url;
+          audio.addEventListener('loadedmetadata', () => {
+            if (isFinite(audio.duration) && audio.duration > 0) {
+              const dCell = row.children[2];
+              if (dCell) dCell.textContent = formatDurationSeconds(audio.duration);
+            }
+          }, { once: true });
+          // 에러는 무시
+        } catch (_) {}
+      }
     });
 
     collectionsData.track_new = tracks;
   } catch (err) {
     alert('음원 데이터 로드 실패: ' + (err?.message || err));
   }
+}
+
+// 업로드 UI 바인딩 및 처리 (Storage로 업로드 후 track_new 문서에 메타만 기록하는 구조로 확장 가능)
+function bindTrackUploadUI() {
+  const drop = document.getElementById('track-upload-drop');
+  const input = document.getElementById('track-upload-input');
+  const queue = document.getElementById('track-upload-queue');
+  const list = document.getElementById('track-upload-list');
+  const mode = document.getElementById('track-bulk-mode');
+  const bulkMetaPanel = document.getElementById('bulk-meta-panel');
+  const bulkMetaText = null; // 텍스트 붙여넣기 제거
+  const btnApplyMeta = null;
+  // 새로운 업로드 매니저 UI
+  const tracksInput = document.getElementById('bulk-tracks-file');
+  const coversInput = document.getElementById('bulk-covers-file');
+  const btnValidate = document.getElementById('btn-validate-audio');
+  const btnRunUpload = document.getElementById('btn-run-audio-upload');
+  const validatePanel = document.getElementById('upload-validate-panel');
+  const validateList = document.getElementById('upload-validate-list');
+  const excelInput = document.getElementById('bulk-meta-file');
+  const progressText = document.getElementById('upload-progress-text');
+  const successCountEl = document.getElementById('upload-success-count');
+  const failCountEl = document.getElementById('upload-fail-count');
+  // 트랙 뷰 존재 여부만 확인 (드롭존 요소는 없어도 동작해야 함)
+  if (!document.getElementById('table-view-track_new')) return;
+
+  const openPicker = () => input.click();
+  if (drop) {
+    drop.addEventListener('click', openPicker);
+    drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.style.background = '#eef2ff'; });
+    drop.addEventListener('dragleave', () => { drop.style.background = '#f8fafc'; });
+    drop.addEventListener('drop', (e) => {
+      e.preventDefault();
+      drop.style.background = '#f8fafc';
+      handleFiles(e.dataTransfer.files);
+    });
+  }
+  if (input) {
+    input.addEventListener('change', () => handleFiles(input.files));
+  }
+
+  if (mode) {
+    mode.addEventListener('change', () => {
+      const v = mode.value;
+      // 파일 input의 accept를 모드별로 변경
+      if (v === 'tracks') input.setAttribute('accept', '.mp3,audio/mpeg');
+      else if (v === 'covers') input.setAttribute('accept', 'image/*');
+      else input.setAttribute('accept', '*/*');
+      // 메타 패널 토글
+      if (bulkMetaPanel) bulkMetaPanel.style.display = 'none';
+    });
+  }
+
+
+  function handleFiles(files) {
+    if (!files || !files.length || !queue) return;
+    queue.style.display = 'block';
+    const currentMode = (mode && mode.value) || 'none';
+    Array.from(files).forEach((f) => {
+      if (currentMode === 'tracks' && !f.type.startsWith('audio/')) return;
+      if (currentMode === 'covers' && !f.type.startsWith('image/')) return;
+      const li = document.createElement('li');
+      li.style.padding = '6px 8px';
+      li.style.border = '1px solid #e2e8f0';
+      li.style.borderRadius = '6px';
+      li.style.display = 'flex';
+      li.style.justifyContent = 'space-between';
+      li.innerHTML = `<span>${f.name} · ${(f.size/1024/1024).toFixed(1)} MB</span><span class="muted">${currentMode==='tracks'?'트랙': currentMode==='covers'?'커버':'대기'}</span>`;
+      list.appendChild(li);
+    });
+
+    // 업로드 실행
+    if (currentMode === 'tracks') {
+      batchUploadTracks(files).catch(console.error);
+    } else if (currentMode === 'covers') {
+      batchUploadCovers(files).catch(console.error);
+    }
+  }
+
+  // 업로드 매니저: 선택/표시
+  // 버튼 제거 → 파일 input 직접 활용
+
+  // 엑셀/CSV → 텍스트로 파싱해서 textarea에 채우기
+  if (excelInput) {
+    excelInput.addEventListener('change', async () => {
+      const file = excelInput.files && excelInput.files[0];
+      if (!file) return;
+      try {
+        const data = await file.arrayBuffer();
+        const wb = XLSX.read(data);
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(ws, { header: 1 }); // 2D array
+        // 1행을 헤더로 인식
+        const headers = (json[0] || []).map(h => String(h).trim());
+        const colIndex = (name) => headers.findIndex(h => h.toLowerCase() === name.toLowerCase());
+        const idxTitle = colIndex('title');
+        const idxMood = colIndex('mood');
+        const idxUse = colIndex('use-case') !== -1 ? colIndex('use-case') : colIndex('usecase');
+        const idxISRC = colIndex('ISRC');
+        const idxArtist = colIndex('Primary Artist') !== -1 ? colIndex('Primary Artist') : (colIndex('Artist'));
+        const idxGenre = colIndex('Genre');
+        const idxReleaseDate = colIndex('Release Date');
+        // 메모리 보관: lastValidate.metaRows 대체용으로 rows2 저장
+        const rows2 = [];
+        for (let i = 1; i < json.length; i++) {
+          const r = json[i] || [];
+          const get = (idx) => (idx>=0 && idx<r.length) ? String(r[idx] ?? '').trim() : '';
+          const item = {
+            title: get(idxTitle),
+            mood: get(idxMood),
+            usecase: get(idxUse),
+            ISRC: get(idxISRC),
+            artist: get(idxArtist),
+            genre: get(idxGenre),
+            releaseDate: get(idxReleaseDate)
+          };
+          if (item.title) rows2.push(item);
+        }
+        excelInput.dataset.parsed = JSON.stringify(rows2);
+      } catch (e) {
+        console.error(e);
+        alert('엑셀/CSV 파싱 중 오류가 발생했습니다.');
+      }
+    });
+  }
+
+  let lastValidate = null;
+  if (btnValidate && btnRunUpload && validatePanel && validateList) {
+    btnValidate.onclick = async () => {
+      validateList.innerHTML = '';
+      const logs = [];
+      const trackFiles = Array.from((tracksInput && tracksInput.files) ? tracksInput.files : []);
+      const coverFiles = Array.from((coversInput && coversInput.files) ? coversInput.files : []);
+      const parsed = excelInput?.dataset?.parsed ? JSON.parse(excelInput.dataset.parsed) : [];
+      if (!trackFiles.length) logs.push('트랙 파일이 선택되지 않았습니다.');
+      if (!coverFiles.length) logs.push('커버 이미지가 선택되지 않았습니다.');
+      if (!parsed.length) logs.push('메타데이터 파일이 비어 있거나 헤더를 찾을 수 없습니다.');
+      const titlesFromMeta = new Set(parsed.map(r => (r.title||'').toLowerCase()).filter(Boolean));
+      // 파일명 정규화 매핑
+      const trackBaseSet = new Set(trackFiles.map(f => normalizeBaseName(f.name).toLowerCase()));
+      const coverBaseSet = new Set(coverFiles.map(f => normalizeBaseName(f.name).toLowerCase()));
+      // 교집합 체크
+      const missingForTracks = [...titlesFromMeta].filter(t => !trackBaseSet.has(t));
+      const missingForCovers = [...titlesFromMeta].filter(t => !coverBaseSet.has(t));
+      if (missingForTracks.length) logs.push(`메타에 있으나 트랙 파일이 없는 항목: ${missingForTracks.slice(0,5).join(', ')}${missingForTracks.length>5?' 외':''}`);
+      if (missingForCovers.length) logs.push(`메타에 있으나 커버 파일이 없는 항목: ${missingForCovers.slice(0,5).join(', ')}${missingForCovers.length>5?' 외':''}`);
+      if (!logs.length) logs.push('검증 통과: 업로드 가능합니다.');
+      logs.forEach(line => {
+        const li = document.createElement('li'); li.textContent = line; validateList.appendChild(li);
+      });
+      validatePanel.style.display = 'block';
+      const ok = trackFiles.length>0 && coverFiles.length>0 && parsed.length>0 && missingForTracks.length===0 && missingForCovers.length===0;
+      btnRunUpload.disabled = !ok;
+      lastValidate = { trackFiles, coverFiles, metaRows: parsed };
+    };
+
+    btnRunUpload.onclick = async () => {
+      if (!lastValidate) return;
+      const { trackFiles, coverFiles, metaRows } = lastValidate;
+      let success = 0, fail = 0, total = trackFiles.length + coverFiles.length + metaRows.length;
+      const setProgress = () => {
+        if (progressText) progressText.textContent = `${Math.round(((success+fail)/Math.max(1,total))*100)}%`;
+        if (successCountEl) successCountEl.textContent = String(success);
+        if (failCountEl) failCountEl.textContent = String(fail);
+      };
+      // 1) 트랙 업로드 → 문서 매칭/생성
+      try {
+        const resTracks = await batchUploadTracks(trackFiles);
+        success += (resTracks?.success || 0);
+        fail += (resTracks?.fail || 0);
+      } catch { fail += trackFiles.length; }
+      setProgress();
+      // 2) 커버 업로드 → 문서 매칭 갱신
+      try {
+        const resCovers = await batchUploadCovers(coverFiles);
+        success += (resCovers?.success || 0);
+        fail += (resCovers?.fail || 0);
+      } catch { fail += coverFiles.length; }
+      setProgress();
+      // 3) 메타 적용 (title, mood, use-case, ISRC)
+      // 최신 인덱스로 단 한 번 매핑
+      const idx = await buildTrackIndex();
+      for (const item of metaRows) {
+        try {
+          const title = (item.title||'').trim(); if (!title) { fail++; setProgress(); continue; }
+          const mood = (item.mood||'').trim();
+          const usecase = (item.usecase||'').trim();
+          const isrc = (item.ISRC||'').trim();
+          const key = title.toLowerCase();
+          const match = idx[key];
+          if (match) {
+            await updateDoc(doc(db, 'track_new', match.id), {
+              mood: mood || null,
+              usecase: usecase || null,
+              ISRC: isrc || null,
+              updatedAt: serverTimestamp()
+            });
+            success++;
+          } else { fail++; }
+          setProgress();
+        } catch { fail++; setProgress(); }
+      }
+      alert('업로드 및 메타 적용이 완료되었습니다.');
+      await loadTracksTable();
+    };
+  }
+}
+
+async function batchUploadTracks(fileList) {
+  const files = Array.from(fileList).filter(f => f.type.startsWith('audio/'));
+  if (!files.length) return { success: 0, fail: 0 };
+  await assertAdminOrThrow();
+  const index = await buildTrackIndex();
+  let success = 0, fail = 0;
+  for (const f of files) {
+    try {
+      const base = normalizeBaseName(f.name);
+      const dest = `track/${f.name}`;
+      const sref = storageRef(storage, dest);
+      await uploadBytesResumable(sref, f);
+      const url = await getDownloadURL(sref);
+      const key = base.toLowerCase();
+      const match = index[key];
+      if (match) {
+        await updateDoc(doc(db, 'track_new', match.id), {
+          storagePath: dest,
+          downloadUrl: url,
+          fileName: f.name,
+          fileSize: f.size,
+          'Track Title': match.data['Track Title'] || match.data.trackTitle || match.data.title || base,
+          updatedAt: serverTimestamp()
+        });
+        success++;
+      } else {
+        await addDoc(collection(db, 'track_new'), {
+          'Track Title': base,
+          storagePath: dest,
+          downloadUrl: url,
+          fileName: f.name,
+          fileSize: f.size,
+          createdAt: serverTimestamp()
+        });
+        success++;
+      }
+    } catch (e) { console.error('트랙 업로드 실패', f.name, e); fail++; }
+  }
+  await loadTracksTable();
+  return { success, fail };
+}
+
+async function batchUploadCovers(fileList) {
+  const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+  if (!files.length) return { success: 0, fail: 0 };
+  await assertAdminOrThrow();
+  const index = await buildTrackIndex();
+  let success = 0, fail = 0;
+  for (const f of files) {
+    try {
+      const base = normalizeBaseName(f.name);
+      const dest = `track/covers/${f.name}`;
+      const sref = storageRef(storage, dest);
+      await uploadBytesResumable(sref, f);
+      const url = await getDownloadURL(sref);
+      const key = base.toLowerCase();
+      const match = index[key];
+      if (match) {
+        await updateDoc(doc(db, 'track_new', match.id), {
+          coverUrl: url,
+          updatedAt: serverTimestamp()
+        });
+        success++;
+      }
+    } catch (e) { console.error('커버 업로드 실패', f.name, e); fail++; }
+  }
+  await loadTracksTable();
+  return { success, fail };
 }
 
 // 계좌 정보 테이블 렌더링
@@ -847,6 +1225,10 @@ async function loadAccountsTable() {
       const arr = (d.contentLinks || d.links || []).map(l => l.contentUrl || l.url || l.videoUrl || l.permalink).filter(Boolean);
       uidToLinks[docSnap.id] = arr;
     });
+
+    // 총 계좌 개수 뱃지
+    const accountsCountEl = document.getElementById('accounts-count');
+    if (accountsCountEl) accountsCountEl.textContent = String(accounts.length);
 
     accounts.forEach(account => {
       const row = document.createElement('tr');
@@ -997,7 +1379,6 @@ async function deleteAccountWithConfirm(accountId) {
 }
 
 // 전역 함수로 노출 (HTML onclick에서 사용)
-window.loadDocument = loadDocument;
 window.updateChannelStatus = updateChannelStatus;
 window.updateTrackRequestStatus = updateTrackRequestStatus;
 window.deleteUserWithConfirm = deleteUserWithConfirm;
@@ -1011,6 +1392,7 @@ function main() {
   bindPresetButtons();
   showProjectInfo();
   initAdminAuth();
+  bindTrackUploadUI();
 }
 
 function bindPresetButtons() {
@@ -1021,6 +1403,10 @@ function bindPresetButtons() {
       
       if (collectionName === 'users') {
         await loadUsersTable();
+        const providerSelect = document.getElementById('filter-users-provider');
+        const searchInput = document.getElementById('filter-users');
+        if (providerSelect) providerSelect.onchange = () => loadUsersTable();
+        if (searchInput) searchInput.oninput = () => loadUsersTable();
       } else if (collectionName === 'channels') {
         await loadChannelsTable();
         // 정렬 select 변경 시 다시 로드
@@ -1042,6 +1428,11 @@ function bindPresetButtons() {
         await loadTrackRequestsTable();
       } else if (collectionName === 'track_new') {
         await loadTracksTable();
+        // 제목 검색 oninput 바인딩
+        const searchInput = document.getElementById('filter-tracks');
+        if (searchInput) searchInput.oninput = () => loadTracksTable();
+        // 업로드 UI 재바인딩 (동적 요소 대비)
+        bindTrackUploadUI();
       } else if (collectionName === 'user_withdraw_accounts') {
         await loadAccountsTable();
       } else {

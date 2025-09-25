@@ -331,6 +331,24 @@
                   <span>🇰🇷</span>
                   한국 콜드메일
                 </button>
+                <button 
+                  type="button" 
+                  id="tpl-emoji-missing"
+                  class="audionyx-btn-secondary px-4 py-2 rounded-lg text-xs font-medium inline-flex items-center gap-2 transition-all"
+                  title="이모지키 누락 안내 템플릿 삽입"
+                >
+                  <span>🔑</span>
+                  이모지키 안내
+                </button>
+                <button 
+                  type="button" 
+                  id="tpl-track-submitted"
+                  class="audionyx-btn-secondary px-4 py-2 rounded-lg text-xs font-medium inline-flex items-center gap-2 transition-all"
+                  title="개인 음원 신청 접수완료 템플릿 삽입"
+                >
+                  <span>✅</span>
+                  접수완료 안내
+                </button>
                 <!-- 향후 템플릿 확장 자리: 자동 루프 생성 예정 -->
               </div>
             </div>
@@ -425,11 +443,15 @@
     const htmlTextarea = document.getElementById("html");
     const tplBtnJpColdmail = document.getElementById("tpl-jp-coldmail");
     const tplBtnKrColdmail = document.getElementById("tpl-kr-coldmail");
+    const tplBtnEmojiMissing = document.getElementById("tpl-emoji-missing");
+    const tplBtnTrackSubmitted = document.getElementById("tpl-track-submitted");
 
     // 템플릿 정의 (향후 확장 가능 구조)
     const mailTemplates = [
       { id: "jp-coldmail", label: "🇯🇵 일본 콜드메일 템플릿", path: "/japan-creator-coldmail.html" },
-      { id: "kr-coldmail", label: "🇰🇷 한국 콜드메일 템플릿", path: "/korea-creator-coldmail.html" }
+      { id: "kr-coldmail", label: "🇰🇷 한국 콜드메일 템플릿", path: "/korea-creator-coldmail.html" },
+      { id: "emoji-missing", label: "🔑 이모지키 누락 안내", path: "/emoji-key-missing.html" },
+      { id: "track-submitted", label: "✅ 개인 음원 신청 접수완료", path: "/track-request-submitted.html" }
     ];
 
     // 새로운 이메일 관련 DOM 요소들
@@ -592,6 +614,12 @@
     });
     tplBtnKrColdmail.addEventListener("click", () => {
       loadTemplateIntoEditor("/korea-creator-coldmail.html");
+    });
+    tplBtnEmojiMissing.addEventListener("click", () => {
+      loadTemplateIntoEditor("/emoji-key-missing.html");
+    });
+    tplBtnTrackSubmitted.addEventListener("click", () => {
+      loadTemplateIntoEditor("/track-request-submitted.html");
     });
 
     // 인증 상태 변경 감지

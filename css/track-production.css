@@ -1443,6 +1443,27 @@ html {
 .section-heading { font-size: 1.6rem; margin: 1.25rem 0 .75rem; }
 .section-paragraph { color: var(--color-text-gray); }
 
+/* === 정산 주기 변경 공지 모달: 모바일 반응형 === */
+#settlement-notice-modal .auth-modal-content { max-width: 560px; width: 90%; }
+#settlement-notice-modal .auth-modal-header { text-align: left; }
+#settlement-notice-modal .auth-modal-title { font-size: 1.25rem; }
+#settlement-notice-modal .auth-modal-subtitle { color: var(--color-text-gray); font-size: 0.95rem; }
+
+@media (max-width: 768px) {
+  #settlement-notice-modal .auth-modal-content { width: calc(100% - 2rem); margin: 0 1rem; padding: 1rem; }
+  #settlement-notice-modal .auth-modal-title { font-size: 1.1rem; }
+  #settlement-notice-modal .auth-modal-subtitle { font-size: 0.9rem; }
+  #settlement-notice-modal .bullet-list { padding-left: 1rem; }
+  #settlement-notice-modal .phone-step-actions { justify-content: stretch !important; gap: .5rem; }
+  #settlement-notice-modal .btn-primary, 
+  #settlement-notice-modal .btn-secondary { flex: 1 1 auto; min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  #settlement-notice-modal .auth-modal-title { font-size: 1rem; }
+  #settlement-notice-modal .auth-modal-subtitle { font-size: 0.85rem; }
+}
+
 /* === 리뉴얼: 플로우/불릿 === */
 .flow-section { padding: 1rem 0; }
 .flow-list { display: grid; gap: 1rem; padding-left: 1.25rem; }

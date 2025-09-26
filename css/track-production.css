@@ -1455,6 +1455,18 @@ html {
 /* === 리뉴얼: 기존 카드 섹션 숨김 === */
 .process-guide-section { display: none; }
 
+/* === 정산 핵심 안내 카드 === */
+.settlement-key-cards { padding: 0.5rem 0 1.25rem; background: var(--dark-bg); }
+.key-cards-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.key-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 12px; padding: 12px; }
+.key-card-label { color: var(--color-text-gray); font-size: 12px; margin-bottom: 6px; }
+.key-card-value { color: #fff; font-weight: 800; font-size: 18px; }
+.key-card-desc { color: var(--color-text-gray); font-size: 12px; margin-top: 4px; }
+
+@media (max-width: 768px) {
+  .key-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (max-width: 768px) {
   .production-hero { padding: 2.5rem 0 1.25rem; }
   .production-hero-title { font-size: 1.6rem; }

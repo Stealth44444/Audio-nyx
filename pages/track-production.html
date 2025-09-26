@@ -209,11 +209,11 @@
     <section class="production-hero" data-animate="fade-up">
       <div class="container">
         <div class="production-hero-inner">
-          <p class="production-hero-kicker">사내 프로 프로듀서 직접 제작</p>
-          <h1 class="production-hero-title">개인 음원 제작 — 1:1 맞춤 상담부터 유통까지</h1>
-          <p class="production-hero-sub">당신의 콘텐츠에 날개를 달 개인 음원 제작, Audionyx가 만들어 드립니다.<br>더 이상 저작권 걱정 없이, 맞춤 제작 → 피드백 → 유통 → 정산까지 모든 과정을 한곳에서.</p>
+          <p class="production-hero-kicker" data-i18n="trackProduction.hero.kicker">사내 프로 프로듀서 직접 제작</p>
+          <h1 class="production-hero-title" data-i18n="trackProduction.hero.title">개인 음원 제작 — 1:1 맞춤 상담부터 유통까지</h1>
+          <p class="production-hero-sub" data-i18n="trackProduction.hero.subtitle">당신의 콘텐츠에 날개를 달 개인 음원 제작, Audionyx가 만들어 드립니다.<br>더 이상 저작권 걱정 없이, 맞춤 제작 → 피드백 → 유통 → 정산까지 모든 과정을 한곳에서.</p>
           <div class="production-hero-actions">
-            <a href="producer.html" class="btn-producer-check">프로듀서 확인하기</a>
+            <a href="producer.html" class="btn-producer-check" data-i18n="trackProduction.hero.checkProducer">프로듀서 확인하기</a>
           </div>
         </div>
       </div>
@@ -224,16 +224,16 @@
       <div class="container">
         <div class="promo-card">
           <div class="promo-header">
-            <span class="promo-badge">런칭 프로모션 (KRW)</span>
+            <span class="promo-badge" data-i18n="trackProduction.promo.badge">런칭 프로모션 (KRW)</span>
           </div>
-          <h2 class="promo-title">1:1 개인 맞춤 상담·기획·제작·피드백 패키지</h2>
+          <h2 class="promo-title" data-i18n="trackProduction.promo.title">1:1 개인 맞춤 상담·기획·제작·피드백 패키지</h2>
           <div class="promo-price-row">
             <span class="price-original">149,000</span>
             <span class="price-arrow">→</span>
             <span class="price-discount">49,900</span>
           </div>
-          <p class="promo-period">기간: 2025.09.15 – 2025.10.15</p>
-          <p class="promo-desc">상담–기획–제작–피드백이 하나의 흐름으로 이어지는 올인원 패키지입니다.</p>
+          <p class="promo-period" data-i18n="trackProduction.promo.period">기간: 2025.09.15 – 2025.10.15</p>
+          <p class="promo-desc" data-i18n="trackProduction.promo.description">상담–기획–제작–피드백이 하나의 흐름으로 이어지는 올인원 패키지입니다.</p>
         </div>
       </div>
     </section>
@@ -241,39 +241,62 @@
     <!-- 리뉴얼: 정산 구조 -->
     <section class="payout-section" data-animate="fade-up">
       <div class="container">
-        <h2 class="section-heading">정산 구조 (투명한 기준)</h2>
-        <p class="section-paragraph">유통 이후 관리 수수료 10% 공제 후, 로열티 90% 지급. 사용·조회 등 유통 실적 기반으로 정확히 산정하여 안전하게 지급합니다.</p>
+        <h2 class="section-heading" data-i18n="trackProduction.settlement.title">정산 구조 (투명한 기준)</h2>
+        <p class="section-paragraph" data-i18n="trackProduction.settlement.paragraph">유통 이후 관리 수수료 10% 공제 후, 로열티 90% 지급. 사용·조회 등 유통 실적 기반으로 정확히 산정하여 안전하게 지급합니다.<br><strong data-i18n="trackProduction.settlement.paragraphHighlight">정산 주기: 매월 1회</strong> <span data-i18n="trackProduction.settlement.paragraphNote">(기존 분기 1회 → 월 1회로 개선)</span></p>
+      </div>
+    </section>
+
+    <!-- 정산 핵심 안내 카드: 가독성/UX 개선 -->
+    <section class="settlement-key-cards" data-animate="fade-up">
+      <div class="container">
+        <div class="key-cards-grid">
+          <div class="key-card">
+            <div class="key-card-label" data-i18n="trackProduction.settlement.cardCycleLabel">정산 주기</div>
+            <div class="key-card-value" data-i18n="trackProduction.settlement.cardCycleValue">매월 1회</div>
+            <div class="key-card-desc" data-i18n="trackProduction.settlement.cardCycleDesc">분기 → 월 정산으로 더 빠르게</div>
+          </div>
+          <div class="key-card">
+            <div class="key-card-label" data-i18n="trackProduction.settlement.cardPayoutLabel">지급 기준</div>
+            <div class="key-card-value" data-i18n="trackProduction.settlement.cardPayoutValue">로열티 90%</div>
+            <div class="key-card-desc" data-i18n="trackProduction.settlement.cardPayoutDesc">관리 수수료 10% 공제 후 지급</div>
+          </div>
+          <div class="key-card">
+            <div class="key-card-label" data-i18n="trackProduction.settlement.cardConfirmLabel">확인 방법</div>
+            <div class="key-card-value" data-i18n="trackProduction.settlement.cardConfirmValue">대시보드</div>
+            <div class="key-card-desc" data-i18n="trackProduction.settlement.cardConfirmDesc">월별 사용량·수익 확인 (도입 예정)</div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- 리뉴얼: 제작·선정·유통 플로우 -->
     <section class="flow-section" data-animate="fade-up">
       <div class="container">
-        <h2 class="section-heading">제작·선정·유통 플로우</h2>
+        <h2 class="section-heading" data-i18n="trackProduction.flow.title">제작·선정·유통 플로우</h2>
         <ol class="flow-list">
           <li>
-            <h3>1) 1:1 상담 & 요청서 제출</h3>
-            <p>원하는 제목 / 장르 / BPM / 분위기 / 사용 플랫폼(용도) 를 작성해 제출합니다.</p>
+            <h3 data-i18n="trackProduction.flow.step1Title">1) 1:1 상담 & 요청서 제출</h3>
+            <p data-i18n="trackProduction.flow.step1Desc">원하는 제목 / 장르 / BPM / 분위기 / 사용 플랫폼(용도) 를 작성해 제출합니다.</p>
           </li>
           <li>
-            <h3>2) 오리지널 · 개인 음원 제작 (Audionyx 프로 프로듀서 직접 제작)</h3>
-            <p>Audionyx Production 팀의 현업 프로 프로듀서가 기획 의도와 레퍼런스를 바탕으로 직접 작곡·편곡을 진행합니다. 장르별 전문 프로듀서를 배정하고, 필요 시 사운드 디자이너/믹싱 엔지니어가 협업해 완성도를 높입니다. 브랜딩용 시그니처 사운드, 루프, 인트로/아웃트로 등 맞춤 구성이 가능합니다.</p>
+            <h3 data-i18n="trackProduction.flow.step2Title">2) 오리지널 · 개인 음원 제작 (Audionyx 프로 프로듀서 직접 제작)</h3>
+            <p data-i18n="trackProduction.flow.step2Desc">Audionyx Production 팀의 현업 프로 프로듀서가 기획 의도와 레퍼런스를 바탕으로 직접 작곡·편곡을 진행합니다. 장르별 전문 프로듀서를 배정하고, 필요 시 사운드 디자이너/믹싱 엔지니어가 협업해 완성도를 높입니다. 브랜딩용 시그니처 사운드, 루프, 인트로/아웃트로 등 맞춤 구성이 가능합니다.</p>
           </li>
           <li>
-            <h3>3) 시안 전달 & 피드백</h3>
-            <p>완료된 여러 트랙 시안을 이메일로 전달드립니다. 피드백을 반영해 완성도와 적합도를 끌어올립니다.</p>
+            <h3 data-i18n="trackProduction.flow.step3Title">3) 시안 전달 & 피드백</h3>
+            <p data-i18n="trackProduction.flow.step3Desc">완료된 여러 트랙 시안을 이메일로 전달드립니다. 피드백을 반영해 완성도와 적합도를 끌어올립니다.</p>
           </li>
           <li>
-            <h3>4) 최종 선택 & 유통 협의</h3>
-            <p>피드백 이후 유통할 최종 음원을 확정합니다. 작곡가/제작자(Credit) 표기는 고객님의 성함(요청 시 예명 가능)으로 제작합니다.</p>
+            <h3 data-i18n="trackProduction.flow.step4Title">4) 최종 선택 & 유통 협의</h3>
+            <p data-i18n="trackProduction.flow.step4Desc">피드백 이후 유통할 최종 음원을 확정합니다. 작곡가/제작자(Credit) 표기는 고객님의 성함(요청 시 예명 가능)으로 제작합니다.</p>
           </li>
           <li>
-            <h3>5) 결제 시점</h3>
-            <p>모든 제작 프로세스 종료 후, 실제 유통 개시 전 결제가 진행됩니다.</p>
+            <h3 data-i18n="trackProduction.flow.step5Title">5) 결제 시점</h3>
+            <p data-i18n="trackProduction.flow.step5Desc">모든 제작 프로세스 종료 후, 실제 유통 개시 전 결제가 진행됩니다.</p>
           </li>
           <li>
-            <h3>6) 유통 & 정산</h3>
-            <p>유통을 진행하고, 실적에 따라 수수료 10% 공제 후 로열티 90%를 지급합니다.</p>
+            <h3 data-i18n="trackProduction.flow.step6Title">6) 유통 & 정산</h3>
+            <p data-i18n="trackProduction.flow.step6Desc">유통을 진행하고, 실적에 따라 수수료 10% 공제 후 로열티 90%를 지급합니다. <strong data-i18n="trackProduction.flow.step6Highlight">정산은 매월 1회</strong> 진행됩니다.</p>
           </li>
         </ol>
       </div>
@@ -282,12 +305,12 @@
     <!-- 리뉴얼: 왜 Audionyx의 “개인 음원 제작”인가 -->
     <section class="why-section" data-animate="fade-up">
       <div class="container">
-        <h2 class="section-heading">왜 Audionyx의 “개인 음원 제작”인가</h2>
+        <h2 class="section-heading" data-i18n="trackProduction.why.title">왜 Audionyx의 "개인 음원 제작"인가</h2>
         <ul class="bullet-list">
-          <li>채널 정체성을 강화하는 나만의 사운드 시그니처</li>
-          <li>시리즈/브랜드 채널에 최적화된 맞춤 길이·구성</li>
-          <li>레퍼런스는 참고하되 저작권 우려 없는 오리지널 확보</li>
-          <li>사내 프로 프로듀서의 책임 제작으로 일관된 품질 보장</li>
+          <li data-i18n="trackProduction.why.list1">채널 정체성을 강화하는 나만의 사운드 시그니처</li>
+          <li data-i18n="trackProduction.why.list2">시리즈/브랜드 채널에 최적화된 맞춤 길이·구성</li>
+          <li data-i18n="trackProduction.why.list3">레퍼런스는 참고하되 저작권 우려 없는 오리지널 확보</li>
+          <li data-i18n="trackProduction.why.list4">사내 프로 프로듀서의 책임 제작으로 일관된 품질 보장</li>
         </ul>
       </div>
     </section>
@@ -295,13 +318,13 @@
     <!-- 리뉴얼: 신뢰할 수 있는 운영 원칙 -->
     <section class="principles-section" data-animate="fade-up">
       <div class="container">
-        <h2 class="section-heading">신뢰할 수 있는 운영 원칙</h2>
+        <h2 class="section-heading" data-i18n="trackProduction.principles.title">신뢰할 수 있는 운영 원칙</h2>
         <ul class="bullet-list">
-          <li>일방 중단 없음: 서비스 제공과 지급 의무를 성실히 이행</li>
-          <li>예측 가능한 진행: 단계·일정을 명확하게 안내</li>
-          <li>책임 있는 지급: 사용 내역 기반 정확·안전 지급</li>
-          <li>권리·보안 우선: 개인정보·원본 파일 안전 관리, 권리 충돌 사전 예방</li>
-          <li>지속 가능성: 과도한 약속보다 안정적 운영을 우선</li>
+          <li data-i18n="trackProduction.principles.list1">일방 중단 없음: 서비스 제공과 지급 의무를 성실히 이행</li>
+          <li data-i18n="trackProduction.principles.list2">예측 가능한 진행: 단계·일정을 명확하게 안내</li>
+          <li data-i18n="trackProduction.principles.list3">책임 있는 지급: 사용 내역 기반 정확·안전 지급</li>
+          <li data-i18n="trackProduction.principles.list4">권리·보안 우선: 개인정보·원본 파일 안전 관리, 권리 충돌 사전 예방</li>
+          <li data-i18n="trackProduction.principles.list5">지속 가능성: 과도한 약속보다 안정적 운영을 우선</li>
         </ul>
       </div>
     </section>
@@ -467,25 +490,46 @@
     <div class="auth-modal-content">
       <button class="auth-modal-close" id="confirm-modal-close">&times;</button>
       <div class="auth-modal-header">
-        <h2 class="auth-modal-title">요청 전 재확인</h2>
-        <p class="auth-modal-subtitle">아래 사항을 확인 후 동의해 주세요.</p>
+        <h2 class="auth-modal-title" data-i18n="trackProduction.confirmModal.title">요청 전 재확인</h2>
+        <p class="auth-modal-subtitle" data-i18n="trackProduction.confirmModal.subtitle">아래 사항을 확인 후 동의해 주세요.</p>
       </div>
       <div class="auth-methods">
         <div class="confirm-body">
           <ul class="bullet-list">
-            <li>요청 제출 시 상단에 고지된 프로세스에 따라 작업이 시작됩니다.</li>
-            <li>제작 진행 중에는 담당자와 개인 연락처(이메일 등)로 소통합니다.</li>
-            <li>모든 제작이 완료된 이후, 실제 유통 개시 전에 결제가 진행됩니다.</li>
+            <li data-i18n="trackProduction.confirmModal.point1">요청 제출 시 상단에 고지된 프로세스에 따라 작업이 시작됩니다.</li>
+            <li data-i18n="trackProduction.confirmModal.point2">제작 진행 중에는 담당자와 개인 연락처(이메일 등)로 소통합니다.</li>
+            <li data-i18n="trackProduction.confirmModal.point3">모든 제작이 완료된 이후, 실제 유통 개시 전에 결제가 진행됩니다.</li>
           </ul>
           <label class="checkbox-container" style="margin-top: 0.75rem;">
             <input type="checkbox" id="confirm-agree">
             <span class="checkmark"></span>
-            위 사항을 확인했으며 동의합니다.
+            <span data-i18n="trackProduction.confirmModal.agreeText">위 사항을 확인했으며 동의합니다.</span>
           </label>
         </div>
         <div class="phone-step-actions" style="margin-top: 1rem;">
-          <button class="btn-secondary" id="confirm-cancel">취소</button>
-          <button class="btn-primary" id="confirm-submit" disabled>동의하고 요청 제출</button>
+          <button class="btn-secondary" id="confirm-cancel" data-i18n="trackProduction.confirmModal.cancel">취소</button>
+          <button class="btn-primary" id="confirm-submit" disabled data-i18n="trackProduction.confirmModal.submit">동의하고 요청 제출</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1회성 팝업 공지: 분기→월 정산 전환 안내 -->
+  <div id="settlement-notice-modal" class="auth-modal" style="display: none;">
+    <div class="auth-modal-content">
+      <button class="auth-modal-close" id="settlement-notice-close">&times;</button>
+      <div class="auth-modal-header">
+        <h2 class="auth-modal-title" data-i18n="trackProduction.settlementNotice.title">정산 주기 변경 안내</h2>
+        <p class="auth-modal-subtitle" data-i18n="trackProduction.settlementNotice.subtitle">개인 음원 정산 주기가 <strong data-i18n="trackProduction.settlementNotice.previousCycle">분기 1회</strong>에서 <strong data-i18n="trackProduction.settlementNotice.newCycle">매월 1회</strong>로 더욱 빨라졌습니다.</p>
+      </div>
+      <div class="auth-methods">
+        <ul class="bullet-list">
+          <li data-i18n="trackProduction.settlementNotice.benefit1">더 짧은 주기로 수익을 확인하고 수령할 수 있어요.</li>
+          <li data-i18n="trackProduction.settlementNotice.benefit2">관리 수수료 10% 공제 후 로열티 90%를 지급합니다.</li>
+        </ul>
+        <div class="phone-step-actions" style="margin-top: 1rem; display: flex; gap: .5rem; justify-content: flex-end;">
+          <button class="btn-secondary" id="settlement-notice-later" data-i18n="trackProduction.settlementNotice.laterBtn">다음에 보기</button>
+          <button class="btn-primary" id="settlement-notice-ok" data-i18n="trackProduction.settlementNotice.confirmBtn">확인했어요</button>
         </div>
       </div>
     </div>
@@ -568,28 +612,28 @@
       <button class="auth-modal-close" id="auth-modal-close">&times;</button>
       
       <div class="auth-modal-header">
-        <h2 class="auth-modal-title">로그인 / 회원가입</h2>
-        <p class="auth-modal-subtitle">Audionyx의 모든 서비스를 이용하려면<br>로그인이 필요합니다</p>
+        <h2 class="auth-modal-title" data-i18n="auth.modal.title">로그인 / 회원가입</h2>
+        <p class="auth-modal-subtitle" data-i18n="auth.modal.subtitle">Audionyx의 모든 서비스를 이용하려면<br>로그인이 필요합니다</p>
       </div>
       
       <div class="auth-methods">
         <!-- 이메일/아이디 및 비밀번호 로그인 폼 -->
         <form id="email-login-form" autocomplete="off">
           <div class="form-group">
-            <label for="login-email-id">아이디 또는 이메일</label>
-            <input type="text" id="login-email-id" placeholder="아이디 또는 이메일 주소" required autocomplete="username">
+            <label for="login-email-id" data-i18n="auth.login.emailLabel">아이디 또는 이메일</label>
+            <input type="text" id="login-email-id" data-i18n-placeholder="auth.login.emailPlaceholder" placeholder="아이디 또는 이메일 주소" required autocomplete="username">
             <div class="error-message" id="login-email-id-error"></div>
           </div>
           <div class="form-group">
-            <label for="login-password">비밀번호</label>
-            <input type="password" id="login-password" placeholder="비밀번호" required autocomplete="current-password">
+            <label for="login-password" data-i18n="auth.login.passwordLabel">비밀번호</label>
+            <input type="password" id="login-password" data-i18n-placeholder="auth.login.passwordPlaceholder" placeholder="비밀번호" required autocomplete="current-password">
             <div class="error-message" id="login-password-error"></div>
           </div>
-          <button type="submit" class="btn-primary auth-submit-btn">로그인</button>
+          <button type="submit" class="btn-primary auth-submit-btn" data-i18n="auth.login.loginBtn">로그인</button>
         </form>
 
         <div class="auth-divider">
-          <span>또는</span>
+          <span data-i18n="auth.divider">또는</span>
         </div>
         
         <!-- Google 로그인 버튼만 유지 -->
@@ -600,13 +644,13 @@
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
           </svg>
-          Google 계정으로 계속하기
+          <span data-i18n="auth.login.googleBtn">Google 계정으로 계속하기</span>
         </button>
       </div>
       
       <div class="auth-modal-footer">
-        <p>Audionyx가 처음이신가요? <a href="#" id="show-signup-modal-link" class="signup-link">회원가입 하기</a></p>
-        <p>로그인 시 <a href="#" onclick="event.preventDefault()">이용약관</a> 및 <a href="#" onclick="event.preventDefault()">개인정보처리방침</a>에 동의하게 됩니다</p>
+        <p data-i18n="auth.footer.newUser">Audionyx가 처음이신가요? <a href="#" id="show-signup-modal-link" class="signup-link" data-i18n="auth.footer.signupLink">회원가입 하기</a></p>
+        <p data-i18n="auth.footer.terms">로그인 시 <a href="#" onclick="event.preventDefault()">이용약관</a> 및 <a href="#" onclick="event.preventDefault()">개인정보처리방침</a>에 동의하게 됩니다</p>
       </div>
     </div>
   </div>
@@ -617,8 +661,8 @@
       <button class="auth-modal-close" id="signup-modal-close">&times;</button>
 
       <div class="auth-modal-header">
-        <h2 class="auth-modal-title">회원가입</h2>
-        <p class="auth-modal-subtitle">Audionyx에 오신 것을 환영합니다!<br>간단한 정보 입력으로 시작하세요</p>
+        <h2 class="auth-modal-title" data-i18n="auth.signup.title">회원가입</h2>
+        <p class="auth-modal-subtitle" data-i18n="auth.signup.subtitle">Audionyx에 오신 것을 환영합니다!<br>간단한 정보 입력으로 시작하세요</p>
       </div>
 
       <div class="auth-methods">

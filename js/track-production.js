@@ -94,6 +94,26 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 애니메이션 초기화
   initializeAnimations();
+
+  // ── 1회성 팝업 공지 (분기→월 정산 변경) ───────────────────────────────
+  try {
+    const STORAGE_KEY = 'audionyx.settlementNotice.dismissed.v1';
+    const dismissed = localStorage.getItem(STORAGE_KEY) === '1';
+    const modal = document.getElementById('settlement-notice-modal');
+    const btnClose = document.getElementById('settlement-notice-close');
+    const btnLater = document.getElementById('settlement-notice-later');
+    const btnOk = document.getElementById('settlement-notice-ok');
+    const open = () => { if (modal) { modal.style.display = 'flex'; setTimeout(()=>modal.classList.add('show'),10);} };
+    const close = () => { if (modal) { modal.classList.remove('show'); setTimeout(()=> modal.style.display = 'none', 200);} };
+    if (!dismissed && modal) {
+      setTimeout(open, 600); // 페이지 진입 후 약간 지연하여 표시
+    }
+    if (btnClose) btnClose.addEventListener('click', close);
+    if (btnLater) btnLater.addEventListener('click', close);
+    if (btnOk) btnOk.addEventListener('click', () => { try { localStorage.setItem(STORAGE_KEY, '1'); } catch(_){} close(); });
+  } catch (e) {
+    console.warn('정산 변경 공지 표시 중 경고:', e);
+  }
   
   // DOM 요소
   const requestForm = document.getElementById('track-request-form');
@@ -611,4 +631,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   console.log('트랙 제작 페이지 초기화 완료');
+  // i18n이 먼저/나중에 초기화돼도 본문 번역이 확실히 적용되도록 재동기화
+  try {
+    const reapply = () => {
+      if (window.i18next && typeof window.i18next.changeLanguage === 'function') {
+        const lang = window.i18next.language || 'ja';
+        window.i18next.changeLanguage(lang, () => {
+          if (typeof window.syncDynamicI18n === 'function') {
+            window.syncDynamicI18n();
+          }
+        });
+      }
+    };
+    // DOM 준비 직후 1회, 그리고 약간의 지연으로 한 번 더 시도
+    reapply();
+    setTimeout(reapply, 200);
+  } catch (e) {
+    console.warn('i18n 재적용 중 경고:', e);
+  }
 }); 

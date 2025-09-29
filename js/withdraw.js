@@ -120,18 +120,34 @@ let userChannels = []; // 사용자 채널 정보 저장
 let channelMonitoringUnsubscribe = null; // 채널 모니터링 해제 함수
 let currentLanguage = 'ko'; // 현재 선택된 언어
 
-// 은행별 계좌번호 형식 정보
+// 은행별 계좌번호 형식 정보 (유연한 범위 허용: 실제 계좌 길이 편차 대응)
+// length: 특정 자리수 집합, min/max: 범위 허용 (둘 중 하나만 사용하거나 병행 가능)
 const bankFormats = {
-  '국민은행': { length: [11, 14], example: '123456-78-901234' },
-  '신한은행': { length: [11, 12], example: '110-123-456789' },
-  '우리은행': { length: [13, 14], example: '1002-123-456789' },
-  '하나은행': { length: [11, 14], example: '123-456789-01234' },
-  '농협은행': { length: [11, 13], example: '123-12-123456' },
-  '기업은행': { length: [10, 11], example: '123-123456-01' },
-  'SC제일은행': { length: [11, 12], example: '123-12-123456' },
-  '카카오뱅크': { length: [13], example: '3333-12-1234567' },
-  '토스뱅크': { length: [13], example: '1000-12-1234567' }
+  '국민은행': { min: 10, max: 14, example: '123456-78-901234' },
+  '신한은행': { min: 10, max: 13, example: '110-123-456789' },
+  '우리은행': { min: 10, max: 14, example: '1002-123-456789' },
+  '하나은행': { min: 10, max: 15, example: '123-456789-01234' },
+  '농협은행': { min: 10, max: 13, example: '123-12-123456' },
+  '기업은행': { min: 10, max: 12, example: '123-123456-01' },
+  'SC제일은행': { min: 10, max: 13, example: '123-12-123456' },
+  '카카오뱅크': { min: 10, max: 13, example: '3333-12-1234567' },
+  '토스뱅크': { min: 10, max: 13, example: '1000-12-1234567' }
 };
+
+function expectedLengthText(format) {
+  if (!format) return '';
+  if (Array.isArray(format.length) && format.length.length > 0) {
+    const uniq = Array.from(new Set(format.length)).sort((a,b)=>a-b);
+    if (uniq.length === 1) return `${uniq[0]}자리`;
+    return `${uniq[0]}~${uniq[uniq.length-1]}자리`;
+  }
+  if (typeof format.min === 'number' && typeof format.max === 'number') {
+    return `${format.min}~${format.max}자리`;
+  }
+  if (typeof format.min === 'number') return `${format.min}자리 이상`;
+  if (typeof format.max === 'number') return `${format.max}자리 이하`;
+  return '';
+}
 
 // 언어 토글 기능
 function toggleLanguage(lang) {
@@ -292,7 +308,13 @@ function validateAccountNumber(bank, account) {
   if (!format) return true; // 알 수 없는 은행은 통과
   
   const accountLength = account.replace(/\D/g, '').length;
-  return format.length.includes(accountLength);
+  if (Array.isArray(format.length) && format.length.includes(accountLength)) return true;
+  if (typeof format.min === 'number' && typeof format.max === 'number') {
+    return accountLength >= format.min && accountLength <= format.max;
+  }
+  if (typeof format.min === 'number') return accountLength >= format.min;
+  if (typeof format.max === 'number') return accountLength <= format.max;
+  return true;
 }
 
 // 계좌번호 일치 확인
@@ -359,7 +381,7 @@ function validateKoreanAccount() {
   } else if (!validateAccountNumber(bankSelect.value, accountInput.value)) {
     const format = bankFormats[bankSelect.value];
     if (format) {
-      accountError.textContent = `${bankSelect.value}의 계좌번호 자릿수가 올바르지 않습니다. (${format.length.join('~')}자리)`;
+      accountError.textContent = `${bankSelect.value}의 계좌번호 자릿수가 올바르지 않습니다. (${expectedLengthText(format)})`;
       isValid = false;
     }
   }
@@ -474,7 +496,7 @@ function updateUI(data = null) {
         
         if (data.bank && bankFormats[data.bank]) {
           const format = bankFormats[data.bank];
-          formatExample.textContent = `예: ${format.example} (${format.length.join('~')}자리)`;
+          formatExample.textContent = `예: ${format.example} (${expectedLengthText(format)})`;
           accountFormatGuide.style.display = 'block';
         }
       }
@@ -776,6 +798,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if (!validateForm()) {
+      showToast('입력값을 확인해주세요.', 'error');
+      try {
+        const firstError = document.querySelector('.error-message:not(:empty)');
+        if (firstError) {
+          const wrap = firstError.closest('.form-group') || firstError;
+          try { wrap.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (_) {}
+          const input = wrap.querySelector('input, select, textarea');
+          if (input) { try { input.focus(); } catch (_) {} }
+        }
+      } catch (_) {}
       return;
     }
     
@@ -828,7 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedBank = e.target.value;
     if (selectedBank && bankFormats[selectedBank]) {
       const format = bankFormats[selectedBank];
-      formatExample.textContent = `예: ${format.example} (${format.length.join('~')}자리)`;
+      formatExample.textContent = `예: ${format.example} (${expectedLengthText(format)})`;
       accountFormatGuide.style.display = 'block';
     } else {
       accountFormatGuide.style.display = 'none';

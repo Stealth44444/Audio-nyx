@@ -9,6 +9,11 @@ interface MailData {
   to: string | string[];
   subject: string;
   html: string;
+  attachments?: Array<{
+    filename: string;
+    content: string; // base64 encoded string
+    contentType?: string;
+  }>;
 }
 
 // 이메일 유효성 검증 함수
@@ -40,6 +45,7 @@ export const sendMail = functions.https.onCall(async (data: any, context: any) =
   const to = actualData?.to;
   const subject = actualData?.subject || "Test Subject";
   const html = actualData?.html || "<h1>Test HTML</h1><p>This is a test email.</p>";
+  const attachmentsInput = actualData?.attachments as MailData["attachments"] | undefined;
   
   if (!to) {
     throw new functions.https.HttpsError("invalid-argument", "받는 사람 이메일 주소가 필요합니다.");
@@ -64,13 +70,24 @@ export const sendMail = functions.https.onCall(async (data: any, context: any) =
     });
 
     // 여러 이메일 주소로 동시에 발송
-    await transporter.sendMail({
+    const mailOptions: any = {
       from: `"Audionyx" <${gmailUser}>`,
       to: emailAddresses.join(", "), // 쉼표로 구분하여 여러 수신자에게 발송
       subject,
       html,
       text: html.replace(/<[^>]*>/g, "")   // HTML→텍스트 변환
-    });
+    };
+
+    if (attachmentsInput && Array.isArray(attachmentsInput) && attachmentsInput.length > 0) {
+      mailOptions.attachments = attachmentsInput.map(att => ({
+        filename: att.filename,
+        content: Buffer.from(att.content, "base64"),
+        contentType: att.contentType || undefined,
+        encoding: "base64"
+      }));
+    }
+
+    await transporter.sendMail(mailOptions);
 
     return { 
       ok: true, 

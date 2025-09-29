@@ -94,6 +94,17 @@ footer,
     text-align: center;
 }
 
+.page-subnote {
+    color: var(--color-text-gray);
+    font-size: 0.9rem;
+    text-align: center;
+    margin: -2rem 0 2.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .page-subnote { font-size: 0.85rem; margin: -1.5rem 0 2rem 0; }
+}
+
 /* === 출금 프로세스 안내 섹션 === */
 .withdraw-process-section {
     margin-top: 0;

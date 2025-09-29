@@ -124,6 +124,7 @@
     "step3Title": "Withholding Tax",
     "step3Desc": "3.3% withholding tax<br>Deposit net of tax<br>Automated tax process",
     "pageTitle": "Bank Account",
+    "mobileNote": "*If you encounter registration issues on mobile, please try again on a PC",
     "formTitle": "Register / Edit Account",
     "bankLabel": "Select Bank",
     "bankPlaceholder": "Please select a bank",
@@ -691,6 +692,12 @@
       "stat2": "Total Streams",
       "stat3": "Collab Artists",
       "contactBtn": "Request a Track"
+    },
+    "nyx": {
+      "badge": "Head Producer",
+      "title": "NYX",
+      "subtitle": "A producer crossing boundaries with creative sound",
+      "description": "Blending analog textures with modern electronic sound,<br>NYX designs immersive sonic narratives.<br><br>Experimental yet balanced with accessibility and emotion,<br>creating original tracks that pull listeners in."
     },
     "genres": { "title": "Specialized Genres" },
     "intro": {

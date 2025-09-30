@@ -1452,6 +1452,7 @@ html {
 .price-original { color: #aaa; text-decoration: line-through; }
 .price-arrow { color: #888; }
 .price-discount { color: var(--color-primary); font-weight: 800; font-size: 1.3rem; }
+.price-vat { color: var(--color-text-gray); font-size: .85rem; }
 .promo-period { color: var(--color-text-gray); font-size: .95rem; margin: .25rem 0 .5rem; }
 .promo-desc { color: #fff; font-size: .95rem; }
 

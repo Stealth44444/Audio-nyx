@@ -518,11 +518,22 @@ async function loadChannelsTable() {
     const keyword = (document.getElementById('filter-channels')?.value || '').toLowerCase();
     let filtered = statusFilter ? channelRows.filter(r => String(r.status).replace(/\s+/g,'_') === statusFilter) : channelRows;
     if (keyword) {
-      filtered = filtered.filter(r => (
-        (r.url || '').toLowerCase().includes(keyword) ||
-        (r.originalUrl || '').toLowerCase().includes(keyword) ||
-        (r.platform || '').toLowerCase().includes(keyword)
-      ));
+      filtered = filtered.filter(r => {
+        const owner = ownerMap[r.userId] || {};
+        const ownerCandidates = [
+          owner.nickname,
+          owner.displayName,
+          owner.username,
+          owner.name,
+          owner.email
+        ].filter(Boolean).map(v => String(v).toLowerCase());
+        return (
+          (r.url || '').toLowerCase().includes(keyword) ||
+          (r.originalUrl || '').toLowerCase().includes(keyword) ||
+          (r.platform || '').toLowerCase().includes(keyword) ||
+          ownerCandidates.some(v => v.includes(keyword))
+        );
+      });
     }
     if (sortMode === 'status') {
       filtered.sort((a, b) => {
@@ -649,6 +660,11 @@ async function loadTrackRequestsTable() {
         <td>${refUrl ? `<a href="${refUrl}" target="_blank" style="color:#3b82f6;">${displayRef}</a>` : '-'}</td>
         <td>${displayDesc}</td>
         <td>${createdStr}</td>
+        <td>
+          <div class="table-actions">
+            <button title="제작중" class="btn-quick btn-p" onclick="updateTrackRequestStatus('${request.id}', '제작중')">P</button>
+          </div>
+        </td>
         <td><span class="status-badge ${statusClass}">${normalized}</span></td>
       `;
       tbody.appendChild(row);

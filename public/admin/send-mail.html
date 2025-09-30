@@ -671,6 +671,11 @@
     function generateFinalConfirmationHtml({ trackTitle, artistName, coverFileName, trackFileName }) {
       const accountNumber = "823-910017-83704";
       const accountHolder = "주식회사 오디오닉스";
+      const basePrice = 49900; // KRW
+      const vatRate = 0.1; // 10%
+      const vatAmount = Math.round(basePrice * vatRate);
+      const totalPrice = basePrice + vatAmount;
+      const fmt = (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       return `
 <div style="font-family: 'Inter', 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif; background:#f6fbf9; padding:24px;">
   <div style="max-width:720px; margin:0 auto; background:#ffffff; border:1px solid #d9efe7; border-radius:12px; overflow:hidden;">
@@ -692,7 +697,10 @@
 
       <div style="border:1px solid #c8eadf; background:#eff9f5; border-radius:10px; padding:14px 16px; margin:14px 0;">
         <div style="font-weight:700; color:#0d2f25; margin-bottom:6px;">[2] 결제 및 확정 안내</div>
-        <div style="margin:4px 0;"><strong>입금 금액:</strong> 49,900원</div>
+        <div style="margin:4px 0; display:flex; justify-content:space-between; align-items:center;">
+          <div><strong>입금 금액 :</strong> ${totalPrice}원</div>
+          <div style="color:#6b7280; font-size:12px;">(${fmt(basePrice)} + VAT 10% = ${fmt(totalPrice)}원)</div>
+        </div>
         <div style="margin:4px 0;"><strong>입금 계좌:</strong> ${accountNumber} <span style="color:#2a7a62;">(예금주: ${accountHolder})</span></div>
         <div style="margin:4px 0;">송금 완료 후 <u>요청하신 아티스트 명</u>을 포함해 본 메일로 회신해 주시면, 빠르게 최종 확정 후 유통 진행해드리겠습니다.</div>
         <div style="margin:4px 0;">유통 완료 후 각 플랫폼(YouTube, Spotify 등) 등록이 마무리되면 별도 안내 메일을 다시 보내드리겠습니다.</div>

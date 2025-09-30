@@ -501,6 +501,29 @@
       { id: "track-submitted", label: "✅ 개인 음원 신청 접수완료", path: "/track-request-submitted.html" }
     ];
 
+    // 일반 텍스트 → HTML 변환 유틸 (줄바꿈 보존)
+    function isLikelyHtml(input) {
+      if (typeof input !== "string") return false;
+      return /<\/?[a-z][\s\S]*>/i.test(input);
+    }
+
+    function escapeHtml(unsafe) {
+      return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function toHtmlPreserveLineBreaks(input) {
+      const value = String(input ?? "");
+      if (isLikelyHtml(value)) return value;
+      const escaped = escapeHtml(value);
+      // 단순 줄바꿈을 <br>로 변환
+      return escaped.replace(/\r\n|\r|\n/g, '<br>');
+    }
+
     // 새로운 이메일 관련 DOM 요소들
     const tabIndividual = document.getElementById("tab-individual");
     const tabBulk = document.getElementById("tab-bulk");
@@ -857,7 +880,8 @@
 
     // 미리보기
     previewBtn.addEventListener("click", () => {
-      const html = document.getElementById("html").value;
+      const raw = document.getElementById("html").value;
+      const html = toHtmlPreserveLineBreaks(raw);
       previewContent.innerHTML = html;
       previewModal.classList.remove("hidden");
     });
@@ -872,7 +896,8 @@
       
       const emails = getAllEmails();
       const subject = document.getElementById("subject").value.trim();
-      const html = document.getElementById("html").value;
+      const rawHtmlInput = document.getElementById("html").value;
+      const html = toHtmlPreserveLineBreaks(rawHtmlInput);
 
       // 유효성 검증
       if (emails.length === 0) {

@@ -75,8 +75,27 @@ export const sendMail = functions.https.onCall(async (data: any, context: any) =
       to: emailAddresses.join(", "), // 쉼표로 구분하여 여러 수신자에게 발송
       subject,
       html,
-      text: html.replace(/<[^>]*>/g, "")   // HTML→텍스트 변환
+      // HTML이 없거나 일반 텍스트가 들어온 경우에도 줄바꿈 보존
+      // 1) text: 태그 제거 + 줄바꿈 유지
+      // 2) html이 태그가 없는 순수 텍스트로 보이면 <br>로 치환한 간단 HTML 생성
+      text: (() => {
+        const value = String(html ?? "");
+        const withoutTags = value.replace(/<[^>]*>/g, "");
+        return withoutTags;
+      })(),
     };
+
+    // 순수 텍스트가 들어온 경우 간단한 줄바꿈 보존 HTML 생성
+    const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(String(html || ''));
+    if (!looksLikeHtml) {
+      const escaped = String(html || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+      mailOptions.html = escaped.replace(/\r\n|\r|\n/g, '<br>');
+    }
 
     if (attachmentsInput && Array.isArray(attachmentsInput) && attachmentsInput.length > 0) {
       mailOptions.attachments = attachmentsInput.map(att => ({

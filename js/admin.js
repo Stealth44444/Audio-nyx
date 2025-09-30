@@ -651,7 +651,7 @@ async function loadTrackRequestsTable() {
       const displayDesc = desc.length > 60 ? desc.slice(0,60)+'...' : desc;
       const mapped = uidToUser[request.uid] || {};
       const displayName = mapped.nickname || request.uid || '-';
-      const displayEmail = mapped.email || request.userEmail || '-';
+      const displayEmail = request.userEmail || mapped.email || '-';
       
       row.innerHTML = `
         <td>${displayName}</td>

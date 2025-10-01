@@ -458,7 +458,7 @@
       "platformSelect": "プラットフォーム選択",
       "youtubeChannelUrl": "YouTubeチャンネルURL",
       "channelUrlPlaceholder": "https://www.youtube.com/c/チャンネル名",
-      "helpText": "YouTubeチャンネルURLまたは@ハンドルを入力してください",
+      "helpText": "YouTubeチャンネルURLまたは@ハンドルを入力してください。例: https://www.youtube.com/@Audionyx-o7b..., https://www.youtube.com/channel/UCKyR5HM..., https://www.youtube.com/@%E3%81%99%E3%81%A3%E3%81%A8...",
       "issuedKeyLabel": "発行された絵文字キー",
       "copy": "コピー",
       "cancel": "キャンセル",

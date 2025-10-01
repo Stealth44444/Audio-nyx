@@ -403,7 +403,7 @@
       "platformSelect": "Select Platform",
       "youtubeChannelUrl": "YouTube Channel URL",
       "channelUrlPlaceholder": "https://www.youtube.com/c/channelname or @handle",
-      "helpText": "Enter YouTube channel URL or @handle",
+      "helpText": "Enter your YouTube channel URL or @handle. e.g., https://www.youtube.com/@Audionyx-o7b..., https://www.youtube.com/channel/UCKyR5HM..., https://www.youtube.com/@%EC%88%8F%EB%8D...",
       "issuedKeyLabel": "Generated Emoji Key",
       "copy": "Copy",
       "cancel": "Cancel",

@@ -177,8 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const platformConfigs = {
       youtube: {
         label: 'YouTube 채널 URL',
-        placeholder: 'https://www.youtube.com/@핸들명 또는 https://studio.youtube.com/channel/UC.../editing',
-        helpText: 'YouTube 채널 URL(@핸들명 포함) 또는 Studio 링크(https://studio.youtube.com/channel/UC.../editing)도 허용됩니다',
+        placeholder: 'https://www.youtube.com/@핸들명 또는 https://www.youtube.com/channel/UC...',
+        helpText: (window.i18next && window.i18next.t('channelManagement.modal.helpText')) || 'YouTube 채널 URL 또는 @핸들을 입력하세요. 예: https://www.youtube.com/@Audionyx-o7b..., https://www.youtube.com/channel/UCKyR5HM..., https://www.youtube.com/@%EC%88%8F%EB%8D...',
         keyHelp: 'YouTube 채널 설명란에 위 키를 붙여넣으세요'
       },
       tiktok: {
@@ -198,7 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const config = platformConfigs[platform];
     if (urlLabel) urlLabel.textContent = config.label;
     if (urlInput) urlInput.placeholder = config.placeholder;
-    if (helpText) helpText.textContent = config.helpText;
+    if (helpText) {
+      // i18n 동기화: data-i18n 바인딩 요소와 동일한 키로부터 값 가져오기
+      const localized = (window.i18next && window.i18next.t('channelManagement.modal.helpText')) || config.helpText;
+      helpText.textContent = localized;
+    }
     if (keyHelpText) keyHelpText.textContent = config.keyHelp;
     
     // URL 입력값 초기화
@@ -1054,8 +1058,6 @@ document.addEventListener('DOMContentLoaded', () => {
         /^https?:\/\/(www\.)?youtube\.com\/user\/[a-zA-Z0-9_-]+\/?(\?.*)?$/,
         // 핸들(@) + 퍼센트 인코딩(UTF-8) 허용
         /^https?:\/\/(www\.)?youtube\.com\/@(?:[a-zA-Z0-9_.-]|%[0-9A-Fa-f]{2})+\/?(\?.*)?$/,
-        // YouTube Studio 채널 편집 링크 허용: https://studio.youtube.com/channel/UC.../editing
-        /^https?:\/\/studio\.youtube\.com\/channel\/[a-zA-Z0-9_-]+\/(editing|content|videos)?\/?(\?.*)?$/,
         // @핸들명만 (퍼센트 인코딩 허용)
         /^@(?:[a-zA-Z0-9_.-]|%[0-9A-Fa-f]{2})+$/
       ],
@@ -1482,7 +1484,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return { platform: null, name: '자동 감지됨', icon: '' };
     }
     
-    if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('studio.youtube.com')) {
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
       return {
         platform: 'youtube',
         name: 'YouTube',
@@ -2719,14 +2721,7 @@ function normalizeUrl(url, platform = 'youtube') {
         if (normalized.startsWith('@')) {
           normalized = `https://www.youtube.com/${normalized}`;
         }
-        // YouTube Studio URL을 표준 채널 URL로 정규화 (가능한 경우)
-        // 예: https://studio.youtube.com/channel/UC123.../editing -> https://www.youtube.com/channel/UC123...
-        if (normalized.startsWith('https://studio.youtube.com/channel/')) {
-          const match = normalized.match(/^https:\/\/studio\.youtube\.com\/channel\/([a-zA-Z0-9_-]+)/);
-          if (match && match[1]) {
-            normalized = `https://www.youtube.com/channel/${match[1]}`;
-          }
-        }
+        // Studio 링크는 허용하지 않음: 그대로 두어 검증에서 실패시키기
         // www 추가 (이미 www가 있는지 확인)
         if (normalized.includes('youtube.com/') && !normalized.includes('www.youtube.com/')) {
           normalized = normalized.replace('youtube.com/', 'www.youtube.com/');
@@ -3098,4 +3093,9 @@ window.syncDynamicI18n = function() {
   if (!toggleText || !toggleBtn) return;
   const isExpanded = toggleBtn.classList.contains('expanded');
   toggleText.textContent = (window.i18next && window.i18next.t(isExpanded ? 'channelManagement.contentLinks.hideLinks' : 'channelManagement.contentLinks.showLinks')) || toggleText.textContent;
+  // 모달 내 도움말 텍스트도 동기화
+  const helpText = document.getElementById('help-text');
+  if (helpText && window.i18next) {
+    helpText.textContent = window.i18next.t('channelManagement.modal.helpText');
+  }
 };

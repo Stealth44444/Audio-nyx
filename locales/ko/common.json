@@ -343,7 +343,7 @@
       "platformSelect": "플랫폼 선택",
       "youtubeChannelUrl": "YouTube 채널 URL",
       "channelUrlPlaceholder": "https://www.youtube.com/c/채널명 또는 @핸들명",
-      "helpText": "YouTube 채널 URL 또는 @핸들을 입력하세요",
+      "helpText": "YouTube 채널 URL 또는 @핸들을 입력하세요. 예: https://www.youtube.com/@Audionyx-o7b..., https://www.youtube.com/channel/UCKyR5HM..., https://www.youtube.com/@%EC%88%8F%EB%8D...",
       "issuedKeyLabel": "발급된 이모지 키",
       "copy": "복사",
       "cancel": "취소",

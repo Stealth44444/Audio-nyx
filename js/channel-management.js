@@ -900,17 +900,32 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 상태 태그 렌더링
   function renderStatusTag(status) {
-    if (status === '검사중') {
-      return `<span class="tag-pending">검사중</span>`;
-    } else if (status === '검사완료') {
-      return `<span class="tag-verified">검사완료</span>`;
-    } else if (status === '이모지 키 누락') {
-      return `<span class="tag-missing-emoji">이모지 키 누락</span>`;
-    } else if (status === 'Url 재확인') {
-      return `<span class="tag-recheck-url">Url 재확인</span>`;
-    } else {
-      return `<span>${status}</span>`;
+    let statusKey;
+    let statusClass;
+
+    switch (status) {
+      case '검사중':
+        statusKey = 'channelManagement.status.pending';
+        statusClass = 'tag-pending';
+        break;
+      case '검사완료':
+        statusKey = 'channelManagement.status.verified';
+        statusClass = 'tag-verified';
+        break;
+      case '이모지 키 누락':
+        statusKey = 'channelManagement.status.missingEmoji';
+        statusClass = 'tag-missing-emoji';
+        break;
+      case 'Url 재확인':
+        statusKey = 'channelManagement.status.recheckUrl';
+        statusClass = 'tag-recheck-url';
+        break;
+      default:
+        return `<span>${status}</span>`;
     }
+
+    const translatedStatus = window.i18next ? window.i18next.t(statusKey) : status;
+    return `<span class="${statusClass}">${translatedStatus}</span>`;
   }
   
   // 플랫폼 아이콘 렌더링
@@ -1944,6 +1959,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // 페이지네이션 UI 업데이트
     updatePagination(totalItems, totalPages);
   }
+
+  // 채널 목록 재렌더링 함수 (언어 변경 시 호출)
+  function rerenderChannels() {
+    if (channelsData && channelsData.length > 0) {
+      const docs = channelsData.map(channel => ({ data: () => channel }));
+      renderChannelTable(docs);
+      renderChannelCards(docs);
+    }
+  }
+  window.rerenderChannelManagement = rerenderChannels;
 
   // 컨텐츠 링크 토글 기능
   function toggleContentLinksVisibility() {

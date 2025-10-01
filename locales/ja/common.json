@@ -446,7 +446,10 @@
       }
     },
     "status": {
-      "verified": "検査完了",
+      "pending": "検査中",
+      "verified": "確認済み",
+      "missingEmoji": "絵文字キー不明",
+      "recheckUrl": "URL再確認",
       "failed": "検証失敗"
     },
     "modal": {

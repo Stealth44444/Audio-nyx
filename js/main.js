@@ -83,13 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log("[main.js] 전역 입력 필드 활성화 완료");
     
-    // 공지 모달 (2025-09-15) 지속 표기 로직: '다시 보지 않기' 전까지 표시
+    // 공지 모달 (2025-10-03 추석) 지속 표기 로직: '다시 보지 않기' 전까지 표시
     try {
-        const NOTICE_KEY = 'notice_20250915_dismissed_v2';
-        const modal = document.getElementById('notice-modal-20250915');
-        const btnClose = document.getElementById('notice-modal-close-20250915');
-        const btnDismiss = document.getElementById('notice-modal-dismiss-20250915');
-        const cta = document.getElementById('notice-modal-cta-20250915');
+        const NOTICE_KEY = 'notice_20251003_dismissed_v1';
+        const modal = document.getElementById('notice-modal-20251003');
+        const btnClose = document.getElementById('notice-modal-close-20251003');
+        const btnDismiss = document.getElementById('notice-modal-dismiss-20251003');
+        const cta = document.getElementById('notice-modal-cta-20251003');
         
         if (modal && !localStorage.getItem(NOTICE_KEY)) {
             // 메인 진입 시마다 노출 (닫더라도 재방문 시 다시 표시)

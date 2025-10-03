@@ -134,6 +134,14 @@ function formatDurationSeconds(totalSeconds) {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
+function formatDateYYMMDD(date) {
+    if (!date || isNaN(date.getTime())) return '-';
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}/${month}/${day}`;
+}
+
 async function assertAdminOrThrow() {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -450,10 +458,10 @@ async function loadUsersTable() {
     filteredUsers.forEach(user => {
       const row = document.createElement('tr');
       const createdAt = user.createdAt?.toDate ? user.createdAt.toDate() : (user.createdAt && user.createdAt.seconds ? new Date(user.createdAt.seconds * 1000) : (typeof user.createdAt === 'string' || typeof user.createdAt === 'number' ? new Date(user.createdAt) : null));
-      const createdStr = (createdAt && !isNaN(createdAt.getTime())) ? createdAt.toLocaleDateString('ko-KR') : '-';
+      const createdStr = formatDateYYMMDD(createdAt);
       
       row.innerHTML = `
-        <td>${user.displayName || user.nickname || '-'}</td>
+        <td>${user.nickname || user.displayName || user.username || '-'}</td>
         <td>${user.email || '-'}</td>
         <td>${user.username || '-'}</td>
         <td>${user.phone || '-'}</td>
@@ -556,13 +564,13 @@ async function loadChannelsTable() {
     filtered.forEach(channel => {
       const row = document.createElement('tr');
       const chDate = channel.createdAt ? (channel.createdAt.toDate ? channel.createdAt.toDate() : (channel.createdAt.seconds ? new Date(channel.createdAt.seconds * 1000) : new Date(channel.createdAt))) : null;
-      const createdStr = (chDate && !isNaN(chDate.getTime())) ? chDate.toLocaleDateString('ko-KR') : '-';
+      const createdStr = formatDateYYMMDD(chDate);
       const normalizedStatus = channel.status || 'pending';
       const sanitizedStatus = String(normalizedStatus).replace(/\s+/g, '_');
       const statusClass = `status-${sanitizedStatus}`;
       
       const owner = ownerMap[channel.userId] || {};
-      const displayName = owner.nickname || channel.userId;
+      const displayName = owner.nickname || owner.displayName || owner.username || owner.email || channel.userId;
       row.innerHTML = `
         <td>${displayName}</td>
         <td><a href="${channel.originalUrl || channel.url}" target="_blank" style="color:#3b82f6;">${(channel.originalUrl || channel.url || '').substring(0, 40)}...</a></td>
@@ -634,39 +642,107 @@ async function loadTrackRequestsTable() {
 
     // 상태 필터 적용 (선택 시)
     const statusFilter = (document.getElementById('filter-track-requests-status')?.value || '').trim();
-    const filtered = statusFilter ? requests.filter(r => (r.status || '').toLowerCase() === statusFilter.toLowerCase()) : requests;
+    const keyword = (document.getElementById('filter-track-requests')?.value || '').toLowerCase();
+    let filtered = requests;
+
+    if (statusFilter) {
+      filtered = filtered.filter(r => (r.status || '').toLowerCase() === statusFilter.toLowerCase());
+    }
+    if (keyword) {
+      filtered = filtered.filter(r => {
+        const owner = uidToUser[r.uid] || {};
+        const ownerCandidates = [
+          owner.nickname,
+          owner.displayName,
+          owner.username,
+          owner.email
+        ].filter(Boolean).map(v => String(v).toLowerCase());
+
+        return (
+          (r.description || '').toLowerCase().includes(keyword) ||
+          (r.request || '').toLowerCase().includes(keyword) ||
+          (r.genre || '').toLowerCase().includes(keyword) ||
+          (r.referenceUrl || '').toLowerCase().includes(keyword) ||
+          (r.userEmail || '').toLowerCase().includes(keyword) ||
+          ownerCandidates.some(v => v.includes(keyword))
+        );
+      });
+    }
 
     filtered.forEach(request => {
       const row = document.createElement('tr');
       const createdAt = request.createdAt?.toDate?.() || null;
-      const createdStr = createdAt ? createdAt.toLocaleDateString('ko-KR') : '-';
+      const createdStr = formatDateYYMMDD(createdAt);
       const normalized = request.status || 'pending';
       let statusClass = `status-${normalized}`;
-      if (normalized === '제작중') statusClass = 'status-제작중';
-      if (normalized === '미제작') statusClass = 'status-미제작';
+      let statusContent = normalized;
+
+      if (normalized === '제작중') {
+        statusClass = 'status-제작중';
+        statusContent = '<span class="status-dot blue" title="제작중"></span>';
+      } else if (normalized === '미제작') {
+        statusClass = 'status-미제작';
+        statusContent = '<span class="status-dot yellow" title="미제작"></span>';
+      }
+      
       const refUrl = request.referenceUrl || request.refUrl || request.sampleUrl || '';
       const displayRef = refUrl ? (refUrl.length > 60 ? refUrl.slice(0,60)+'...' : refUrl) : '-';
       const genre = request.genre || request.category || '-';
       const desc = (request.description || request.request || '').toString();
       const displayDesc = desc.length > 60 ? desc.slice(0,60)+'...' : desc;
       const mapped = uidToUser[request.uid] || {};
-      const displayName = mapped.nickname || request.uid || '-';
-      const displayEmail = request.userEmail || mapped.email || '-';
+      const displayName = mapped.nickname || mapped.displayName || mapped.username || mapped.email || request.uid || '-';
+      const displayEmail = request.email || request.userEmail || mapped.email || '-';
       
       row.innerHTML = `
         <td>${displayName}</td>
         <td>${displayEmail}</td>
         <td>${genre}</td>
-        <td>${refUrl ? `<a href="${refUrl}" target="_blank" style="color:#3b82f6;">${displayRef}</a>` : '-'}</td>
-        <td>${displayDesc}</td>
+        <td></td>
+        <td></td>
         <td>${createdStr}</td>
         <td>
           <div class="table-actions">
             <button title="제작중" class="btn-quick btn-p" onclick="updateTrackRequestStatus('${request.id}', '제작중')">P</button>
           </div>
         </td>
-        <td><span class="status-badge ${statusClass}">${normalized}</span></td>
+        <td><span class="status-badge ${statusClass}">${statusContent}</span></td>
       `;
+
+      const refCell = row.cells[3];
+      if (refUrl) {
+        const link = document.createElement('a');
+        link.href = refUrl;
+        link.target = '_blank';
+        link.textContent = displayRef;
+        link.style.color = '#3b82f6';
+        refCell.appendChild(link);
+
+        if (refUrl.length > 60) {
+            const ellipsisBtn = document.createElement('span');
+            ellipsisBtn.className = 'ellipsis-btn';
+            ellipsisBtn.textContent = '...';
+            ellipsisBtn.onclick = () => {
+                showModal(refUrl);
+            };
+            refCell.appendChild(ellipsisBtn);
+        }
+      } else {
+        refCell.textContent = '-';
+      }
+
+      const descCell = row.cells[4];
+      descCell.textContent = displayDesc;
+      if (desc.length > 60) {
+          const ellipsisBtn = document.createElement('span');
+          ellipsisBtn.className = 'ellipsis-btn';
+          ellipsisBtn.textContent = '...';
+          ellipsisBtn.onclick = () => {
+              showModal(desc);
+          };
+          descCell.appendChild(ellipsisBtn);
+      }
+
       tbody.appendChild(row);
     });
 
@@ -716,19 +792,34 @@ async function loadContentLinksTable() {
     // 사용자명 매핑
     const linkOwnerMap = await getUserInfoMap(Array.from(linkOwnerIds));
 
-    // 카운트 표시
     const cntEl = document.getElementById('content-links-count');
-    if (cntEl) cntEl.textContent = String(linkRows.length);
+    const keyword = (document.getElementById('filter-content-links')?.value || '').toLowerCase();
+    const filtered = keyword ? linkRows.filter(link => {
+        const owner = linkOwnerMap[link.userId] || {};
+        const ownerCandidates = [
+            owner.nickname,
+            owner.displayName,
+            owner.username,
+            owner.email
+        ].filter(Boolean).map(v => String(v).toLowerCase());
+        return (
+            (link.resolvedUrl || '').toLowerCase().includes(keyword) ||
+            (link.platform || '').toLowerCase().includes(keyword) ||
+            ownerCandidates.some(v => v.includes(keyword))
+        );
+    }) : linkRows;
 
-    if (linkRows.length === 0) {
+    if (cntEl) cntEl.textContent = String(filtered.length);
+
+    if (filtered.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#6b7280; padding:20px;">등록된 콘텐츠링크가 없습니다.</td></tr>';
       return;
     }
 
-    linkRows.forEach(link => {
+    filtered.forEach(link => {
       const row = document.createElement('tr');
       const lDate = link.createdAt ? (link.createdAt.toDate ? link.createdAt.toDate() : (link.createdAt.seconds ? new Date(link.createdAt.seconds * 1000) : new Date(link.createdAt))) : null;
-      const createdStr = (lDate && !isNaN(lDate.getTime())) ? lDate.toLocaleDateString('ko-KR') : '-';
+      const createdStr = formatDateYYMMDD(lDate);
       const url = link.resolvedUrl || '';
       const displayUrl = url ? (url.length > 80 ? url.slice(0,80) + '...' : url) : '-';
       const lower = (url || '').toLowerCase();
@@ -740,7 +831,7 @@ async function loadContentLinksTable() {
       const icon = getPlatformIconSvg(platformResolved);
       
       const owner = linkOwnerMap[link.userId] || {};
-      const displayName = owner.nickname || link.userId;
+      const displayName = owner.nickname || owner.displayName || owner.username || owner.email || link.userId;
       row.innerHTML = `
         <td>${displayName}</td>
         <td><span class="platform-icon" style="margin-right:6px; display:inline-flex; align-items:center;">${icon}</span><a href="${url || '#'}" target="_blank" style="color:#3b82f6;">${displayUrl}</a></td>
@@ -1242,11 +1333,33 @@ async function loadAccountsTable() {
       uidToLinks[docSnap.id] = arr;
     });
 
+    const keyword = (document.getElementById('filter-accounts')?.value || '').toLowerCase();
+    const filtered = keyword ? accounts.filter(account => {
+        const owner = ownerMap[account.id] || {};
+        const ownerCandidates = [
+            owner.nickname,
+            owner.displayName,
+            owner.username,
+            owner.email
+        ].filter(Boolean).map(v => String(v).toLowerCase());
+        return (
+            (account.bank || '').toLowerCase().includes(keyword) ||
+            (account.accountHolder || '').toLowerCase().includes(keyword) ||
+            (account.accountNumber || '').toLowerCase().includes(keyword) ||
+            ownerCandidates.some(v => v.includes(keyword))
+        );
+    }) : accounts;
+
     // 총 계좌 개수 뱃지
     const accountsCountEl = document.getElementById('accounts-count');
-    if (accountsCountEl) accountsCountEl.textContent = String(accounts.length);
+    if (accountsCountEl) accountsCountEl.textContent = String(filtered.length);
 
-    accounts.forEach(account => {
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#6b7280; padding:20px;">등록된 계좌 정보가 없습니다.</td></tr>';
+      return;
+    }
+
+    filtered.forEach(account => {
       const row = document.createElement('tr');
       const rawDate = account.createdAt || account.updatedAt || null;
       const createdAt = rawDate
@@ -1254,9 +1367,9 @@ async function loadAccountsTable() {
            : (rawDate.seconds ? new Date(rawDate.seconds * 1000)
               : (typeof rawDate === 'string' || typeof rawDate === 'number' ? new Date(rawDate) : null)))
         : null;
-      const createdStr = (createdAt && !isNaN(createdAt.getTime())) ? createdAt.toLocaleDateString('ko-KR') : '-';
+      const createdStr = formatDateYYMMDD(createdAt);
       const owner = ownerMap[account.id] || {};
-      const displayName = owner.nickname || account.id;
+      const displayName = owner.nickname || owner.displayName || owner.username || owner.email || account.id;
       const links = uidToLinks[account.id] || [];
       const options = links.length
         ? ['<option value="" disabled selected>링크 선택</option>'].concat(
@@ -1402,6 +1515,35 @@ window.deleteContentLinkWithConfirm = deleteContentLinkWithConfirm;
 window.deleteTrackWithConfirm = deleteTrackWithConfirm;
 window.deleteAccountWithConfirm = deleteAccountWithConfirm;
 
+const modal = document.getElementById('content-modal');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalBody = document.getElementById('modal-body')?.querySelector('pre');
+
+function showModal(content) {
+    if (!modal || !modalBody) return;
+    modalBody.textContent = content;
+    modal.style.display = 'flex';
+}
+
+function hideModal() {
+    if (!modal) return;
+    modal.style.display = 'none';
+    if (modalBody) modalBody.textContent = '';
+}
+
+function initModal() {
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+    }
+    if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', hideModal);
+    }
+}
+
 function main() {
   initGate();
   bindEvents();
@@ -1409,6 +1551,7 @@ function main() {
   showProjectInfo();
   initAdminAuth();
   bindTrackUploadUI();
+  initModal();
 }
 
 function bindPresetButtons() {
@@ -1440,8 +1583,14 @@ function bindPresetButtons() {
         }
       } else if (collectionName === 'contentLinks') {
         await loadContentLinksTable();
+        const searchInput = document.getElementById('filter-content-links');
+        if (searchInput) searchInput.oninput = () => loadContentLinksTable();
       } else if (collectionName === 'track_requests') {
         await loadTrackRequestsTable();
+        const searchInput = document.getElementById('filter-track-requests');
+        if (searchInput) searchInput.oninput = () => loadTrackRequestsTable();
+        const statusSelect = document.getElementById('filter-track-requests-status');
+        if (statusSelect) statusSelect.onchange = () => loadTrackRequestsTable();
       } else if (collectionName === 'track_new') {
         await loadTracksTable();
         // 제목 검색 oninput 바인딩
@@ -1451,6 +1600,8 @@ function bindPresetButtons() {
         bindTrackUploadUI();
       } else if (collectionName === 'user_withdraw_accounts') {
         await loadAccountsTable();
+        const searchInput = document.getElementById('filter-accounts');
+        if (searchInput) searchInput.oninput = () => loadAccountsTable();
       } else {
         // 기본 컬렉션 로드
         await loadCollection(collectionName);

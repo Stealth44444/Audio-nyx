@@ -924,36 +924,49 @@
       sendBtn.textContent = `📨 ${emails.length}개 이메일로 개별 발송 중...`;
 
       try {
-        const sendMail = httpsCallable(functions, "sendMail");
+        // onRequest 함수 URL - us-central1 리전 및 프로젝트 ID에 맞게 설정
+        const functionUrl = "https://us-central1-audionyx-a7b2e.cloudfunctions.net/sendMail";
+        
         let sentCount = 0;
         const sentEmails = [];
         const failedEmails = [];
 
-        // 각 이메일 주소로 개별 발송 (1대1 발송으로 처리)
         for (let i = 0; i < emails.length; i++) {
           const email = emails[i];
           
           try {
-            // 진행 상황 표시
             sendBtn.textContent = `📨 발송 중... (${i + 1}/${emails.length})`;
             
+            const idToken = await currentUser.getIdToken();
+
             const mailData = { 
-              to: email, // 단일 이메일로 개별 발송
+              to: email,
               subject, 
               html,
-              // 최종 확인 템플릿을 통해 준비된 첨부파일이 있으면 포함
               ...(typeof currentAttachments !== "object" || currentAttachments === null ? {} : { attachments: currentAttachments })
             };
+
+            const response = await fetch(functionUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${idToken}`
+              },
+              body: JSON.stringify(mailData)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+              throw new Error(result.error || `HTTP error! status: ${response.status}`);
+            }
             
-            const result = await sendMail(mailData);
             console.log(`이메일 발송 성공: ${email}`, result);
-            
             sentCount++;
             sentEmails.push(email);
-            
-            // 발송 간격 조정 (rate limiting 방지)
+
             if (i < emails.length - 1) {
-              await new Promise(resolve => setTimeout(resolve, 500)); // 0.5초 대기
+              await new Promise(resolve => setTimeout(resolve, 500));
             }
             
           } catch (emailError) {
@@ -964,7 +977,6 @@
         
         // 발송 결과 처리
         if (sentCount === emails.length) {
-          // 모든 이메일 발송 성공
           showResult(
             `✅ 개별 메일 발송이 성공적으로 완료되었습니다!\n` +
             `📧 발송 완료: ${sentCount}개 이메일 (각각 1대1 개별 발송)\n` +
@@ -972,7 +984,6 @@
             "success"
           );
         } else if (sentCount > 0) {
-          // 일부 발송 성공
           showResult(
             `⚠️ 일부 메일 발송이 완료되었습니다.\n` +
             `✅ 성공: ${sentCount}개 이메일\n` +
@@ -982,7 +993,6 @@
             "warning"
           );
         } else {
-          // 모든 발송 실패
           showResult(
             `❌ 모든 메일 발송이 실패했습니다.\n` +
             `💥 실패 수신자: ${failedEmails.slice(0, 3).map(f => f.email).join(", ")}${failedEmails.length > 3 ? ` 외 ${failedEmails.length - 3}명` : ""}\n` +
@@ -993,28 +1003,17 @@
         
         // 폼 초기화
         mailForm.reset();
-        // 이전에 준비된 첨부 초기화 (의도치 않은 재사용 방지)
         currentAttachments = null;
         
-        // 개별 추가 모드라면 이메일 목록도 초기화
         if (!individualMode.classList.contains("hidden")) {
           emailList.innerHTML = `
             <div class="flex gap-3 email-item">
-              <input 
-                type="email" 
-                class="audionyx-input flex-1 p-4 rounded-xl font-medium email-input" 
-                placeholder="recipient@example.com"
-              />
-              <button 
-                type="button" 
-                class="audionyx-btn-secondary px-4 py-4 rounded-xl transition-all remove-email hover:bg-red-500 hover:border-red-500"
-                title="이메일 제거"
-              >
+              <input type="email" class="audionyx-input flex-1 p-4 rounded-xl font-medium email-input" placeholder="recipient@example.com"/>
+              <button type="button" class="audionyx-btn-secondary px-4 py-4 rounded-xl transition-all remove-email hover:bg-red-500 hover:border-red-500" title="이메일 제거">
                 <span class="text-lg">🗑️</span>
               </button>
             </div>
           `;
-          // 이벤트 리스너 다시 추가
           document.querySelector(".email-input").addEventListener("input", updateEmailCount);
           document.querySelector(".remove-email").addEventListener("click", (e) => {
             if (emailList.children.length > 1) {
@@ -1027,16 +1026,10 @@
         updateEmailCount();
         
       } catch (error) {
-        console.error("메일 발송 오류:", error);
-        console.error("오류 상세:", {
-          code: error.code,
-          message: error.message,
-          details: error.details
-        });
+        console.error("메일 발송 프로세스 오류:", error);
         showResult(
-          `❌ 메일 발송에 실패했습니다.\n` +
-          `💬 오류 메시지: ${error.message}\n` +
-          `🎯 대상 이메일: ${emails.length}개`, 
+          `❌ 메일 발송 중 심각한 오류가 발생했습니다.\n` +
+          `💬 오류 메시지: ${error.message}`, 
           "error"
         );
       } finally {

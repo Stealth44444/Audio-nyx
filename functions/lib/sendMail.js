@@ -44,36 +44,30 @@ function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email.trim());
 }
-// 이메일 주소들을 배열로 파싱하는 함수
-function parseEmailAddresses(to) {
-    if (Array.isArray(to)) {
-        return to.map(email => email.trim()).filter(email => email && isValidEmail(email));
+exports.sendMail = functions.https.onRequest(async (req, res) => {
+    // CORS 헤더 수동 설정
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    // Preflight OPTIONS 요청 처리
+    if (req.method === 'OPTIONS') {
+        res.status(204).send('');
+        return;
     }
-    // 쉼표, 세미콜론, 줄바꿈으로 구분된 이메일 주소들을 파싱
-    return to
-        .split(/[,;\n]/)
-        .map(email => email.trim())
-        .filter(email => email && isValidEmail(email));
-}
-exports.sendMail = functions.https.onCall(async (data, context) => {
-    // 디버깅: 받은 데이터 구조 로깅
-    console.log("data의 타입:", typeof data);
-    console.log("data의 키들:", Object.keys(data || {}));
-    // 실제 데이터는 data.data 안에 있을 수 있음
-    const actualData = (data === null || data === void 0 ? void 0 : data.data) || data;
-    const to = actualData === null || actualData === void 0 ? void 0 : actualData.to;
-    const subject = (actualData === null || actualData === void 0 ? void 0 : actualData.subject) || "Test Subject";
-    const html = (actualData === null || actualData === void 0 ? void 0 : actualData.html) || "<h1>Test HTML</h1><p>This is a test email.</p>";
-    const attachmentsInput = actualData === null || actualData === void 0 ? void 0 : actualData.attachments;
-    if (!to) {
-        throw new functions.https.HttpsError("invalid-argument", "받는 사람 이메일 주소가 필요합니다.");
+    const { to, subject, html, attachments: attachmentsInput } = req.body;
+    if (!to || typeof to !== "string") {
+        res.status(400).json({ success: false, error: "Recipient email address (to) must be a string." });
+        return;
     }
-    // 이메일 주소들을 파싱하고 검증
-    const emailAddresses = parseEmailAddresses(to);
-    if (emailAddresses.length === 0) {
-        throw new functions.https.HttpsError("invalid-argument", "유효한 이메일 주소가 없습니다.");
+    if (!isValidEmail(to)) {
+        res.status(400).json({ success: false, error: `"${to}" is not a valid email address.` });
+        return;
     }
-    console.log(`${emailAddresses.length}개의 이메일 주소로 발송 시도:`, emailAddresses);
+    if (!subject || !html) {
+        res.status(400).json({ success: false, error: "Fields 'subject' and 'html' are required." });
+        return;
+    }
+    console.log(`Attempting to send email to:`, to);
     try {
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -82,32 +76,32 @@ exports.sendMail = functions.https.onCall(async (data, context) => {
                 pass: gmailPass
             }
         });
-        // 여러 이메일 주소로 동시에 발송
         const mailOptions = {
             from: `"Audionyx" <${gmailUser}>`,
-            to: emailAddresses.join(", "), // 쉼표로 구분하여 여러 수신자에게 발송
+            to: to,
             subject,
             html,
-            text: html.replace(/<[^>]*>/g, "") // HTML→텍스트 변환
+            text: html.replace(/<[^>]*>/g, ""),
         };
         if (attachmentsInput && Array.isArray(attachmentsInput) && attachmentsInput.length > 0) {
-            mailOptions.attachments = attachmentsInput.map(att => ({
+            mailOptions.attachments = attachmentsInput.map((att) => ({
                 filename: att.filename,
-                content: Buffer.from(att.content, "base64"),
+                content: att.content,
+                encoding: "base64",
                 contentType: att.contentType || undefined,
-                encoding: "base64"
             }));
         }
         await transporter.sendMail(mailOptions);
-        return {
-            ok: true,
-            sentTo: emailAddresses,
-            count: emailAddresses.length
-        };
+        res.status(200).json({
+            success: true,
+            sentTo: [to],
+            count: 1
+        });
     }
     catch (error) {
-        console.error("메일 발송 오류:", error);
-        throw new functions.https.HttpsError("internal", `메일 발송 실패: ${error}`);
+        console.error("Error sending email:", error);
+        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+        res.status(500).json({ success: false, error: `Failed to send email: ${errorMessage}` });
     }
 });
 //# sourceMappingURL=sendMail.js.map

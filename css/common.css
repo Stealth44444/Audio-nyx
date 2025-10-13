@@ -61,6 +61,14 @@
 }
 
 /* === 기본 스타일 === */
+
+/* Text utility classes */
+.text-primary { color: var(--color-primary) !important; }
+.text-accent { color: var(--color-accent) !important; }
+.text-warning { color: #FFD700; } /* Gold color for warning */
+.text-danger { color: #ff4757; } /* A danger/error color */
+.font-bold { font-weight: 700 !important; }
+
 * {
     margin: 0;
     padding: 0;
@@ -90,7 +98,7 @@
     border-radius: 20px;
     width: 92%;
     max-width: 520px;
-    padding: 24px;
+    padding: 32px; /* Increased padding */
     color: #fff;
     position: relative;
     box-shadow: 0 20px 40px rgba(0,0,0,0.45), 0 0 60px rgba(62, 180, 137, 0.12);
@@ -98,8 +106,8 @@
 
 .notice-modal-close {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 16px; /* Adjusted position */
+    right: 16px; /* Adjusted position */
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -107,10 +115,16 @@
     border: 1px solid rgba(255,255,255,0.2);
     color: rgba(255,255,255,0.85);
     cursor: pointer;
+    z-index: 10; /* Added z-index */
 }
 
 .notice-modal-body h2 { margin-bottom: 8px; }
-.notice-modal-body p { color: rgba(255,255,255,0.8); margin-bottom: 16px; }
+.notice-modal-body p { 
+    color: rgba(255,255,255,0.9); /* Brighter text */
+    margin-bottom: 16px;
+    font-size: 1.05em; /* Slightly larger font */
+    line-height: 1.6; /* More space between lines */
+}
 
 .notice-modal-actions { display: flex; gap: 10px; }
 .notice-modal-actions .btn-primary { flex: 1; text-align: center; }

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audionyx Original 음원 협업 프로젝트 종료 안내 - AUDIONYX</title>
+    <meta name="description" content="Audionyx Original 음원 협업 프로젝트 종료 안내">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/common.css">
+    
+    <!-- Firebase v10 -->
+    <script type="module" src="../js/firebase.js?v=20250116"></script>
+    <script src="../js/i18n.js?v=20250116"></script>
+    
+    <style>
+        .notice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.9);
+            border-radius: 12px;
+            border: 1px solid rgba(62, 180, 137, 0.2);
+            margin-top: 100px;
+            margin-bottom: 2rem;
+        }
+        
+        .notice-title {
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .notice-date {
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        .notice-content {
+            color: var(--color-text-light);
+            line-height: 1.8;
+        }
+        
+        .notice-article {
+            margin-bottom: 2rem;
+        }
+        
+        .notice-article h2 {
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .notice-article h3 {
+            color: var(--color-accent);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .notice-article p {
+            margin-bottom: 1rem;
+        }
+        
+        .notice-article ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            list-style-type: disc;
+        }
+        
+        .notice-article li {
+            margin-bottom: 0.5rem;
+        }
+
+        .notice-signature {
+            text-align: right;
+            margin-top: 3rem;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .notice-container {
+                margin-top: 80px;
+                padding: 1rem;
+            }
+            
+            .notice-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo-area">
+                <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+            </div>
+            <nav role="navigation" class="menu-area">
+                <ul>
+                    <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
+                    <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
+                    <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
+                    <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+                    <li><a href="channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+                    <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+                </ul>
+            </nav>
+            <div class="language-toggle">
+                <span class="language-option active" data-lang="ko">KR</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="ja">JP</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="en">EN</span>
+            </div>
+            <div class="auth-buttons">
+                <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
+            </div>
+            <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
+                <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
+                <span id="user-name" class="user-name"></span>
+                <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="producer.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
+                    </a>
+                    <a href="channel-management.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                        <span data-i18n="navbar.channel">채널 관리</span>
+                    </a>
+                    <a href="withdraw.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12V7H5a2 2 0 010-4h14v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 5v14a2 2 0 002 2h16v-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 12a2 2 0 100-4 2 2 0 000 4z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span data-i18n="navbar.withdraw">정산/출금</span>
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a href="#" class="dropdown-item logout" onclick="handleLogout()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16,17 21,12 16,7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span data-i18n="navbar.logout">로그아웃</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="notice-container">
+            <h1 class="notice-title">Audionyx Original 음원 협업 프로젝트 종료 안내</h1>
+            <div class="notice-date">
+                게시일: 2025년 10월 13일
+            </div>
+            
+            <div class="notice-content">
+                <p>안녕하세요, Audionyx입니다.<br>
+                먼저 <span class="text-primary font-bold">Audionyx Original 음원 협업 프로젝트</span>에 참여해 주시고 많은 관심을 보내주신 모든 크리에이터분들께 진심으로 감사드립니다.</p>
+
+                <p>다만, 최근 유튜브의 음악 콘텐츠 정책 및 커뮤니티 가이드 준수 강화로 인해 유감스럽게도 <span class="text-primary font-bold">Audionyx Original</span> 음원 중 일부가 사전 공지 없이 <span class="text-danger font-bold">서비스 중단(음원 셧다운)</span> 되는 상황이 발생했습니다.</p>
+
+                <p>이에 따라 내부적으로 심도 있는 논의를 거친 결과, 안정적인 서비스 제공이 어렵다고 판단하여 <span class="text-primary font-bold">Audionyx Original 음원 협업 프로젝트</span>를 <span class="text-danger font-bold">공식 종료</span>하게 되었음을 알려드립니다.</p>
+                
+                <article class="notice-article">
+                    <h2>주요 안내 사항</h2>
+                    
+                    <h3>1) Audionyx Original 음원 협업 종료</h3>
+                    <p>본 공지 시점부터 <span class="text-primary font-bold">Audionyx Original</span> 음원에 대한 모든 협업은 <span class="text-danger">종료됩니다.</span></p>
+
+                    <h3>2) 수익 정산 안내</h3>
+                    <ul>
+                        <li><strong><span class="text-primary">정산 기준일</span>:</strong> <span class="text-accent font-bold">2025년 10월 13일</span>까지 발생한 모든 <span class="text-primary font-bold">Audionyx Original</span> 음원 수익</li>
+                        <li><strong><span class="text-primary">정산 지급일</span>:</strong> <span class="text-accent font-bold">2025년 12월 말</span>부터 순차 지급</li>
+                        <li><strong>정책 변화로 음원 셧다운된 음원:</strong> 해당 음원은 유튜브 콘텐츠 ID에서 등록 해제되기 전까지 발생한 조회수에 해당하는 <span class="text-primary">수익</span>만 정산하여 지급됩니다. 너른 양해 부탁드립니다.</li>
+                    </ul>
+
+                    <h3>3) 개인 음원 제작 서비스 유지 및 안내</h3>
+                    <p><span class="text-primary font-bold">개인 음원 제작 및 수익 창출 서비스</span>는 <span class="text-primary">변함없이 운영됩니다.</span></p>
+                    <p>특히 개인 음원은 오리지널 제작·권리 구조가 명확하고 메타데이터 일치성이 높아, <span class="text-warning">불펌·짜집기 등 정책 위반</span>과 연관될 확률이 상대적으로 낮아 보다 안정적입니다.</p>
+                    <ul>
+                        <li>전용(또는 맞춤) 작곡·편곡으로 콘텐츠 중복·컴필레이션 리스크 감소</li>
+                        <li>권리 귀속·크레딧·레퍼런스가 명확해 정책 검수 시 오인 가능성 축소</li>
+                        <li>지속 모니터링을 통해 무단 사용·어뷰징 조기 대응</li>
+                    </ul>
+                    <p>앞으로는 <span class="text-primary font-bold">개인 음원 제작 서비스</span>에서 계속 뵙고, 채널 브랜딩에 최적화된 음악을 함께 만들겠습니다.</p>
+
+                    <h3>4) 추가 안내: 음원 셧다운 원인 및 정산 기준</h3>
+                    <ul>
+                        <li><strong>음원 셧다운 주요 원인:</strong> 최근 확인된 <span class="text-warning">불펌(무단 재업로드), 짜집기(무단 편집/컴필레이션)</span> 등과 연관된 일부 채널의 활동이 유튜브 정책 위반 판정에 영향을 주어 <span class="text-danger">음원 셧다운</span>이 발생했습니다.</li>
+                        <li><strong>정산 대상 기준(이용약관 근거):</strong> 정산금 지급은 이용약관 제6조 제3항 및 제5조 제2항에 의거하여, ① <span class="text-warning">불펌/짜집기 등 위반 행위가 없고</span> ② <span class="text-primary">정산 요건을 충족한 채널</span>에 한해 진행됩니다.</li>
+                        <li><strong>정산 일정:</strong> <span class="text-accent font-bold">2025년 12월 말</span>부터 순차 지급합니다. 대상 채널 여부는 내부 검수(콘텐츠 사용 적법성, 메타데이터 적정성, 콘텐츠 ID 분쟁 여부 등)를 거쳐 확정됩니다.</li>
+                        <li><strong>투명한 집행:</strong> 모든 정산은 투명하고 명확하게 처리됩니다. 채널별 집계 기간·지표·지급 내역을 확인할 수 있도록 단계별로 안내드리겠습니다.</li>
+                    </ul>
+
+                    <h3>유의 사항</h3>
+                    <p>아래에 해당하는 경우 <span class="text-warning font-bold">정산 대상에서 제외될 수 있습니다.</span></p>
+                    <ul>
+                        <li><span class="text-warning">타 저작물 무단 사용·재업로드, 원저작자 동의 없는 편집/컴필레이션</span></li>
+                        <li><span class="text-warning">허위·오인 소지가 있는 제목/태그/설명 등 메타데이터 운영</span></li>
+                        <li><span class="text-warning">콘텐츠 ID 분쟁/침해 신고가 해소되지 않은 상태</span></li>
+                    </ul>
+                    <p><strong>안내:</strong> 공지 이후에도 콘텐츠 운영 과정에서 유사 위반이 발견될 경우, 관련 수익은 <span class="text-warning font-bold">보류·차감되거나 지급 대상에서 제외될 수 있습니다.</span> 건전한 창작·운영을 다시 한 번 부탁드립니다.</p>
+                </article>
+
+                <p>그동안 Audionyx와 협업해 주셔서 진심으로 감사드립니다.<br>
+                앞으로도 <span class="text-primary font-bold">개인 음원 제작 서비스</span>로 안정적이고 지속 가능한 창작을 함께 지원하겠습니다. 더 나은 서비스로 보답할 수 있도록 항상 노력하겠습니다.</p>
+
+                <p class="notice-signature">Audionyx 드림</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo-section">
+                <a href="../index.html" class="footer-logo">
+                    <span style="color: var(--color-primary);">AUDIO</span><span style="color: white;">NYX</span>
+                </a>
+                <div class="footer-nav-container">
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
+                        <ul class="footer-nav">
+                            <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+                            <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
+                            <li><a href="../pages/channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+                            <li><a href="../pages/track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
+                        <ul class="footer-nav">
+                            <li><a href="../pages/brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
+                            <li><a href="../pages/terms.html" data-i18n="footer.terms">이용약관</a></li>
+                            <li><a href="../pages/privacy.html" data-i18n="footer.privacy">개인정보처리방침</a></li>
+                            <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs">문의하기</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-group">
+                        <h4 class="footer-heading" data-i18n="footer.contact">연락처</h4>
+                        <ul class="footer-nav">
+                            <li><a href="mailto:audionyx369@gmail.com">audionyx369@gmail.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p class="footer-copy" data-i18n="footer.copy">© 2025 AUDIONYX Music, Inc. All rights reserved.</p>
+                    <p class="footer-location" data-i18n="footer.location">Seoul, Korea</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openChannelTalk() {
+            if (typeof ChannelIO !== 'undefined') {
+                ChannelIO('show');
+            } else {
+                window.location.href = 'mailto:audionyx369@gmail.com?subject=문의사항&body=안녕하세요. 문의사항이 있습니다.';
+            }
+        }
+    </script>
+</body>
+</html>

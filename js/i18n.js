@@ -42,7 +42,7 @@ class SimpleI18n {
       // 폴백 번역 데이터
       if (lang === 'ko') {
         this.translations[lang] = {
-          navbar: { home: "홈", brand: "브랜드 소개", withdraw: "계좌 등록", findMusic: "음원 찾기", channel: "채널 관리", track: "트랙 제작", login: "로그인", producer: "Audionyx 프로듀서", faq: "FAQ", logout: "로그아웃" },
+          navbar: { home: "홈", brand: "브랜드 소개", withdraw: "계좌 등록", findMusic: "음원 샘플", channel: "채널 관리", track: "트랙 제작", login: "로그인", producer: "Audionyx 프로듀서", faq: "FAQ", logout: "로그아웃" },
           hero: { fixed: "FREE TRACKS + EARN", main: "쇼츠에 음원 수익을 더하세요.", desc: "유튜브가 저작권자에게 지급한 음악 라이선스 비용을 AUDIONYX가 크리에이터에게 제공하는 방식으로 음원 수익이 발생합니다.", cta: "지금 시작하기" },
           footer: { tagline: "쇼츠 음원 수익화 플랫폼", service: "서비스", company: "회사", contact: "연락처", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" },
           mobile: { home: "홈", music: "음원", channel: "채널", withdraw: "정산", production: "제작" },
@@ -153,10 +153,12 @@ function translate() {
     const key = el.dataset.i18n;
     const translation = i18next.t(key);
     
-    console.log(`번역: ${key} -> ${translation}`);
-    
     if (translation && translation !== key) {
-      el.innerHTML = translation;
+      if (el.tagName === 'TITLE') {
+        document.title = translation;
+      } else {
+        el.innerHTML = translation;
+      }
     }
   });
 

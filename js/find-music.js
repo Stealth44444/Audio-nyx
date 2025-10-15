@@ -21,8 +21,8 @@ const tracksPerPage = 12; // 페이지 당 트랙 수
 let activeWaveSurferInstances = []; //  새로운 전역 인스턴스 배열
 
 // Mini Player 전역 변수 - 중요: 모든 DOM 참조 제거
-let miniWavesurfer = null;
-let currentMainWavesurferForMiniPlayer = null; // 현재 미니 플레이어와 연결된 메인 WaveSurfer
+// let miniWavesurfer = null;
+// let currentMainWavesurferForMiniPlayer = null; // 현재 미니 플레이어와 연결된 메인 WaveSurfer
 
 // 전역 변수에 currentPlayingWavesurfer 추가
 let currentPlayingWavesurfer = null;
@@ -1695,71 +1695,39 @@ function renderTracksPage(page) {
     const displayCID = track.ISRC || `AUDNX${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
 
     // HTML 구조 및 내용은 기존과 동일
-    trackItem.innerHTML = `
-      <div class="findmusic-item-thumbnail">
-        ${track.coverUrl ? `<img class="findmusic-item-cover" src="${track.coverUrl}" alt="${track.title} 커버" onerror="this.style.display='none'">` : ''}
-        <div class="findmusic-thumbnail-waveform" data-findmusic-wave="true">
-          <svg class="findmusic-waveform-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,30 L15,20 L20,40 L25,15 L30,45 L35,25 L40,35 L45,10 L50,50 L55,20 L60,40 L65,15 L70,45 L75,25 L80,35 L85,10 L90,50 L95,20 L100,30 L105,40 L110,15 L115,45 L120,25 L125,35 L130,10 L135,50 L140,20 L145,40 L150,15 L155,45 L160,25 L165,35 L170,10 L175,50 L180,20 L185,40 L190,30" 
-                  stroke="var(--color-primary)" 
-                  stroke-width="2" 
-                  fill="none" 
-                  stroke-linecap="round"/>
-          </svg>
-        </div>
-      </div>
-
-      <button class="findmusic-play-btn" aria-label="${track.title} 재생">
-        <div class="loading-spinner" style="display: none;"></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-      </button>
-
-      <div class="findmusic-item-main-group">
-        <div class="findmusic-item-title-genre-wrapper">
-          <div class="findmusic-item-title-row">
-          <h3 class="findmusic-item-title" title="${track.title}">${track.title}</h3>
-            <span class="findmusic-item-artist" title="${track.artist || '아티스트 정보 없음'}">by ${track.artist || '아티스트 정보 없음'}</span>
+        trackItem.innerHTML = `
+          <div class="findmusic-item-thumbnail">
+            ${track.coverUrl ? `<img class="findmusic-item-cover" src="${track.coverUrl}" alt="${track.title} 커버" onerror="this.style.display='none'">` : ''}
+            <div class="findmusic-thumbnail-waveform" data-findmusic-wave="true">
+              <svg class="findmusic-waveform-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10,30 L15,20 L20,40 L25,15 L30,45 L35,25 L40,35 L45,10 L50,50 L55,20 L60,40 L65,15 L70,45 L75,25 L80,35 L85,10 L90,50 L95,20 L100,30 L105,40 L110,15 L115,45 L120,25 L125,35 L130,10 L135,50 L140,20 L145,40 L150,15 L155,45 L160,25 L165,35 L170,10 L175,50 L180,20 L185,40 L190,30" 
+                      stroke="var(--color-primary)" 
+                      stroke-width="2" 
+                      fill="none" 
+                      stroke-linecap="round"/>
+              </svg>
           </div>
-          <div class="findmusic-item-tags">
-            ${(() => {
-              const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
-              const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
-              
-              // 현재 언어 가져오기
-              const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
-              
-              const moodTags = moods.map(mood => ({
-                localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
-                type: 'mood'
-              }));
-              const usecaseTags = usecases.map(usecase => ({
-                localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage),
-                type: 'usecase'
-              }));
-              
-              return [...moodTags, ...usecaseTags].map(tag => 
-                `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
-              ).join('');
-            })()}
           </div>
-        </div>
-        
-        <div class="findmusic-item-waveform-container">
-          <div class="findmusic-track-wave" data-src="${track.src}"></div>
-        </div>
-      </div>
-
-      <span class="findmusic-item-duration">${formatDuration(track.duration || 0)}</span>
-
-      <div class="findmusic-item-cid-container">
-        <span class="findmusic-cid-label">CID:</span>
-        <span class="findmusic-track-cid-text">${displayCID}</span>
-        <button class="findmusic-cid-copy-btn" aria-label="Content ID 복사" title="Content ID 복사">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-        </button>
-      </div>
-    `;
     
+          <button class="findmusic-play-btn" aria-label="${track.title} 재생">
+            <div class="loading-spinner" style="display: none;"></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+    
+          <div class="findmusic-item-main-group">
+            <div class="findmusic-item-title-genre-wrapper">
+              <div class="findmusic-item-title-row">
+              <h3 class="findmusic-item-title" title="${track.title}">${track.title}</h3>
+              </div>
+            </div>
+            
+            <div class="findmusic-item-waveform-container">
+              <div class="findmusic-track-wave" data-src="${track.src}"></div>
+            </div>
+          </div>
+    
+          <span class="findmusic-item-duration">${formatDuration(track.duration || 0)}</span>
+        `;    
     // 생성된 트랙 아이템을 배열에 저장
     trackItems.push(trackItem);
   });
@@ -1936,234 +1904,235 @@ function createPageButton(pageNumber, container) {
 }
 
 // Mini Player 함수
-function updateMiniPlayerPlayButton(isPlaying) {
-  const miniPlayerPlayBtn = document.getElementById('mini-player-play');
-  if (miniPlayerPlayBtn) {
-    const svgIcon = miniPlayerPlayBtn.querySelector('svg path'); // SVG path 요소를 가져옵니다.
-    if (svgIcon) {
-      if (isPlaying) {
-        svgIcon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); // 일시정지 아이콘 경로
-      } else {
-        svgIcon.setAttribute('d', 'M8 5v14l11-7z'); // 재생 아이콘 경로
-      }
-    }
-    miniPlayerPlayBtn.setAttribute('aria-label', isPlaying ? '일시정지' : '재생');
-    miniPlayerPlayBtn.classList.toggle('playing', isPlaying);
-  }
-}
+// function updateMiniPlayerPlayButton(isPlaying) {
+//   const miniPlayerPlayBtn = document.getElementById('mini-player-play');
+//   if (miniPlayerPlayBtn) {
+//     const svgIcon = miniPlayerPlayBtn.querySelector('svg path'); // SVG path 요소를 가져옵니다.
+//     if (svgIcon) {
+//       if (isPlaying) {
+//         svgIcon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); // 일시정지 아이콘 경로
+//       } else {
+//         svgIcon.setAttribute('d', 'M8 5v14l11-7z'); // 재생 아이콘 경로
+//       }
+//     }
+//     miniPlayerPlayBtn.setAttribute('aria-label', isPlaying ? '일시정지' : '재생');
+//     miniPlayerPlayBtn.classList.toggle('playing', isPlaying);
+//   }
+// }
 
-function showMiniPlayer(track, mainWavesurfer) {
-  // 모바일 환경에서는 미니플레이어 비활성화
-  if (window.innerWidth <= 768) {
-    console.log("[showMiniPlayer] 모바일 환경에서는 미니플레이어를 표시하지 않습니다.");
-    return;
-  }
+// Mini Player 함수
+// function showMiniPlayer(track, mainWavesurfer) {
+//   // 모바일 환경에서는 미니플레이어 비활성화
+//   if (window.innerWidth <= 768) {
+//     console.log("[showMiniPlayer] 모바일 환경에서는 미니플레이어를 표시하지 않습니다.");
+//     return;
+//   }
   
-  // 필수 요소 참조
-  const miniPlayerElement = document.getElementById('mini-player');
-  const miniPlayerThumbnail = document.getElementById('mini-player-thumbnail');
-  const miniPlayerCover = document.getElementById('mini-player-cover');
-  const miniPlayerTitle = document.getElementById('mini-player-title');
-  const miniPlayerTags = document.getElementById('mini-player-tags');
-  const miniPlayerTime = document.getElementById('mini-player-time');
-  const miniPlayerDuration = document.getElementById('mini-player-duration');
-  const miniPlayerProgress = document.getElementById('mini-player-progress');
-  const miniPlayerCid = document.getElementById('mini-player-cid');
+//   // 필수 요소 참조
+//   const miniPlayerElement = document.getElementById('mini-player');
+//   const miniPlayerThumbnail = document.getElementById('mini-player-thumbnail');
+//   const miniPlayerCover = document.getElementById('mini-player-cover');
+//   const miniPlayerTitle = document.getElementById('mini-player-title');
+//   const miniPlayerTags = document.getElementById('mini-player-tags');
+//   const miniPlayerTime = document.getElementById('mini-player-time');
+//   const miniPlayerDuration = document.getElementById('mini-player-duration');
+//   const miniPlayerProgress = document.getElementById('mini-player-progress');
+//   const miniPlayerCid = document.getElementById('mini-player-cid');
   
-  // 필수 요소 검증
-  if (!miniPlayerElement || !track || !mainWavesurfer) {
-    console.error("[showMiniPlayer] 필수 요소가 없습니다");
-    return;
-  }
+//   // 필수 요소 검증
+//   if (!miniPlayerElement || !track || !mainWavesurfer) {
+//     console.error("[showMiniPlayer] 필수 요소가 없습니다");
+//     return;
+//   }
 
-  currentMainWavesurferForMiniPlayer = mainWavesurfer;
+//   currentMainWavesurferForMiniPlayer = mainWavesurfer;
 
-  // 썸네일 설정
-  if (miniPlayerThumbnail) {
+//   // 썸네일 설정
+//   if (miniPlayerThumbnail) {
     
-    // 커버 이미지 처리
-    if (miniPlayerCover && track.coverUrl) {
-      miniPlayerCover.src = track.coverUrl;
-      miniPlayerCover.style.display = 'block';
-      miniPlayerCover.onerror = function() {
-        this.style.display = 'none';
-      };
-    } else if (miniPlayerCover) {
-      miniPlayerCover.style.display = 'none';
-    }
+//     // 커버 이미지 처리
+//     if (miniPlayerCover && track.coverUrl) {
+//       miniPlayerCover.src = track.coverUrl;
+//       miniPlayerCover.style.display = 'block';
+//       miniPlayerCover.onerror = function() {
+//         this.style.display = 'none';
+//       };
+//     } else if (miniPlayerCover) {
+//       miniPlayerCover.style.display = 'none';
+//     }
     
-    const thumbWave = miniPlayerThumbnail.querySelector('.findmusic-thumbnail-waveform');
-    if (thumbWave) {
-      thumbWave.style.display = 'block';
-    }
-  }
+//     const thumbWave = miniPlayerThumbnail.querySelector('.findmusic-thumbnail-waveform');
+//     if (thumbWave) {
+//       thumbWave.style.display = 'block';
+//     }
+//   }
 
-  // 타이틀
-  if (miniPlayerTitle) miniPlayerTitle.textContent = track.title;
+//   // 타이틀
+//   if (miniPlayerTitle) miniPlayerTitle.textContent = track.title;
 
-  // 태그 표시 - 트랙 아이템과 동일한 스타일 적용
-  if (miniPlayerTags) {
-    const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
-    const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
+//   // 태그 표시 - 트랙 아이템과 동일한 스타일 적용
+//   if (miniPlayerTags) {
+//     const moods = track.mood ? track.mood.filter(m => m && m !== 'NaN').slice(0, 2) : [];
+//     const usecases = track.usecase ? track.usecase.filter(u => u && u !== 'NaN').slice(0, 2) : [];
     
-    // 현재 언어 가져오기
-    const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
+//     // 현재 언어 가져오기
+//     const currentLanguage = window.i18next && window.i18next.language ? window.i18next.language : 'ko';
     
-    const moodTags = moods.map(mood => ({
-      localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
-      type: 'mood'
-    }));
-    const usecaseTags = usecases.map(usecase => ({
-      localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage), 
-      type: 'usecase'
-    }));
+//     const moodTags = moods.map(mood => ({
+//       localized: convertTagToLocalizedString(mood, 'mood', currentLanguage),
+//       type: 'mood'
+//     }));
+//     const usecaseTags = usecases.map(usecase => ({
+//       localized: convertTagToLocalizedString(usecase, 'usecase', currentLanguage), 
+//       type: 'usecase'
+//     }));
     
-    const allTags = [...moodTags, ...usecaseTags];
+//     const allTags = [...moodTags, ...usecaseTags];
     
-    // 태그 없음 텍스트도 현재 언어에 맞게 표시
-    const noTagsText = currentLanguage === 'ja' ? 'タグなし' : '태그 없음';
+//     // 태그 없음 텍스트도 현재 언어에 맞게 표시
+//     const noTagsText = currentLanguage === 'ja' ? 'タグなし' : '태그 없음';
     
-    miniPlayerTags.innerHTML = allTags.length > 0 
-      ? allTags.map(tag => 
-          `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
-        ).join('')
-      : `<span class="findmusic-item-tag">${noTagsText}</span>`;
-  }
+//     miniPlayerTags.innerHTML = allTags.length > 0 
+//       ? allTags.map(tag => 
+//           `<span class="findmusic-item-tag findmusic-tag-${tag.type}" title="${tag.localized}">${tag.localized}</span>`
+//         ).join('')
+//       : `<span class="findmusic-item-tag">${noTagsText}</span>`;
+//   }
   
-  // 시간 정보
-  const trackDuration = track.duration || mainWavesurfer.getDuration() || 0;
-  const currentTime = mainWavesurfer.getCurrentTime() || 0;
-  if (miniPlayerTime) miniPlayerTime.textContent = formatDuration(currentTime);
-  if (miniPlayerDuration) miniPlayerDuration.textContent = formatDuration(trackDuration);
+//   // 시간 정보
+//   const trackDuration = track.duration || mainWavesurfer.getDuration() || 0;
+//   const currentTime = mainWavesurfer.getCurrentTime() || 0;
+//   if (miniPlayerTime) miniPlayerTime.textContent = formatDuration(currentTime);
+//   if (miniPlayerDuration) miniPlayerDuration.textContent = formatDuration(trackDuration);
   
-  // 진행률 게이지 초기화
-  if (miniPlayerProgress) {
-    const progressPercent = (trackDuration > 0) ? (currentTime / trackDuration * 100) : 0;
-    miniPlayerProgress.style.width = `${progressPercent}%`;
-  }
+//   // 진행률 게이지 초기화
+//   if (miniPlayerProgress) {
+//     const progressPercent = (trackDuration > 0) ? (currentTime / trackDuration * 100) : 0;
+//     miniPlayerProgress.style.width = `${progressPercent}%`;
+//   }
 
-  // CID - ISRC 필드 사용
-  const displayCID = track.ISRC || `AUDNX${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
-  if (miniPlayerCid) miniPlayerCid.textContent = displayCID;
+//   // CID - ISRC 필드 사용
+//   const displayCID = track.ISRC || `AUDNX${String(Math.floor(Math.random() * 99999)).padStart(5, '0')}`;
+//   if (miniPlayerCid) miniPlayerCid.textContent = displayCID;
 
-  // CID 복사 버튼 이벤트 연결
-  const miniPlayerCidCopyBtn = document.getElementById('mini-player-cid-copy-btn');
-  if (miniPlayerCidCopyBtn && miniPlayerCid) {
-    // 중복 이벤트 리스너 방지
-    if (!miniPlayerCidCopyBtn.hasAttribute('data-event-bound')) {
-      miniPlayerCidCopyBtn.setAttribute('data-event-bound', 'true');
+//   // CID 복사 버튼 이벤트 연결
+//   const miniPlayerCidCopyBtn = document.getElementById('mini-player-cid-copy-btn');
+//   if (miniPlayerCidCopyBtn && miniPlayerCid) {
+//     // 중복 이벤트 리스너 방지
+//     if (!miniPlayerCidCopyBtn.hasAttribute('data-event-bound')) {
+//       miniPlayerCidCopyBtn.setAttribute('data-event-bound', 'true');
       
-      miniPlayerCidCopyBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+//       miniPlayerCidCopyBtn.addEventListener('click', function(e) {
+//         e.preventDefault();
+//         e.stopPropagation();
         
-        const cidText = miniPlayerCid.textContent;
-        if (!cidText) {
-          console.warn('CID 텍스트가 없습니다.');
-          return;
-        }
+//         const cidText = miniPlayerCid.textContent;
+//         if (!cidText) {
+//           console.warn('CID 텍스트가 없습니다.');
+//           return;
+//         }
         
-        navigator.clipboard.writeText(cidText)
-          .then(() => {
-            const originalContent = miniPlayerCidCopyBtn.innerHTML;
-            miniPlayerCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-            miniPlayerCidCopyBtn.classList.add('copied');
-            miniPlayerCidCopyBtn.setAttribute('title', '복사됨!');
+//         navigator.clipboard.writeText(cidText)
+//           .then(() => {
+//             const originalContent = miniPlayerCidCopyBtn.innerHTML;
+//             miniPlayerCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
+//             miniPlayerCidCopyBtn.classList.add('copied');
+//             miniPlayerCidCopyBtn.setAttribute('title', '복사됨!');
             
-            setTimeout(() => {
-              miniPlayerCidCopyBtn.innerHTML = originalContent;
-              miniPlayerCidCopyBtn.classList.remove('copied');
-              miniPlayerCidCopyBtn.setAttribute('title', 'Content ID 복사');
-            }, 1200);
-          })
-          .catch(err => {
-            console.error('CID 복사 실패:', err);
-            miniPlayerCidCopyBtn.textContent = '실패';
-            setTimeout(() => {
-              miniPlayerCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
-            }, 1500);
-          });
-      });
-    }
-  }
+//             setTimeout(() => {
+//               miniPlayerCidCopyBtn.innerHTML = originalContent;
+//               miniPlayerCidCopyBtn.classList.remove('copied');
+//               miniPlayerCidCopyBtn.setAttribute('title', 'Content ID 복사');
+//             }, 1200);
+//           })
+//           .catch(err => {
+//             console.error('CID 복사 실패:', err);
+//             miniPlayerCidCopyBtn.textContent = '실패';
+//             setTimeout(() => {
+//               miniPlayerCidCopyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+//             }, 1500);
+//           });
+//       });
+//     }
+//   }
 
-  // 재생/일시정지 버튼 상태 업데이트 및 이벤트 바인딩
-  const miniPlayerPlayBtn = document.getElementById('mini-player-play');
-  if (miniPlayerPlayBtn) {
-    // 현재 재생 상태에 따라 버튼 업데이트
-    const isCurrentlyPlaying = mainWavesurfer.isPlaying();
-    updateMiniPlayerPlayButton(isCurrentlyPlaying);
+//   // 재생/일시정지 버튼 상태 업데이트 및 이벤트 바인딩
+//   const miniPlayerPlayBtn = document.getElementById('mini-player-play');
+//   if (miniPlayerPlayBtn) {
+//     // 현재 재생 상태에 따라 버튼 업데이트
+//     const isCurrentlyPlaying = mainWavesurfer.isPlaying();
+//     updateMiniPlayerPlayButton(isCurrentlyPlaying);
     
-    // 중복 이벤트 리스너 방지
-    if (!miniPlayerPlayBtn.hasAttribute('data-event-bound')) {
-      miniPlayerPlayBtn.setAttribute('data-event-bound', 'true');
+//     // 중복 이벤트 리스너 방지
+//     if (!miniPlayerPlayBtn.hasAttribute('data-event-bound')) {
+//       miniPlayerPlayBtn.setAttribute('data-event-bound', 'true');
       
-      miniPlayerPlayBtn.addEventListener('click', () => {
-        if (currentMainWavesurferForMiniPlayer) {
-          currentMainWavesurferForMiniPlayer.playPause();
-        }
-      });
-    }
-  }
+//       miniPlayerPlayBtn.addEventListener('click', () => {
+//         if (currentMainWavesurferForMiniPlayer) {
+//           currentMainWavesurferForMiniPlayer.playPause();
+//         }
+//       });
+//     }
+//   }
 
-  // 닫기 버튼 이벤트 바인딩
-  const miniPlayerCloseBtn = document.getElementById('mini-player-close');
-  if (miniPlayerCloseBtn) {
-    // 중복 이벤트 리스너 방지
-    if (!miniPlayerCloseBtn.hasAttribute('data-event-bound')) {
-      miniPlayerCloseBtn.setAttribute('data-event-bound', 'true');
+//   // 닫기 버튼 이벤트 바인딩
+//   const miniPlayerCloseBtn = document.getElementById('mini-player-close');
+//   if (miniPlayerCloseBtn) {
+//     // 중복 이벤트 리스너 방지
+//     if (!miniPlayerCloseBtn.hasAttribute('data-event-bound')) {
+//       miniPlayerCloseBtn.setAttribute('data-event-bound', 'true');
       
-      miniPlayerCloseBtn.addEventListener('click', hideMiniPlayer);
-    }
-  }
+//       miniPlayerCloseBtn.addEventListener('click', hideMiniPlayer);
+//     }
+//   }
 
-  // 진행률 업데이트 함수
-  function updateProgress() {
-    if (!currentMainWavesurferForMiniPlayer) return;
+//   // 진행률 업데이트 함수
+//   function updateProgress() {
+//     if (!currentMainWavesurferForMiniPlayer) return;
     
-    const current = currentMainWavesurferForMiniPlayer.getCurrentTime();
-    const total = currentMainWavesurferForMiniPlayer.getDuration();
+//     const current = currentMainWavesurferForMiniPlayer.getCurrentTime();
+//     const total = currentMainWavesurferForMiniPlayer.getDuration();
     
-    if (miniPlayerProgress && isFinite(current) && isFinite(total) && total > 0) {
-      const percent = (current / total) * 100;
-      miniPlayerProgress.style.width = `${percent}%`;
-    }
+//     if (miniPlayerProgress && isFinite(current) && isFinite(total) && total > 0) {
+//       const percent = (current / total) * 100;
+//       miniPlayerProgress.style.width = `${percent}%`;
+//     }
     
-    if (miniPlayerTime && isFinite(current)) {
-      miniPlayerTime.textContent = formatDuration(current);
-    }
-  }
+//     if (miniPlayerTime && isFinite(current)) {
+//       miniPlayerTime.textContent = formatDuration(current);
+//     }
+//   }
 
-  // 진행률 주기적 업데이트 설정
-  const progressUpdateInterval = setInterval(updateProgress, 100);
+//   // 진행률 주기적 업데이트 설정
+//   const progressUpdateInterval = setInterval(updateProgress, 100);
   
-  // 객체에 인터벌 ID 저장 (닫을 때 제거하기 위함)
-  miniPlayerElement.dataset.progressInterval = progressUpdateInterval;
+//   // 객체에 인터벌 ID 저장 (닫을 때 제거하기 위함)
+//   miniPlayerElement.dataset.progressInterval = progressUpdateInterval;
 
-  // 진행률 직접 클릭으로 탐색 기능
-  const progressContainer = document.querySelector('.mini-player-progress-container');
-  if (progressContainer) {
-    // 중복 이벤트 리스너 방지
-    if (!progressContainer.hasAttribute('data-event-bound')) {
-      progressContainer.setAttribute('data-event-bound', 'true');
+//   // 진행률 직접 클릭으로 탐색 기능
+//   const progressContainer = document.querySelector('.mini-player-progress-container');
+//   if (progressContainer) {
+//     // 중복 이벤트 리스너 방지
+//     if (!progressContainer.hasAttribute('data-event-bound')) {
+//       progressContainer.setAttribute('data-event-bound', 'true');
       
-      progressContainer.addEventListener('click', function(e) {
-        if (!currentMainWavesurferForMiniPlayer) return;
+//       progressContainer.addEventListener('click', function(e) {
+//         if (!currentMainWavesurferForMiniPlayer) return;
         
-        const rect = this.getBoundingClientRect();
-        const clickPosition = (e.clientX - rect.left) / rect.width;
-        const duration = currentMainWavesurferForMiniPlayer.getDuration();
+//         const rect = this.getBoundingClientRect();
+//         const clickPosition = (e.clientX - rect.left) / rect.width;
+//         const duration = currentMainWavesurferForMiniPlayer.getDuration();
         
-        if (isFinite(clickPosition) && clickPosition >= 0 && clickPosition <= 1 && isFinite(duration)) {
-          currentMainWavesurferForMiniPlayer.seekTo(clickPosition);
-        }
-      });
-    }
-  }
+//         if (isFinite(clickPosition) && clickPosition >= 0 && clickPosition <= 1 && isFinite(duration)) {
+//           currentMainWavesurferForMiniPlayer.seekTo(clickPosition);
+//         }
+//       });
+//     }
+//   }
 
-  // 미니 플레이어 표시
-  miniPlayerElement.classList.add('active');
-}
+//   // 미니 플레이어 표시
+//   miniPlayerElement.classList.add('active');
+// }
 
 // hideMiniPlayer 함수 수정
 function hideMiniPlayer() {
@@ -2205,29 +2174,27 @@ function initializeWaveform(waveContainer) {
     container: waveContainer,
     waveColor: 'rgba(255, 255, 255, 0.6)',   // 기본 상태: 흰색
     progressColor: '#ff6b35',                // 진행 시: 플레이버튼 주황색
-    height: 36,                            // 더 높게
-    barWidth: 2.5,                         // 더 두껍게
-    barGap: 1.5,                           // 간격 살짝 넓게
+    height: 36,                              // 더 높게
+    barWidth: 2.2,                           // 약간 경량화
+    barGap: 1.4,                             // 약간 경량화
     barRadius: 3,                          // 더 둥글게
     cursorWidth: 0,                        // 커서 제거
     interact: true,                        // 클릭으로 이동 가능
     normalize: true,                       // 진폭 정규화
-    partialRender: false,                  // 부분 렌더링 비활성화
-    scrollParent: false,                   // 스크롤 비활성화
-    staticPeaks: false,                    // 동적 모드로 변경
-    fillParent: true,                      // 컨테이너 꽉 채우기
-    minPxPerSec: 50,                       // 최소 픽셀 설정
-    autoCenter: true,                      // 자동 센터링 활성화
-    autoScroll: true,                      // 자동 스크롤 활성화
-    responsive: true,                      // 반응형 활성화
-    hideScrollbar: true,                   // 스크롤바 숨김
-    plugins: []                            // 플러그인 배열 비우기
+    partialRender: true,                    // 부분 렌더링 활성화 → 리페인트 감소
+    scrollParent: false,                    // 스크롤 비활성화
+    staticPeaks: false,                     // 동적 모드 유지
+    fillParent: true,                       // 컨테이너 꽉 채우기
+    minPxPerSec: 30,                        // 리렌더 빈도 완화
+    autoCenter: false,                      // 자동 센터링 비활성화
+    autoScroll: false,                      // 자동 스크롤 비활성화
+    responsive: true,                       // 반응형 활성화
+    hideScrollbar: true,                    // 스크롤바 숨김
+    pixelRatio: 1,                          // 고해상도 디바이스에서 과도한 렌더링 억제
+    plugins: []                             // 플러그인 배열 비우기
   });
-  
-  // WaveSurfer 내부 리사이즈 트리거 찾기
-  wavesurfer.on('redraw', () => {
-    console.log('[WaveSurfer redraw]', Date.now(), waveContainer.dataset.src);
-  });
+
+  // 성능: 불필요한 redraw 로그 제거
   
   // 생성된 인스턴스를 전역 배열에 추가
   activeWaveSurferInstances.push(wavesurfer);

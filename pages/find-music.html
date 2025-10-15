@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>음원 찾기 | Audionyx</title>
+  <title>음원 샘플 | Audionyx</title>
   <!-- 캐시 무효화 메타 태그 -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="../css/common.css?v=20250116" />
   <link rel="stylesheet" href="../css/find-music.css?v=20250116" />
   <link rel="stylesheet" href="../css/brand.css?v=20250116" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;500;600;700&display=swap" rel="stylesheet">
       <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
@@ -25,7 +28,7 @@
   <script type="module" src="../js/find-music.js?v=20250117"></script>
   <script src="../js/i18n.js?v=20250116"></script>
 
-  <meta property="og:title" content="Audionyx - 음원 찾기">
+  <meta property="og:title" content="Audionyx - 음원 샘플">
   <meta property="og:description" content="다양한 장르와 무드의 고퀄리티 음원을 무료로 찾아보세요. 쇼츠, 유튜브, 인스타그램 등에서 사용 가능한 트랙 제공.">
   <meta property="og:url" content="https://audio-nyx.com/pages/find-music.html">
   <meta property="og:type" content="website">
@@ -48,8 +51,7 @@
         <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
         <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
         <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-        <li class="active"><a href="find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
-        <li><a href="channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+        <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
         <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
       </ul>
     </nav>
@@ -163,190 +165,7 @@
       <div class="gradient-orb bottom-right-banner"></div>
     </section>
     
-    <!-- 통합된 검색 및 필터 패널 -->
-    <div class="findmusic-search-and-filters">
-      <div class="findmusic-search-box">
-        <input type="text" data-i18n-placeholder="findMusic.search.placeholder" placeholder="트랙 이름, 장르 또는 분위기로 검색하세요" class="findmusic-search-input" id="search-input" autocomplete="off" spellcheck="false">
-        <button class="findmusic-search-btn" type="button">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-      
-      <!-- 필터 버튼 컨테이너 -->
-      <div class="findmusic-filter-buttons">
-        <!-- 무드 필터 버튼 -->
-        <button class="findmusic-mood-filter-toggle">
-          <svg class="findmusic-filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1L13.5 2.5L16.17 5.17C15.24 5.06 14.32 5 13.4 5C9.56 5 6.51 6.44 5.44 8.6C4.94 9.54 5.39 10.67 6.33 11.17C6.6 11.31 6.89 11.37 7.18 11.37C7.85 11.37 8.5 11.05 8.83 10.47C9.46 9.38 11.24 8.5 13.4 8.5C15.56 8.5 17.34 9.38 17.97 10.47C18.5 11.37 19.72 11.67 20.62 11.14C21.52 10.61 21.82 9.39 21.29 8.49L21 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="findMusic.filters.mood">🎵 무드</span>
-        </button>
-        
-        <!-- 용도 필터 버튼 -->
-        <button class="findmusic-usecase-filter-toggle">
-          <svg class="findmusic-filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="findMusic.filters.usecase">🎬 용도</span>
-        </button>
-      </div>
-      
-      <!-- 무드 필터 컨텐츠 -->
-      <div class="findmusic-mood-filter-content">
-        <div class="filter-group filter-group-tags">
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="joyful">
-            <span data-i18n="findMusic.moods.joyful">즐거운/신나는</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="energetic">
-            <span data-i18n="findMusic.moods.energetic">에너지틱</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="inspiring">
-            <span data-i18n="findMusic.moods.inspiring">감동/희망</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="chill">
-            <span data-i18n="findMusic.moods.chill">편안/여유</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="romantic">
-            <span data-i18n="findMusic.moods.romantic">로맨틱</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="playful">
-            <span data-i18n="findMusic.moods.playful">장난/귀여움</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="groovy">
-            <span data-i18n="findMusic.moods.groovy">그루비/펑키</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="epic">
-            <span data-i18n="findMusic.moods.epic">웅장/스케일</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="dramatic">
-            <span data-i18n="findMusic.moods.dramatic">드라마틱</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="dark">
-            <span data-i18n="findMusic.moods.dark">다크</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="tense">
-            <span data-i18n="findMusic.moods.tense">긴장/서스펜스</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="aggressive">
-            <span data-i18n="findMusic.moods.aggressive">공격적/분노</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="mysterious">
-            <span data-i18n="findMusic.moods.mysterious">미스터리</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="mood" value="sad">
-            <span data-i18n="findMusic.moods.sad">슬픔/우울</span>
-          </label>
-        </div>
-      </div>
-      
-      <!-- 용도 필터 컨텐츠 -->
-      <div class="findmusic-usecase-filter-content">
-        <div class="filter-group filter-group-tags">
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="docu_education">
-            <span data-i18n="findMusic.usecases.docu_education">다큐·교육·과학</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="travel_aerial">
-            <span data-i18n="findMusic.usecases.travel_aerial">여행·드론·풍경</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="fashion_beauty">
-            <span data-i18n="findMusic.usecases.fashion_beauty">패션·뷰티</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="lifestyle_vlog">
-            <span data-i18n="findMusic.usecases.lifestyle_vlog">Vlog·라이프스타일</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="gaming_esports">
-            <span data-i18n="findMusic.usecases.gaming_esports">게이밍·e스포츠</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="tech_innovation">
-            <span data-i18n="findMusic.usecases.tech_innovation">테크·산업·혁신</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="animation_narration">
-            <span data-i18n="findMusic.usecases.animation_narration">애니메이션·나레이션</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="party_events">
-            <span data-i18n="findMusic.usecases.party_events">파티·이벤트·오락</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="wellness_asmr">
-            <span data-i18n="findMusic.usecases.wellness_asmr">웰니스·명상·앰비언트</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="sports_motivation">
-            <span data-i18n="findMusic.usecases.sports_motivation">스포츠·동기부여</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="pets_nature">
-            <span data-i18n="findMusic.usecases.pets_nature">펫·동물·자연</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="trailers_branding">
-            <span data-i18n="findMusic.usecases.trailers_branding">트레일러·인트로·로고</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="diy_howto">
-            <span data-i18n="findMusic.usecases.diy_howto">DIY·튜토리얼</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="holiday_seasonal">
-            <span data-i18n="findMusic.usecases.holiday_seasonal">홀리데이·시즌별</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="art_culture">
-            <span data-i18n="findMusic.usecases.art_culture">예술·문화</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="news_affairs">
-            <span data-i18n="findMusic.usecases.news_affairs">뉴스·시사</span>
-          </label>
-          <label class="filter-option">
-            <input type="checkbox" name="usecase" value="drive">
-            <span data-i18n="findMusic.usecases.drive">드라이브</span>
-          </label>
-        </div>
-      </div>
-      
-      <div class="findmusic-sort-container">
-        <div class="findmusic-sort-select-container">
-          <select class="findmusic-sort-select" id="sort-select">
-            <option value="recommended" data-i18n="findMusic.sort.recommended">추천순</option>
-            <option value="relevance" data-i18n="findMusic.sort.relevance">정확도순</option>
-            <option value="popular" data-i18n="findMusic.sort.popular">인기순</option>
-            <option value="newest" data-i18n="findMusic.sort.newest">최신순</option>
-          </select>
-        </div>
-        <button class="findmusic-reset-filters">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
-            <path d="M9 9L15 15M15 9L9 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span data-i18n="findMusic.sort.resetFilters">필터 초기화</span>
-        </button>
-      </div>
-    </div>
+
 
     <!-- 사용 단계 안내 (브랜드 소개 페이지와 유사한 디자인) -->
     <!-- <div class="findmusic-steps">
@@ -390,13 +209,7 @@
         <div class="findmusic-tracks-header-left">
           <h2 class="findmusic-tracks-title" data-i18n="findMusic.results.trackLibrary">Track Library</h2>
         </div>
-        <div class="findmusic-tracks-header-right">
-          <div class="findmusic-usage-hint" role="note">
-            <p class="usage-line" data-i18n="findMusic.usageHint.reels">릴스 사용 시 곡 제목/아티스트 명으로 검색</p>
-            <p class="usage-line" data-i18n="findMusic.usageHint.shorts">유튜브 쇼츠 사용 시 코드 복사 or 곡 제목/아티스트 명으로 검색</p>
-            <p class="usage-line" data-i18n="findMusic.usageHint.maxRevenue">볼륨 15 이상, 영상 길이 35초 이상일 때 수익이 극대화 돼요!</p>
-          </div>
-        </div>
+
       </div>
 
       <!-- 로딩 상태 표시 -->
@@ -417,63 +230,7 @@
     </section>
   </div>
 
-  <!-- 미니 플레이어 -->
-  <div id="mini-player" class="mini-player">
-    <button id="mini-player-close" class="mini-player-close" data-i18n-aria-label="findMusic.player.close" aria-label="닫기">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <div class="mini-player-track-list-item">
-      <div id="mini-player-thumbnail" class="findmusic-item-thumbnail" data-genre="Default">
-        <img id="mini-player-cover" class="findmusic-item-cover" src="" alt="트랙 커버" style="display: none;">
-        <div class="findmusic-thumbnail-waveform">
-          <svg class="findmusic-waveform-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,30 L15,20 L20,40 L25,15 L30,45 L35,25 L40,35 L45,10 L50,50 L55,20 L60,40 L65,15 L70,45 L75,25 L80,35 L85,10 L90,50 L95,20 L100,30 L105,40 L110,15 L115,45 L120,25 L125,35 L130,10 L135,50 L140,20 L145,40 L150,15 L155,45 L160,25 L165,35 L170,10 L175,50 L180,20 L185,40 L190,30" 
-                  stroke="var(--color-primary)" 
-                  stroke-width="2" 
-                  fill="none" 
-                  stroke-linecap="round"/>
-          </svg>
-      </div>
-      </div>
-      
-      <button id="mini-player-play" class="findmusic-play-btn mini-player-play" data-i18n-aria-label="findMusic.player.play" aria-label="재생">
-        <div class="loading-spinner" style="display: none;"></div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-      </button>
-      
-      <div class="mini-player-main-group findmusic-item-main-group">
-        <div class="findmusic-item-title-genre-wrapper">
-          <h3 id="mini-player-title" class="findmusic-item-title">Track Title</h3>
-          <div id="mini-player-tags" class="findmusic-item-tags">
-            <!-- 태그는 JavaScript에서 동적으로 생성됩니다 -->
-          </div>
-        </div>
-        <div class="findmusic-item-waveform-container">
-          <div id="mini-player-time" class="mini-player-time">0:00</div>
-          <div class="mini-player-progress-container">
-            <div id="mini-player-progress" class="mini-player-progress"></div>
-          </div>
-          <div id="mini-player-duration" class="mini-player-duration">0:00</div>
-        </div>
-      </div>
-      
-      <span id="mini-player-bpm" class="findmusic-item-bpm">BPM</span>
-      
-      <div class="findmusic-item-cid-container">
-        <span class="findmusic-cid-label" data-i18n="findMusic.player.cid">CID:</span>
-        <span id="mini-player-cid" class="findmusic-track-cid-text">CID</span>
-        <button id="mini-player-cid-copy-btn" class="findmusic-cid-copy-btn" data-i18n-aria-label="findMusic.player.copyCid" data-i18n-title="findMusic.player.copyCid" aria-label="Content ID 복사" title="Content ID 복사">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
+
 
   <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
@@ -487,9 +244,8 @@
           <div class="footer-nav-group">
             <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
             <ul class="footer-nav">
-              <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+              <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
               <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-              <li><a href="../pages/channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
               <li><a href="../pages/track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
             </ul>
           </div>
@@ -552,7 +308,7 @@
             <circle cx="6" cy="18" r="3"/>
             <circle cx="18" cy="16" r="3"/>
           </svg>
-          <span data-i18n="mobile.music">음원</span>
+          <span data-i18n="mobile.music">샘플</span>
         </a>
       </li>
       <li class="mobile-nav-item">

@@ -1,0 +1,6 @@
+user_id	track_id	track_title	artist_name	platform	revenue_share	currency	period_start	period_end	report_date	ISRC
+user123	TRK001	Summer Breeze	Artist A	Spotify	15000	KRW	2025-09-01	2025-09-30	2025-10-10	US-S1Z-20-00001
+user123	TRK002	City Lights	Artist A	Apple Music	12000	KRW	2025-09-01	2025-09-30	2025-10-10	US-S1Z-20-00002
+user456	TRK003	Rainy Day Mood	Artist B	YouTube	8000	KRW	2025-09-01	2025-09-30	2025-10-10	US-S1Z-20-00003
+user123	TRK001	Summer Breeze	Artist A	YouTube	5000	KRW	2025-09-01	2025-09-30	2025-10-10	US-S1Z-20-00001
+user456	TRK004	Groovy Nights	Artist B	Spotify	10000	KRW	2025-09-01	2025-09-30	2025-10-10	US-S1Z-20-00004

@@ -685,7 +685,7 @@ onAuthStateChanged(auth, async (user) => {
     try {
       if (sessionStorage.getItem('redirectToChannelAfterLogin') === '1') {
         sessionStorage.removeItem('redirectToChannelAfterLogin');
-        window.location.href = '/pages/channel-management.html?openChannelModal=1';
+        window.location.href = '/index.html';
       }
     } catch (_) {}
 
@@ -1554,16 +1554,12 @@ const PAGE_ACCESS_CONFIG = {
     '/pages/faq.html'
   ],
   // 로그인이 필요한 페이지
-  protectedPages: [
-    '/pages/channel-management.html',
-    '/pages/track-production.html',
-    '/pages/withdraw.html'
+        protectedPages: [
+          '/pages/track-production.html',    '/pages/withdraw.html'
   ],
   // 페이지별 설명
-  pageDescriptions: {
-    '/pages/channel-management.html': '채널 관리',
-    '/pages/track-production.html': '트랙 제작 요청',
-    '/pages/withdraw.html': '계좌 등록 및 정산'
+        pageDescriptions: {
+          '/pages/track-production.html': '트랙 제작 요청',    '/pages/withdraw.html': '계좌 등록 및 정산'
   }
 };
 
@@ -1776,7 +1772,7 @@ function renderPostSignupBanner() {
           }
         } else {
           // 채널 관리 페이지로 이동 후 스크롤
-          window.location.href = '/pages/channel-management.html?scrollTo=channelTable';
+          window.location.href = '/index.html';
         }
       } else {
         sessionStorage.setItem('redirectToChannelAfterLogin', '1');

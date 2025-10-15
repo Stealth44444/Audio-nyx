@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="withdraw.title">수익 출금 | Audionyx</title>
+  <title>수익 출금 | Audionyx</title>
   <meta property="og:title" content="Audionyx - 계좌 등록">
   <meta property="og:description" content="수익 출금을 위한 계좌 등록 페이지입니다. Audionyx에서 안전하게 계좌를 등록하고 매월 수익을 받아보세요.">
   <meta property="og:url" content="https://audio-nyx.com/pages/withdraw.html">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/withdraw.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
       <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="../favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
@@ -26,10 +26,11 @@
     <meta name="theme-color" content="#3EB489">
     <meta name="msapplication-TileColor" content="#3EB489">
   
+  <!-- Chart.js 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+  
   <script type="module" src="../js/firebase.js"></script>
   <script type="module" src="../js/withdraw.js"></script>
-  <!-- i18next 국제화 스크립트 -->
-  <script src="../js/i18n.js"></script>
 </head>
 <body>
   <!-- 브랜드 공통 네비게이터 -->
@@ -45,8 +46,7 @@
         <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
         <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
         <li class="active"><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-        <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
-        <li><a href="channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
+        <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
         <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
       </ul>
         </nav>
@@ -164,28 +164,18 @@
           <span data-i18n="mobile.home">홈</span>
         </a>
       </li>
-      <li class="mobile-nav-item">
-        <a href="find-music.html" class="mobile-nav-link">
-          <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M9 18V5l12-2v13"/>
-            <circle cx="6" cy="18" r="3"/>
-            <circle cx="18" cy="16" r="3"/>
-          </svg>
-          <span data-i18n="mobile.music">음원</span>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="channel-management.html" class="mobile-nav-link">
-          <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
-            <polygon points="9.75,15.02 15.5,11.75 9.75,8.48"/>
-          </svg>
-          <span data-i18n="mobile.channel">채널</span>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="withdraw.html" class="mobile-nav-link active">
-          <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <li class="mobile-nav-item">
+                  <a href="find-music.html" class="mobile-nav-link">
+                    <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M9 18V5l12-2v13"/>
+                      <circle cx="6" cy="18" r="3"/>
+                      <circle cx="18" cy="16" r="3"/>
+                    </svg>
+                    <span data-i18n="mobile.music">음원</span>
+                  </a>
+                </li>
+                <li class="mobile-nav-item">
+                  <a href="withdraw.html" class="mobile-nav-link active">          <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M21 12V7H5a2 2 0 010-4h14v4"/>
             <path d="M3 5v14a2 2 0 002 2h16v-5"/>
             <path d="M18 12a2 2 0 100-4 2 2 0 000 4z"/>
@@ -207,100 +197,42 @@
 
   <!-- 메인 컨텐츠 -->
   <main class="page-content">
-    <!-- 수익 출금 프로세스 안내 섹션 -->
-    <section class="withdraw-process-section" data-animate="fade-up">
-      <div class="container">
-        <div class="withdraw-process-title-row">
-        <div class="withdraw-process-header">
-          <div class="about-audionyx-title" data-i18n="withdraw.processTitle">수익 출금 프로세스 안내</div>
-          <h2 class="about-audionyx-headline" data-i18n="withdraw.processHeadline">분기 말, 자동으로 내 계좌로 입금</h2>
-          <p class="about-audionyx-subcopy" data-i18n="withdraw.processDesc">
-            Audionyx는 유튜브, 쇼츠 등 모든 채널의 수익을 집계하여 등록된 계좌로 분기 말 자동 입금해 드립니다. 계좌 등록만 하면, 별도의 신청 없이 분기마다 수익을 받아보세요.
-          </p>
-          </div>
+    <!-- Dashboard Section -->
+    <section class="dashboard-section" data-animate="fade-up">
+      <div class="bento-grid">
+        <div class="bento-card card-total-revenue">
+          <h3 class="card-title">총 수익</h3>
+          <p class="revenue-amount">₩1,234,567</p>
+          <p class="revenue-change">+15.2%</p>
         </div>
-      </div>
-    </section>
-
-    <!-- 정산 상세 정보 섹션 -->
-    <section class="settlement-info-section">
-      <div class="container">
-        <div class="settlement-header">
-          <h2 class="settlement-main-title" data-i18n="withdraw.settlementTitle">정산 상세 정보</h2>
-          <p class="settlement-subtitle" data-i18n="withdraw.settlementSubtitle">정확한 정산을 위해 아래 정보를 확인해주세요</p>
+        <div class="bento-card card-current-balance">
+          <h3 class="card-title">현재 잔액</h3>
+          <p class="balance-amount">₩345,678</p>
         </div>
-        
-        <div class="process-cards-grid">
-          <!-- 정산 주기 -->
-          <div class="process-card" data-animate="fade-up">
-            <div class="process-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-            </div>
-            <div class="process-label">STEP 01</div>
-            <h3 data-i18n="withdraw.step1Title">정산 주기</h3>
-            <p class="process-description" data-i18n="withdraw.step1Desc">
-              분기별 정산 시스템<br>
-              3월말, 6월말, 9월말, 12월말<br>
-              자동 입금 처리
-            </p>
-          </div>
-
-          <!-- 입금 조건 -->
-          <div class="process-card" data-animate="fade-up">
-            <div class="process-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 2v20M2 12h20"/>
-                <circle cx="12" cy="12" r="4"/>
-              </svg>
-            </div>
-            <div class="process-label">STEP 02</div>
-            <h3 data-i18n="withdraw.step2Title">입금 조건</h3>
-            <p class="process-description" data-i18n="withdraw.step2Desc">
-              최소 입금액 1원부터<br>
-              수익 발생 시 자동 정산<br>
-              별도 신청 불필요
-            </p>
-          </div>
-
-          <!-- 원천세 -->
-          <div class="process-card" data-animate="fade-up">
-            <div class="process-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/>
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                <path d="M12 11h4"/>
-                <path d="M12 16h4"/>
-                <path d="M8 11h.01"/>
-                <path d="M8 16h.01"/>
-              </svg>
-            </div>
-            <div class="process-label">STEP 03</div>
-            <h3 data-i18n="withdraw.step3Title">원천세</h3>
-            <p class="process-description" data-i18n="withdraw.step3Desc">
-              법정 원천세 3.3% 차감<br>
-              차감 후 실수령액 입금<br>
-              세무 처리 자동화
-            </p>
-          </div>
+        <div class="bento-card card-next-payout">
+          <h3 class="card-title">다음 정산일</h3>
+          <p class="payout-date">2025.11.15</p>
         </div>
-
-        <!-- 주의사항 -->
-        <div class="settlement-notice-box">
-          <div class="notice-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-            </svg>
-            <h3 data-i18n="withdraw.noticeTitle">계좌 등록 시 주의사항</h3>
-          </div>
-          <div class="notice-content">
-            <p><strong data-i18n="withdraw.noticeDesc1">※ 계좌 등록을 위해서는 먼저 채널 등록이 완료되어야 합니다.</strong></p>
-            <p><span data-i18n="withdraw.noticeDesc2">예금주 및 계좌번호 등을 정확하게 입력해주세요. 잘못된 정보로 인한 입금 오류 시 재정산까지 시간이 소요될 수 있습니다.</span></p>
-          </div>
+        <div class="bento-card card-latest-track">
+          <h3 class="card-title">최근 수익 발생 음원</h3>
+          <p class="track-title" id="latest-track-title">-</p>
+          <p class="track-artist" id="latest-track-artist">-</p>
+        </div>
+        <div class="bento-card card-earnings-chart">
+          <h3 class="card-title">월별 수익</h3>
+          <canvas id="earningsChart"></canvas>
+        </div>
+        <div class="bento-card card-source-chart">
+          <h3 class="card-title">수익 소스</h3>
+          <canvas id="sourceChart"></canvas>
+        </div>
+        <div class="bento-card card-payout-history">
+          <h3 class="card-title">정산 내역</h3>
+          <ul class="history-list">
+            <li><span>2025.10.15</span><span>₩150,230</span><span class="status-completed">완료</span></li>
+            <li><span>2025.09.15</span><span>₩145,880</span><span class="status-completed">완료</span></li>
+            <li><span>2025.08.15</span><span>₩162,300</span><span class="status-completed">완료</span></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -318,19 +250,7 @@
             <div class="card">
               <h2 class="card-title" data-i18n="withdraw.formTitle">계좌 등록/수정</h2>
               
-              <!-- 채널 등록 상태 안내 -->
-              <div id="channel-status-notice" class="channel-status-notice" style="display: none;">
-                <div class="notice-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <div class="notice-content">
-                  <h3 data-i18n="withdraw.channelNoticeTitle">채널 등록이 필요합니다</h3>
-                  <p data-i18n="withdraw.channelNoticeDesc">계좌 등록을 위해서는 먼저 채널을 등록해야 합니다.<br>채널 관리 페이지에서 채널을 등록한 후 다시 시도해주세요.</p>
-                  <a href="channel-management.html" class="btn-channel-register" data-i18n="withdraw.channelRegisterBtn">채널 등록하러 가기</a>
-                </div>
-              </div>
+
               
               <button id="show-form-btn" class="show-form-btn" data-i18n="withdraw.showFormBtn">계좌 등록하기</button>
               <div id="withdraw-form-wrapper" style="display:none;">
@@ -519,9 +439,8 @@
           <div class="footer-nav-group">
             <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
             <ul class="footer-nav">
-              <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 찾기</a></li>
+              <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
               <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-              <li><a href="../pages/channel-management.html" data-i18n="navbar.channel">채널 관리</a></li>
               <li><a href="../pages/track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
             </ul>
           </div>

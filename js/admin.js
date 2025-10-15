@@ -374,6 +374,21 @@ function showProjectInfo() {
   } catch {}
 }
 
+// 테이블 뷰 표시 함수
+function showTableView(viewId) {
+  // 모든 뷰 숨기기
+  document.getElementById('basic-view').style.display = 'none';
+  document.querySelectorAll('.table-view').forEach(view => {
+    view.classList.remove('active');
+  });
+
+  // 지정된 테이블 뷰 표시
+  const targetView = document.getElementById(`table-view-${viewId}`);
+  if (targetView) {
+    targetView.classList.add('active');
+  }
+}
+
 // 컬렉션별 전용 뷰 관리
 function switchView(collectionName) {
   // 모든 뷰 숨기기
@@ -618,7 +633,7 @@ async function loadTrackRequestsTable() {
     const uidToUser = await getUserInfoMap(Array.from(uidSet));
 
     if (requests.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#6b7280; padding:20px;">등록된 트랙 요청이 없습니다.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#6b7280; padding:20px;">등록된 트랙 요청이 없습니다.</td></tr>';
       return;
     }
 
@@ -700,6 +715,14 @@ async function loadTrackRequestsTable() {
         <td>${genre}</td>
         <td></td>
         <td></td>
+        <td>
+          <input type="text" 
+                 class="isrc-input" 
+                 value="${request.ISRC || ''}" 
+                 placeholder="ISRC 입력" 
+                 onchange="updateTrackRequestISRC('${request.id}', this.value)"
+                 style="width: 100%; padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px;">
+        </td>
         <td>${createdStr}</td>
         <td>
           <div class="table-actions">
@@ -750,7 +773,7 @@ async function loadTrackRequestsTable() {
   } catch (err) {
     console.error('트랙 요청 데이터 로드 오류:', err);
     const tbody = document.getElementById('track-requests-tbody');
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#dc2626; padding:20px;">데이터 로드 실패: ${err?.message || '권한이 없거나 컬렉션이 존재하지 않습니다'}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#dc2626; padding:20px;">데이터 로드 실패: ${err?.message || '권한이 없거나 컬렉션이 존재하지 않습니다'}</td></tr>`;
   }
 }
 
@@ -1507,13 +1530,378 @@ async function deleteAccountWithConfirm(accountId) {
   }
 }
 
+// ISRC 업데이트 함수
+async function updateTrackRequestISRC(requestId, isrcValue) {
+  try {
+    const requestRef = doc(db, 'track_requests', requestId);
+    await updateDoc(requestRef, { 
+      ISRC: isrcValue.trim() || null,
+      updatedAt: serverTimestamp()
+    });
+    
+    // 테이블 새로고침
+    await loadTrackRequestsTable();
+    
+    if (isrcValue.trim()) {
+      alert(`ISRC가 "${isrcValue.trim()}"로 저장되었습니다.`);
+    } else {
+      alert('ISRC가 삭제되었습니다.');
+    }
+  } catch (err) {
+    alert('ISRC 업데이트 실패: ' + (err?.message || err));
+    console.error('ISRC 업데이트 오류:', err);
+  }
+}
+
+// CD Baby 리포트 파싱 관련 변수
+let selectedCDBabyFile = null;
+let parsedCDBabyData = null;
+
+// CD Baby 리포트 파일 선택 처리
+function handleCDBabyFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  selectedCDBabyFile = file;
+  
+  // 파일 정보 표시
+  const fileInfo = document.getElementById('selected-file-info');
+  const processingOptions = document.getElementById('processing-options');
+  
+  fileInfo.style.display = 'block';
+  fileInfo.innerHTML = `
+    <strong>선택된 파일:</strong> ${file.name} 
+    <span style="color: #64748b;">(${(file.size / 1024).toFixed(1)} KB)</span>
+  `;
+  
+  processingOptions.style.display = 'block';
+}
+
+// CD Baby 리포트 파싱
+async function parseCDBabyReport() {
+  if (!selectedCDBabyFile) {
+    alert('먼저 CD Baby 리포트 파일을 선택해주세요.');
+    return;
+  }
+
+  try {
+    const text = await selectedCDBabyFile.text();
+    const lines = text.split('\n').filter(line => line.trim());
+    
+    if (lines.length === 0) {
+      alert('파일이 비어있거나 읽을 수 없습니다.');
+      return;
+    }
+
+    // CD Baby 리포트 형식에 따라 파싱 (일반적인 형식 가정)
+    const records = [];
+    const headers = lines[0].split('\t').map(h => h.trim()); // 탭 구분 가정
+    
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split('\t');
+      if (values.length < headers.length) continue;
+      
+      const record = {};
+      headers.forEach((header, index) => {
+        record[header] = values[index]?.trim() || '';
+      });
+      records.push(record);
+    }
+
+    // ISRC와 사용자 매핑
+    const mappingResults = await mapCDBabyRecordsToUsers(records);
+    
+    // 결과 표시
+    displayParsingResults(mappingResults);
+    
+    parsedCDBabyData = mappingResults;
+    
+  } catch (error) {
+    console.error('CD Baby 리포트 파싱 오류:', error);
+    alert('파일 파싱 중 오류가 발생했습니다: ' + error.message);
+  }
+}
+
+// CD Baby 레코드를 사용자와 매핑
+async function mapCDBabyRecordsToUsers(records) {
+  const results = {
+    totalRecords: records.length,
+    mappedRecords: [],
+    unmappedRecords: [],
+    totalEarnings: 0
+  };
+
+  // track_requests 컬렉션에서 ISRC 매핑 정보 가져오기
+  const trackRequestsSnap = await getDocs(collection(db, 'track_requests'));
+  const isrcToUserMap = new Map();
+  
+  trackRequestsSnap.forEach(doc => {
+    const data = doc.data();
+    if (data.ISRC && data.uid) {
+      isrcToUserMap.set(data.ISRC, data.uid);
+    }
+  });
+
+  for (const record of records) {
+    const isrc = record['ISRC'] || record['isrc'] || '';
+    const artist = record['Artist Name'] || record['Artist'] || '';
+    const platform = record['Platform'] || record['Store'] || '';
+    const earnings = parseFloat(record['revenue_share'] || record['Earnings'] || record['Revenue'] || '0') || 0;
+    
+    const mappedRecord = {
+      artist,
+      isrc,
+      platform,
+      earnings,
+      mapped: false,
+      userId: null,
+      userName: null
+    };
+
+    // ISRC로 매핑 시도
+    if (isrc && isrcToUserMap.has(isrc)) {
+      const userId = isrcToUserMap.get(isrc);
+      const userInfo = await getUserInfo(userId);
+      
+      mappedRecord.mapped = true;
+      mappedRecord.userId = userId;
+      mappedRecord.userName = userInfo.nickname || userInfo.displayName || userInfo.username || userId;
+      
+      results.mappedRecords.push(mappedRecord);
+      results.totalEarnings += earnings;
+    } else {
+      results.unmappedRecords.push(mappedRecord);
+    }
+  }
+
+  return results;
+}
+
+// 사용자 정보 가져오기 (단일 사용자)
+async function getUserInfo(userId) {
+  if (userInfoCache.has(userId)) {
+    return userInfoCache.get(userId);
+  }
+
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      const info = {
+        username: userData.username || '',
+        nickname: userData.nickname || '',
+        displayName: userData.displayName || '',
+        email: userData.email || ''
+      };
+      userInfoCache.set(userId, info);
+      return info;
+    }
+  } catch (error) {
+    console.error('사용자 정보 조회 오류:', error);
+  }
+
+  return { username: '', nickname: '', displayName: '', email: '' };
+}
+
+// 파싱 결과 표시
+function displayParsingResults(results) {
+  const resultsPanel = document.getElementById('parsing-results');
+  const tbody = document.getElementById('parsing-results-tbody');
+  
+  // 통계 업데이트
+  document.querySelector('#parsing-results > div:nth-child(2) > div:nth-child(1) > div:nth-child(1)').textContent = results.totalRecords;
+  document.querySelector('#parsing-results > div:nth-child(2) > div:nth-child(2) > div:nth-child(1)').textContent = results.mappedRecords.length;
+  document.querySelector('#parsing-results > div:nth-child(2) > div:nth-child(3) > div:nth-child(1)').textContent = results.unmappedRecords.length;
+  document.querySelector('#parsing-results > div:nth-child(2) > div:nth-child(4) > div:nth-child(1)').textContent = `₩${results.totalEarnings.toLocaleString()}`;
+
+  // 상세 결과 테이블 업데이트
+  tbody.innerHTML = '';
+  
+  // 매핑된 레코드 표시
+  results.mappedRecords.forEach(record => {
+    const row = document.createElement('tr');
+    row.style.background = '#f0fdf4';
+    row.innerHTML = `
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.artist}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.isrc}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.platform}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">₩${record.earnings.toLocaleString()}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center;">
+        <span style="background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">
+          ✅ ${record.userName}
+        </span>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  // 매핑되지 않은 레코드 표시
+  results.unmappedRecords.forEach(record => {
+    const row = document.createElement('tr');
+    row.style.background = '#fef3c7';
+    row.innerHTML = `
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.artist}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.isrc || '-'}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.platform}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">₩${record.earnings.toLocaleString()}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center;">
+        <span style="background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">
+          ❌ 매핑 실패
+        </span>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  // 저장 버튼 표시 (매핑된 데이터가 있을 때만)
+  const saveButton = document.getElementById('save-parsed-data');
+  if (results.mappedRecords.length > 0) {
+    saveButton.style.display = 'block';
+  } else {
+    saveButton.style.display = 'none';
+  }
+
+  resultsPanel.style.display = 'block';
+}
+
+// CD Baby 리포트 업로드 기록 저장
+async function saveCDBabyUploadHistory(results, fileName, uploadedBy, processingMode) {
+  try {
+    await addDoc(collection(db, 'cdbaby_upload_history'), {
+      timestamp: serverTimestamp(),
+      fileName: fileName,
+      uploadedBy: uploadedBy,
+      totalRecords: results.totalRecords,
+      mappedRecordsCount: results.mappedRecords.length,
+      unmappedRecordsCount: results.unmappedRecords.length,
+      totalEarnings: results.totalEarnings,
+      processingMode: processingMode
+    });
+    console.log('[saveCDBabyUploadHistory] 업로드 기록 저장 성공');
+  } catch (error) {
+    console.error('[saveCDBabyUploadHistory] 업로드 기록 저장 실패:', error);
+  }
+}
+
+// 파싱된 데이터를 user_earnings 컬렉션에 저장
+async function saveParsedCDBabyData() {
+  if (!parsedCDBabyData || parsedCDBabyData.mappedRecords.length === 0) {
+    alert('저장할 데이터가 없습니다.');
+    return;
+  }
+
+  try {
+    const processingMode = document.getElementById('processing-mode').value;
+    if (processingMode === 'preview') {
+      alert('미리보기 모드에서는 실제 저장이 되지 않습니다. 처리 모드를 "실제 업데이트"로 변경해주세요.');
+      return;
+    }
+
+    // 사용자별 수익 데이터 그룹화
+    const userEarningsMap = new Map();
+    
+    parsedCDBabyData.mappedRecords.forEach(record => {
+      if (!userEarningsMap.has(record.userId)) {
+        userEarningsMap.set(record.userId, {
+          userId: record.userId,
+          monthlyEarningsAggregated: new Map(), // New: to aggregate by month
+          totalEarnings: 0,
+          currentBalance: 0,
+          lastUpdated: new Date()
+        });
+      }
+      
+      const userEarnings = userEarningsMap.get(record.userId);
+      const currentMonth = getCurrentMonth(); // e.g., "YYYY-MM"
+
+      // Aggregate earnings by month
+      const existingMonthlyAmount = userEarnings.monthlyEarningsAggregated.get(currentMonth) || 0;
+      userEarnings.monthlyEarningsAggregated.set(currentMonth, existingMonthlyAmount + record.earnings);
+
+      userEarnings.totalEarnings += record.earnings;
+      userEarnings.currentBalance += record.earnings;
+    });
+
+    // Convert aggregated monthly earnings to the expected array format
+    for (const earningsData of userEarningsMap.values()) {
+      const monthlyEarningsArray = [];
+      earningsData.monthlyEarningsAggregated.forEach((amount, month) => {
+        monthlyEarningsArray.push({ month, amount });
+      });
+      earningsData.monthlyEarnings = monthlyEarningsArray; // Assign to monthlyEarnings
+      delete earningsData.monthlyEarningsAggregated; // Clean up temporary map
+    }
+
+    // Firestore에 저장
+    const batch = [];
+    for (const [userId, earningsData] of userEarningsMap) {
+      const userEarningsRef = doc(db, 'user_earnings', userId);
+      batch.push(setDoc(userEarningsRef, earningsData, { merge: true }));
+    }
+
+    await Promise.all(batch);
+    
+    alert(`성공적으로 ${userEarningsMap.size}명의 사용자 수익 데이터를 저장했습니다.`);
+    
+    // 업로드 기록 저장
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const fileName = selectedCDBabyFile ? selectedCDBabyFile.name : 'Unknown File';
+      await saveCDBabyUploadHistory(parsedCDBabyData, fileName, currentUser.uid, processingMode);
+    }
+
+    // 결과 패널 숨기기
+    document.getElementById('parsing-results').style.display = 'none';
+    
+  } catch (error) {
+    console.error('데이터 저장 오류:', error);
+    alert('데이터 저장 중 오류가 발생했습니다: ' + error.message);
+  }
+}
+
+// 현재 월 문자열 반환 (YYYY-MM 형식)
+function getCurrentMonth() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
+
+// CD Baby 리포트 관련 이벤트 리스너 설정
+function setupCDBabyEventListeners() {
+  const fileInput = document.getElementById('cdbaby-report-file');
+  const selectButton = document.getElementById('select-cdbaby-file');
+  const parseButton = document.getElementById('parse-cdbaby-report');
+  const saveButton = document.getElementById('save-parsed-data');
+
+  if (selectButton) {
+    selectButton.addEventListener('click', () => {
+      fileInput.click();
+    });
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', handleCDBabyFileSelect);
+  }
+
+  if (parseButton) {
+    parseButton.addEventListener('click', parseCDBabyReport);
+  }
+
+  if (saveButton) {
+    saveButton.addEventListener('click', saveParsedCDBabyData);
+  }
+}
+
 // 전역 함수로 노출 (HTML onclick에서 사용)
 window.updateChannelStatus = updateChannelStatus;
 window.updateTrackRequestStatus = updateTrackRequestStatus;
+window.updateTrackRequestISRC = updateTrackRequestISRC;
 window.deleteUserWithConfirm = deleteUserWithConfirm;
 window.deleteContentLinkWithConfirm = deleteContentLinkWithConfirm;
 window.deleteTrackWithConfirm = deleteTrackWithConfirm;
 window.deleteAccountWithConfirm = deleteAccountWithConfirm;
+window.parseCDBabyReport = parseCDBabyReport;
+window.saveParsedCDBabyData = saveParsedCDBabyData;
 
 const modal = document.getElementById('content-modal');
 const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -1552,6 +1940,55 @@ function main() {
   initAdminAuth();
   bindTrackUploadUI();
   initModal();
+  setupCDBabyEventListeners();
+}
+
+// CD Baby 업로드 기록 로드 및 표시
+async function loadCDBabyUploadHistory() {
+  try {
+    const tbody = document.getElementById('cdbaby-upload-history-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    const snapshot = await getDocs(query(collection(db, 'cdbaby_upload_history'), orderBy('timestamp', 'desc')));
+    const historyRecords = [];
+    const uids = new Set();
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      historyRecords.push({ id: doc.id, ...data });
+      if (data.uploadedBy) uids.add(data.uploadedBy);
+    });
+
+    const userInfoMap = await getUserInfoMap(Array.from(uids));
+
+    if (historyRecords.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#6b7280; padding:20px;">업로드 기록이 없습니다.</td></tr>';
+      return;
+    }
+
+    historyRecords.forEach(record => {
+      const row = document.createElement('tr');
+      const uploadDate = record.timestamp?.toDate ? record.timestamp.toDate() : (record.timestamp && record.timestamp.seconds ? new Date(record.timestamp.seconds * 1000) : null);
+      const dateStr = uploadDate ? uploadDate.toLocaleString('ko-KR') : '-';
+      const uploaderInfo = userInfoMap[record.uploadedBy] || {};
+      const uploaderName = uploaderInfo.nickname || uploaderInfo.displayName || uploaderInfo.username || record.uploadedBy || '-';
+
+      row.innerHTML = `
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${dateStr}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${record.fileName}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0;">${uploaderName}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">${record.totalRecords}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">${record.mappedRecordsCount}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">${record.unmappedRecordsCount}</td>
+        <td style="padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: right;">₩${record.totalEarnings.toLocaleString()}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (err) {
+    console.error('CD Baby 업로드 기록 로드 실패:', err);
+    const tbody = document.getElementById('cdbaby-upload-history-tbody');
+    if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#dc2626; padding:20px;">기록 로드 실패: ${err?.message || '알 수 없는 오류'}</td></tr>`;
+  }
 }
 
 function bindPresetButtons() {
@@ -1602,6 +2039,10 @@ function bindPresetButtons() {
         await loadAccountsTable();
         const searchInput = document.getElementById('filter-accounts');
         if (searchInput) searchInput.oninput = () => loadAccountsTable();
+      } else if (collectionName === 'cdbaby-reports') {
+        // CD Baby 리포트 섹션 표시 (특별한 데이터 로딩 없음)
+        showTableView('cdbaby-reports');
+        await loadCDBabyUploadHistory(); // <--- Add this line
       } else {
         // 기본 컬렉션 로드
         await loadCollection(collectionName);

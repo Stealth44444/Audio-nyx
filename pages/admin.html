@@ -6,6 +6,7 @@
     <title>Audionyx Admin</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* 관리자 전용 디자인 - 업무 효율성 중심 */
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #f8fafc; color: #1e293b; margin: 0; }
@@ -220,6 +221,7 @@
                     <div class="preset-btn" data-collection="track_requests" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">🎵 트랙요청</div>
                     <div class="preset-btn" data-collection="track_new">🎼 음원DB</div>
                     <div class="preset-btn" data-collection="user_withdraw_accounts" title="권한이 필요하거나 컬렉션이 존재하지 않을 수 있습니다">💳 고객 계좌</div>
+                    <div class="preset-btn" data-collection="cdbaby-reports" title="CD Baby 리포트 업로드 및 처리">📊 CD Baby 리포트</div>
                 </div>
             </div>
 
@@ -332,6 +334,7 @@
                                         <th>장르</th>
                                         <th>레퍼런스 URL</th>
                                         <th>요청 내용</th>
+                                        <th>ISRC</th>
                                         <th>요청일</th>
                                         <th>액션</th>
                                         <th>상태</th>
@@ -447,6 +450,144 @@
                                 </thead>
                                 <tbody id="accounts-tbody"></tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <!-- CD Baby 리포트 업로드 섹션 -->
+                    <div id="table-view-cdbaby-reports" class="table-view">
+                        <div class="panel">
+                            <h3 style="margin:0 0 16px 0; font-size:18px; font-weight:700; color:#0f172a;">
+                                📊 CD Baby 리포트 업로드 시스템
+                            </h3>
+                            <p style="color:#64748b; margin-bottom:20px; font-size:14px;">
+                                CD Baby에서 받은 수익 리포트 파일을 업로드하여 사용자별 수익 데이터를 자동으로 처리합니다.
+                            </p>
+                            
+                            <!-- 파일 업로드 영역 -->
+                            <div class="upload-section" style="border: 2px dashed #e2e8f0; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 20px; background: #f8fafc;">
+                                <div style="margin-bottom: 16px;">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" style="margin-bottom: 8px;">
+                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <h4 style="margin: 0 0 8px 0; color: #1e293b;">CD Baby 리포트 파일 업로드</h4>
+                                <p style="margin: 0 0 16px 0; color: #64748b; font-size: 14px;">
+                                    .txt 또는 .csv 형식의 CD Baby 수익 리포트 파일을 선택하세요
+                                </p>
+                                <input type="file" id="cdbaby-report-file" accept=".txt,.csv" style="display: none;">
+                                <button id="select-cdbaby-file" class="btn-primary" style="padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                    파일 선택
+                                </button>
+                                <div id="selected-file-info" style="margin-top: 12px; color: #059669; font-size: 14px; display: none;"></div>
+                            </div>
+
+                            <!-- 처리 옵션 -->
+                            <div class="processing-options" style="display: none;" id="processing-options">
+                                <h4 style="margin: 0 0 12px 0; color: #1e293b; font-size: 16px;">처리 옵션</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">리포트 기간</label>
+                                        <select id="report-period" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                            <option value="">자동 감지</option>
+                                            <option value="2025-01">2025년 1월</option>
+                                            <option value="2025-02">2025년 2월</option>
+                                            <option value="2025-03">2025년 3월</option>
+                                            <option value="2025-04">2025년 4월</option>
+                                            <option value="2025-05">2025년 5월</option>
+                                            <option value="2025-06">2025년 6월</option>
+                                            <option value="2025-07">2025년 7월</option>
+                                            <option value="2025-08">2025년 8월</option>
+                                            <option value="2025-09">2025년 9월</option>
+                                            <option value="2025-10">2025년 10월</option>
+                                            <option value="2025-11">2025년 11월</option>
+                                            <option value="2025-12">2025년 12월</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151;">처리 모드</label>
+                                        <select id="processing-mode" style="width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                            <option value="preview">미리보기 (실제 저장 안함)</option>
+                                            <option value="update">실제 업데이트</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                                    <button id="parse-cdbaby-report" class="btn-primary" style="padding: 12px 24px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                        리포트 파싱 시작
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 처리 결과 -->
+                            <div id="parsing-results" class="panel" style="display: none; margin-top: 20px;">
+                                <h4 style="margin: 0 0 16px 0; color: #1e293b; font-size: 16px;">파싱 결과</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                                    <div style="text-align: center; padding: 16px; background: #f0f9ff; border-radius: 8px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: #0284c7;">0</div>
+                                        <div style="color: #64748b; font-size: 14px;">총 레코드</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 16px; background: #f0fdf4; border-radius: 8px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: #16a34a;">0</div>
+                                        <div style="color: #64748b; font-size: 14px;">매핑 성공</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 16px; background: #fef3c7; border-radius: 8px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: #d97706;">0</div>
+                                        <div style="color: #64748b; font-size: 14px;">매핑 실패</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 16px; background: #fef2f2; border-radius: 8px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: #dc2626;">₩0</div>
+                                        <div style="color: #64748b; font-size: 14px;">총 수익</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 상세 결과 테이블 -->
+                                <div style="max-height: 400px; overflow: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                                        <thead style="background: #f8fafc; position: sticky; top: 0;">
+                                            <tr>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #e2e8f0;">아티스트</th>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #e2e8f0;">ISRC</th>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #e2e8f0;">플랫폼</th>
+                                                <th style="padding: 8px; text-align: right; border-bottom: 1px solid #e2e8f0;">수익</th>
+                                                <th style="padding: 8px; text-align: center; border-bottom: 1px solid #e2e8f0;">매핑 상태</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="parsing-results-tbody">
+                                            <!-- 파싱 결과가 여기에 표시됩니다 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                                    <button id="save-parsed-data" class="btn-primary" style="padding: 12px 24px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; display: none;">
+                                        데이터 저장
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 업로드 기록 -->
+                            <div class="panel" style="margin-top: 20px;">
+                                <h4 style="margin: 0 0 16px 0; color: #1e293b; font-size: 16px;">업로드 기록</h4>
+                                <div style="max-height: 400px; overflow: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                                        <thead style="background: #f8fafc; position: sticky; top: 0;">
+                                            <tr>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #e2e8f0;">업로드 날짜</th>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #e2e8f0;">파일 이름</th>
+                                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #e2e8f0;">업로드 관리자</th>
+                                                <th style="padding: 8px; text-align: right; border-bottom: 1px solid #e2e8f0;">총 레코드</th>
+                                                <th style="padding: 8px; text-align: right; border-bottom: 1px solid #e2e8f0;">매핑 성공</th>
+                                                <th style="padding: 8px; text-align: right; border-bottom: 1px solid #e2e8f0;">매핑 실패</th>
+                                                <th style="padding: 8px; text-align: right; border-bottom: 1px solid #e2e8f0;">총 수익</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cdbaby-upload-history-tbody">
+                                            <!-- 업로드 기록이 여기에 표시됩니다 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

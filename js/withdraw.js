@@ -80,27 +80,10 @@ let userChannels = [];
 let channelMonitoringUnsubscribe = null;
 
 // DOM 요소들
-const showFormBtn = document.getElementById('show-form-btn');
-const formWrapper = document.getElementById('withdraw-form-wrapper');
-const withdrawForm = document.getElementById('withdraw-form');
+let showFormBtn; // assign after DOMContentLoaded
+let formWrapper; // assign after DOMContentLoaded
+let withdrawForm; // assign after DOMContentLoaded
 const channelStatusNotice = document.querySelector('.channel-status-notice');
-
-// === 폼 표시/숨김 토글 ===
-function toggleForm() {
-  if (!formWrapper || !showFormBtn) return;
-  
-  const isVisible = formWrapper.style.display !== 'none';
-  
-  if (isVisible) {
-    formWrapper.style.display = 'none';
-    showFormBtn.textContent = '계좌 등록하기';
-    showFormBtn.classList.remove('active');
-  } else {
-    formWrapper.style.display = 'block';
-    showFormBtn.textContent = '폼 숨기기';
-    showFormBtn.classList.add('active');
-  }
-}
 
 // === 폼 유효성 검사 ===
 function validateForm() {
@@ -524,8 +507,21 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
     }
 }
 
-// === Dashboard UI Elements ===
-let totalRevenueAmount, totalRevenueChange, currentBalanceAmount, nextPayoutDate, payoutHistoryList, latestTrackTitleEl, latestTrackArtistEl;
+function getPlatformIcon(platform) {
+  const p = String(platform).toLowerCase();
+  if (p.includes('spotify')) {
+    return '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.223 17.493c-.24.36-.68.47-1.04.23-.29-.19-.4-.51-.4-.82v-.01c0-.3.11-.6.39-.79 2.5-1.53 2.84-4.23.7-6.16-2.13-1.93-5.53-2.2-8.2.23-.34.3-.78.39-1.14.15-.36-.24-.48-.68-.24-1.04.24-.36.68-.48 1.04-.24 3.25-2.92 7.43-2.5 10.13.23 2.7 2.7 2.35 6.38-.58 8.21zm-3.11-3.11c-.2.29-.58.38-.88.18-1.92-1.18-4.32-1.53-7.02-.82-.3.08-.6-.08-.68-.38-.08-.3.08-.6.38-.68 3-.78 5.7-.39 7.82.98.3.2.38.58.18.88zm-4.1-3.25c-.16.24-.48.32-.72.16-1.5-.92-3.4-.92-4.82 0-.24.16-.56.08-.72-.16-.16-.24-.08-.56.16-.72 1.64-1.08 3.9-.99 5.64.24.24.16.32.48.16.72z"/></svg>';
+  }
+  if (p.includes('apple')) {
+    return '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.015 6.992C10.848 6.984 9.83 7.544 9.24 8.4c-1.12 1.696-.744 4.12.704 6.04.56.72 1.216 1.584 2.048 1.584.816 0 1.232-.784 2.016-1.584 1.24-1.28 1.824-2.96 1.824-4.64 0-2.312-1.68-3.408-3.816-3.408zM14.4 2.16c-.048.008-2.248.96-3.6 2.48-.96 1.12-1.88 2.8-1.632 4.44.12.784.56 1.472 1.12 2.04.56.56 1.248.968 2.064.96.048 0 .08-.008.12-.008.04-.008.08-.008.12-.008.8-.008 1.536-.44 2.096-1.04.64-.64 1.04-1.512 1.04-2.424 0-.072-.016-.144-.016-.216-.024-1.52-1.008-2.92-2.2-3.816C15.448 2.448 14.76 2.16 14.4 2.16z"/></svg>';
+  }
+  if (p.includes('youtube')) {
+    return '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M21.582 7.242c-.23-.854-.882-1.508-1.735-1.738C18.23 5 12 5 12 5s-6.23 0-7.847.504c-.853.23-1.505.884-1.735 1.738C2 9.01 2 12 2 12s0 2.99.418 4.758c.23.854.882 1.508 1.735 1.738C5.77 19 12 19 12 19s6.23 0 7.847-.504c.853-.23 1.505-.884 1.735-1.738C22 14.99 22 12 22 12s0-2.99-.418-4.758zM9.75 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>';
+  }
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
+}
+
+let totalRevenueAmount, totalRevenueChange, currentBalanceAmount, nextPayoutDate, lastUpdatedDateEl, latestTrackInfoEl, sourceListEl, payoutHistoryList, dbAccountBank, dbAccountNumber, dbAccountHolder;
 
 // DOM 요소 참조 함수
 function getDashboardElements() {
@@ -533,203 +529,165 @@ function getDashboardElements() {
     totalRevenueChange = document.querySelector('.card-total-revenue .revenue-change');
     currentBalanceAmount = document.querySelector('.card-current-balance .balance-amount');
     nextPayoutDate = document.querySelector('.card-next-payout .payout-date');
-    payoutHistoryList = document.querySelector('.card-payout-history .history-list');
-    latestTrackTitleEl = document.getElementById('latest-track-title');
-    latestTrackArtistEl = document.getElementById('latest-track-artist');
-    
-    console.log('[getDashboardElements] DOM 요소 검색 결과:', {
-        totalRevenueAmount: !!totalRevenueAmount,
-        totalRevenueChange: !!totalRevenueChange,
-        currentBalanceAmount: !!currentBalanceAmount,
-        nextPayoutDate: !!nextPayoutDate,
-        payoutHistoryList: !!payoutHistoryList,
-        latestTrackTitleEl: !!latestTrackTitleEl,
-        latestTrackArtistEl: !!latestTrackArtistEl
-    });
+    lastUpdatedDateEl = document.querySelector('.card-last-updated .update-date');
+    latestTrackInfoEl = document.getElementById('latest-track-info');
+    sourceListEl = document.getElementById('source-list');
+    // 대시보드 내 계좌 정보 요소
+    dbAccountBank = document.getElementById('dashboard-account-bank');
+    dbAccountNumber = document.getElementById('dashboard-account-number');
+    dbAccountHolder = document.getElementById('dashboard-account-holder');
 }
 
 function updateDashboardUI(dashboardData) {
-    console.log('[updateDashboardUI] 대시보드 UI 업데이트 시작', dashboardData);
-    
-    // DOM 요소 다시 검색
     getDashboardElements();
-    
-    // DOM 요소 확인
-    console.log('[updateDashboardUI] DOM 요소 상태:', {
-        totalRevenueAmount: !!totalRevenueAmount,
-        currentBalanceAmount: !!currentBalanceAmount,
-        nextPayoutDate: !!nextPayoutDate,
-        payoutHistoryList: !!payoutHistoryList,
-        latestTrackTitleEl: !!latestTrackTitleEl,
-        latestTrackArtistEl: !!latestTrackArtistEl
-    });
-    
-    if (totalRevenueAmount) {
-        totalRevenueAmount.textContent = `₩${dashboardData.totalRevenue.toLocaleString()}`;
-        console.log('[updateDashboardUI] 총 수익 업데이트:', totalRevenueAmount.textContent);
-    }
-    
+
+    if (totalRevenueAmount) totalRevenueAmount.textContent = `₩${dashboardData.totalRevenue.toLocaleString()}`;
     if (totalRevenueChange) {
         totalRevenueChange.textContent = `${dashboardData.totalRevenueChange >= 0 ? '+' : ''}${dashboardData.totalRevenueChange}%`;
         totalRevenueChange.style.color = dashboardData.totalRevenueChange >= 0 ? '#22c55e' : '#ef4444';
     }
-    
-    if (currentBalanceAmount) {
-        currentBalanceAmount.textContent = `₩${dashboardData.currentBalance.toLocaleString()}`;
-        console.log('[updateDashboardUI] 현재 잔액 업데이트:', currentBalanceAmount.textContent);
-    }
-    
-    if (nextPayoutDate) {
-        nextPayoutDate.textContent = dashboardData.nextPayout;
-        console.log('[updateDashboardUI] 다음 정산일 업데이트:', nextPayoutDate.textContent);
+    if (currentBalanceAmount) currentBalanceAmount.textContent = `₩${dashboardData.currentBalance.toLocaleString()}`;
+    if (nextPayoutDate) nextPayoutDate.textContent = dashboardData.nextPayout;
+    if (lastUpdatedDateEl) lastUpdatedDateEl.textContent = dashboardData.lastUpdatedAt || '-';
+
+    if (latestTrackInfoEl) {
+        const title = dashboardData.latestTrackTitle || '-';
+        const artist = dashboardData.latestTrackArtist || '-';
+        latestTrackInfoEl.textContent = title === '-' ? '-' : `${title} - ${artist}`;
     }
 
-    if (payoutHistoryList) {
-        if (dashboardData.payoutHistory && dashboardData.payoutHistory.length > 0) {
-        payoutHistoryList.innerHTML = dashboardData.payoutHistory.map(item => `
-            <li><span>${item.date}</span><span>₩${item.amount.toLocaleString()}</span><span class="status-${item.status === '완료' ? 'completed' : 'pending'}">${item.status}</span></li>
-        `).join('');
+    // 대시보드 내 계좌 정보 업데이트
+    if (dbAccountBank) dbAccountBank.textContent = dashboardData.bank || '-';
+    if (dbAccountNumber) dbAccountNumber.textContent = dashboardData.account || '-';
+    if (dbAccountHolder) dbAccountHolder.textContent = dashboardData.holder || '-';
+
+    if (sourceListEl) {
+        sourceListEl.innerHTML = '';
+        if (dashboardData.sourceBreakdownMap && dashboardData.sourceBreakdownMap.size > 0) {
+            const sourceLabels = Array.from(dashboardData.sourceBreakdownMap.keys());
+            const sourceData = Array.from(dashboardData.sourceBreakdownMap.values());
+            
+            sourceLabels.forEach((platform, index) => {
+                const amount = sourceData[index];
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="source-icon">${getPlatformIcon(platform)}</span>
+                    <span class="source-name">${platform}</span>
+                    <span class="source-amount">₩${amount.toLocaleString()}</span>
+                `;
+                sourceListEl.appendChild(li);
+            });
         } else {
-            payoutHistoryList.innerHTML = '<li style="text-align: center; color: #64748b; padding: 20px;">정산 내역이 없습니다</li>';
+            sourceListEl.innerHTML = '<li style="justify-content: center; color: #64748b;">수익 소스 데이터가 없습니다</li>';
         }
-        console.log('[updateDashboardUI] 정산 내역 업데이트 완료');
     }
 
-    if (latestTrackTitleEl) {
-        latestTrackTitleEl.textContent = dashboardData.latestTrackTitle || '-';
-    }
-    if (latestTrackArtistEl) {
-        latestTrackArtistEl.textContent = dashboardData.latestTrackArtist || '-';
-    }
-
-    renderDashboardCharts(dashboardData.monthlyEarnings, dashboardData.earningsLabels, dashboardData.sourceBreakdown, dashboardData.sourceLabels);
-    
-    console.log('[updateDashboardUI] 대시보드 UI 업데이트 완료');
+    renderDashboardCharts(dashboardData.monthlyEarnings, dashboardData.earningsLabels, Array.from(dashboardData.sourceBreakdownMap.values()), Array.from(dashboardData.sourceBreakdownMap.keys()));
 }
 
 // === Fetch Dashboard Data ===
+
 async function fetchDashboardData(uid) {
-    console.log(`[fetchDashboardData] Fetching dashboard data for user: ${uid}`);
-    console.log(`[fetchDashboardData] Authenticated user UID: ${getAuth().currentUser?.uid}`);
-    
     try {
-        // Firestore에서 user_earnings 컬렉션 조회
-        const userEarningsRef = doc(db, 'user_earnings', uid);
-        const userEarningsSnap = await getDoc(userEarningsRef);
-        
+        // 두 데이터 소스를 병렬로 조회
+        const [userEarningsSnap, userAccountSnap] = await Promise.all([
+            getDoc(doc(db, 'user_earnings', uid)),
+            getDoc(doc(db, 'user_withdraw_accounts', uid))
+        ]);
+
+        let earningsData = {};
+        let accountData = {};
+
         if (userEarningsSnap.exists()) {
-            const data = userEarningsSnap.data();
-            console.log('[fetchDashboardData] 사용자 수익 데이터 발견:', data);
-            
-            // 실제 데이터가 있으면 반환
-            // 월별 수익 데이터 정렬 및 매핑
-            const monthlyEarningsMap = new Map();
-            if (data.monthlyEarnings) {
-                data.monthlyEarnings.forEach(earning => {
-                    monthlyEarningsMap.set(earning.month, earning.amount);
-                });
-            }
-            const currentYear = new Date().getFullYear();
-            const chartMonthlyEarnings = [
-                `${currentYear}-06`, `${currentYear}-07`, `${currentYear}-08`, `${currentYear}-09`, `${currentYear}-10`, `${currentYear}-11`
-            ].map(monthKey => monthlyEarningsMap.get(monthKey) || 0);
+            earningsData = userEarningsSnap.data();
+        }
 
-            // 수익 소스 데이터 집계 및 매핑
-            const sourceBreakdownMap = new Map();
-            if (data.monthlyEarnings) {
-                data.monthlyEarnings.forEach(earning => {
-                    const platform = earning.platform || '기타';
-                    const currentAmount = sourceBreakdownMap.get(platform) || 0;
-                    sourceBreakdownMap.set(platform, currentAmount + earning.amount);
-                });
-            }
-            const chartSourceBreakdown = [
-                sourceBreakdownMap.get('YouTube') || 0,
-                sourceBreakdownMap.get('Spotify') || 0,
-                sourceBreakdownMap.get('Apple Music') || 0,
-                sourceBreakdownMap.get('기타') || 0,
-                sourceBreakdownMap.get('직접 판매') || 0
-            ];
+        if (userAccountSnap.exists()) {
+            accountData = userAccountSnap.data();
+            // 기존 계좌 정보 UI도 업데이트
+            updateAccountInfoUI(accountData);
+        } else {
+            showNoAccountInfo();
+        }
 
-            // 최근 수익 발생 음원 정보 가져오기
-            let latestTrackTitle = '-';
-            let latestTrackArtist = '-';
-            if (data.monthlyEarnings && data.monthlyEarnings.length > 0) {
-                // 가장 최근에 추가된 수익 기록 (admin.js에서 월별로 집계되므로, 여기서는 단순히 첫 번째 항목 사용)
-                const latestEarningRecord = data.monthlyEarnings[0]; // 첫 번째 수익 기록 사용
-                console.log('[fetchDashboardData] latestEarningRecord:', latestEarningRecord);
-                if (latestEarningRecord) {
-                    latestTrackArtist = latestEarningRecord.artist || '-';
-                    console.log('[fetchDashboardData] latestTrackArtist:', latestTrackArtist);
-                    // ISRC를 사용하여 track_requests에서 트랙 제목 조회
-                    if (latestEarningRecord.isrc) {
-                        console.log('[fetchDashboardData] Searching for ISRC in track_requests:', latestEarningRecord.isrc);
-                        const q = query(collection(db, 'track_requests'), where('ISRC', '==', latestEarningRecord.isrc));
-                        const querySnapshot = await getDocs(q);
-                        if (!querySnapshot.empty) {
-                            const trackRequestData = querySnapshot.docs[0].data();
-                            latestTrackTitle = trackRequestData.request || trackRequestData.description || '-'; // 요청 내용 또는 설명 사용
-                            console.log('[fetchDashboardData] Found in track_requests, title:', latestTrackTitle);
-                        } else {
-                            console.log('[fetchDashboardData] Not found in track_requests, searching in track_new:', latestEarningRecord.isrc);
-                            // track_new 컬렉션에서도 찾아볼 수 있음 (ISRC 필드가 있다면)
-                            const q2 = query(collection(db, 'track_new'), where('ISRC', '==', latestEarningRecord.isrc));
-                            const querySnapshot2 = await getDocs(q2);
-                            if (!querySnapshot2.empty) {
-                                const trackNewData = querySnapshot2.docs[0].data();
-                                latestTrackTitle = trackNewData['Track Title'] || trackNewData.title || trackNewData.name || '-';
-                                console.log('[fetchDashboardData] Found in track_new, title:', latestTrackTitle);
-                            } else {
-                                console.log('[fetchDashboardData] Not found in track_new either.');
-                            }
-                        }
-                    }
+        const monthlyEarningsMap = new Map();
+        const currentYear = new Date().getFullYear();
+        const monthLabels = ['6월', '7월', '8월', '9월', '10월', '11월'];
+        const monthKeys = [`${currentYear}-06`, `${currentYear}-07`, `${currentYear}-08`, `${currentYear}-09`, `${currentYear}-10`, `${currentYear}-11`];
+        monthKeys.forEach(key => monthlyEarningsMap.set(key, 0));
+
+        const sourceBreakdownMap = new Map();
+        if (earningsData.monthlyEarnings) {
+            earningsData.monthlyEarnings.forEach(earning => {
+                if (monthlyEarningsMap.has(earning.month)) {
+                    const currentAmount = monthlyEarningsMap.get(earning.month);
+                    monthlyEarningsMap.set(earning.month, currentAmount + earning.amount);
                 }
-            }
+                const platform = earning.platform || '기타';
+                const currentSourceAmount = sourceBreakdownMap.get(platform) || 0;
+                sourceBreakdownMap.set(platform, currentSourceAmount + earning.amount);
+            });
+        }
+        const chartMonthlyEarnings = Array.from(monthlyEarningsMap.values());
 
-            return {
-                totalRevenue: data.totalEarnings || 0,
-                totalRevenueChange: data.totalRevenueChange || 0,
-                currentBalance: data.currentBalance || 0,
-                nextPayout: data.nextPayout || '-',
-                monthlyEarnings: chartMonthlyEarnings,
-                earningsLabels: ['6월', '7월', '8월', '9월', '10월', '11월'],
-                sourceBreakdown: chartSourceBreakdown,
-                sourceLabels: ['YouTube', 'Spotify', 'Apple Music', '기타', '직접 판매'],
-                payoutHistory: data.payoutHistory || [],
-                latestTrackTitle: latestTrackTitle,
-                latestTrackArtist: latestTrackArtist
-            };
-  } else {
-            console.log('[fetchDashboardData] 사용자 수익 데이터 없음 - 빈 데이터 반환');
-            // 데이터가 없으면 빈 데이터 반환
-            return {
-        totalRevenue: 0,
-        totalRevenueChange: 0,
-        currentBalance: 0,
-        nextPayout: '-',
-                monthlyEarnings: [0, 0, 0, 0, 0, 0],
-                earningsLabels: ['6월', '7월', '8월', '9월', '10월', '11월'],
-                sourceBreakdown: [0, 0, 0, 0, 0],
-                sourceLabels: ['YouTube', 'Spotify', 'Apple Music', '기타', '직접 판매'],
-        payoutHistory: []
-            };
-      }
+        const currentMonthIndex = new Date().getMonth() - 5; // Assuming 6월 is index 0
+        const lastMonthIndex = currentMonthIndex - 1;
+
+        const currentMonthRevenue = chartMonthlyEarnings[currentMonthIndex] || 0;
+        const lastMonthRevenue = chartMonthlyEarnings[lastMonthIndex] || 0;
+
+        let totalRevenueChange = 0;
+        if (lastMonthRevenue > 0) {
+            totalRevenueChange = Math.round(((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100);
+        } else if (currentMonthRevenue > 0) {
+            totalRevenueChange = 100; // 지난달 수익이 0일 때
+        }
+
+        let latestTrackTitle = '-';
+        let latestTrackArtist = '-';
+        if (earningsData.monthlyEarnings && earningsData.monthlyEarnings.length > 0) {
+            const sortedEarnings = [...earningsData.monthlyEarnings].sort((a, b) => new Date(b.month) - new Date(a.month));
+            const latestEarningRecord = sortedEarnings[0];
+            if (latestEarningRecord) {
+                latestTrackTitle = latestEarningRecord.trackTitle || '-';
+                latestTrackArtist = latestEarningRecord.artistName || latestEarningRecord.artist || '-';
+            }
+        }
+
+        let lastUpdatedAtFormatted = '-';
+        if (earningsData.lastUpdatedAt && earningsData.lastUpdatedAt.toDate) {
+            const date = earningsData.lastUpdatedAt.toDate();
+            lastUpdatedAtFormatted = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        return {
+            totalRevenue: earningsData.totalEarnings || 0,
+            totalRevenueChange: totalRevenueChange,
+            currentBalance: earningsData.currentBalance || 0,
+            nextPayout: earningsData.nextPayout || '-',
+            monthlyEarnings: chartMonthlyEarnings,
+            earningsLabels: monthLabels,
+            sourceBreakdownMap,
+            payoutHistory: earningsData.payoutHistory || [],
+            latestTrackTitle,
+            latestTrackArtist,
+            lastUpdatedAt: lastUpdatedAtFormatted,
+            bank: accountData.bank,
+            account: accountData.account,
+            holder: accountData.holder
+        };
+
     } catch (error) {
         console.error('[fetchDashboardData] 데이터 조회 오류:', error);
-        console.error('[fetchDashboardData] 오류 코드:', error.code);
-        console.error('[fetchDashboardData] 오류 메시지:', error.message);
-        // 오류 발생 시에도 빈 데이터 반환
-    return {
-        totalRevenue: 0,
-        totalRevenueChange: 0,
-        currentBalance: 0,
-        nextPayout: '-',
+        return { 
+            totalRevenue: 0, currentBalance: 0, nextPayout: '-',
             monthlyEarnings: [0, 0, 0, 0, 0, 0],
             earningsLabels: ['6월', '7월', '8월', '9월', '10월', '11월'],
-            sourceBreakdown: [0, 0, 0, 0, 0],
-            sourceLabels: ['YouTube', 'Spotify', 'Apple Music', '기타', '직접 판매'],
-        payoutHistory: []
+            sourceBreakdown: new Map(),
+            payoutHistory: [],
+            latestTrackTitle: '-', latestTrackArtist: '-',
+            lastUpdatedAt: '-',
+            bank: '-', account: '-', holder: '-'
         };
     }
 }
@@ -817,15 +775,20 @@ onAuthStateChanged(getAuth(), async (user) => {
     
     // 로그아웃 상태에서도 대시보드 표시 (빈 데이터로)
     const emptyDashboardData = {
-        totalRevenue: 0,
-        totalRevenueChange: 0,
-        currentBalance: 0,
-        nextPayout: '-',
+      totalRevenue: 0,
+      totalRevenueChange: 0,
+      currentBalance: 0,
+      nextPayout: '-',
       monthlyEarnings: [0, 0, 0, 0, 0, 0],
       earningsLabels: ['6월', '7월', '8월', '9월', '10월', '11월'],
-      sourceBreakdown: [0, 0, 0, 0, 0],
-      sourceLabels: ['YouTube', 'Spotify', 'Apple Music', '기타', '직접 판매'],
-        payoutHistory: []
+      sourceBreakdownMap: new Map(), // Map 객체로 수정
+      payoutHistory: [],
+      latestTrackTitle: '-',
+      latestTrackArtist: '-',
+      lastUpdatedAt: '-',
+      bank: '-',
+      account: '-',
+      holder: '-'
     };
     updateDashboardUI(emptyDashboardData);
   }
@@ -837,15 +800,20 @@ function initializeDashboard() {
   
   // 데이터가 없을 때 기본값 0으로 표시하는 대시보드 데이터
   const emptyDashboardData = {
-        totalRevenue: 0,
-        totalRevenueChange: 0,
-        currentBalance: 0,
-        nextPayout: '-',
+    totalRevenue: 0,
+    totalRevenueChange: 0,
+    currentBalance: 0,
+    nextPayout: '-',
     monthlyEarnings: [0, 0, 0, 0, 0, 0],
     earningsLabels: ['6월', '7월', '8월', '9월', '10월', '11월'],
-    sourceBreakdown: [0, 0, 0, 0, 0],
-    sourceLabels: ['YouTube', 'Spotify', 'Apple Music', '기타', '직접 판매'],
-        payoutHistory: []
+    sourceBreakdownMap: new Map(), // Map 객체로 수정
+    payoutHistory: [],
+    latestTrackTitle: '-',
+    latestTrackArtist: '-',
+    lastUpdatedAt: '-',
+    bank: '-',
+    account: '-',
+    holder: '-'
   };
   
   // 대시보드 섹션 표시
@@ -854,7 +822,7 @@ function initializeDashboard() {
   if (dashboardSection) {
     dashboardSection.style.display = 'block';
     console.log('[initializeDashboard] 대시보드 섹션 표시됨');
-    } else {
+  } else {
     console.error('[initializeDashboard] 대시보드 섹션을 찾을 수 없습니다');
   }
   
@@ -868,8 +836,9 @@ function initializeDashboard() {
 }
 
 // === 이벤트 리스너 설정 ===
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('[DOMContentLoaded] 이벤트 발생');
+function initializePage() {
+  console.log('[initializePage] 페이지 초기화 시작');
+  
   // 페이지 애니메이션 초기화
   initPageAnimations();
 
@@ -879,20 +848,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // 계좌번호 재확인 기능 설정
   setupAccountConfirmation();
 
+  // DOM 요소 바인딩
+  showFormBtn = document.getElementById('show-form-btn');
+  formWrapper = document.getElementById('withdraw-form-wrapper');
+  withdrawForm = document.getElementById('withdraw-form');
+
+  console.log('[initializePage] DOM 요소 확인:', {
+    showFormBtn: !!showFormBtn,
+    formWrapper: !!formWrapper,
+    withdrawForm: !!withdrawForm
+  });
+
   // 폼 표시/숨김 버튼
-    if (showFormBtn) {
+  if (showFormBtn) {
+    console.log('[initializePage] 계좌등록 버튼에 이벤트 리스너 추가');
     showFormBtn.addEventListener('click', toggleForm);
+  } else {
+    console.error('[initializePage] show-form-btn 요소를 찾을 수 없습니다');
   }
 
   // 폼 제출 처리
   if (withdrawForm) {
+    console.log('[initializePage] 폼에 submit 이벤트 리스너 추가');
     withdrawForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       if (!validateForm()) {
         showToast('입력 정보를 확인해주세요.', 'error');
         return;
-    }
+      }
 
       const formData = new FormData(withdrawForm);
       const accountData = {
@@ -906,23 +890,68 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = auth.currentUser;
         
         if (!user) {
-      showToast('로그인이 필요합니다.', 'error');
-      return;
-    }
+          showToast('로그인이 필요합니다.', 'error');
+          return;
+        }
     
         const success = await saveAccountData(user.uid, accountData);
       
-      if (success) {
+        if (success) {
           showToast('계좌 정보가 성공적으로 저장되었습니다.', 'success');
           await fetchAccountData(user.uid);
           toggleForm(); // 폼 숨기기
-    } else {
+        } else {
           showToast('계좌 정보 저장에 실패했습니다.', 'error');
         }
-  } catch (error) {
+      } catch (error) {
         console.error('계좌 저장 오류:', error);
         showToast('계좌 정보 저장 중 오류가 발생했습니다.', 'error');
       }
     });
+  } else {
+    console.error('[initializePage] withdraw-form 요소를 찾을 수 없습니다');
   }
-});
+  
+  console.log('[initializePage] 페이지 초기화 완료');
+}
+
+// DOMContentLoaded 또는 이미 로드된 경우 즉시 실행
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializePage);
+} else {
+  // DOM이 이미 준비된 경우 (모듈 스크립트는 defer처럼 동작)
+  initializePage();
+}
+
+// === 폼 표시/숨김 토글 ===
+function toggleForm() {
+  console.log('[toggleForm] 함수 호출됨');
+  
+  const localFormWrapper = document.getElementById('withdraw-form-wrapper');
+  const localShowFormBtn = document.getElementById('show-form-btn');
+  
+  console.log('[toggleForm] 요소 검색 결과:', {
+    localFormWrapper: !!localFormWrapper,
+    localShowFormBtn: !!localShowFormBtn
+  });
+  
+  if (!localFormWrapper || !localShowFormBtn) {
+    console.error('[toggleForm] 요소를 찾을 수 없습니다');
+    return;
+  }
+
+  const isVisible = localFormWrapper.style.display !== 'none';
+  console.log('[toggleForm] 현재 상태 - isVisible:', isVisible, 'display:', localFormWrapper.style.display);
+
+  if (isVisible) {
+    localFormWrapper.style.display = 'none';
+    localShowFormBtn.textContent = '계좌 등록하기';
+    localShowFormBtn.classList.remove('active');
+    console.log('[toggleForm] 폼 숨김 완료');
+  } else {
+    localFormWrapper.style.display = 'block';
+    localShowFormBtn.textContent = '폼 숨기기';
+    localShowFormBtn.classList.add('active');
+    console.log('[toggleForm] 폼 표시 완료');
+  }
+}

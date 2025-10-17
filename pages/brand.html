@@ -45,123 +45,121 @@
 </head>
 <body>
    
-   <!-- 브랜드 공통 네비게이터 -->
-   <div id="scroll-progress"></div>
-  
-   <header class="navbar">
-     <div class="container">
-       <div class="logo-area">
-         <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
-       </div>
-     <nav role="navigation" class="menu-area">
-       <ul>
-         <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
-         <li class="active"><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
-         <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-         <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
-         <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
-       </ul>
-     </nav>
-     <!-- 언어 선택 토글 -->
-     <div class="language-toggle">
-         <span class="language-option active" data-lang="ko">KR</span>
-         <span class="language-separator">|</span>
-         <span class="language-option" data-lang="ja">JP</span>
-         <span class="language-separator">|</span>
-         <span class="language-option" data-lang="en">EN</span>
-     </div>
-     <!-- 로그인 버튼 -->
-     <div class="auth-buttons">
-       <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
-     </div>
-     
-     <!-- 로그인 후 표시될 프로필 영역 -->
-     <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
-             <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
-        <span id="user-name" class="user-name"></span>
-       <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-         <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-       </svg>
-       <div id="dropdown-menu" class="dropdown-menu">
-         <a href="producer.html" class="dropdown-item">
-           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-           </svg>
-           <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
-         </a>
-         <a href="faq.html" class="dropdown-item">
-           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-             <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-             <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-           </svg>
-           <span data-i18n="navbar.faq">FAQ</span>
-         </a>
-         <a href="#" class="dropdown-item" id="btn-logout">
-           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-             <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-           </svg>
-           <span data-i18n="navbar.logout">로그아웃</span>
-         </a>
-       </div>
-     </div>
+    <!-- 웹 바 (상단 네비게이션) -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo-area">
+                <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+            </div>
+            <nav role="navigation" class="menu-area">
+                <ul>
+                    <li><a href="../index.html" data-i18n="navbar.home"></a></li>
+                    <li class="active"><a href="brand.html" data-i18n="navbar.brand"></a></li>
+                    <li><a href="withdraw.html" data-i18n="navbar.withdraw"></a></li>
+                    <li><a href="find-music.html" data-i18n="navbar.findMusic"></a></li>
+                    <li><a href="track-production.html" data-i18n="navbar.track"></a></li>
+                </ul>
+            </nav>
+            <!-- 언어 선택 토글 -->
+            <div class="language-toggle">
+                <span class="language-option active" data-lang="ko">KR</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="ja">JP</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="en">EN</span>
+            </div>
+            <div class="auth-buttons">
+                <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
+            </div>
+            <!-- 로그인 후 표시될 프로필 영역 -->
+            <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
+                <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
+                <span id="user-name" class="user-name"></span>
+                <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="producer.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
+                    </a>
+                    <a href="faq.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.faq">FAQ</span>
+                    </a>
+                    <a href="#" class="dropdown-item" id="btn-logout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.logout">로그아웃</span>
+                    </a>
+                </div>
+            </div>
 
-     <!-- 모바일용 언어 선택 토글 -->
-     <div class="mobile-language-toggle">
-         <span class="mobile-language-option active" data-lang="ko">KR</span>
-         <span class="mobile-language-separator">|</span>
-         <span class="mobile-language-option" data-lang="ja">JP</span>
-         <span class="mobile-language-separator">|</span>
-         <span class="mobile-language-option" data-lang="en">EN</span>
-     </div>
+            <!-- 모바일용 언어 선택 토글 -->
+            <div class="mobile-language-toggle">
+                <span class="mobile-language-option active" data-lang="ko">KR</span>
+                <span class="mobile-language-separator">|</span>
+                <span class="mobile-language-option" data-lang="ja">JP</span>
+                <span class="mobile-language-separator">|</span>
+                <span class="mobile-language-option" data-lang="en">EN</span>
+            </div>
 
-     <!-- 모바일용 로그인 버튼 (로그인하지 않은 상태) -->
-     <div id="mobile-auth-buttons" class="mobile-auth-buttons guest-mode">
-         <a href="#" class="mobile-btn-login" id="mobile-login-btn">
-             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                 <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-             </svg>
-             로그인
-         </a>
-     </div>
+            <!-- 모바일용 로그인 버튼 (로그인하지 않은 상태) -->
+            <div id="mobile-auth-buttons" class="mobile-auth-buttons guest-mode">
+                <a href="#" class="mobile-btn-login" id="mobile-login-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span data-i18n="navbar.login">로그인</span>
+                </a>
+            </div>
 
-     <!-- 모바일용 프로필 메뉴 (로그인한 상태) -->
-     <div id="mobile-user-profile" class="mobile-user-profile guest-mode">
-             <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.svg" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
+            <!-- 모바일용 프로필 메뉴 (로그인한 상태) -->
+            <div id="mobile-user-profile" class="mobile-user-profile guest-mode">
+                      <img id="mobile-user-avatar" class="mobile-user-avatar" src="../images/default-avatar.svg" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
                     <span id="mobile-user-name" class="mobile-user-name" data-i18n="channelManagement.common.guest">게스트</span>
-       <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-           <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-       </svg>
-       <!-- 모바일 드롭다운 메뉴 -->
-       <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
-           <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
-               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                   <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-               </svg>
-               로그인
-           </a>
-           <a href="producer.html" class="mobile-dropdown-item">
-               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-               </svg>
-               Audionyx 프로듀서
-           </a>
-           <a href="faq.html" class="mobile-dropdown-item">
-               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                   <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                   <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-               </svg>
-               FAQ
-           </a>
-           <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
-               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                   <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-               </svg>
-               로그아웃
-           </a>
-       </div>
-     </div>
-     </div>
-   </header>
+                <svg class="mobile-dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <!-- 모바일 드롭다운 메뉴 -->
+                <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
+                    <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.login">로그인</span>
+                    </a>
+                    <a href="producer.html" class="mobile-dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
+                    </a>
+                    <a href="faq.html" class="mobile-dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.faq">FAQ</span>
+                    </a>
+                    <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.logout">로그아웃</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="scroll-progress"></div>
 
    <!-- 모바일 네비게이터 -->
    <nav class="mobile-nav">
@@ -345,8 +343,8 @@
                         <circle cx="12" cy="12" r="3"/>
                         <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
                     </svg>
-                    <div class="mobile-benefit-title">분기별 정산</div>
-                    <p class="mobile-benefit-description">분기별 투명하고 정확한 정산</p>
+                    <div class="mobile-benefit-title">매월 정산</div>
+                    <p class="mobile-benefit-description">유통 후 2~3개월부터<br>매월 정산</p>
                 </div>
             </div>
         </div>
@@ -434,8 +432,8 @@
                         <div class="image-overlay"></div>
                     </figure>
                     <div class="flow-text">
-                        <h3 data-i18n="brand.step1Title">Step 1  ·  음원 고르기</h3>
-                        <p data-i18n="brand.step1Desc">트랙 감상하고 <b>Copy CID</b></p>
+                        <h3 data-i18n="brand.step1Title">Step 1  ·  개인 음원 요청</h3>
+                        <p data-i18n="brand.step1Desc"><b>개인 음원 제작</b> 요청하고<br><b>나만의 음원</b> 받기</p>
                     </div>
                 </div>
                 
@@ -445,7 +443,7 @@
                             <div class="shorts-mockup">
                                 <div class="shorts-header">YouTube Shorts</div>
                                 <div class="shorts-content">
-                                    <div class="shorts-input">CID: Music_12345</div>
+                                    <div class="shorts-input">My Track Playing...</div>
                                 </div>
                                 <div class="shorts-footer">
                                     <span class="check-icon">✔</span>
@@ -456,7 +454,7 @@
                     </figure>
                     <div class="flow-text">
                         <h3 data-i18n="brand.step2Title">Step 2  ·  영상 업로드</h3>
-                        <p data-i18n="brand.step2Desc">Shorts 업로드 시<br><b>음원 CID</b> 붙여넣기</p>
+                        <p data-i18n="brand.step2Desc"><b>나만의 음원</b>을 사용해<br>Shorts 업로드</p>
                     </div>
                 </div>
                 
@@ -482,8 +480,8 @@
                         <div class="image-overlay"></div>
                     </figure>
                     <div class="flow-text">
-                        <h3 data-i18n="brand.step3Title">Step 3  ·  분기별 정산</h3>
-                        <p data-i18n="brand.step3Desc">분기별 정산: <b>3월말·6월말·9월말·12월말</b><br><small>대시보드 정산금 확인 서비스 도입 예정</small></p>
+                        <h3 data-i18n="brand.step3Title">Step 3  ·  매월 정산</h3>
+                        <p data-i18n="brand.step3Desc">유통 2~3개월 후부터, <b>매월 저작권 수익</b>을 정산 및 출금하세요</p>
                     </div>
                 </div>
             </div>
@@ -501,8 +499,8 @@
                             </div>
                         </div>
                         <div class="mobile-flow-content">
-                            <h3 class="mobile-flow-title">음원 고르기</h3>
-                            <p class="mobile-flow-description">마음에 드는 트랙을 감상하고<br><strong>Copy CID</strong> 버튼을 눌러보세요</p>
+                            <h3 class="mobile-flow-title">개인 음원 요청</h3>
+                            <p class="mobile-flow-description"><strong>개인 음원 제작</strong> 요청하고<br><strong>나만의 음원</strong> 받기</p>
                         </div>
                     </div>
 
@@ -516,7 +514,7 @@
                                         <div class="mobile-platform-icon">▶</div>
                                         <span class="mobile-upload-title">YouTube Shorts</span>
                                     </div>
-                                    <div class="mobile-input-field" placeholder="CID 붙여넣기...">CID: Music_12345</div>
+                                    <div class="mobile-input-field" placeholder="내 음원 재생 중...">My Track Playing...</div>
                                     <div class="mobile-upload-status">
                                         <div class="mobile-check-icon">✓</div>
                                         <span>업로드 완료</span>
@@ -526,11 +524,11 @@
                         </div>
                         <div class="mobile-flow-content">
                             <h3 class="mobile-flow-title">영상 업로드</h3>
-                            <p class="mobile-flow-description">Shorts 업로드 시<br><strong>음원 CID</strong>를 붙여넣기하세요</p>
+                            <p class="mobile-flow-description"><strong>나만의 음원</strong>을 사용해<br>Shorts 업로드</p>
                         </div>
                     </div>
 
-                    <!-- Step 3: 분기별 정산 -->
+                    <!-- Step 3: 매월 정산 -->
                     <div class="mobile-flow-card" data-step="3">
                         <div class="mobile-step-badge">3</div>
                         <div class="mobile-interaction-preview">
@@ -553,8 +551,8 @@
                             </div>
                         </div>
                         <div class="mobile-flow-content">
-                            <h3 class="mobile-flow-title">분기별 정산</h3>
-                            <p class="mobile-flow-description">3·6·9·12월 말 정산<br><small>대시보드 정산금 확인 서비스 도입 예정</small></p>
+                            <h3 class="mobile-flow-title">매월 정산</h3>
+                            <p class="mobile-flow-description">유통 2~3개월 후부터<br><strong>매월 저작권 수익</strong>을 정산 및 출금하세요</p>
                         </div>
                     </div>
                 </div>
@@ -577,115 +575,7 @@
         </div>
     </section>
 
-    <!-- ===== 음원 미리보기 섹션 ===== -->
-    <section class="preview-section" data-animate="fade-up">
-      <div class="container">
-        <div class="section-header">
-          <div class="about-audionyx-title" data-i18n="brand.previewTitle">Right Now</div>
-          <h2 class="about-audionyx-headline" data-i18n="brand.previewHeadline">
-            하이퀄리티 음원 트랙 사용하고<br>
-            새로운 수익 파이프라인을 만드세요
-          </h2>
-          <p class="about-audionyx-subcopy" data-i18n="brand.previewDesc">
-            Audionyx의 프리미엄 트랙으로 지금 바로 시작하세요 <strong>모든 음원이 무료이며, 수익의 대부분을 가져갈 수 있습니다.</strong>
-          </p>
-        </div>
 
-        <div class="tracks-showcase">
-          <div class="tracks-grid">
-            <div class="track-card glass-card" data-track="1">
-              <div class="track-visual">
-                <div class="track-waveform">
-                  <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
-                    <path d="M0,30 L10,15 L20,45 L30,10 L40,50 L50,20 L60,40 L70,5 L80,55 L90,25 L100,35 L110,12 L120,48 L130,18 L140,42 L150,8 L160,52 L170,22 L180,38 L190,28 L200,30" 
-                          stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <div class="track-overlay">
-                  <button class="track-play-btn">
-                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
-                      <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="track-info">
-                <div class="track-meta">
-                  <div class="track-name">Electric Palms</div>
-                  <div class="track-genre">Electronic</div>
-                </div>
-                <div class="track-actions">
-                  <button class="copy-cid-btn" data-cid="ElectricPalms2024">Copy CID</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="track-card glass-card" data-track="2">
-              <div class="track-visual">
-                <div class="track-waveform">
-                  <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
-                    <path d="M0,30 L10,25 L20,35 L30,20 L40,40 L50,15 L60,45 L70,25 L80,35 L90,10 L100,50 L110,30 L120,20 L130,40 L140,25 L150,35 L160,15 L170,45 L180,30 L190,25 L200,30" 
-                          stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <div class="track-overlay">
-                  <button class="track-play-btn">
-                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
-                      <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="track-info">
-                <div class="track-meta">
-                  <div class="track-name">Echo Chamber 4A.M.</div>
-                  <div class="track-genre">Lo-Fi</div>
-                </div>
-                <div class="track-actions">
-                  <button class="copy-cid-btn" data-cid="EchoChamber4AM2024">Copy CID</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="track-card glass-card" data-track="3">
-              <div class="track-visual">
-                <div class="track-waveform">
-                  <svg class="waveform-svg" viewBox="0 0 200 60" fill="none">
-                    <path d="M0,30 L10,10 L20,50 L30,20 L40,40 L50,5 L60,55 L70,15 L80,45 L90,25 L100,35 L110,8 L120,52 L130,18 L140,42 L150,12 L160,48 L170,28 L180,32 L190,22 L200,30" 
-                          stroke="#3EB489" stroke-width="2" fill="none" stroke-linecap="round"/>
-                  </svg>
-                </div>
-                <div class="track-overlay">
-                  <button class="track-play-btn">
-                    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
-                      <path d="M15 7.26795C16.3333 8.03775 16.3333 9.96225 15 10.7321L3 17.3301C1.66667 18.0999 0 17.1377 0 15.598L0 2.40192C0 0.862305 1.66667 -0.0999451 3 0.669855L15 7.26795Z" fill="currentColor"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="track-info">
-                <div class="track-meta">
-                  <div class="track-name">Ultraviolet Gate</div>
-                  <div class="track-genre">Electronic</div>
-                </div>
-                <div class="track-actions">
-                  <button class="copy-cid-btn" data-cid="UltravioletGate2024">Copy CID</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="tracks-cta">
-            <a href="find-music.html" class="btn-primary tracks-cta-btn">
-              <span data-i18n="brand.freeTracksCta">무료 음원 찾아보기</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
     </main>
 
     <!-- 모바일 네비게이터 -->
@@ -743,18 +633,18 @@
             <div class="footer-nav-group">
               <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
               <ul class="footer-nav">
-                <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
-                <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-                <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+                <li><a href="find-music.html" data-i18n="navbar.findMusic"></a></li>
+                <li><a href="withdraw.html" data-i18n="navbar.withdraw"></a></li>
+                <li><a href="track-production.html" data-i18n="navbar.track"></a></li>
               </ul>
             </div>
             <div class="footer-nav-group">
               <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
               <ul class="footer-nav">
-                <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
-                <li><a href="terms.html" data-i18n="footer.terms">이용약관</a></li>
-                <li><a href="privacy.html" data-i18n="footer.privacy">개인정보처리방침</a></li>
-                <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs">문의하기</a></li>
+                <li><a href="brand.html" data-i18n="navbar.brand"></a></li>
+                <li><a href="terms.html" data-i18n="footer.terms"></a></li>
+                <li><a href="privacy.html" data-i18n="footer.privacy"></a></li>
+                <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs"></a></li>
               </ul>
             </div>
             <div class="footer-nav-group">

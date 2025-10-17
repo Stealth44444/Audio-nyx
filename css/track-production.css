@@ -1449,11 +1449,8 @@ html {
 .promo-badge { display: inline-block; padding: 0.35rem 0.6rem; border-radius: 999px; background: rgba(62,180,137,.15); border: 1px solid rgba(62,180,137,.35); color: var(--color-primary); font-weight: 700; font-size: .85rem; }
 .promo-title { font-size: 1.25rem; margin: 0.75rem 0; }
 .promo-price-row { display: inline-flex; align-items: baseline; gap: .5rem; margin: .25rem 0 .5rem; }
-.price-original { color: #aaa; text-decoration: line-through; }
-.price-arrow { color: #888; }
 .price-discount { color: var(--color-primary); font-weight: 800; font-size: 1.3rem; }
 .price-vat { color: var(--color-text-gray); font-size: .85rem; }
-.promo-period { color: var(--color-text-gray); font-size: .95rem; margin: .25rem 0 .5rem; }
 .promo-desc { color: #fff; font-size: .95rem; }
 
 /* === 리뉴얼: 공통 섹션 === */

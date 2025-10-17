@@ -37,66 +37,61 @@
   <meta property="og:image:height" content="630">
 </head>
 <body>
-  <!-- 브랜드 공통 네비게이터 -->
-  <div id="scroll-progress"></div>
-
-  <!-- 수정: 공통 네비게이션 바 추가 -->
-  <header class="navbar">
-    <div class="container">
-      <div class="logo-area">
-        <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
-      </div>
-    <nav role="navigation" class="menu-area">
-      <ul>
-        <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
-        <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
-        <li><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-        <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
-        <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
-      </ul>
-    </nav>
-    <!-- 언어 선택 토글 -->
-    <div class="language-toggle">
-        <span class="language-option active" data-lang="ko">KR</span>
-        <span class="language-separator">|</span>
-        <span class="language-option" data-lang="ja">JP</span>
-        <span class="language-separator">|</span>
-        <span class="language-option" data-lang="en">EN</span>
-    </div>
-    <!-- 로그인 버튼 -->
-    <div class="auth-buttons">
-        <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
-    </div>
-    
-    <!-- 로그인 후 표시될 프로필 영역 -->
-    <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
-      <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
-      <span id="user-name" class="user-name"></span>
-      <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div id="dropdown-menu" class="dropdown-menu">
-        <a href="producer.html" class="dropdown-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
-        </a>
-        <a href="faq.html" class="dropdown-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="navbar.faq">FAQ</span>
-        </a>
-        <a href="#" class="dropdown-item" id="btn-logout">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span data-i18n="navbar.logout">로그아웃</span>
-        </a>
-      </div>
-    </div>
+    <!-- 웹 바 (상단 네비게이션) -->
+    <header class="navbar">
+        <div class="container">
+            <div class="logo-area">
+                <a href="../index.html" class="logo-link"><div class="logo">AUDIONYX</div></a>
+            </div>
+            <nav role="navigation" class="menu-area">
+                <ul>
+                    <li><a href="../index.html" data-i18n="navbar.home"></a></li>
+                    <li><a href="brand.html" data-i18n="navbar.brand"></a></li>
+                    <li><a href="withdraw.html" data-i18n="navbar.withdraw"></a></li>
+                    <li class="active"><a href="find-music.html" data-i18n="navbar.findMusic"></a></li>
+                    <li><a href="track-production.html" data-i18n="navbar.track"></a></li>
+                </ul>
+            </nav>
+            <!-- 언어 선택 토글 -->
+            <div class="language-toggle">
+                <span class="language-option active" data-lang="ko">KR</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="ja">JP</span>
+                <span class="language-separator">|</span>
+                <span class="language-option" data-lang="en">EN</span>
+            </div>
+            <div class="auth-buttons">
+                <button id="btn-login" class="btn-login" data-i18n="navbar.login">로그인</button>
+            </div>
+            <!-- 로그인 후 표시될 프로필 영역 -->
+            <div id="user-profile" class="user-profile" style="display: none;" aria-expanded="false">
+                <img id="user-avatar" class="user-avatar" src="" alt="프로필 이미지" data-i18n-alt="channelManagement.common.profileImage">
+                <span id="user-name" class="user-name"></span>
+                <svg class="dropdown-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="producer.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
+                    </a>
+                    <a href="faq.html" class="dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.09 9a3 3 0 515.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.faq">FAQ</span>
+                    </a>
+                    <a href="#" class="dropdown-item" id="btn-logout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.logout">로그아웃</span>
+                    </a>
+                </div>
+            </div>
 
             <!-- 모바일용 언어 선택 토글 -->
             <div class="mobile-language-toggle">
@@ -125,36 +120,38 @@
                     <path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 <!-- 모바일 드롭다운 메뉴 -->
-            <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
-                <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="navbar.login">로그인</span>
-                </a>
-                <a href="producer.html" class="mobile-dropdown-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
-                </a>
-                                 <a href="faq.html" class="mobile-dropdown-item">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                         <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                     </svg>
-                     <span data-i18n="navbar.faq">FAQ</span>
-                 </a>
-                 <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                     </svg>
-                     <span data-i18n="navbar.logout">로그아웃</span>
-                 </a>
-             </div>
+                <div id="mobile-dropdown-menu" class="mobile-dropdown-menu">
+                    <a href="#" class="mobile-dropdown-item" id="mobile-btn-login">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.login">로그인</span>
+                    </a>
+                    <a href="producer.html" class="mobile-dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.producer">Audionyx 프로듀서</span>
+                    </a>
+                    <a href="faq.html" class="mobile-dropdown-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.faq">FAQ</span>
+                    </a>
+                    <a href="#" class="mobile-dropdown-item" id="mobile-btn-logout" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span data-i18n="navbar.logout">로그아웃</span>
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
-  </header>
+    </header>
+
+    <div id="scroll-progress"></div>
 
   <!-- 음원 찾기 메인 컨테이너 -->
   <div class="findmusic-container page-content">
@@ -312,22 +309,12 @@
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="channel-management.html" class="mobile-nav-link">
+        <a href="withdraw.html" class="mobile-nav-link">
           <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33z"/>
             <polygon points="9.75,15.02 15.5,11.75 9.75,8.48"/>
           </svg>
           <span data-i18n="mobile.channel">채널</span>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="withdraw.html" class="mobile-nav-link">
-          <svg class="mobile-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M21 12V7H5a2 2 0 010-4h14v4"/>
-            <path d="M3 5v14a2 2 0 002 2h16v-5"/>
-            <path d="M18 12a2 2 0 100-4 2 2 0 000 4z"/>
-          </svg>
-          <span data-i18n="mobile.withdraw">정산</span>
         </a>
       </li>
       <li class="mobile-nav-item">

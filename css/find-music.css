@@ -1,5 +1,5 @@
 /* === 음원 찾기 페이지 개별 스타일 === */
-/* 모바일 재생 버튼 표시 및 최적화 */
+/* 모바일 재생 버튼 표시 및 최적화 - 글래스모피즘 스타일 */
 @media (max-width: 768px) {
   .findmusic-play-btn {
     display: flex !important;
@@ -11,20 +11,36 @@
     height: 44px !important;
     min-width: 44px !important;
     border-radius: 50% !important;
-    background: rgba(62, 180, 137, 0.9) !important;
-    backdrop-filter: blur(8px) !important;
-    box-shadow: 0 4px 12px rgba(62, 180, 137, 0.3) !important;
+    
+    /* 글래스모피즘 효과 */
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.25) 0%, 
+      rgba(62, 180, 137, 0.4) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(62, 180, 137, 0.5) !important;
+    box-shadow: 
+      0 6px 24px rgba(62, 180, 137, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 1px 2px rgba(0, 0, 0, 0.1) !important;
   }
   
   .findmusic-play-btn:hover {
-    background: rgba(62, 180, 137, 1) !important;
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.4) 0%, 
+      rgba(62, 180, 137, 0.55) 100%) !important;
     transform: scale(1.05) !important;
-    box-shadow: 0 6px 16px rgba(62, 180, 137, 0.4) !important;
+    border-color: rgba(62, 180, 137, 0.65) !important;
+    box-shadow: 
+      0 8px 28px rgba(62, 180, 137, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 2px 4px rgba(0, 0, 0, 0.15) !important;
   }
   
   .findmusic-play-btn svg {
     width: 18px !important;
     height: 18px !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
   }
   
   .findmusic-track-list-item {
@@ -43,20 +59,36 @@
     height: 40px !important;
     min-width: 40px !important;
     border-radius: 50% !important;
-    background: rgba(62, 180, 137, 0.9) !important;
-    backdrop-filter: blur(8px) !important;
-    box-shadow: 0 4px 12px rgba(62, 180, 137, 0.3) !important;
+    
+    /* 글래스모피즘 효과 */
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.25) 0%, 
+      rgba(62, 180, 137, 0.4) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(62, 180, 137, 0.5) !important;
+    box-shadow: 
+      0 6px 24px rgba(62, 180, 137, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 1px 2px rgba(0, 0, 0, 0.1) !important;
   }
   
   .findmusic-play-btn:hover {
-    background: rgba(62, 180, 137, 1) !important;
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.4) 0%, 
+      rgba(62, 180, 137, 0.55) 100%) !important;
     transform: scale(1.05) !important;
-    box-shadow: 0 6px 16px rgba(62, 180, 137, 0.4) !important;
+    border-color: rgba(62, 180, 137, 0.65) !important;
+    box-shadow: 
+      0 8px 28px rgba(62, 180, 137, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 2px 4px rgba(0, 0, 0, 0.15) !important;
   }
   
   .findmusic-play-btn svg {
     width: 16px !important;
     height: 16px !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
   }
   
   .findmusic-track-list-item {
@@ -1084,14 +1116,11 @@ body {
   box-shadow: 0 8px 25px rgba(62, 180, 137, 0.15);
 }
 
-/* 재생 버튼 개선 - 브랜드 페이지 스타일 */
+/* 재생 버튼 개선 - 글래스모피즘 스타일 */
 .findmusic-play-btn {
-  width: 48px; /* Reduced size */
-  height: 48px; /* Reduced size */
+  width: 48px;
+  height: 48px;
   border-radius: 50%; 
-  background: var(--color-primary);
-  border: none;
-  color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1100,20 +1129,65 @@ body {
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(62, 180, 137, 0.3);
+  
+  /* 글래스모피즘 효과 */
+  background: linear-gradient(135deg, 
+    rgba(62, 180, 137, 0.2) 0%, 
+    rgba(62, 180, 137, 0.35) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(62, 180, 137, 0.4);
+  color: var(--color-text-light);
+  box-shadow: 
+    0 8px 32px rgba(62, 180, 137, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.findmusic-play-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    transparent 50%, 
+    rgba(62, 180, 137, 0.2) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 50%;
 }
 
 .findmusic-play-btn:hover {
-  background: var(--color-primary-hover);
+  background: linear-gradient(135deg, 
+    rgba(62, 180, 137, 0.35) 0%, 
+    rgba(62, 180, 137, 0.5) 100%);
   transform: scale(1.1);
-  box-shadow: 0 10px 30px rgba(62, 180, 137, 0.5);
+  border-color: rgba(62, 180, 137, 0.6);
+  box-shadow: 
+    0 12px 40px rgba(62, 180, 137, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.findmusic-play-btn:hover::before {
+  opacity: 1;
+}
+
+.findmusic-play-btn:active {
+  transform: scale(1.05);
 }
 
 .findmusic-play-btn svg {
-  width: 18px; /* Reduced size */
-  height: 18px; /* Reduced size */
+  width: 18px;
+  height: 18px;
   fill: currentColor;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 /* 메인 그룹 개선 */
@@ -1344,38 +1418,133 @@ body {
 @media (max-width: 768px) {
   .findmusic-container {
     padding: 0 1rem;
+    padding-bottom: 6rem; /* 모바일 네비게이션 여백 */
   }
   
   /* 모바일 검색 배너 숨김 */
   .findmusic-search-banner {
-    display: none !important; /* 모바일에서 완전히 숨김 */
+    display: none !important;
   }
   
+  /* 검색 및 필터 영역 - 앱 스타일 */
   .findmusic-search-and-filters {
-    padding: 1.5rem;
-    margin-top: var(--nav-height); /* 헤더 바로 아래 배치 */
-    border-radius: 16px;
+    padding: 1.25rem;
+    margin-top: calc(var(--nav-height) + 1rem);
+    margin-bottom: 1.5rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, 
+      rgba(8, 8, 8, 0.9) 0%, 
+      rgba(12, 12, 12, 0.85) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(62, 180, 137, 0.15);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.05) inset;
   }
   
-  /* 모바일 최적화된 트랙 리스트 아이템 */
+  /* 트랙 리스트 헤더 */
+  .findmusic-tracks-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 0.5rem;
+  }
+  
+  /* 모바일 최적화된 트랙 리스트 아이템 - 앱 그리드 스타일 */
   .findmusic-track-list-item {
-    display: flex;
-    align-items: flex-start;
-    padding: 1rem;
-    gap: 1rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    min-height: 64px; /* 44px 최소 터치 타겟 + 여백 */
-    cursor: pointer; /* 카드 전체 클릭 가능 */
+    display: grid;
+    grid-template-columns: 60px 1fr 48px;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    gap: 0.875rem;
+    border-radius: 18px;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.05) 0%, 
+      rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 80px;
+    height: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 3px 12px rgba(0, 0, 0, 0.18),
+      0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
   }
   
-  /* 썸네일 최적화 */
+  .findmusic-track-list-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.02) 0%, 
+      transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .findmusic-track-list-item:active {
+    transform: scale(0.97);
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.1) 0%, 
+      rgba(62, 180, 137, 0.05) 100%);
+    border-color: rgba(62, 180, 137, 0.25);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  }
+  
+  .findmusic-track-list-item:active::before {
+    opacity: 1;
+  }
+  
+  /* 썸네일 최적화 - 앱 스타일 */
   .findmusic-item-thumbnail {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.15) 0%, 
+      rgba(62, 180, 137, 0.08) 100%);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.25),
+      0 1px 0 rgba(255, 255, 255, 0.1) inset;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    grid-column: 1;
+  }
+  
+  .findmusic-item-thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 30%, 
+      rgba(255, 255, 255, 0.12) 0%, 
+      transparent 60%);
+    pointer-events: none;
+  }
+  
+  .findmusic-track-list-item:active .findmusic-item-thumbnail {
+    transform: scale(0.95);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.08) inset;
   }
   
   /* 웨이브폼 완전 숨김 - 모바일에서는 불필요 */
@@ -1386,31 +1555,42 @@ body {
     display: none !important;
   }
   
-  /* 모바일에서 재생 버튼 숨김 */
+  /* 모바일에서 재생 버튼 완전 제거 */
   .findmusic-play-btn {
     display: none !important;
   }
   
   /* 메인 콘텐츠 그룹 - 제목만 */
   .findmusic-item-main-group {
-    flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 0.25rem; /* 재생 버튼과 정렬 */
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0;
+    grid-column: 2;
   }
   
   .findmusic-item-title {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 400;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.95);
     margin: 0;
-    transition: color 0.3s ease;
-    /* 모바일 최적화: 한 줄 표시 */
-    white-space: nowrap;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+    /* 모바일 최적화: 최대 2줄 표시 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: -0.005em;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  
+  .findmusic-track-list-item:active .findmusic-item-title {
+    color: rgba(62, 180, 137, 0.95);
   }
   
   /* 태그들 숨김 - 모바일에서는 간소화 */
@@ -1426,21 +1606,20 @@ body {
     display: none !important;
   }
   
-  /* CID 컨테이너 최적화 - 복사 버튼만 표시 */
+  /* CID 컨테이너 최적화 - 글래스모피즘 스타일 */
   .findmusic-item-cid-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem;
-    background: rgba(62, 180, 137, 0.1);
-    border: 1px solid rgba(62, 180, 137, 0.3);
-    border-radius: 12px;
-    /* 복사 버튼만 들어갈 공간 */
-    width: 50px;
-    height: 50px;
-    min-width: 50px;
-    flex-shrink: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
     position: relative;
+    grid-column: 3;
   }
   
   /* CID 라벨과 텍스트 숨김 */
@@ -1449,33 +1628,64 @@ body {
     display: none !important;
   }
   
+  /* 복사 버튼 - 앱 스타일 글래스모피즘 */
   .findmusic-cid-copy-btn {
-    padding: 0.75rem;
-    background: var(--color-primary);
-    color: #000;
-    border: none;
-    border-radius: 10px;
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    min-height: 38px;
+    padding: 0;
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.22) 0%, 
+      rgba(62, 180, 137, 0.38) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--color-text-light);
+    border: 1px solid rgba(62, 180, 137, 0.45);
+    border-radius: 14px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(62, 180, 137, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 4px 16px rgba(62, 180, 137, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
   }
   
-  .findmusic-cid-copy-btn:hover {
-    background: rgba(62, 180, 137, 1);
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(62, 180, 137, 0.4);
+  .findmusic-cid-copy-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 30%, 
+      rgba(255, 255, 255, 0.15) 0%, 
+      transparent 60%);
+    pointer-events: none;
+  }
+  
+  .findmusic-cid-copy-btn:active {
+    transform: scale(0.90);
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.4) 0%, 
+      rgba(62, 180, 137, 0.55) 100%);
+    border-color: rgba(62, 180, 137, 0.65);
+    box-shadow: 
+      0 2px 10px rgba(62, 180, 137, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22);
   }
   
   .findmusic-cid-copy-btn svg {
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
+    position: relative;
+    z-index: 1;
   }
   
   /* 모바일에서 미니플레이어 완전 숨김 */
@@ -1483,10 +1693,48 @@ body {
     display: none !important;
   }
   
+  /* 검색 박스 모바일 최적화 */
+  .findmusic-search-box {
+    border-radius: 14px;
+    border: 1px solid rgba(62, 180, 137, 0.2);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  }
+  
+  .findmusic-search-input {
+    padding: 14px 18px;
+    font-size: 0.9375rem;
+  }
+  
+  .findmusic-search-btn {
+    width: 52px;
+  }
+  
   /* 정렬 컨테이너 모바일 최적화 */
   .findmusic-sort-container {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.875rem;
+  }
+  
+  .findmusic-sort-select {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, 
+      rgba(8, 8, 8, 0.95) 0%, 
+      rgba(12, 12, 12, 0.9) 100%);
+    border: 1px solid rgba(62, 180, 137, 0.2);
+  }
+  
+  .findmusic-reset-filters {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.05) 0%, 
+      rgba(255, 255, 255, 0.02) 100%);
   }
   
   /* 그리드 레이아웃 최적화 */
@@ -1494,22 +1742,45 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    padding-bottom: 1rem;
+    width: 100%;
   }
   
-  /* 필터 버튼 모바일 최적화 */
+  /* 필터 버튼 모바일 최적화 - 앱 스타일 */
   .findmusic-filter-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
   
   .findmusic-mood-filter-toggle,
   .findmusic-usecase-filter-toggle {
-    width: 100%;
+    flex: 1;
     justify-content: center;
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 14px;
+    font-weight: 600;
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.08) 0%, 
+      rgba(62, 180, 137, 0.04) 100%);
+    border: 1px solid rgba(62, 180, 137, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .findmusic-mood-filter-toggle.active,
+  .findmusic-usecase-filter-toggle.active {
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.25) 0%, 
+      rgba(62, 180, 137, 0.15) 100%);
+    border-color: rgba(62, 180, 137, 0.5);
+    color: #fff;
+    box-shadow: 
+      0 4px 16px rgba(62, 180, 137, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
   
   /* 필터 패널 모바일 최적화 */
@@ -1535,47 +1806,58 @@ body {
     min-height: 44px; /* 터치 타겟 */
   }
   
-  /* 모바일 페이지네이션 최적화 - 하단 네비게이터 고려 */
+  /* 모바일 페이지네이션 최적화 - 앱 스타일 */
   .findmusic-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 3rem;
-    margin-bottom: 80px; /* 하단 네비게이터 높이 고려 */
-    padding: 1rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem 0.5rem;
     flex-wrap: wrap;
   }
   
   .pagination-btn {
-    min-width: 44px; /* 터치 타겟 크기 */
+    min-width: 44px;
     height: 44px;
     padding: 0;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(62, 180, 137, 0.3);
-    border-radius: 8px;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.04) 0%, 
+      rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     color: rgba(255, 255, 255, 0.85);
     font-weight: 600;
     font-size: 0.9rem;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.15),
+      0 1px 0 rgba(255, 255, 255, 0.03) inset;
+    -webkit-tap-highlight-color: transparent;
   }
   
-  .pagination-btn:hover:not(:disabled) {
-    background: rgba(62, 180, 137, 0.15);
-    border-color: var(--color-primary);
+  .pagination-btn:active:not(:disabled) {
+    transform: scale(0.92);
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.15) 0%, 
+      rgba(62, 180, 137, 0.08) 100%);
+    border-color: rgba(62, 180, 137, 0.3);
     color: var(--color-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(62, 180, 137, 0.2);
   }
   
   .pagination-btn.active {
-    background: var(--color-primary);
-    color: #000;
-    border-color: var(--color-primary);
+    background: linear-gradient(135deg, 
+      rgba(62, 180, 137, 0.25) 0%, 
+      rgba(62, 180, 137, 0.35) 100%);
+    color: #fff;
+    border-color: rgba(62, 180, 137, 0.5);
     font-weight: 700;
-    box-shadow: 0 4px 15px rgba(62, 180, 137, 0.4);
+    box-shadow: 
+      0 4px 16px rgba(62, 180, 137, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
   
   .pagination-btn:disabled {
@@ -1589,58 +1871,58 @@ body {
 @media (max-width: 480px) {
   .findmusic-container {
     padding: 0 0.75rem;
+    padding-bottom: 5.5rem;
   }
   
   /* 초소형 화면 검색 배너 */
   .findmusic-search-banner {
-    display: none !important; /* 초소형 화면에서도 완전히 숨김 */
+    display: none !important;
   }
   
-  .findmusic-search-banner .banner-title {
-    font-size: 1.1rem;
-  }
-  
-  .findmusic-search-banner .banner-subtitle {
-    font-size: 0.85rem;
-  }
-  
+  /* 검색 및 필터 영역 - 더 컴팩트하게 */
   .findmusic-search-and-filters {
     padding: 1rem;
-    margin-top: var(--nav-height); /* 헤더 바로 아래 배치 */
-    border-radius: 12px;
+    margin-top: calc(var(--nav-height) + 0.75rem);
+    margin-bottom: 1.25rem;
+    border-radius: 18px;
+  }
+  
+  /* 트랙 리스트 헤더 */
+  .findmusic-tracks-title {
+    font-size: 1.375rem;
+    margin-bottom: 1.25rem;
   }
   
   /* 필터 버튼 초소형 모바일 최적화 */
   .findmusic-filter-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.625rem;
     margin-bottom: 1rem;
   }
   
   .findmusic-mood-filter-toggle,
   .findmusic-usecase-filter-toggle {
-    width: 100%;
-    justify-content: center;
-    padding: 0.625rem 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.75rem 0.875rem;
+    font-size: 0.8125rem;
+    border-radius: 12px;
   }
   
   /* 초소형 화면 최적화된 트랙 리스트 아이템 */
   .findmusic-track-list-item {
-    padding: 0.75rem;
+    grid-template-columns: 56px 1fr 42px;
+    padding: 0.875rem;
     gap: 0.75rem;
-    border-radius: 10px;
-    min-height: 60px; /* 조금 더 컴팩트하게 */
-    align-items: flex-start;
-    cursor: pointer; /* 초소형 모바일에서도 카드 전체 클릭 가능 */
+    border-radius: 16px;
+    min-height: 76px;
+    align-items: center;
+    width: 100%;
   }
   
-  /* 썸네일 더 작게 */
+  /* 썸네일 */
   .findmusic-item-thumbnail {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
+    width: 56px;
+    height: 56px;
+    border-radius: 13px;
+    grid-column: 1;
   }
   
   /* 웨이브폼 완전 숨김 유지 */
@@ -1651,22 +1933,23 @@ body {
     display: none !important;
   }
   
-  /* 초소형 모바일에서도 재생 버튼 숨김 */
+  /* 초소형 모바일에서 재생 버튼 제거 */
   .findmusic-play-btn {
     display: none !important;
   }
   
-  /* 제목 최적화 - 생략하지 않고 여러 줄로 표시 */
+  /* 제목 최적화 */
   .findmusic-item-title {
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 400;
-    color: #fff;
-    margin: 0;
-    transition: color 0.3s ease;
-    /* 초소형 모바일 최적화: 한 줄 표시 */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+  }
+  
+  /* 메인 콘텐츠 그룹 */
+  .findmusic-item-main-group {
+    grid-column: 2;
   }
   
   /* 태그들 숨김 유지 */
@@ -1678,56 +1961,25 @@ body {
     display: none !important;
   }
   
-  /* CID 컨테이너 초소형 화면 최적화 - 복사 버튼만 표시 */
+  /* CID 컨테이너 초소형 화면 */
   .findmusic-item-cid-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.375rem;
-    background: rgba(62, 180, 137, 0.1);
-    border: 1px solid rgba(62, 180, 137, 0.3);
-    border-radius: 10px;
-    /* 복사 버튼만 들어갈 공간 */
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    flex-shrink: 0;
-    position: relative;
-  }
-  
-  /* CID 라벨과 텍스트 숨김 */
-  .findmusic-cid-label,
-  .findmusic-track-cid-text {
-    display: none !important;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    grid-column: 3;
   }
   
   .findmusic-cid-copy-btn {
-    padding: 0.625rem;
-    background: var(--color-primary);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(62, 180, 137, 0.3);
-  }
-  
-  .findmusic-cid-copy-btn:hover {
-    background: rgba(62, 180, 137, 1);
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(62, 180, 137, 0.4);
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    border-radius: 12px;
   }
   
   .findmusic-cid-copy-btn svg {
-    width: 12px;
-    height: 12px;
+    width: 17px;
+    height: 17px;
   }
   
   /* 480px 이하에서도 미니플레이어 숨김 유지 */
@@ -1737,7 +1989,8 @@ body {
   
   /* 그리드 간격 최적화 */
   .findmusic-grid {
-    gap: 0.5rem;
+    gap: 0.625rem;
+    width: 100%;
   }
   
   /* 필터 최적화 */
@@ -1758,35 +2011,32 @@ body {
   }
   
   /* 검색 박스 최적화 */
+  .findmusic-search-box {
+    border-radius: 12px;
+  }
+  
   .findmusic-search-input {
-    padding: 16px 20px; /* 터치 친화적 크기 */
-    font-size: 1rem;
+    padding: 13px 16px;
+    font-size: 0.9rem;
   }
   
   .findmusic-search-btn {
-    width: 56px; /* 터치 타겟 크기 유지 */
+    width: 48px;
   }
   
   /* 페이지네이션 최적화 */
-  .pagination-btn {
-    min-width: 44px;
-    height: 44px;
-    padding: 0;
-  }
-  
-  /* 초소형 화면 페이지네이션 최적화 */
   .findmusic-pagination {
     gap: 0.4rem;
-    margin-top: 2.5rem;
-    margin-bottom: 70px; /* 하단 네비게이터 높이 고려 */
-    padding: 0.75rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 0.25rem;
   }
   
   .pagination-btn {
     min-width: 40px;
     height: 40px;
-    font-size: 0.85rem;
-    border-radius: 6px;
+    font-size: 0.8125rem;
+    border-radius: 10px;
   }
   
   /* 480px 이하에서도 미니플레이어 숨김 유지 - 중복 제거 */

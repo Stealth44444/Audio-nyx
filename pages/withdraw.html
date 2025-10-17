@@ -29,6 +29,7 @@
   <!-- Chart.js 라이브러리 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
   
+  <script src="../js/i18n.js"></script>
   <script type="module" src="../js/firebase.js"></script>
   <script type="module" src="../js/withdraw.js"></script>
 </head>
@@ -43,11 +44,11 @@
       </div>
     <nav role="navigation" class="menu-area">
       <ul>
-        <li><a href="../index.html" data-i18n="navbar.home">홈</a></li>
-        <li><a href="brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
-        <li class="active"><a href="withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-        <li><a href="find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
-        <li><a href="track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+        <li><a href="../index.html" data-i18n="navbar.home"></a></li>
+        <li><a href="brand.html" data-i18n="navbar.brand"></a></li>
+        <li class="active"><a href="withdraw.html" data-i18n="navbar.withdraw"></a></li>
+        <li><a href="find-music.html" data-i18n="navbar.findMusic"></a></li>
+        <li><a href="track-production.html" data-i18n="navbar.track"></a></li>
       </ul>
         </nav>
     <!-- 언어 선택 토글 -->
@@ -197,42 +198,54 @@
 
   <!-- 메인 컨텐츠 -->
   <main class="page-content">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Dashboard</h1>
+        </div>
+    </section>
+
     <!-- Dashboard Section -->
     <section class="dashboard-section" data-animate="fade-up">
-      <div class="bento-grid">
-        <div class="bento-card card-total-revenue">
+      <div class="dashboard-layout">
+        <div class="dashboard-card card-total-revenue">
           <h3 class="card-title">총 수익</h3>
-          <p class="revenue-amount">₩1,234,567</p>
-          <p class="revenue-change">+15.2%</p>
+          <p class="revenue-amount">₩0</p>
+          <p class="revenue-change">+0%</p>
         </div>
-        <div class="bento-card card-current-balance">
+        <div class="dashboard-card card-current-balance">
           <h3 class="card-title">현재 잔액</h3>
-          <p class="balance-amount">₩345,678</p>
+          <p class="balance-amount">₩0</p>
         </div>
-        <div class="bento-card card-next-payout">
+        <div class="dashboard-card card-next-payout">
           <h3 class="card-title">다음 정산일</h3>
-          <p class="payout-date">2025.11.15</p>
+          <p class="payout-date">-</p>
         </div>
-        <div class="bento-card card-latest-track">
+        <div class="dashboard-card card-last-updated">
+          <h3 class="card-title">데이터 업데이트</h3>
+          <p class="update-date">-</p>
+        </div>
+        <div class="dashboard-card card-latest-track">
           <h3 class="card-title">최근 수익 발생 음원</h3>
-          <p class="track-title" id="latest-track-title">-</p>
-          <p class="track-artist" id="latest-track-artist">-</p>
+          <p id="latest-track-info">-</p>
         </div>
-        <div class="bento-card card-earnings-chart">
+        <div class="dashboard-card card-earnings-chart">
           <h3 class="card-title">월별 수익</h3>
           <canvas id="earningsChart"></canvas>
         </div>
-        <div class="bento-card card-source-chart">
+        <div class="dashboard-card card-source-chart">
           <h3 class="card-title">수익 소스</h3>
-          <canvas id="sourceChart"></canvas>
+          <ul id="source-list" class="source-list"></ul>
         </div>
-        <div class="bento-card card-payout-history">
-          <h3 class="card-title">정산 내역</h3>
-          <ul class="history-list">
-            <li><span>2025.10.15</span><span>₩150,230</span><span class="status-completed">완료</span></li>
-            <li><span>2025.09.15</span><span>₩145,880</span><span class="status-completed">완료</span></li>
-            <li><span>2025.08.15</span><span>₩162,300</span><span class="status-completed">완료</span></li>
-          </ul>
+        <div class="dashboard-card card-payout-history">
+          <h3 class="card-title">등록된 계좌</h3>
+          <div class="account-display">
+            <p id="dashboard-account-bank">-</p>
+            <div class="account-details-line">
+              <p id="dashboard-account-number">-</p>
+              <p id="dashboard-account-holder">-</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -439,18 +452,18 @@
           <div class="footer-nav-group">
             <h4 class="footer-heading" data-i18n="footer.service">서비스</h4>
             <ul class="footer-nav">
-              <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic">음원 샘플</a></li>
-              <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw">계좌 등록</a></li>
-              <li><a href="../pages/track-production.html" data-i18n="navbar.track">트랙 제작</a></li>
+              <li><a href="../pages/find-music.html" data-i18n="navbar.findMusic"></a></li>
+              <li><a href="../pages/withdraw.html" data-i18n="navbar.withdraw"></a></li>
+              <li><a href="../pages/track-production.html" data-i18n="navbar.track"></a></li>
             </ul>
           </div>
           <div class="footer-nav-group">
             <h4 class="footer-heading" data-i18n="footer.company">회사</h4>
             <ul class="footer-nav">
-              <li><a href="../pages/brand.html" data-i18n="navbar.brand">브랜드 소개</a></li>
-                              <li><a href="../pages/terms.html" data-i18n="footer.terms">이용약관</a></li>
-                <li><a href="../pages/privacy.html" data-i18n="footer.privacy">개인정보처리방침</a></li>
-                <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs">문의하기</a></li>
+              <li><a href="../pages/brand.html" data-i18n="navbar.brand"></a></li>
+              <li><a href="../pages/terms.html" data-i18n="footer.terms"></a></li>
+                <li><a href="../pages/privacy.html" data-i18n="footer.privacy"></a></li>
+                <li><a href="#" onclick="openChannelTalk(); return false;" data-i18n="footer.contactUs"></a></li>
             </ul>
           </div>
           <div class="footer-nav-group">

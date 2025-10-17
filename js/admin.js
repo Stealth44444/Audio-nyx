@@ -1593,9 +1593,9 @@ async function parseCDBabyReport() {
       return;
     }
 
-    // CD Baby 리포트 형식에 따라 파싱 (일반적인 형식 가정)
     const records = [];
-    const headers = lines[0].split('\t').map(h => h.trim()); // 탭 구분 가정
+    // 1. 구분자를 탭으로 되돌리고, 2. 헤더를 소문자로 변환하여 대소문자 구분 없앰
+    const headers = lines[0].split('\t').map(h => h.trim().toLowerCase());
     
     for (let i = 1; i < lines.length; i++) {
       const values = lines[i].split('\t');
@@ -1608,10 +1608,8 @@ async function parseCDBabyReport() {
       records.push(record);
     }
 
-    // ISRC와 사용자 매핑
     const mappingResults = await mapCDBabyRecordsToUsers(records);
     
-    // 결과 표시
     displayParsingResults(mappingResults);
     
     parsedCDBabyData = mappingResults;
@@ -1631,7 +1629,6 @@ async function mapCDBabyRecordsToUsers(records) {
     totalEarnings: 0
   };
 
-  // track_requests 컬렉션에서 ISRC 매핑 정보 가져오기
   const trackRequestsSnap = await getDocs(collection(db, 'track_requests'));
   const isrcToUserMap = new Map();
   
@@ -1643,13 +1640,16 @@ async function mapCDBabyRecordsToUsers(records) {
   });
 
   for (const record of records) {
-    const isrc = record['ISRC'] || record['isrc'] || '';
-    const artist = record['Artist Name'] || record['Artist'] || '';
-    const platform = record['Platform'] || record['Store'] || '';
-    const earnings = parseFloat(record['revenue_share'] || record['Earnings'] || record['Revenue'] || '0') || 0;
+    // 헤더가 소문자로 변환되었으므로, 소문자 키로 조회
+    const isrc = record['isrc'] || '';
+    const artist = record['artist_name'] || record['artist'] || '';
+    const track_title = record['track_title'] || record['track title'] || '';
+    const platform = record['platform'] || record['store'] || '';
+    const earnings = parseFloat(record['revenue_share'] || record['earnings'] || record['revenue'] || '0') || 0;
     
     const mappedRecord = {
       artist,
+      track_title,
       isrc,
       platform,
       earnings,
@@ -1658,7 +1658,6 @@ async function mapCDBabyRecordsToUsers(records) {
       userName: null
     };
 
-    // ISRC로 매핑 시도
     if (isrc && isrcToUserMap.has(isrc)) {
       const userId = isrcToUserMap.get(isrc);
       const userInfo = await getUserInfo(userId);
@@ -1799,44 +1798,40 @@ async function saveParsedCDBabyData() {
 
     // 사용자별 수익 데이터 그룹화
     const userEarningsMap = new Map();
-    
+
     parsedCDBabyData.mappedRecords.forEach(record => {
-      if (!userEarningsMap.has(record.userId)) {
-        userEarningsMap.set(record.userId, {
-          userId: record.userId,
-          monthlyEarningsAggregated: new Map(), // New: to aggregate by month
-          totalEarnings: 0,
-          currentBalance: 0,
-          lastUpdated: new Date()
+        if (!userEarningsMap.has(record.userId)) {
+            userEarningsMap.set(record.userId, {
+                userId: record.userId,
+                monthlyEarnings: [],
+                totalEarnings: 0,
+                currentBalance: 0,
+            });
+        }
+
+        const userEarnings = userEarningsMap.get(record.userId);
+        const currentMonth = getCurrentMonth();
+
+        userEarnings.monthlyEarnings.push({
+            month: currentMonth,
+            amount: record.earnings,
+            trackTitle: record.track_title || '', // 'N/A' 대신 빈 문자열 사용
+            artistName: record.artist_name || record.artist || '', // 'N/A' 대신 빈 문자열 사용
+            platform: record.platform || '기타' // 플랫폼 정보 추가
         });
-      }
-      
-      const userEarnings = userEarningsMap.get(record.userId);
-      const currentMonth = getCurrentMonth(); // e.g., "YYYY-MM"
 
-      // Aggregate earnings by month
-      const existingMonthlyAmount = userEarnings.monthlyEarningsAggregated.get(currentMonth) || 0;
-      userEarnings.monthlyEarningsAggregated.set(currentMonth, existingMonthlyAmount + record.earnings);
-
-      userEarnings.totalEarnings += record.earnings;
-      userEarnings.currentBalance += record.earnings;
+        userEarnings.totalEarnings += record.earnings;
+        userEarnings.currentBalance += record.earnings;
     });
-
-    // Convert aggregated monthly earnings to the expected array format
-    for (const earningsData of userEarningsMap.values()) {
-      const monthlyEarningsArray = [];
-      earningsData.monthlyEarningsAggregated.forEach((amount, month) => {
-        monthlyEarningsArray.push({ month, amount });
-      });
-      earningsData.monthlyEarnings = monthlyEarningsArray; // Assign to monthlyEarnings
-      delete earningsData.monthlyEarningsAggregated; // Clean up temporary map
-    }
 
     // Firestore에 저장
     const batch = [];
     for (const [userId, earningsData] of userEarningsMap) {
-      const userEarningsRef = doc(db, 'user_earnings', userId);
-      batch.push(setDoc(userEarningsRef, earningsData, { merge: true }));
+        // 업데이트 시간 필드 추가
+        earningsData.lastUpdatedAt = serverTimestamp();
+
+        const userEarningsRef = doc(db, 'user_earnings', userId);
+        batch.push(setDoc(userEarningsRef, earningsData, { merge: true }));
     }
 
     await Promise.all(batch);

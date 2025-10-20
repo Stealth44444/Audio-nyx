@@ -104,6 +104,27 @@ body {
   overflow-x: hidden;
 }
 
+/* === 페이지 애니메이션 (브랜드 페이지와 일관성) === */
+[data-animate] {
+  will-change: opacity, transform;
+  transition: opacity 1.2s cubic-bezier(.4,0,.2,1), transform 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+[data-animate]:not(.animate-fade-up):not(.animate-fade-in) {
+  opacity: 0 !important;
+  transform: translateY(40px) !important;
+}
+
+.animate-fade-up {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.animate-fade-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 /* 페이지 컨테이너 */
 .findmusic-container {
   width: 100%;
@@ -1506,6 +1527,10 @@ body {
   .findmusic-track-list-item:active::before {
     opacity: 1;
   }
+
+  .findmusic-track-list-item.playing .findmusic-item-title {
+    color: #FFFFFF !important;
+  }
   
   /* 썸네일 최적화 - 앱 스타일 */
   .findmusic-item-thumbnail {
@@ -1574,7 +1599,7 @@ body {
   .findmusic-item-title {
     font-size: 0.9375rem;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.95);
+    color: #FFFFFF;
     margin: 0;
     line-height: 1.5;
     transition: all 0.3s ease;
@@ -1589,9 +1614,7 @@ body {
     hyphens: auto;
   }
   
-  .findmusic-track-list-item:active .findmusic-item-title {
-    color: rgba(62, 180, 137, 0.95);
-  }
+
   
   /* 태그들 숨김 - 모바일에서는 간소화 */
   .findmusic-item-tags,

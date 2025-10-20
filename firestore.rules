@@ -385,12 +385,13 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+
     /* ───────── ⑲ CD Baby 업로드 기록 컬렉션 ───────── */
     match /cdbaby_upload_history/{historyId} {
       allow read, write: if isAdmin();
     }
 
-    /* ───────── ⑳ 관리자 전용 컬렉션들 ───────── */
+    /* ───────── ⑱ 관리자 전용 컬렉션들 ───────── */
     match /admin/{document=**} {
       allow read, write: if isAdmin();
     }

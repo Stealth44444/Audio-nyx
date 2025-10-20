@@ -1,3 +1,43 @@
+// === 비디오 자동재생 처리 (모바일 지원) ===
+function initVideoAutoplay() {
+    const video = document.querySelector('.hero-video-background video');
+    if (!video) return;
+    
+    // 비디오 로드 후 재생 시도
+    video.addEventListener('loadeddata', function() {
+        const playPromise = video.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('[Video] 자동재생 성공');
+            }).catch(error => {
+                console.log('[Video] 자동재생 실패, 사용자 인터랙션 대기:', error);
+                
+                // 모바일에서 자동재생 실패 시 첫 터치/클릭으로 재생
+                const playOnInteraction = () => {
+                    video.play().then(() => {
+                        console.log('[Video] 사용자 인터랙션으로 재생 성공');
+                    }).catch(err => {
+                        console.log('[Video] 재생 실패:', err);
+                    });
+                    document.removeEventListener('touchstart', playOnInteraction);
+                    document.removeEventListener('click', playOnInteraction);
+                };
+                
+                document.addEventListener('touchstart', playOnInteraction, { once: true });
+                document.addEventListener('click', playOnInteraction, { once: true });
+            });
+        }
+    });
+    
+    // 비디오가 이미 로드된 경우
+    if (video.readyState >= 3) {
+        video.play().catch(error => {
+            console.log('[Video] 초기 재생 실패:', error);
+        });
+    }
+}
+
 // 전역 입력 필드 활성화 스크립트
 console.log("[main.js] 전역 입력 필드 활성화 스크립트 시작");
 
@@ -5,9 +45,12 @@ console.log("[main.js] 전역 입력 필드 활성화 스크립트 시작");
 document.addEventListener('DOMContentLoaded', function() {
     console.log("[main.js] DOM 로드 완료, 입력 필드 활성화 시작");
     
-    // 모든 input 필드 활성화
+    // 비디오 자동재생 초기화
+    initVideoAutoplay();
+    
+    // 모든 input 및 textarea 필드 활성화
     function enableAllInputs() {
-        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="search"], input[type="number"], input:not([type])');
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="search"], input[type="number"], input:not([type]), textarea, select');
         
         console.log(`[main.js] 발견된 입력 필드 수: ${inputs.length}`);
         

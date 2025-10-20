@@ -16,37 +16,39 @@ import {
   onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
 
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-storage.js';
+
 import { db } from './firebase.js';
 
-// 애니메이션 초기화 함수 (find-music 페이지와 동일한 패턴)
-function initializeAnimations() {
-  // 메인 섹션들 애니메이션
-  const animatedElements = document.querySelectorAll('[data-animate="fade-up"]');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-fade-up');
-        
-        // 프로세스 가이드 섹션인 경우 카드들도 애니메이션 적용
-        if (entry.target.classList.contains('process-guide-section')) {
-          const processCards = entry.target.querySelectorAll('.process-card');
-          processCards.forEach(card => {
-            card.classList.add('animate-fade-up');
-          });
-        }
-        
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  });
+// === 페이지 애니메이션 (브랜드 페이지와 일관성) ===
+function initPageAnimations() {
+    const animatedElements = document.querySelectorAll('[data-animate]');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const animationType = entry.target.getAttribute('data-animate');
+                if (animationType === 'fade-up') {
+                    entry.target.classList.add('animate-fade-up');
+                } else if (animationType === 'fade-in') {
+                    entry.target.classList.add('animate-fade-in');
+                }
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
 
-  animatedElements.forEach(element => {
-    observer.observe(element);
-  });
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        observer.observe(el);
+    });
 }
 
 // 토스트 메시지 표시 함수
@@ -92,8 +94,8 @@ function renderStatusTag(status) {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('트랙 제작 페이지 초기화 중...');
   
-  // 애니메이션 초기화
-  initializeAnimations();
+  // 페이지 애니메이션 초기화
+  initPageAnimations();
 
   // ── 1회성 팝업 공지 (분기→월 정산 변경) ───────────────────────────────
   try {
@@ -118,11 +120,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOM 요소
   const requestForm = document.getElementById('track-request-form');
   const titleInput = document.getElementById('track-title');
+  const artistInput = document.getElementById('track-artist');
   const bpmInput = document.getElementById('track-bpm');
   const genreSelect = document.getElementById('track-genre');
   const descriptionInput = document.getElementById('track-description');
   const refUrlInput = document.getElementById('track-ref-url');
   const emailInput = document.getElementById('track-email');
+  const coverInput = document.getElementById('track-cover');
+  const coverPreview = document.getElementById('cover-preview');
+  const coverPreviewImg = document.getElementById('cover-preview-img');
+  const removeCoverBtn = document.getElementById('remove-cover');
   const submitBtn = document.getElementById('submit-request');
   const requestList = document.getElementById('request-list');
   const loadingEl = document.getElementById('request-loading');
@@ -137,11 +144,65 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 오류 메시지 요소
   const titleError = document.getElementById('title-error');
+  const artistError = document.getElementById('artist-error');
   const bpmError = document.getElementById('bpm-error');
   const genreError = document.getElementById('genre-error');
   const descriptionError = document.getElementById('description-error');
   const urlError = document.getElementById('url-error');
   const emailError = document.getElementById('email-error');
+  const coverError = document.getElementById('cover-error');
+  
+  // 커버 아트 파일 관리
+  let selectedCoverFile = null;
+  
+  // 커버 아트 업로드 처리
+  if (coverInput) {
+    coverInput.addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      // 파일 크기 체크 (10MB)
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        if (coverError) {
+          coverError.textContent = '파일 크기는 10MB를 초과할 수 없습니다.';
+          coverError.style.display = 'block';
+        }
+        coverInput.value = '';
+        return;
+      }
+      
+      // 파일 형식 체크
+      if (!file.type.match('image/(png|jpeg|jpg)')) {
+        if (coverError) {
+          coverError.textContent = 'PNG, JPG, JPEG 파일만 업로드 가능합니다.';
+          coverError.style.display = 'block';
+        }
+        coverInput.value = '';
+        return;
+      }
+      
+      // 이미지 미리보기
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        coverPreviewImg.src = e.target.result;
+        coverPreview.style.display = 'block';
+        selectedCoverFile = file;
+        if (coverError) coverError.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  // 커버 아트 제거
+  if (removeCoverBtn) {
+    removeCoverBtn.addEventListener('click', function() {
+      coverInput.value = '';
+      coverPreview.style.display = 'none';
+      coverPreviewImg.src = '';
+      selectedCoverFile = null;
+    });
+  }
   
   // Firebase 초기화 확인
   if (!db) {
@@ -153,11 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 인증 상태 확인
   const auth = getAuth();
   let currentUser = { uid: 'anonymous', isAnonymous: true }; // 기본값을 익명 사용자로 설정
-  const MAX_REQUESTS = 2; // 최대 요청 횟수
+  // const MAX_REQUESTS = 2; // 최대 요청 횟수 - 제한 제거
   let userRequestCount = 0; // 사용자 현재 요청 횟수
-  if (maxRequestsCount) {
-    maxRequestsCount.textContent = MAX_REQUESTS;
-  }
+  // if (maxRequestsCount) {
+  //   maxRequestsCount.textContent = MAX_REQUESTS;
+  // }
 
   // 언어 변경 후 동적 텍스트 동기화 훅
   window.syncDynamicI18n = function() {
@@ -190,65 +251,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-  // 요청 횟수 제한 체크 함수
+  // 요청 횟수 제한 체크 함수 - 제한 제거됨
   function checkRequestLimit(requestCount) {
     userRequestCount = requestCount;
     
-    // 상태 바 요소가 없으면(레이아웃 제거) 제한 UI 없이 로직만 처리
-    if (!requestStatusBar || !currentRequestCount || !limitWarning || !formCard || !submitBtn) {
-      return requestCount < MAX_REQUESTS;
+    // 제한 없이 항상 요청 가능
+    if (requestStatusBar) {
+      requestStatusBar.style.display = 'none'; // 상태 바 숨김
     }
-    
-    // 상태 바 표시
-    requestStatusBar.style.display = 'flex';
-    currentRequestCount.textContent = requestCount;
-    
-    if (requestCount >= MAX_REQUESTS) {
-      // 최대 횟수 도달시 폼 비활성화
-      limitWarning.style.display = 'flex';
-      formCard.classList.add('form-disabled');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" stroke-width="2"/>
-        </svg>
-        <span>${(window.i18next && window.i18next.t('trackProduction.limit.exceeded')) || '요청 횟수 초과'}</span>
-      `;
-      
-      // 입력 필드 비활성화
-      titleInput.disabled = true;
-      bpmInput.disabled = true;
-      genreSelect.disabled = true;
-      descriptionInput.disabled = true;
-      refUrlInput.disabled = true;
-      emailInput.disabled = true;
-      
-      return false;
-    } else {
-      // 아직 요청 가능
-      limitWarning.style.display = 'none';
+    if (limitWarning) {
+      limitWarning.style.display = 'none'; // 경고 숨김
+    }
+    if (formCard) {
       formCard.classList.remove('form-disabled');
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 19l7-7 3 3-7 7-3-3z"/>
-          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
-          <path d="M2 2l7.586 7.586"/>
-          <circle cx="11" cy="11" r="2"/>
-        </svg>
-        <span>${(window.i18next && window.i18next.t('trackProduction.form.submit')) || '요청 제출'}</span>
-      `;
-      
-      // 입력 필드 활성화
-      titleInput.disabled = false;
-      bpmInput.disabled = false;
-      genreSelect.disabled = false;
-      descriptionInput.disabled = false;
-      refUrlInput.disabled = false;
-      emailInput.disabled = false;
-      
-      return true;
     }
+    
+    return true; // 항상 요청 가능
   }
   
   // 폼 제출 처리 (재확인 모달 선표시)
@@ -262,14 +280,15 @@ document.addEventListener('DOMContentLoaded', () => {
     //   return;
     // }
     
-    // 요청 횟수 제한 체크
-    if (userRequestCount >= MAX_REQUESTS) {
-      showNotification('최대 요청 횟수(2회)에 도달했습니다.', true);
-      return;
-    }
+    // 요청 횟수 제한 체크 - 제한 제거됨
+    // if (userRequestCount >= MAX_REQUESTS) {
+    //   showNotification('최대 요청 횟수(2회)에 도달했습니다.', true);
+    //   return;
+    // }
     
     // 입력값 가져오기
     const title = titleInput.value.trim();
+    const artist = artistInput.value.trim();
     const bpm = parseInt(bpmInput.value.trim());
     const genre = genreSelect.value;
     const description = descriptionInput.value.trim();
@@ -278,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 입력 검증
     resetErrors();
-    if (!validateForm(title, bpm, genre, description, refUrl, email)) {
+    if (!validateForm(title, artist, bpm, genre, description, refUrl, email)) {
       return;
     }
     
@@ -287,6 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmClose = document.getElementById('confirm-modal-close');
     const confirmCancel = document.getElementById('confirm-cancel');
     const confirmAgree = document.getElementById('confirm-agree');
+    const confirmTermsAgree = document.getElementById('confirm-terms-agree');
     const confirmSubmit = document.getElementById('confirm-submit');
 
     if (!confirmModal) return;
@@ -302,13 +322,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     openConfirm();
 
-    // 동의 체크에 따라 버튼 활성화
-    if (confirmAgree) {
+    // 두 개의 체크박스 모두 체크해야 버튼 활성화
+    function checkAllAgreements() {
+      const allChecked = confirmAgree && confirmAgree.checked && 
+                        confirmTermsAgree && confirmTermsAgree.checked;
+      if (confirmSubmit) {
+        confirmSubmit.disabled = !allChecked;
+      }
+    }
+
+    if (confirmAgree && confirmTermsAgree) {
       confirmAgree.checked = false;
+      confirmTermsAgree.checked = false;
       confirmSubmit.disabled = true;
-      confirmAgree.addEventListener('change', () => {
-        confirmSubmit.disabled = !confirmAgree.checked;
-      }, { once: false });
+      
+      confirmAgree.addEventListener('change', checkAllAgreements);
+      confirmTermsAgree.addEventListener('change', checkAllAgreements);
     }
 
     // 닫기/취소
@@ -318,7 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 확정 제출 핸들러
     if (confirmSubmit) {
       confirmSubmit.addEventListener('click', async () => {
-        if (!confirmAgree || !confirmAgree.checked) return;
+        if (!confirmAgree || !confirmAgree.checked || 
+            !confirmTermsAgree || !confirmTermsAgree.checked) {
+          showNotification('모든 항목에 동의해주세요.', true);
+          return;
+        }
         closeConfirm();
         try {
           // 로딩 상태 표시
@@ -341,21 +374,89 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('사용자 정보 가져오기 오류:', userError);
           }
 
+          // 커버 아트 업로드 처리
+          let coverArtUrl = null;
+          let coverArtMetadata = null;
+          
+          if (selectedCoverFile) {
+            try {
+              console.log('커버 아트 업로드 시작:', selectedCoverFile.name);
+              console.log('현재 사용자 UID:', currentUser.uid);
+              console.log('파일 크기:', selectedCoverFile.size, '바이트');
+              console.log('파일 타입:', selectedCoverFile.type);
+              
+              const storage = getStorage();
+              const timestamp = Date.now();
+              // 파일명에서 특수문자 제거
+              const sanitizedFileName = selectedCoverFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+              const fileName = `cover_arts/${currentUser.uid}/${timestamp}_${sanitizedFileName}`;
+              const storageRef = ref(storage, fileName);
+              
+              console.log('업로드 경로:', fileName);
+              
+              // 파일 업로드
+              const snapshot = await uploadBytes(storageRef, selectedCoverFile, {
+                contentType: selectedCoverFile.type,
+                customMetadata: {
+                  uploadedBy: currentUser.uid,
+                  uploadedAt: new Date().toISOString(),
+                  originalName: selectedCoverFile.name
+                }
+              });
+              console.log('커버 아트 업로드 완료:', snapshot.metadata.fullPath);
+              
+              // 다운로드 URL 가져오기
+              coverArtUrl = await getDownloadURL(storageRef);
+              console.log('커버 아트 URL 생성 완료:', coverArtUrl);
+              
+              coverArtMetadata = {
+                name: selectedCoverFile.name,
+                sanitizedName: sanitizedFileName,
+                size: selectedCoverFile.size,
+                type: selectedCoverFile.type,
+                path: fileName,
+                uploadedAt: new Date().toISOString()
+              };
+              
+              console.log('커버 아트 메타데이터:', coverArtMetadata);
+            } catch (uploadError) {
+              console.error('커버 아트 업로드 오류:', uploadError);
+              console.error('오류 코드:', uploadError.code);
+              console.error('오류 메시지:', uploadError.message);
+              
+              if (uploadError.code === 'storage/unauthorized') {
+                console.error('Firebase Storage 권한 오류 - Storage 규칙을 확인하세요');
+                showNotification('커버 아트 업로드 권한이 없습니다. 관리자에게 문의하세요.', true);
+              } else {
+                showNotification('커버 아트 업로드 중 오류가 발생했습니다. 커버 아트 없이 계속 진행합니다.', false);
+              }
+              
+              // 커버 아트 없이 계속 진행
+              coverArtUrl = null;
+              coverArtMetadata = null;
+            }
+          }
+
           const docRef = await addDoc(collection(db, 'track_requests'), {
             uid: currentUser.uid,
             title,
+            artist,
             bpm,
             genre,
             description,
             refUrl: refUrl || null,
             status: '미제작',
             email,
+            coverArtUrl: coverArtUrl,
+            coverArtMetadata: coverArtMetadata,
+            hasCoverArt: !!selectedCoverFile,
             userNickname: userInfo.nickname,
             userPhone: userInfo.phone,
             createdAt: serverTimestamp()
           });
           console.log('트랙 요청 추가 성공:', docRef.id);
           showNotification('트랙 제작 요청이 성공적으로 등록되었습니다.');
+          
           resetForm();
         } catch (error) {
           console.error('트랙 요청 등록 중 오류 발생:', error);
@@ -481,12 +582,18 @@ document.addEventListener('DOMContentLoaded', () => {
   */
   
   // 입력 검증 함수
-  function validateForm(title, bpm, genre, description, refUrl, email) {
+  function validateForm(title, artist, bpm, genre, description, refUrl, email) {
     let isValid = true;
     
     // 제목 검증
     if (!title) {
       showError(titleInput, titleError, '트랙 제목을 입력해주세요.');
+      isValid = false;
+    }
+    
+    // 아티스트명 검증
+    if (!artist) {
+      showError(artistInput, artistError, '아티스트 명을 입력해주세요.');
       isValid = false;
     }
     
@@ -579,6 +686,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetForm() {
     requestForm.reset();
     resetErrors();
+    // 커버 아트 미리보기 초기화
+    if (coverPreview) coverPreview.style.display = 'none';
+    if (coverPreviewImg) coverPreviewImg.src = '';
+    selectedCoverFile = null;
   }
   
   // 폼 비활성화 (로그인 필요 시)

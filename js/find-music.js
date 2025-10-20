@@ -622,6 +622,7 @@ async function initializePage() {
   loadHeader(); // 주석 해제
   initializeFilters(); // 주석 해제
   setupSearchAnimation(); // 검색 박스 등장 애니메이션 설정
+  initPageAnimations(); // 공통 등장 애니메이션 초기화
   console.log("[JS SCRIPT] loadHeader 및 initializeFilters 호출 완료."); // 로그 메시지 변경
   
   try {
@@ -639,8 +640,6 @@ async function initializePage() {
     if (loadingElement) {
       loadingElement.innerHTML = `
         <div class="loading-spinner-large"></div>
-        <p>Firebase에서 음원 데이터를 불러오는 중...</p>
-        <small>잠시만 기다려주세요</small>
       `;
     }
     
@@ -651,8 +650,6 @@ async function initializePage() {
     if (loadingElement && loadedTracksFromFirebase.length > 0) {
       loadingElement.innerHTML = `
         <div class="loading-spinner-large"></div>
-        <p>음원 파일을 처리하는 중...</p>
-        <small>${loadedTracksFromFirebase.length}개의 트랙을 발견했습니다</small>
       `;
     }
     
@@ -780,6 +777,33 @@ async function initializePage() {
       `;
     }
   }
+}
+
+// === 페이지 애니메이션 (브랜드 페이지와 일관성) ===
+function initPageAnimations() {
+  const animatedElements = document.querySelectorAll('[data-animate]');
+  if (!animatedElements || animatedElements.length === 0) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const animationType = entry.target.getAttribute('data-animate');
+        if (animationType === 'fade-up') {
+          entry.target.classList.add('animate-fade-up');
+        } else if (animationType === 'fade-in') {
+          entry.target.classList.add('animate-fade-in');
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  animatedElements.forEach(el => {
+    // 초기 상태는 CSS에서 처리되지만, 안전하게 보장
+    el.style.opacity = el.style.opacity || '0';
+    el.style.transform = el.style.transform || 'translateY(20px)';
+    observer.observe(el);
+  });
 }
 
 // Firebase Storage URL 자동 생성 함수

@@ -162,10 +162,10 @@
         <section class="hero-banner hero-section">
             <!-- 비디오 배경 -->
             <div class="hero-video-background">
-                <video autoplay loop muted playsinline disablePictureInPicture>
+                <video autoplay loop muted playsinline webkit-playsinline disablePictureInPicture preload="auto">
                     <source src="videos/20250522_1528_DJ's Hands in Action_simple_compose_01jvvatt0aej3ahqrks6sjab3z.mp4" type="video/mp4">
-                            브라우저가 비디오 태그를 지원하지 않습니다.
-                        </video>
+                    브라우저가 비디오 태그를 지원하지 않습니다.
+                </video>
             </div>
 
             <!-- 오버레이 그라디언트 -->
@@ -173,10 +173,13 @@
             
             <div class="hero-content">
                 <div class="banner-headlines">
-                    <h1 class="main-heading">당신의 숏폼, 당신의 수익.</h1>
+                    <h1 class="main-heading"><span class="line-one">당신의 숏폼,</span> <span class="line-two">당신의 수익.</span></h1>
                 </div>
                 <p class="hero-description">개인 맞춤 음원 제작부터 유통·정산 관리까지, 한 번에.<br>Audionyx와 함께 모든 영상에서 새로운 수익을 창출하세요.</p>
-                <a href="pages/find-music.html" id="hero-cta-btn" class="btn-primary">샘플 들어보기</a>
+                <div class="hero-cta-buttons">
+                    <a href="pages/find-music.html" id="hero-cta-btn" class="btn-primary">샘플 들어보기</a>
+                    <a href="pages/brand.html" class="btn-secondary-outline mobile-only-cta">AUDIONYX에 대해 알아보기</a>
+                </div>
             </div>
         </section>
 

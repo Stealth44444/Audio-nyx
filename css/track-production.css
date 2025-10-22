@@ -2224,8 +2224,8 @@ details.collapsible > *:not(summary) {
   margin-bottom: 0;
 }
 
-.step-number {
-  display: none; /* 번호 동그라미 숨김 */
+.process-step .step-number {
+  display: none; /* 확인 모달의 번호 동그라미만 숨김 */
 }
 
 .step-content h4 {

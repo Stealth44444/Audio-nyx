@@ -1918,7 +1918,7 @@ async function maybeShowChannelBanner(uid) {
     const snap = await getDoc(userChannelDocRef);
     const hasChannels = snap.exists() && Array.isArray(snap.data().channels) && snap.data().channels.length > 0;
     if (!hasChannels) {
-      renderPostSignupBanner();
+      // renderPostSignupBanner(); // 채널 등록 배너 비활성화
     } else {
       const existing = document.querySelector('.post-signup-banner');
       if (existing) existing.remove();

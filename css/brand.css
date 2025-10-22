@@ -1,3 +1,83 @@
+/* Step 2 upload phone preview */
+.step2-upload { display:grid; place-items:center; height:240px; border-radius:16px; background: radial-gradient(60% 60% at 50% 40%, rgba(62,180,137,.18), transparent); }
+.step2-upload .phone { width:180px; height:320px; border-radius:24px; background:#0e0e0e; border:1px solid rgba(255,255,255,.08); position:relative; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.35); }
+.step2-upload .status-bar { height:10px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); }
+.step2-upload .video-skeleton { height:180px; margin:10px; border-radius:12px; background:#1a1a1a; position:relative; overflow:hidden; }
+.step2-upload .music-chip { position:absolute; top:22px; right:16px; font-size:11px; padding:4px 8px; border-radius:999px; background:#11261f; color:#3EB489; border:1px solid rgba(62,180,137,.35); }
+.step2-upload .progress-animate { position:absolute; left:10px; right:10px; bottom:60px; height:6px; border-radius:6px; background:#1a1a1a; overflow:hidden; }
+.step2-upload .progress-animate::after { content:""; position:absolute; width:40%; height:100%; left:-40%; background:linear-gradient(90deg, #3EB489, #2aa275); border-radius:6px; animation: uploadRun 2.2s infinite; }
+.step2-upload .actions { position:absolute; bottom:16px; left:0; right:0; display:flex; justify-content:center; }
+.glow-btn { padding:8px 16px; border-radius:12px; border:0; background:#3EB489; color:#0c0c0c; font-weight:700; box-shadow:0 0 0 rgba(62,180,137,0); animation:pulseGlow 2.4s ease-in-out infinite; }
+@keyframes uploadRun { 100% { left:100%; } }
+
+/* Step 3 revenue dashboard */
+.step3-revenue { display:grid; place-items:center; height:240px; border-radius:16px; background: linear-gradient(180deg, rgba(62,180,137,.12), rgba(62,180,137,.03)); }
+.revenue-card { width:92%; max-width:440px; background:#0e0e0e; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:14px; box-shadow:0 10px 40px rgba(0,0,0,.25); }
+.revenue-header { font-weight:700; opacity:.9; margin-bottom:8px; }
+.revenue-stats { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.stat { background:#101010; border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:10px; }
+.stat-label { font-size:12px; opacity:.8; }
+.stat-value { font-size:18px; font-weight:700; margin-top:4px; }
+.sparkline { display:flex; gap:6px; align-items:flex-end; height:54px; margin:6px 0 10px; }
+.sparkline .bar { width:10px; background:linear-gradient(180deg, #3EB489, #205f49); border-radius:4px; animation: barRise 1.6s ease-in-out infinite alternate; }
+.sparkline .bar:nth-child(odd) { animation-delay:.3s; }
+.payout-chip { font-size:11px; padding:6px 10px; border-radius:999px; border:1px solid rgba(62,180,137,.35); color:#3EB489; background:#11261f; width:max-content; }
+@keyframes barRise { from { transform: scaleY(.8);} to { transform: scaleY(1);} }
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  /* Use desktop cards on mobile without clipping */
+  .how-it-works .flows-container { gap: 1.5rem; }
+  .flow { flex-direction: column; align-items: stretch; gap: 1rem; }
+  .flow-image { flex: none; width: 100%; border-radius: 12px; }
+  .flow-text { flex: none; width: 100%; padding: 0; }
+  .flow-text h3 { font-size: 1.25rem !important; line-height: 1.35; word-break: keep-all; }
+  .flow-text p { font-size: .98rem !important; line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+  .placeholder-image { height: 220px; }
+  .step1-request, .step2-upload, .step3-revenue { height: 220px; }
+  .platform-logos { gap: 1rem !important; }
+  .platform-logos img { width: 44px !important; height: 44px !important; }
+
+  .step1-request { height: 200px; }
+  .request-form-mock { width: 92%; gap: 8px; }
+  .request-form-mock .field { height: 12px; }
+  .request-form-mock .pill { font-size: 10px; padding: 5px 8px; }
+  .submit-glow { padding: 7px 12px; font-size: 13px; }
+
+  .step2-upload { height: 220px; }
+  .step2-upload .phone { width: 150px; height: 260px; border-radius: 20px; }
+  .step2-upload .video-skeleton { height: 150px; }
+  .step2-upload .music-chip { font-size: 10px; padding: 3px 7px; }
+  .step2-upload .progress-animate { bottom: 56px; height: 5px; }
+  .glow-btn { padding: 7px 12px; font-size: 13px; }
+
+  .step3-revenue { height: 220px; }
+  .revenue-card { padding: 12px; }
+  .stat-value { font-size: 16px; }
+  .sparkline { height: 44px; gap: 5px; }
+  .sparkline .bar { width: 8px; }
+  .payout-chip { font-size: 10px; padding: 5px 8px; }
+}
+/* Step 1 request form animation */
+.step1-request {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(62,180,137,.15), rgba(62,180,137,.04));
+  border-radius: 16px;
+  height: 240px;
+  overflow: hidden;
+}
+.request-form-mock { width: 86%; max-width: 420px; display: flex; flex-direction: column; gap: 10px; }
+.request-form-mock .field { height: 14px; border-radius: 8px; background: #1a1a1a; opacity: .9; position: relative; overflow: hidden; }
+.request-form-mock .badge-row { display: flex; gap: 8px; margin: 2px 0 6px; }
+.request-form-mock .pill { font-size: 11px; padding: 6px 10px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; opacity: .9; }
+.submit-glow { margin-top: 4px; align-self: flex-end; padding: 8px 14px; border-radius: 10px; background: #3EB489; color: #0c0c0c; font-weight: 600; border: 0; box-shadow: 0 0 0 rgba(62,180,137,0); animation: pulseGlow 2.2s ease-in-out infinite; }
+.shimmer::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent); animation: shimmerMove 1.8s infinite; }
+@keyframes shimmerMove { 100% { transform: translateX(100%);} }
+@keyframes pulseGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(62,180,137,.0);} 50% { box-shadow: 0 0 24px 2px rgba(62,180,137,.35);} }
+.platform-logos img { opacity: .95; filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+.platform-logos img:hover { transform: scale(1.06); transition: transform .2s ease; }
 /* === 디자인 시스템 변수 === */
 :root {
     /* 색상 */
@@ -2945,14 +3025,14 @@ ul {
         50% { transform: translateX(4px); }
     }
     
-    /* 모바일에서만 데스크톱 플로우 숨기기 */
+    /* 모바일에서도 데스크톱 플로우(새 디자인) 표시 */
     .flows-container {
-        display: none;
+        display: flex;
     }
     
-    /* 모바일 플로우 컨테이너 표시 */
+    /* 모바일 전용 플로우는 비활성화 */
     .mobile-flows-wrapper {
-        display: block;
+        display: none;
     }
 
     /* 2024 트렌드: 멀티플랫폼 섹션 */

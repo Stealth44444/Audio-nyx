@@ -14,10 +14,10 @@
   "navbar": {
     "home": "ホーム",
     "brand": "ブランド紹介",
-    "withdraw": "口座登録",
+    "withdraw": "ダッシュボード",
     "findMusic": "音源検索",
     "channel": "チャンネル管理",
-    "track": "トラック制作",
+    "track": "音源申請",
     "login": "ログイン",
     "producer": "Audionyx プロデューサー",
     "faq": "FAQ",
@@ -33,9 +33,9 @@
     "tagline": "ショート動画楽曲収入化プラットフォーム",
     "service": "サービス",
     "findMusic": "楽曲検索",
-    "withdraw": "口座登録",
+    "withdraw": "ダッシュボード",
     "channelManagement": "チャンネル管理",
-    "trackProduction": "トラック制作",
+    "trackProduction": "音源申請",
     "company": "会社",
     "brand": "ブランド紹介",
     "terms": "利用規約",
@@ -51,6 +51,42 @@
     "businessNumber": "事業者登録番号 : 544-87-03492",
     "businessType": "情報通信業",
     "address": "京畿道龍仁市水枝区豊徳川路139番ギル16-5"
+  },
+  "home": {
+    "video": {"noSupport": "お使いのブラウザは video タグをサポートしていません。"},
+    "hero": {
+      "title": "<span class=\"line-one\">あなたのショート、</span> <span class=\"line-two\">あなたの収入。</span>",
+      "description": "個人カスタム楽曲の制作から配信・精算管理まで、ワンストップ。<br>Audionyxで全ての動画から新しい収益を生み出しましょう。",
+      "primaryCta": "サンプルを聴く",
+      "secondaryCta": "AUDIONYXについて"
+    }
+  },
+  "dashboard": {
+    "totalRevenue": "総収入",
+    "currentBalance": "現在残高",
+    "nextPayout": "次回精算日",
+    "lastUpdated": "データ更新",
+    "latestTrack": "最近収入が発生した楽曲",
+    "monthlyEarnings": "月別収入",
+    "earningsSources": "収入ソース",
+    "registeredAccount": "登録済み口座"
+  },
+  "trackProduction": {
+    "hero": {
+      "title": "<span class=\"highlight-word\">あなたのコンテンツ</span>のための<br><span class=\"highlight-word\">個人音源制作</span><br><span class=\"highlight-word\">1:1相談</span>から配信まで"
+    },
+    "promo": {
+      "feature1": "制作完了後に配信プラットフォームへ配信",
+      "feature2": "アフターケアと毎月の精算",
+      "feature3": "ダッシュボードで収益確認と出金申請",
+      "cta": "今すぐ申請"
+    },
+    "why": {
+      "card1Title": "サウンドシグネチャ",
+      "card2Title": "カスタム構成",
+      "card3Title": "100%オリジナル",
+      "card4Title": "プロデューサー"
+    }
   },
   "mobile": {
     "home": "ホーム",
@@ -70,7 +106,8 @@
     "heroCta": "Go Tracks",
     "aboutTitle": "Audionyxとは？",
           "aboutHeadline": "音源収入も、動画収入も<br>Audionyx一つで全て手に入れましょう",
-    "aboutDescription": "YouTubeはショートで発生する総収入を<br>「音源著作権者」と「動画クリエイター」に分けて支払います。<br>Audionyx音源を使用すると、著作権料の<strong>一部</strong>をAudionyxが代わりに受け取り<span class=\"no-break\">再び還元するため</span>動画収入 + 音源収入を同時に獲得できます。",
+    "aboutDescription": "YouTubeはShortsの収入を<br>「音源権利者」と「動画クリエイター」に分配します。<br>Audionyx音源を使うと、発生した著作権料をAudionyxが代行受領し<span class=\"no-break\">クリエイターに還元するため</span>動画収入と楽曲収入を同時に得られます。",
+    "aboutPersonal": "個人音源を依頼して自分で使えば、YouTubeの広告収入に加えてAudionyxからの独自ロイヤリティも受け取れます。自分だけの音源でチャンネルのアイデンティティを強化し、収益パイプラインを広げましょう。",
           "insightsTitle": "Audionyxトラックで<br>あなたが<strong>逃した収入を</strong>見つけましょう",
       "insightsSubtitle": "これまで<strong>逃していた全ての収入機会</strong>を取り戻します",
     "insightsCta": "3ステップを確認",
@@ -81,16 +118,17 @@
           "whySubtitle": "Audionyxと共に始める新しい収入創出の3つの核心",
     "feature1Label": "FREE TO USE",
     "feature1Title": "All Tracks Free",
-    "feature1Desc": "最高のプロデューサーによる<br>ハイクオリティ音源無料使用",
+    "feature1Desc": "1:1 個人音源カスタム制作でチャンネルシグネチャ確立",
     "feature2Label": "100% SECURE",
     "feature2Title": "All Tracks Licensed",
-    "feature2Desc": "全ての音源<br>著作権/CID完璧保証",
+    "feature2Desc": "オリジナル権利・全プラットフォームCID登録・安全配信",
     "feature3Label": "HIGH ROYALTY",
     "feature3Title": "Most Royalty is Yours",
-          "feature3Desc": "音源を使用するだけで<br>収入の一部を獲得",
+          "feature3Desc": "配信後2〜3ヶ月で初回精算<br>以降は毎月・ダッシュボード毎週更新",
           "multiplatformTitle": "マルチプラットフォーム収入化",
-      "multiplatformHeadline": "TikTok · Instagram · Facebook<br>全てのプラットフォームで収入を享受",
-      "multiplatformDesc": "Audionyx音源一つでShortsだけでなくReels、TikTok、Facebook Videoまで<br><strong>全てのチャンネルで同じ比率で収入を享受できます。</strong>",
+      "multiplatformHeadline": "世界300+の音楽/ソーシャルプラットフォームで一貫した基準で収益化",
+      "multiplatformDesc": "TikTok・Instagram・YouTubeからSpotify・Apple Music・Amazon Musicまで—Audionyx音源ひとつで配信・精算基準を統一。",
+      "multiplatformDetail": "Shorts/Reels/TikTokなどのショートフォームと主要DSP全体で一貫したメタデータ・CIDポリシーを適用。配信後2〜3ヶ月で初回精算、その後は毎月透明に支払い。",
           "howWorksSubtitle": "簡単な3ステップで収入化開始",
     "howWorksTitle": "How It Works",
     "estimatedRoyalty": "予想ロイヤリティ",
@@ -203,17 +241,14 @@
     "player": {
       "close": "閉じる",
       "play": "再生",
+      "pause": "一時停止",
+      "download": "ダウンロード",
+      "favorite": "お気に入り",
       "genre": "ジャンル",
       "mood": "ムード",
       "usecase": "用途",
       "cid": "CID:",
       "copyCid": "Content ID をコピー"
-    },
-    "player": {
-      "play": "再生",
-      "pause": "一時停止",
-      "download": "ダウンロード",
-      "favorite": "お気に入り"
     },
     "auth": {
       "title": "ログイン / 会員登録",

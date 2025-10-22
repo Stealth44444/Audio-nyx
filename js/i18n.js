@@ -42,7 +42,7 @@ class SimpleI18n {
       // 폴백 번역 데이터
       if (lang === 'ko') {
         this.translations[lang] = {
-          navbar: { home: "홈", brand: "브랜드 소개", withdraw: "계좌 등록", findMusic: "음원 샘플", channel: "채널 관리", track: "트랙 제작", login: "로그인", producer: "Audionyx 프로듀서", faq: "FAQ", logout: "로그아웃" },
+          navbar: { home: "홈", brand: "브랜드 소개", withdraw: "대시보드", findMusic: "음원 샘플", channel: "채널 관리", track: "음원 신청", login: "로그인", producer: "Audionyx 프로듀서", faq: "FAQ", logout: "로그아웃" },
           hero: { fixed: "FREE TRACKS + EARN", main: "쇼츠에 음원 수익을 더하세요.", desc: "유튜브가 저작권자에게 지급한 음악 라이선스 비용을 AUDIONYX가 크리에이터에게 제공하는 방식으로 음원 수익이 발생합니다.", cta: "지금 시작하기" },
           footer: { tagline: "쇼츠 음원 수익화 플랫폼", service: "서비스", company: "회사", contact: "연락처", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" },
           mobile: { home: "홈", music: "음원", channel: "채널", withdraw: "정산", production: "제작" },
@@ -50,14 +50,14 @@ class SimpleI18n {
         };
       } else if (lang === 'ja') {
         this.translations[lang] = {
-          navbar: { home: "ホーム", brand: "ブランド紹介", withdraw: "口座登録", findMusic: "音源検索", channel: "チャンネル管理", track: "トラック制作", login: "ログイン", producer: "Audionyx プロデューサー", faq: "FAQ", logout: "ログアウト" },
+          navbar: { home: "ホーム", brand: "ブランド紹介", withdraw: "ダッシュボード", findMusic: "音源検索", channel: "チャンネル管理", track: "音源申請", login: "ログイン", producer: "Audionyx プロデューサー", faq: "FAQ", logout: "ログアウト" },
           hero: { fixed: "FREE TRACKS + EARN", main: "ショートに音源収益をプラス。", desc: "YouTubeが著作権者に支払った音楽ライセンス費用をAUDIONYXがクリエイターに提供する方式で音源収益が発生します。", cta: "今すぐ始める" },
           footer: { tagline: "ショート音源収益化プラットフォーム", service: "サービス", company: "会社", contact: "連絡先", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" },
           mobile: { home: "ホーム", music: "音源", channel: "チャンネル", withdraw: "精算", production: "制作" },
           brand: { title: "ブランド紹介", heroTitle: "ブランド紹介", heroSubtitle: "クリエイター向け音源収益化プラットフォーム", heroCta: "Go Tracks", aboutTitle: "Audionyxとは？", aboutHeadline: "音源収益も、動画収益も<br>Audionyx一つで全て手に入れましょう", whyTitle: "Why Audionyx?", whySubtitle: "Audionyxと共に始める新しい収益創出の3つの核心" }
         };
       } else if (lang === 'en') {
-        this.translations[lang] = { navbar: { home: "Home", brand: "Brand", withdraw: "Bank Account", findMusic: "Find Music", channel: "Channel Management", track: "Track Production", login: "Login", producer: "Audionyx Producer", faq: "FAQ", logout: "Logout" }, hero: { fixed: "FREE TRACKS + EARN", main: "Add music earnings to your Shorts.", desc: "Music licensing fees that YouTube pays to rights holders are shared by AUDIONYX with creators, generating music revenue.", cta: "Get Started" }, footer: { tagline: "Short-form music monetization platform", service: "Services", company: "Company", contact: "Contact", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" }, mobile: { home: "Home", music: "Music", channel: "Channel", withdraw: "Payouts", production: "Production" }, brand: { title: "Brand", heroTitle: "Brand", heroSubtitle: "A music monetization platform for creators", heroCta: "Go Tracks", aboutTitle: "What is Audionyx?", aboutHeadline: "Keep both music revenue and video revenue<br>with Audionyx", whyTitle: "Why Audionyx?", whySubtitle: "3 pillars to open up new revenue with Audionyx" } };
+        this.translations[lang] = { navbar: { home: "Home", brand: "Brand", withdraw: "Dashboard", findMusic: "Find Music", channel: "Channel Management", track: "Request Music", login: "Login", producer: "Audionyx Producer", faq: "FAQ", logout: "Logout" }, hero: { fixed: "FREE TRACKS + EARN", main: "Add music earnings to your Shorts.", desc: "Music licensing fees that YouTube pays to rights holders are shared by AUDIONYX with creators, generating music revenue.", cta: "Get Started" }, footer: { tagline: "Short-form music monetization platform", service: "Services", company: "Company", contact: "Contact", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" }, mobile: { home: "Home", music: "Music", channel: "Channel", withdraw: "Payouts", production: "Production" }, brand: { title: "Brand", heroTitle: "Brand", heroSubtitle: "A music monetization platform for creators", heroCta: "Go Tracks", aboutTitle: "What is Audionyx?", aboutHeadline: "Keep both music revenue and video revenue<br>with Audionyx", whyTitle: "Why Audionyx?", whySubtitle: "3 pillars to open up new revenue with Audionyx" } };
       }
       console.log(`폴백 번역 데이터 사용: ${lang}`);
     }

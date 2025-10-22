@@ -26,11 +26,12 @@
     <meta name="theme-color" content="#3EB489">
     <meta name="msapplication-TileColor" content="#3EB489">
   
+  <script src="../js/i18n.js"></script>
+  <script type="module" src="../js/firebase.js"></script>
+  
   <!-- Chart.js 라이브러리 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
   
-  <script src="../js/i18n.js"></script>
-  <script type="module" src="../js/firebase.js"></script>
   <script type="module" src="../js/withdraw.js"></script>
 </head>
 <body>
@@ -201,7 +202,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">
-            <h1 class="hero-title">Dashboard</h1>
+            <h1 class="hero-title" data-i18n="withdraw.dashboardTitle">Dashboard</h1>
         </div>
     </section>
 
@@ -209,36 +210,36 @@
     <section class="dashboard-section" data-animate="fade-up">
       <div class="dashboard-layout">
         <div class="dashboard-card card-total-revenue">
-          <h3 class="card-title">총 수익</h3>
+          <h3 class="card-title" data-i18n="dashboard.totalRevenue">총 수익</h3>
           <p class="revenue-amount">₩0</p>
           <p class="revenue-change">+0%</p>
         </div>
         <div class="dashboard-card card-current-balance">
-          <h3 class="card-title">현재 잔액</h3>
+          <h3 class="card-title" data-i18n="dashboard.currentBalance">현재 잔액</h3>
           <p class="balance-amount">₩0</p>
         </div>
         <div class="dashboard-card card-next-payout">
-          <h3 class="card-title">다음 정산일</h3>
+          <h3 class="card-title" data-i18n="dashboard.nextPayout">다음 정산일</h3>
           <p class="payout-date">-</p>
         </div>
         <div class="dashboard-card card-last-updated">
-          <h3 class="card-title">데이터 업데이트</h3>
+          <h3 class="card-title" data-i18n="dashboard.lastUpdated">데이터 업데이트</h3>
           <p class="update-date">-</p>
         </div>
         <div class="dashboard-card card-latest-track">
-          <h3 class="card-title">최근 수익 발생 음원</h3>
+          <h3 class="card-title" data-i18n="dashboard.latestTrack">최근 수익 발생 음원</h3>
           <p id="latest-track-info">-</p>
         </div>
         <div class="dashboard-card card-earnings-chart">
-          <h3 class="card-title">월별 수익</h3>
+          <h3 class="card-title" data-i18n="dashboard.monthlyEarnings">월별 수익</h3>
           <canvas id="earningsChart"></canvas>
         </div>
         <div class="dashboard-card card-source-chart">
-          <h3 class="card-title">수익 소스</h3>
+          <h3 class="card-title" data-i18n="dashboard.earningsSources">수익 소스</h3>
           <ul id="source-list" class="source-list"></ul>
         </div>
         <div class="dashboard-card card-payout-history">
-          <h3 class="card-title">등록된 계좌</h3>
+          <h3 class="card-title" data-i18n="dashboard.registeredAccount">등록된 계좌</h3>
           <div class="account-display">
             <p id="dashboard-account-bank">-</p>
             <div class="account-details-line">

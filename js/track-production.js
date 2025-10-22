@@ -97,25 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 페이지 애니메이션 초기화
   initPageAnimations();
 
-  // ── 1회성 팝업 공지 (분기→월 정산 변경) ───────────────────────────────
-  try {
-    const STORAGE_KEY = 'audionyx.settlementNotice.dismissed.v1';
-    const dismissed = localStorage.getItem(STORAGE_KEY) === '1';
-    const modal = document.getElementById('settlement-notice-modal');
-    const btnClose = document.getElementById('settlement-notice-close');
-    const btnLater = document.getElementById('settlement-notice-later');
-    const btnOk = document.getElementById('settlement-notice-ok');
-    const open = () => { if (modal) { modal.style.display = 'flex'; setTimeout(()=>modal.classList.add('show'),10);} };
-    const close = () => { if (modal) { modal.classList.remove('show'); setTimeout(()=> modal.style.display = 'none', 200);} };
-    if (!dismissed && modal) {
-      setTimeout(open, 600); // 페이지 진입 후 약간 지연하여 표시
-    }
-    if (btnClose) btnClose.addEventListener('click', close);
-    if (btnLater) btnLater.addEventListener('click', close);
-    if (btnOk) btnOk.addEventListener('click', () => { try { localStorage.setItem(STORAGE_KEY, '1'); } catch(_){} close(); });
-  } catch (e) {
-    console.warn('정산 변경 공지 표시 중 경고:', e);
-  }
   
   // DOM 요소
   const requestForm = document.getElementById('track-request-form');

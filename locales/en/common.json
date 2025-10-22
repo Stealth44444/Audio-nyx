@@ -14,10 +14,10 @@
   "navbar": {
     "home": "Home",
     "brand": "Brand",
-    "withdraw": "Bank Account",
+    "withdraw": "Dashboard",
     "findMusic": "Find Music",
     "channel": "Channel Management",
-    "track": "Track Production",
+    "track": "Request Music",
     "login": "Login",
     "producer": "Audionyx Producer",
     "faq": "FAQ",
@@ -33,9 +33,9 @@
     "tagline": "Short-form music monetization platform",
     "service": "Services",
     "findMusic": "Find Music",
-    "withdraw": "Bank Account",
+    "withdraw": "Dashboard",
     "channelManagement": "Channel Management",
-    "trackProduction": "Track Production",
+    "trackProduction": "Request Music",
     "company": "Company",
     "brand": "Brand",
     "terms": "Terms of Service",
@@ -51,6 +51,42 @@
     "businessNumber": "Business Reg. No.: 544-87-03492",
     "businessType": "Information & Communications",
     "address": "16-5, Pungdeokcheon-ro 139beon-gil, Suji-gu, Yongin-si, Gyeonggi-do"
+  },
+  "home": {
+    "video": {"noSupport": "Your browser does not support the video tag."},
+    "hero": {
+      "title": "<span class=\"line-one\">Your Shorts,</span> <span class=\"line-two\">your revenue.</span>",
+      "description": "From custom track production to distribution and payouts—one flow.<br>With Audionyx, create new revenue across all your videos.",
+      "primaryCta": "Listen to samples",
+      "secondaryCta": "Learn about AUDIONYX"
+    }
+  },
+  "dashboard": {
+    "totalRevenue": "Total Revenue",
+    "currentBalance": "Current Balance",
+    "nextPayout": "Next Payout Date",
+    "lastUpdated": "Last Updated",
+    "latestTrack": "Latest Earning Track",
+    "monthlyEarnings": "Monthly Earnings",
+    "earningsSources": "Earning Sources",
+    "registeredAccount": "Registered Account"
+  },
+  "trackProduction": {
+    "hero": {
+      "title": "<span class=\"highlight-word\">For your content</span><br><span class=\"highlight-word\">Personal track production</span><br><span class=\"highlight-word\">1:1 custom</span> from consult to distribution"
+    },
+    "promo": {
+      "feature1": "Distribute to platforms after production",
+      "feature2": "Aftercare and monthly settlement",
+      "feature3": "Check revenue and request payout on dashboard",
+      "cta": "Request now"
+    },
+    "why": {
+      "card1Title": "Sound Signature",
+      "card2Title": "Custom Structure",
+      "card3Title": "100% Original",
+      "card4Title": "Pro Producers"
+    }
   },
   "mobile": {
     "home": "Home",
@@ -70,7 +106,8 @@
     "heroCta": "Go Tracks",
     "aboutTitle": "What is Audionyx?",
     "aboutHeadline": "Keep both music revenue and video revenue<br>with Audionyx",
-    "aboutDescription": "YouTube distributes total Shorts revenue to both ‘music rights holders’ and ‘video creators’.<br>When you use Audionyx music, we collect a large portion of the royalty and <span class=\"no-break\">give it back to you</span>, so you can earn both video + music revenue.",
+    "aboutDescription": "YouTube splits Shorts revenue between ‘music rights holders’ and ‘video creators’.<br>When you use Audionyx music, royalties are collected by Audionyx and <span class=\"no-break\">returned to creators</span>, so you can earn both video and music revenue.",
+    "aboutPersonal": "Request a personal track and use it yourself — earn AdSense video revenue plus additional proprietary royalty payouts from Audionyx. Strengthen your channel identity and build an extra revenue pipeline with your own music.",
     "insightsTitle": "Find the <strong>missed revenue</strong><br>with Audionyx tracks",
     "insightsSubtitle": "We recover every revenue opportunity you’ve missed",
     "insightsCta": "See 3 steps",
@@ -79,16 +116,17 @@
     "whySubtitle": "3 pillars to open up new revenue with Audionyx",
     "feature1Label": "FREE TO USE",
     "feature1Title": "All Tracks Free",
-    "feature1Desc": "High‑quality tracks by top producers<br>free to use",
+    "feature1Desc": "1:1 custom personal music to build your channel signature",
     "feature2Label": "100% SECURE",
     "feature2Title": "All Tracks Licensed",
-    "feature2Desc": "All tracks with full copyright/CID assurance",
+    "feature2Desc": "Original rights, full‑platform CID registration, safe distribution",
     "feature3Label": "HIGH ROYALTY",
     "feature3Title": "Most Royalty is Yours",
-    "feature3Desc": "Use the music and keep most of the revenue",
+    "feature3Desc": "First payout after 2–3 months, then monthly · weekly dashboard updates",
     "multiplatformTitle": "Multi‑platform monetization",
-    "multiplatformHeadline": "TikTok · Instagram · Facebook<br>Monetize across every platform",
-    "multiplatformDesc": "One Audionyx track works across Shorts, Reels, TikTok, and Facebook Video<br><strong>with the same revenue share.</strong>",
+    "multiplatformHeadline": "Monetize across 300+ music/social platforms with consistent standards.",
+    "multiplatformDesc": "From TikTok · Instagram · YouTube to Spotify · Apple Music · Amazon Music—one Audionyx track unifies distribution and settlement across platforms.",
+    "multiplatformDetail": "Consistent metadata/CID policy across Shorts/Reels/TikTok and major DSPs. First payout after 2–3 months, then monthly with transparent reporting.",
     "howWorksSubtitle": "Start monetizing in 3 simple steps",
     "howWorksTitle": "How It Works",
     "estimatedRoyalty": "Estimated Royalty",

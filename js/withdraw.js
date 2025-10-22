@@ -369,18 +369,25 @@ function stopChannelMonitoring() {
 
 // === Dashboard Chart Rendering ===
 function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown, sourceLabels) {
+    console.log('[renderDashboardCharts] 차트 렌더링 시작', { monthlyEarnings, sourceBreakdown });
+    
     // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
-        console.error('Chart.js is not loaded. Make sure to include the script in your HTML.');
-        // Chart.js가 로드되지 않은 경우에도 대시보드는 표시
+        console.warn('[renderDashboardCharts] Chart.js가 아직 로드되지 않음, 1초 후 재시도');
+        // Chart.js가 로드될 때까지 재시도
+        setTimeout(() => {
+            if (typeof Chart !== 'undefined') {
+                renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown, sourceLabels);
+            } else {
+                console.error('[renderDashboardCharts] Chart.js 로드 실패, 차트 없이 표시');
+            }
+        }, 1000);
         return;
     }
     
-    console.log('[renderDashboardCharts] 차트 렌더링 시작', { monthlyEarnings, sourceBreakdown });
-    
-    // 데이터가 모두 0인 경우 차트 대신 메시지 표시
-    const hasEarningsData = monthlyEarnings && monthlyEarnings.some(amount => amount > 0);
-    const hasSourceData = sourceBreakdown && sourceBreakdown.some(amount => amount > 0);
+    // 데이터 존재 여부
+    const hasEarningsData = Array.isArray(monthlyEarnings) && monthlyEarnings.length > 0 && monthlyEarnings.some(amount => amount > 0);
+    const hasSourceData = Array.isArray(sourceBreakdown) && sourceBreakdown.length > 0 && sourceBreakdown.some(amount => amount > 0);
 
     // Chart Configs
     const earningsChartConfig = {
@@ -468,26 +475,37 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
     };
 
     // Render Charts
-    const earningsCtx = document.getElementById('earningsChart');
+    let earningsCtx = document.getElementById('earningsChart');
+    if (!earningsCtx) {
+        const earningsContainer = document.querySelector('.card-earnings-chart');
+        if (earningsContainer) {
+            earningsContainer.innerHTML = '<canvas id="earningsChart"></canvas>';
+            earningsCtx = document.getElementById('earningsChart');
+        }
+    }
     if (earningsCtx) {
         // Destroy existing chart if it exists to prevent re-rendering issues
         if (window.earningsChartInstance) {
             window.earningsChartInstance.destroy();
         }
-        
-        if (hasEarningsData) {
-        window.earningsChartInstance = new Chart(earningsCtx, earningsChartConfig);
-        } else {
-            // 데이터가 없으면 메시지 표시
-            earningsCtx.parentElement.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #64748b; font-size: 14px;">
-                    월별 수익 데이터가 없습니다
-                </div>
-            `;
+
+        // 데이터가 없거나 변화가 없어도 라인 차트를 평탄하게 표시
+        if (!hasEarningsData) {
+            const fallbackLen = Array.isArray(earningsLabels) && earningsLabels.length > 0 ? earningsLabels.length : 6;
+            earningsChartConfig.data.labels = earningsLabels && earningsLabels.length ? earningsLabels : Array.from({length: fallbackLen}, (_, i) => `${i+1}월`);
+            earningsChartConfig.data.datasets[0].data = Array(fallbackLen).fill(0);
         }
+        window.earningsChartInstance = new Chart(earningsCtx, earningsChartConfig);
     }
 
-    const sourceCtx = document.getElementById('sourceChart');
+    let sourceCtx = document.getElementById('sourceChart');
+    if (!sourceCtx) {
+        const sourceContainer = document.querySelector('.card-source-chart');
+        if (sourceContainer) {
+            sourceContainer.innerHTML = '<canvas id="sourceChart"></canvas>';
+            sourceCtx = document.getElementById('sourceChart');
+        }
+    }
     if (sourceCtx) {
         // Destroy existing chart if it exists to prevent re-rendering issues
         if (window.sourceChartInstance) {
@@ -496,7 +514,7 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
         
         if (hasSourceData) {
             window.sourceChartInstance = new Chart(sourceCtx, sourceChartConfig);
-  } else {
+        } else {
             // 데이터가 없으면 메시지 표시
             sourceCtx.parentElement.innerHTML = `
                 <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #64748b; font-size: 14px;">
@@ -612,8 +630,15 @@ async function fetchDashboardData(uid) {
 
         const monthlyEarningsMap = new Map();
         const currentYear = new Date().getFullYear();
-        const monthLabels = ['6월', '7월', '8월', '9월', '10월', '11월'];
-        const monthKeys = [`${currentYear}-06`, `${currentYear}-07`, `${currentYear}-08`, `${currentYear}-09`, `${currentYear}-10`, `${currentYear}-11`];
+        // 최근 6개월 라벨/키 자동 생성
+        const now = new Date();
+        const monthLabels = [];
+        const monthKeys = [];
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            monthLabels.push(`${d.getMonth()+1}월`);
+            monthKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+        }
         monthKeys.forEach(key => monthlyEarningsMap.set(key, 0));
 
         const sourceBreakdownMap = new Map();
@@ -630,17 +655,18 @@ async function fetchDashboardData(uid) {
         }
         const chartMonthlyEarnings = Array.from(monthlyEarningsMap.values());
 
-        const currentMonthIndex = new Date().getMonth() - 5; // Assuming 6월 is index 0
-        const lastMonthIndex = currentMonthIndex - 1;
-
-        const currentMonthRevenue = chartMonthlyEarnings[currentMonthIndex] || 0;
-        const lastMonthRevenue = chartMonthlyEarnings[lastMonthIndex] || 0;
-
+        // 증감률 계산 (최근 2개 데이터 기준)
         let totalRevenueChange = 0;
-        if (lastMonthRevenue > 0) {
-            totalRevenueChange = Math.round(((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100);
-        } else if (currentMonthRevenue > 0) {
-            totalRevenueChange = 100; // 지난달 수익이 0일 때
+        if (chartMonthlyEarnings.length >= 2) {
+            const prev = chartMonthlyEarnings[chartMonthlyEarnings.length - 2] || 0;
+            const curr = chartMonthlyEarnings[chartMonthlyEarnings.length - 1] || 0;
+            if (prev > 0) {
+                totalRevenueChange = Math.round(((curr - prev) / prev) * 100);
+            } else if (curr > 0) {
+                totalRevenueChange = 100;
+            } else {
+                totalRevenueChange = 0;
+            }
         }
 
         let latestTrackTitle = '-';

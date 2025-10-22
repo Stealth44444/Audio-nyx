@@ -71,29 +71,12 @@
     "earningsSources": "Earning Sources",
     "registeredAccount": "Registered Account"
   },
-  "trackProduction": {
-    "hero": {
-      "title": "<span class=\"highlight-word\">For your content</span><br><span class=\"highlight-word\">Personal track production</span><br><span class=\"highlight-word\">1:1 custom</span> from consult to distribution"
-    },
-    "promo": {
-      "feature1": "Distribute to platforms after production",
-      "feature2": "Aftercare and monthly settlement",
-      "feature3": "Check revenue and request payout on dashboard",
-      "cta": "Request now"
-    },
-    "why": {
-      "card1Title": "Sound Signature",
-      "card2Title": "Custom Structure",
-      "card3Title": "100% Original",
-      "card4Title": "Pro Producers"
-    }
-  },
   "mobile": {
     "home": "Home",
-    "music": "Music",
-    "channel": "Channel",
-    "withdraw": "Payouts",
-    "production": "Production"
+    "music": "Samples",
+    "channel": "Dashboard",
+    "withdraw": "Dashboard",
+    "production": "Request"
   },
   "common": {
     "loading": "Loading...",
@@ -502,6 +485,62 @@
   },
   "trackProduction": {
     "title": "Track Production | Audionyx",
+    "hero": {
+      "kicker": "In-house professional producers direct production",
+      "title": "<span class=\"highlight-word\">For your content</span><br><span class=\"highlight-word\">Personal track production</span><br><span class=\"highlight-word\">1:1 custom</span> consultation to distribution",
+      "subtitle": "Give wings to your content with personal track production by Audionyx.<br>No more copyright worries, custom production → feedback → distribution → settlement all in one place.",
+      "checkProducer": "Check Producer"
+    },
+    "promo": {
+      "badge": "Production Price (KRW)",
+      "title": "1:1 Personal Consultation·Planning·Production·Feedback Package",
+      "description": "Consultation–planning–production–feedback flows as one all-in-one package.",
+      "currency": "KRW",
+      "reservationLabel": "Reservation Fee",
+      "postLabel": "After production, before actual distribution",
+      "vat": "(VAT included)"
+    },
+    "settlement": {
+      "title": "Settlement Structure",
+      "subtitle": "Transparent and fast settlement system",
+      "step1Title": "Personal track production and distribution",
+      "step1Desc": "&nbsp;",
+      "step2Title": "Track usage",
+      "step2Desc": "Distribution performance aggregation",
+      "step3Title": "Settlement schedule",
+      "step3Desc": "First settlement 2-3 months later, then monthly settlements. Dashboard updates weekly.",
+      "highlight1": "First settlement <strong>2-3 months later</strong>, then <strong>monthly</strong> settlement",
+      "highlight2": "Revenue dashboard <strong>weekly updates</strong>",
+      "highlight3": "Platform <strong>actual usage data</strong> based settlement"
+    },
+    "flow": {
+      "title": "Production Flow",
+      "subtitle": "Together from start to finish",
+      "step1Title": "1:1 Consultation & Request Submission",
+      "step1Desc": "Write desired title / genre / BPM / mood / usage platform (purpose)",
+      "step2Title": "Professional Producer Direct Production",
+      "step2Desc": "Genre-specific professional producer assignment, composition·arrangement·mixing completed with quality",
+      "step3Title": "Draft Delivery & Feedback",
+      "step3Desc": "Deliver completed track draft and reflect feedback to improve quality",
+      "step4Title": "Final Selection & Payment",
+      "step4Desc": "Confirm final track for distribution, proceed with payment after production completion",
+      "step5Title": "Distribution & Settlement",
+      "step5Desc": "Proceed with distribution, pay 88% royalty after 12% fee deduction monthly",
+      "step6Title": "Distribution & Settlement",
+      "step6Desc": "Proceed with distribution, pay 88% royalty after 12% fee deduction monthly"
+    },
+    "why": {
+      "title": "Why Audionyx",
+      "subtitle": "Differentiated custom track production",
+      "card1Title": "Sound Signature",
+      "card2Title": "Custom Structure",
+      "card3Title": "100% Original",
+      "card4Title": "Professional Producer",
+      "list1": "Your own unique sound that strengthens channel identity",
+      "list2": "Length and structure optimized for series/brand",
+      "list3": "Complete original tracks without copyright concerns",
+      "list4": "Consistent quality through in-house professional producer responsible production"
+    },
     "process": {
       "title": "What is Track Production?",
       "headline": "Free CID registration, commercial use allowed",

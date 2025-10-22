@@ -90,10 +90,10 @@
   },
   "mobile": {
     "home": "ホーム",
-    "music": "楽曲",
-    "channel": "チャンネル",
-    "withdraw": "決済",
-    "production": "制作"
+    "music": "サンプル",
+    "channel": "ダッシュボード",
+    "withdraw": "ダッシュボード",
+    "production": "申請"
   },
   "common": {
     "loading": "処理中...",
@@ -189,7 +189,7 @@
     "holderInfo": "口座名義人",
     "updatedInfo": "最終修正日",
     "infoDesc": "楽曲使用後2～3ヶ月後から毎月、登録された口座に収益を精算いたします。チャンネル別の収益を正確に集計して入金いたします。",
-    "dashboardTitle": "ダッシュボード",
+    "dashboardTitle": "Dashboard",
     "trustSecurity": "安全な暗号化",
     "trustMonitoring": "24時間モニタリング",
     "trustEmail": "入金通知メール送信",
@@ -648,34 +648,35 @@
     ,
     "hero": {
       "kicker": "社内プロプロデューサーが直接制作",
-      "title": "個人音源制作 — 1:1相談から配信・精算まで",
+      "title": "<span class=\"highlight-word\">あなたのコンテンツ</span>のための<br><span class=\"highlight-word\">個人音源制作</span><br><span class=\"highlight-word\">1:1相談</span>から配信まで",
       "subtitle": "あなたのコンテンツに翼を。個人音源制作、Audionyxが作らせていただきます。<br>もう著作権の心配はありません。カスタム制作 → フィードバック → 配信 → 精算まですべてをワンストップで。",
       "checkProducer": "プロデューサーを確認"
     },
     "promo": {
-      "badge": "ローンチプロモーション（KRW）",
+      "badge": "制作価格（KRW）",
       "title": "1:1個別相談・企画・制作・フィードバックのパッケージ",
-      "period": "期間: 2025.09.15 – 2025.10.15",
-      "desc": "相談–企画–制作–フィードバックが一つの流れでつながるオールインワンパッケージです。",
-      "description": "相談–企画–制作–フィードバックが一つの流れでつながるオールインワンパッケージです。"
+      "description": "相談–企画–制作–フィードバックが一つの流れでつながるオールインワンパッケージです。",
+      "currency": "円",
+      "reservationLabel": "予約金",
+      "postLabel": "制作後実配信前",
+      "vat": "（VAT含む）"
     },
     "settlement": {
-      "title": "精算構造（透明な基準）",
-      "paragraph": "配信後、管理手数料10%控除のうえロイヤリティ90%をお支払い。視聴・使用などの配信実績に基づき正確に算定し、安全に入金します。",
-      "paragraphHighlight": "精算周期：毎月1回",
-      "paragraphNote": "（従来の四半期1回 → 月次に改善）",
-      "cardCycleLabel": "精算周期",
-      "cardCycleValue": "毎月1回",
-      "cardCycleDesc": "四半期 → 月次でより早く",
-      "cardPayoutLabel": "支払い基準",
-      "cardPayoutValue": "ロイヤリティ90%",
-      "cardPayoutDesc": "管理手数料10%控除後に支払い",
-      "cardConfirmLabel": "確認方法",
-      "cardConfirmValue": "ダッシュボード",
-      "cardConfirmDesc": "月次の使用量・収益を確認（導入予定）"
+      "title": "精算構造",
+      "subtitle": "透明で迅速な精算システム",
+      "step1Title": "個人音源制作及び配信",
+      "step1Desc": "&nbsp;",
+      "step2Title": "音源使用",
+      "step2Desc": "配信実績集計",
+      "step3Title": "精算スケジュール",
+      "step3Desc": "初回精算は2〜3ヶ月後、以降毎月精算します。ダッシュボードは毎週更新されます。",
+      "highlight1": "初回精算 <strong>2-3ヶ月後</strong>、以降 <strong>毎月</strong> 精算",
+      "highlight2": "収益ダッシュボード <strong>週単位更新</strong>",
+      "highlight3": "プラットフォーム <strong>実使用データ</strong> ベース精算"
     },
     "flow": {
-      "title": "制作・選定・配信フロー",
+      "title": "制作フロー",
+      "subtitle": "最初から最後まで一緒に",
       "step1Title": "1) 1:1相談 & 依頼書提出",
       "step1Desc": "希望のタイトル / ジャンル / BPM / 雰囲気 / 使用プラットフォーム（用途）を記入して提出します。",
       "step2Title": "2) オリジナル・個人音源制作（Audionyxプロデューサーが直接制作）",
@@ -691,7 +692,12 @@
       "step6Highlight": "精算は毎月1回"
     },
     "why": {
-      "title": "なぜAudionyxの\"個人音源制作\"なのか",
+      "title": "なぜAudionyxなのか",
+      "subtitle": "差別化されたカスタム音源制作",
+      "card1Title": "サウンドシグネチャ",
+      "card2Title": "カスタム構成",
+      "card3Title": "100%オリジナル",
+      "card4Title": "プロデューサー",
       "list1": "チャンネルのアイデンティティを強化する自分だけのサウンドシグネチャ",
       "list2": "シリーズ/ブランドチャンネルに最適化されたカスタム長さ・構成",
       "list3": "リファレンスは参考にしつつ著作権の心配がないオリジナル確保",

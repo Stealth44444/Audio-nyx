@@ -92,6 +92,8 @@ footer,
     padding: 1.75rem;
     color: var(--text-light);
     position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
 }
 
 .dashboard-card .card-title {
@@ -164,9 +166,16 @@ footer,
     height: 20px;
 }
 
+/* 실제 플랫폼 아이콘 이미지 지원 */
+.source-list .source-icon img {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
 .source-list .source-name {
     flex-grow: 1; /* Takes up remaining space */
-    color: var(--text-light);
+    color: #ffffff; /* 플랫폼명 흰색 */
 }
 
 .source-list .source-amount {
@@ -218,9 +227,52 @@ footer,
     flex-direction: column;
 }
 
+/* 데스크톱 기본 높이 지정: 캔버스가 0px로 렌더링되는 문제 방지 */
+.card-earnings-chart {
+    min-height: 300px;
+}
+
 .card-earnings-chart > canvas, .card-source-chart > canvas {
     flex-grow: 1;
     min-height: 0;
+}
+
+/* 데스크톱에서 차트 캔버스가 보이도록 명시적 높이 지정 */
+.card-earnings-chart canvas {
+    height: 260px;
+    transition: transform 0.3s ease;
+}
+
+.card-source-chart canvas {
+    height: 260px;
+    transition: transform 0.3s ease;
+}
+
+/* 차트 컨테이너 호버 효과 */
+.card-earnings-chart:hover,
+.card-source-chart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: rgba(62, 180, 137, 0.2);
+}
+
+/* 차트 카드 타이틀 스타일 개선 */
+.card-earnings-chart .card-title,
+.card-source-chart .card-title {
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.card-earnings-chart .card-title::after,
+.card-source-chart .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 32px;
+    height: 3px;
+    background: linear-gradient(90deg, #3EB489, transparent);
+    border-radius: 2px;
 }
 
 

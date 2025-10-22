@@ -365,8 +365,7 @@ service cloud.firestore {
 
     /* ───────── ⑰ 정산 관련 추가 컬렉션들 ───────── */
     match /user_earnings/{userId} {
-      // 수익 데이터: 본인만 읽기
-      allow read: if isOwner(userId);
+      allow read: if isOwner(userId) || isAdmin();
       // 수익 데이터 생성/수정: 시스템 또는 관리자만 (클라이언트에서 직접 쓰기 방지)
       allow write: if isAdmin();
     }

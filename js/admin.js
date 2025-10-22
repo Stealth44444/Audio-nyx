@@ -1653,6 +1653,7 @@ async function mapCDBabyRecordsToUsers(records) {
       isrc,
       platform,
       earnings,
+      period_end: record['period_end'] || record['period end'],
       mapped: false,
       userId: null,
       userName: null
@@ -1790,55 +1791,90 @@ async function saveParsedCDBabyData() {
   }
 
   try {
+    await assertAdminOrThrow();
     const processingMode = document.getElementById('processing-mode').value;
     if (processingMode === 'preview') {
       alert('미리보기 모드에서는 실제 저장이 되지 않습니다. 처리 모드를 "실제 업데이트"로 변경해주세요.');
       return;
     }
 
-    // 사용자별 수익 데이터 그룹화
+    // Group earnings data from the current file by user
     const userEarningsMap = new Map();
-
     parsedCDBabyData.mappedRecords.forEach(record => {
         if (!userEarningsMap.has(record.userId)) {
             userEarningsMap.set(record.userId, {
                 userId: record.userId,
                 monthlyEarnings: [],
-                totalEarnings: 0,
-                currentBalance: 0,
+                totalEarnings: 0, // This will be the total from the file
             });
         }
-
         const userEarnings = userEarningsMap.get(record.userId);
-        const currentMonth = getCurrentMonth();
-
+        let recordMonth = getCurrentMonth();
+        if (record.period_end) {
+            try {
+                const d = new Date(record.period_end);
+                recordMonth = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+            } catch (e) { /* fallback to current month */ }
+        }
         userEarnings.monthlyEarnings.push({
-            month: currentMonth,
+            month: recordMonth,
             amount: record.earnings,
-            trackTitle: record.track_title || '', // 'N/A' 대신 빈 문자열 사용
-            artistName: record.artist_name || record.artist || '', // 'N/A' 대신 빈 문자열 사용
-            platform: record.platform || '기타' // 플랫폼 정보 추가
+            trackTitle: record.track_title || '',
+            artistName: record.artist_name || record.artist || '',
+            platform: record.platform || '기타'
         });
-
         userEarnings.totalEarnings += record.earnings;
-        userEarnings.currentBalance += record.earnings;
     });
 
-    // Firestore에 저장
-    const batch = [];
-    for (const [userId, earningsData] of userEarningsMap) {
-        // 업데이트 시간 필드 추가
-        earningsData.lastUpdatedAt = serverTimestamp();
-
+    // For each user in the file, perform a read-modify-write operation
+    for (const [userId, dataFromFile] of userEarningsMap) {
         const userEarningsRef = doc(db, 'user_earnings', userId);
-        batch.push(setDoc(userEarningsRef, earningsData, { merge: true }));
-    }
+        const docSnap = await getDoc(userEarningsRef);
+        
+        const existingData = docSnap.exists() ? docSnap.data() : {};
+        
+        // 1. Create the new history entry
+        const newHistoryEntry = {
+            timestamp: new Date(), // Use client-side timestamp
+            totalEarnings: dataFromFile.totalEarnings 
+        };
 
-    await Promise.all(batch);
+        // 2. Update the history array, keeping the last 20 entries
+        const existingHistory = existingData.earningsUploadHistory || [];
+        const updatedHistory = [...existingHistory, newHistoryEntry].slice(-20); // Keep last 20
+
+        // 3. Recalculate current balance
+        let totalPayouts = 0;
+        if (existingData.payoutHistory) {
+            existingData.payoutHistory.forEach(p => { totalPayouts += p.amount; });
+        }
+        const newCurrentBalance = dataFromFile.totalEarnings - totalPayouts;
+
+        // 4. Construct the final document
+        const finalData = {
+            // Overwrite totalRevenue and monthlyEarnings with data from the new file
+            totalRevenue: dataFromFile.totalEarnings,
+            monthlyEarnings: dataFromFile.monthlyEarnings,
+            
+            // Update balance and history
+            currentBalance: newCurrentBalance,
+            earningsUploadHistory: updatedHistory,
+            
+            // Preserve existing fields
+            payoutHistory: existingData.payoutHistory || [],
+            userId: userId,
+            
+            // Set update timestamp
+            lastUpdatedAt: serverTimestamp()
+        };
+
+        // 5. Save the document
+        await setDoc(userEarningsRef, finalData);
+    }
     
-    alert(`성공적으로 ${userEarningsMap.size}명의 사용자 수익 데이터를 저장했습니다.`);
+    alert(`성공적으로 ${userEarningsMap.size}명의 사용자 수익 데이터를 업데이트했습니다.`);
     
-    // 업로드 기록 저장
+    // Save upload history
     const auth = getAuth();
     const currentUser = auth.currentUser;
     if (currentUser) {
@@ -1846,9 +1882,19 @@ async function saveParsedCDBabyData() {
       await saveCDBabyUploadHistory(parsedCDBabyData, fileName, currentUser.uid, processingMode);
     }
 
-    // 결과 패널 숨기기
+    // Reset UI
     document.getElementById('parsing-results').style.display = 'none';
-    
+    selectedCDBabyFile = null;
+    if(document.getElementById('cdbaby-report-file')) {
+        document.getElementById('cdbaby-report-file').value = '';
+    }
+    if(document.getElementById('selected-file-info')) {
+        document.getElementById('selected-file-info').style.display = 'none';
+    }
+    if(document.getElementById('processing-options')) {
+        document.getElementById('processing-options').style.display = 'none';
+    }
+
   } catch (error) {
     console.error('데이터 저장 오류:', error);
     alert('데이터 저장 중 오류가 발생했습니다: ' + error.message);

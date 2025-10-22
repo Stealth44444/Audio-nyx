@@ -462,6 +462,8 @@
       "trackTitle": "트랙 제목",
       "trackTitleLabel": "트랙 제목",
       "trackTitlePlaceholder": "예: [내 채널명] 브이로그 BGM",
+      "artist": "아티스트 명",
+      "artistPlaceholder": "등록될 아티스트 이름",
       "bpmLabel": "BPM",
       "bpmPlaceholder": "60-200",
       "genre": "장르",
@@ -473,6 +475,9 @@
       "descriptionPlaceholder": "원하는 음원의 분위기, 특징 등을 자세히 설명해주세요",
       "refUrlLabel": "참고 영상 URL (선택)",
       "refUrlPlaceholder": "YouTube 등의 참고 영상 URL",
+      "cover": "커버 아트 (선택)",
+      "coverUpload": "이미지 업로드 (PNG, JPG, 최대 10MB)",
+      "coverHint": "3000x3000 필수",
       "submit": "요청 제출",
       "required": "*",
       "optional": "(선택)",
@@ -550,7 +555,11 @@
       "currency": "원",
       "reservationLabel": "예약금",
       "postLabel": "제작 후 실유통 전",
-      "vat": "(VAT 포함)"
+      "vat": "(VAT 포함)",
+      "feature1": "제작 완료 후 유통 플랫폼 배포",
+      "feature2": "사후 관리 및 매월 정산",
+      "feature3": "대시보드에서 수익 확인 및 출금 신청",
+      "cta": "바로 신청하기"
     },
     "settlement": {
       "title": "정산 구조",

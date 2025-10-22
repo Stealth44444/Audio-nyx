@@ -175,6 +175,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
+  // 번역 강제 동기화 (일부 정적 라벨이 남아있는 경우 대비)
+  try {
+    if (window.i18next && typeof window.i18next.t === 'function') {
+      const syncCoverHints = () => {
+        const coverHintEl = document.querySelector('[data-i18n="trackProduction.form.coverHint"]');
+        if (coverHintEl) coverHintEl.innerHTML = window.i18next.t('trackProduction.form.coverHint');
+        const coverUploadEl = document.querySelector('[data-i18n="trackProduction.form.coverUpload"]');
+        if (coverUploadEl) coverUploadEl.innerHTML = window.i18next.t('trackProduction.form.coverUpload');
+        const featureEls = [
+          ['trackProduction.promo.feature1'],
+          ['trackProduction.promo.feature2'],
+          ['trackProduction.promo.feature3']
+        ];
+        featureEls.forEach(([key]) => {
+          const el = document.querySelector(`[data-i18n="${key}"]`);
+          if (el) el.innerHTML = window.i18next.t(key);
+        });
+      };
+      syncCoverHints();
+      // 언어 변경 후에도 동기화되도록 전역 훅 제공
+      window.syncDynamicI18n = () => {
+        try { syncCoverHints(); } catch (_) {}
+      };
+    }
+  } catch (_) {}
+
   // 커버 아트 제거
   if (removeCoverBtn) {
     removeCoverBtn.addEventListener('click', function() {

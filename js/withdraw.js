@@ -389,7 +389,7 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
     const hasEarningsData = Array.isArray(monthlyEarnings) && monthlyEarnings.length > 0 && monthlyEarnings.some(amount => amount > 0);
     const hasSourceData = Array.isArray(sourceBreakdown) && sourceBreakdown.length > 0 && sourceBreakdown.some(amount => amount > 0);
 
-    // Chart Configs
+    // Chart Configs - 최신 디자인 트렌드 적용
     const earningsChartConfig = {
         type: 'line',
         data: {
@@ -398,43 +398,113 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
                 label: '월별 수익',
                 data: monthlyEarnings,
                 borderColor: '#3EB489',
-                backgroundColor: 'rgba(62, 180, 137, 0.1)',
+                backgroundColor: (context) => {
+                    const ctx = context.chart.ctx;
+                    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                    gradient.addColorStop(0, 'rgba(62, 180, 137, 0.35)');
+                    gradient.addColorStop(0.5, 'rgba(62, 180, 137, 0.15)');
+                    gradient.addColorStop(1, 'rgba(62, 180, 137, 0)');
+                    return gradient;
+                },
                 borderWidth: 3,
                 fill: true,
-                tension: 0.4,
+                tension: 0.42,
                 pointBackgroundColor: '#3EB489',
                 pointBorderColor: '#ffffff',
-                pointBorderWidth: 2,
-                pointRadius: 6
+                pointBorderWidth: 3,
+                pointRadius: 5,
+                pointHoverRadius: 8,
+                pointHoverBackgroundColor: '#3EB489',
+                pointHoverBorderColor: '#ffffff',
+                pointHoverBorderWidth: 4,
+                segment: {
+                    borderColor: (ctx) => {
+                        // 음수 구간은 빨간색으로 표시
+                        const prev = ctx.p0.parsed.y;
+                        const curr = ctx.p1.parsed.y;
+                        return curr < prev ? '#ef4444' : '#3EB489';
+                    }
+                }
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(18, 18, 18, 0.95)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#a1a1a1',
+                    borderColor: 'rgba(62, 180, 137, 0.3)',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    titleFont: {
+                        size: 13,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 16,
+                        weight: '700'
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return '₩' + context.parsed.y.toLocaleString();
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
                     beginAtZero: true,
+                    border: {
+                        display: false
+                    },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
+                        color: 'rgba(255, 255, 255, 0.06)',
+                        lineWidth: 1,
+                        drawTicks: false
                     },
                     ticks: {
-                        color: '#ffffff',
+                        color: 'rgba(255, 255, 255, 0.5)',
+                        font: {
+                            size: 11,
+                            weight: '500'
+                        },
+                        padding: 10,
                         callback: function(value) {
+                            if (value >= 1000000) {
+                                return '₩' + (value / 1000000) + 'M';
+                            } else if (value >= 1000) {
+                                return '₩' + (value / 1000) + 'K';
+                            }
                             return '₩' + value.toLocaleString();
                         }
                     }
                 },
                 x: {
+                    border: {
+                        display: false
+                    },
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
+                        display: false
                     },
                     ticks: {
-                        color: '#ffffff'
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        font: {
+                            size: 12,
+                            weight: '600'
+                        },
+                        padding: 10
                     }
                 }
             }
@@ -451,23 +521,84 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
                     '#3EB489',
                     '#FF6B35',
                     '#4ECDC4',
-                    '#45B7D1',
-                    '#96CEB4',
-                    '#FFEAA7'
+                    '#F97316',
+                    '#8B5CF6',
+                    '#EC4899',
+                    '#FBBF24'
                 ],
-                borderWidth: 0
+                borderWidth: 0,
+                borderRadius: 6,
+                hoverOffset: 12,
+                hoverBorderWidth: 0
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            cutout: '65%',
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        color: '#ffffff',
-                        padding: 20,
-                        usePointStyle: true
+                        color: 'rgba(255, 255, 255, 0.85)',
+                        padding: 16,
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        font: {
+                            size: 12,
+                            weight: '600',
+                            family: "'Poppins', 'Pretendard', sans-serif"
+                        },
+                        boxWidth: 10,
+                        boxHeight: 10,
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return {
+                                        text: `${label} (${percentage}%)`,
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        hidden: false,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(18, 18, 18, 0.95)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#a1a1a1',
+                    borderColor: 'rgba(62, 180, 137, 0.3)',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: true,
+                    boxWidth: 12,
+                    boxHeight: 12,
+                    usePointStyle: true,
+                    titleFont: {
+                        size: 13,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 15,
+                        weight: '700'
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ₩${value.toLocaleString()} (${percentage}%)`;
+                        }
                     }
                 }
             }
@@ -525,17 +656,23 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
     }
 }
 
-function getPlatformIcon(platform) {
+function getPlatformIconUrl(platform) {
   const p = String(platform).toLowerCase();
-  if (p.includes('spotify')) {
-    return '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.223 17.493c-.24.36-.68.47-1.04.23-.29-.19-.4-.51-.4-.82v-.01c0-.3.11-.6.39-.79 2.5-1.53 2.84-4.23.7-6.16-2.13-1.93-5.53-2.2-8.2.23-.34.3-.78.39-1.14.15-.36-.24-.48-.68-.24-1.04.24-.36.68-.48 1.04-.24 3.25-2.92 7.43-2.5 10.13.23 2.7 2.7 2.35 6.38-.58 8.21zm-3.11-3.11c-.2.29-.58.38-.88.18-1.92-1.18-4.32-1.53-7.02-.82-.3.08-.6-.08-.68-.38-.08-.3.08-.6.38-.68 3-.78 5.7-.39 7.82.98.3.2.38.58.18.88zm-4.1-3.25c-.16.24-.48.32-.72.16-1.5-.92-3.4-.92-4.82 0-.24.16-.56.08-.72-.16-.16-.24-.08-.56.16-.72 1.64-1.08 3.9-.99 5.64.24.24.16.32.48.16.72z"/></svg>';
-  }
-  if (p.includes('apple')) {
-    return '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.015 6.992C10.848 6.984 9.83 7.544 9.24 8.4c-1.12 1.696-.744 4.12.704 6.04.56.72 1.216 1.584 2.048 1.584.816 0 1.232-.784 2.016-1.584 1.24-1.28 1.824-2.96 1.824-4.64 0-2.312-1.68-3.408-3.816-3.408zM14.4 2.16c-.048.008-2.248.96-3.6 2.48-.96 1.12-1.88 2.8-1.632 4.44.12.784.56 1.472 1.12 2.04.56.56 1.248.968 2.064.96.048 0 .08-.008.12-.008.04-.008.08-.008.12-.008.8-.008 1.536-.44 2.096-1.04.64-.64 1.04-1.512 1.04-2.424 0-.072-.016-.144-.016-.216-.024-1.52-1.008-2.92-2.2-3.816C15.448 2.448 14.76 2.16 14.4 2.16z"/></svg>';
-  }
-  if (p.includes('youtube')) {
-    return '<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M21.582 7.242c-.23-.854-.882-1.508-1.735-1.738C18.23 5 12 5 12 5s-6.23 0-7.847.504c-.853.23-1.505.884-1.735 1.738C2 9.01 2 12 2 12s0 2.99.418 4.758c.23.854.882 1.508 1.735 1.738C5.77 19 12 19 12 19s6.23 0 7.847-.504c.853-.23 1.505-.884 1.735-1.738C22 14.99 22 12 22 12s0-2.99-.418-4.758zM9.75 15.5V8.5l6.5 3.5-6.5 3.5z"/></svg>';
-  }
+  if (p.includes('spotify')) return '../images/platform-spotify.svg';
+  if (p.includes('apple')) return '../images/platform-apple-music.svg';
+  if (p.includes('youtube')) return '../images/platform-youtube.svg';
+  if (p.includes('instagram') || p.includes('ig')) return '../images/platform-instagram.svg';
+  if (p.includes('facebook') || p.includes('meta')) return '../images/platform-facebook.svg';
+  if (p.includes('tiktok')) return '../images/platform-tiktok.svg';
+  if (p.includes('amazon')) return '../images/platform-amazon-music.svg';
+  return '';
+}
+
+function getPlatformIcon(platform) {
+  const src = getPlatformIconUrl(platform);
+  const alt = String(platform);
+  if (src) return `<img src="${src}" alt="${alt}">`;
+  // Fallback: 글로브 아이콘 (라인)
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>';
 }
 
@@ -561,8 +698,14 @@ function updateDashboardUI(dashboardData) {
 
     if (totalRevenueAmount) totalRevenueAmount.textContent = `₩${dashboardData.totalRevenue.toLocaleString()}`;
     if (totalRevenueChange) {
-        totalRevenueChange.textContent = `${dashboardData.totalRevenueChange >= 0 ? '+' : ''}${dashboardData.totalRevenueChange}%`;
-        totalRevenueChange.style.color = dashboardData.totalRevenueChange >= 0 ? '#22c55e' : '#ef4444';
+        const changeValue = dashboardData.totalRevenueChange;
+        if (changeValue !== null) {
+            totalRevenueChange.textContent = `${changeValue >= 0 ? '+' : ''}${changeValue}%`;
+            totalRevenueChange.style.color = changeValue >= 0 ? '#22c55e' : '#ef4444';
+        } else {
+            totalRevenueChange.textContent = '--';
+            totalRevenueChange.style.color = ''; // Use default text color
+        }
     }
     if (currentBalanceAmount) currentBalanceAmount.textContent = `₩${dashboardData.currentBalance.toLocaleString()}`;
     if (nextPayoutDate) nextPayoutDate.textContent = dashboardData.nextPayout;
@@ -607,7 +750,6 @@ function updateDashboardUI(dashboardData) {
 
 async function fetchDashboardData(uid) {
     try {
-        // 두 데이터 소스를 병렬로 조회
         const [userEarningsSnap, userAccountSnap] = await Promise.all([
             getDoc(doc(db, 'user_earnings', uid)),
             getDoc(doc(db, 'user_withdraw_accounts', uid))
@@ -622,58 +764,53 @@ async function fetchDashboardData(uid) {
 
         if (userAccountSnap.exists()) {
             accountData = userAccountSnap.data();
-            // 기존 계좌 정보 UI도 업데이트
             updateAccountInfoUI(accountData);
         } else {
             showNoAccountInfo();
         }
 
-        const monthlyEarningsMap = new Map();
-        const currentYear = new Date().getFullYear();
-        // 최근 6개월 라벨/키 자동 생성
-        const now = new Date();
-        const monthLabels = [];
-        const monthKeys = [];
-        for (let i = 5; i >= 0; i--) {
-            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            monthLabels.push(`${d.getMonth()+1}월`);
-            monthKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+        // NEW CHART LOGIC based on earningsUploadHistory
+        let finalLabels = [];
+        let finalChartData = [];
+        
+        if (earningsData.earningsUploadHistory && earningsData.earningsUploadHistory.length > 0) {
+            // Sort history by timestamp to ensure order
+            const sortedHistory = earningsData.earningsUploadHistory.sort((a, b) => a.timestamp.seconds - b.timestamp.seconds);
+            
+            finalLabels = sortedHistory.map((_, index) => `${index + 1}차`); // Labels: "1차", "2차", ...
+            finalChartData = sortedHistory.map(entry => entry.totalEarnings);
         }
-        monthKeys.forEach(key => monthlyEarningsMap.set(key, 0));
+        // If history is empty, arrays will be empty, and the renderer will handle it.
 
+        // New percentage calculation based on the history
+        let totalRevenueChange = null;
+        if (finalChartData.length >= 2) {
+            const prev = finalChartData[finalChartData.length - 2] || 0;
+            const curr = finalChartData[finalChartData.length - 1] || 0;
+            
+            if (prev > 0) {
+                totalRevenueChange = Math.round(((curr - prev) / prev) * 100);
+            } else if (curr > 0) {
+                totalRevenueChange = null; // From 0 to positive is not a meaningful percentage
+            } else { // prev is 0 and curr is 0
+                totalRevenueChange = 0; // From 0 to 0 is 0% change
+            }
+        }
+
+        // Source breakdown from the latest monthlyEarnings array
         const sourceBreakdownMap = new Map();
         if (earningsData.monthlyEarnings) {
-            earningsData.monthlyEarnings.forEach(earning => {
-                if (monthlyEarningsMap.has(earning.month)) {
-                    const currentAmount = monthlyEarningsMap.get(earning.month);
-                    monthlyEarningsMap.set(earning.month, currentAmount + earning.amount);
-                }
+             earningsData.monthlyEarnings.forEach(earning => {
                 const platform = earning.platform || '기타';
                 const currentSourceAmount = sourceBreakdownMap.get(platform) || 0;
                 sourceBreakdownMap.set(platform, currentSourceAmount + earning.amount);
             });
         }
-        const chartMonthlyEarnings = Array.from(monthlyEarningsMap.values());
-
-        // 증감률 계산 (최근 2개 데이터 기준)
-        let totalRevenueChange = 0;
-        if (chartMonthlyEarnings.length >= 2) {
-            const prev = chartMonthlyEarnings[chartMonthlyEarnings.length - 2] || 0;
-            const curr = chartMonthlyEarnings[chartMonthlyEarnings.length - 1] || 0;
-            if (prev > 0) {
-                totalRevenueChange = Math.round(((curr - prev) / prev) * 100);
-            } else if (curr > 0) {
-                totalRevenueChange = 100;
-            } else {
-                totalRevenueChange = 0;
-            }
-        }
 
         let latestTrackTitle = '-';
         let latestTrackArtist = '-';
         if (earningsData.monthlyEarnings && earningsData.monthlyEarnings.length > 0) {
-            const sortedEarnings = [...earningsData.monthlyEarnings].sort((a, b) => new Date(b.month) - new Date(a.month));
-            const latestEarningRecord = sortedEarnings[0];
+            const latestEarningRecord = earningsData.monthlyEarnings[earningsData.monthlyEarnings.length - 1];
             if (latestEarningRecord) {
                 latestTrackTitle = latestEarningRecord.trackTitle || '-';
                 latestTrackArtist = latestEarningRecord.artistName || latestEarningRecord.artist || '-';
@@ -687,12 +824,12 @@ async function fetchDashboardData(uid) {
         }
 
         return {
-            totalRevenue: earningsData.totalEarnings || 0,
+            totalRevenue: earningsData.totalRevenue || 0,
             totalRevenueChange: totalRevenueChange,
             currentBalance: earningsData.currentBalance || 0,
             nextPayout: earningsData.nextPayout || '-',
-            monthlyEarnings: chartMonthlyEarnings,
-            earningsLabels: monthLabels,
+            monthlyEarnings: finalChartData, // This is now the history data for the chart
+            earningsLabels: finalLabels, // These are the new labels
             sourceBreakdownMap,
             payoutHistory: earningsData.payoutHistory || [],
             latestTrackTitle,
@@ -707,9 +844,9 @@ async function fetchDashboardData(uid) {
         console.error('[fetchDashboardData] 데이터 조회 오류:', error);
         return { 
             totalRevenue: 0, currentBalance: 0, nextPayout: '-',
-            monthlyEarnings: [0, 0, 0, 0, 0, 0],
-            earningsLabels: ['6월', '7월', '8월', '9월', '10월', '11월'],
-            sourceBreakdown: new Map(),
+            monthlyEarnings: [], // Return empty array on error
+            earningsLabels: [], // Return empty array on error
+            sourceBreakdownMap: new Map(),
             payoutHistory: [],
             latestTrackTitle: '-', latestTrackArtist: '-',
             lastUpdatedAt: '-',

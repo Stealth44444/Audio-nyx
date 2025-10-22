@@ -498,7 +498,11 @@
       "currency": "KRW",
       "reservationLabel": "Reservation Fee",
       "postLabel": "After production, before actual distribution",
-      "vat": "(VAT included)"
+      "vat": "(VAT included)",
+      "feature1": "Distribution to platforms after production is complete",
+      "feature2": "Aftercare and monthly settlements",
+      "feature3": "Check revenue and request withdrawal in Dashboard",
+      "cta": "Request Now"
     },
     "settlement": {
       "title": "Settlement Structure",
@@ -562,6 +566,8 @@
       "trackTitle": "Track Title",
       "trackTitleLabel": "Track Title",
       "trackTitlePlaceholder": "e.g., [My Channel] Vlog BGM",
+      "artist": "Artist Name",
+      "artistPlaceholder": "Artist to be registered",
       "bpmLabel": "BPM",
       "bpm": "BPM",
       "bpmPlaceholder": "60-200",
@@ -578,6 +584,9 @@
       "refUrl": "Reference Video URL (Optional)",
       "refUrlLabel": "Reference Video URL (Optional)",
       "refUrlPlaceholder": "Reference video URL (e.g., YouTube)",
+      "cover": "Cover Art (Optional)",
+      "coverUpload": "Upload image (PNG, JPG, up to 10MB)",
+      "coverHint": "3000x3000 required",
       "submit": "Submit Request",
       "required": "*",
       "optional": "(Optional)",

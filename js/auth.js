@@ -2137,10 +2137,10 @@ function preventAutocompleteInterference() {
     if (!isModalOpen) {
       const activeElement = document.activeElement;
       if (activeElement && activeElement.tagName === 'INPUT') {
-        // 현재 포커스된 input이 로그인 관련 필드가 아니라면 blur 처리
+        // 로그인 모달 외부 입력에도 모바일 키보드가 열리도록 blur를 수행하지 않음
         const isAuthInput = activeElement.closest('#auth-modal, #signup-modal, #onboarding-modal');
         if (!isAuthInput) {
-          activeElement.blur();
+          // no-op: allow focus to persist
         }
       }
     }
@@ -2151,12 +2151,8 @@ function preventAutocompleteInterference() {
     if (e.target.tagName === 'INPUT') {
       const isAuthInput = e.target.closest('#auth-modal, #signup-modal, #onboarding-modal');
       if (!isAuthInput) {
-        // 모달 외부의 입력 필드에서 자동완성 강제 비활성화
+        // 모달 외부 입력의 자동완성만 비활성화하고, readonly 토글은 제거하여 키보드 표시 보장
         e.target.setAttribute('autocomplete', 'off');
-        e.target.setAttribute('readonly', true);
-        setTimeout(() => {
-          e.target.removeAttribute('readonly');
-        }, 100);
       }
     }
   }, true);

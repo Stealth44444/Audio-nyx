@@ -166,7 +166,7 @@
                       <circle cx="6" cy="18" r="3"/>
                       <circle cx="18" cy="16" r="3"/>
                     </svg>
-                    <span data-i18n="mobile.music">음원</span>
+                    <span data-i18n="mobile.music">샘플</span>
                   </a>
                 </li>
                 <li class="mobile-nav-item">
@@ -175,7 +175,7 @@
             <path d="M3 5v14a2 2 0 002 2h16v-5"/>
             <path d="M18 12a2 2 0 100-4 2 2 0 000 4z"/>
           </svg>
-          <span data-i18n="mobile.withdraw">정산</span>
+          <span data-i18n="mobile.withdraw">대시보드</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -184,7 +184,7 @@
             <path d="M12 2v20M2 12h20"/>
             <circle cx="12" cy="12" r="4"/>
           </svg>
-          <span data-i18n="mobile.production">제작</span>
+          <span data-i18n="mobile.production">신청</span>
         </a>
       </li>
     </ul>
@@ -236,19 +236,19 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <polyline points="20 6 9 17 4 12" stroke-width="2.5"/>
                 </svg>
-                <span data-i18n="trackProduction.promo.feature1">제작 완료 후 유통 플랫폼 배포</span>
+                <span data-i18n="trackProduction.promo.feature1"></span>
               </div>
               <div class="promo-feature-row">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <polyline points="20 6 9 17 4 12" stroke-width="2.5"/>
                 </svg>
-                <span data-i18n="trackProduction.promo.feature2">사후 관리 및 매월 정산</span>
+                <span data-i18n="trackProduction.promo.feature2"></span>
               </div>
               <div class="promo-feature-row">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <polyline points="20 6 9 17 4 12" stroke-width="2.5"/>
                 </svg>
-                <span data-i18n="trackProduction.promo.feature3">대시보드에서 수익 확인 및 출금 신청</span>
+                <span data-i18n="trackProduction.promo.feature3"></span>
               </div>
             </div>
             
@@ -577,6 +577,16 @@
                   <div class="error-message" id="email-error"></div>
                 </div>
 
+                <!-- 입금자명 -->
+                <div class="form-field form-field-full">
+                  <label for="track-depositor" class="form-label">
+                    <span>입금자 명</span>
+                    <span class="required">*</span>
+                  </label>
+                  <input type="text" id="track-depositor" class="form-input" placeholder="실제 입금자 이름" required>
+                  <div class="error-message" id="depositor-error"></div>
+                </div>
+
                 <!-- 커버 아트 업로드 -->
                 <div class="form-field form-field-full">
                   <label for="track-cover" class="form-label">
@@ -645,17 +655,25 @@
           <div class="request-list-header">
             <h2 class="section-title" data-i18n="trackProduction.requestList.title">내 요청 목록</h2>
             <div class="request-status-info">
-                              <div class="status-tag status-pending">
+              <div class="status-tag status-payment-pending">
                 <div class="status-dot"></div>
-                <span data-i18n="trackProduction.status.pending">대기중</span>
+                <span data-i18n="trackProduction.status.paymentPending">입금 대기</span>
               </div>
-              <div class="status-tag status-working">
+              <div class="status-tag status-production">
                 <div class="status-dot"></div>
-                <span data-i18n="trackProduction.status.working">제작중</span>
+                <span data-i18n="trackProduction.status.production">제작중</span>
               </div>
-              <div class="status-tag status-done">
+              <div class="status-tag status-distribution-pending">
                 <div class="status-dot"></div>
-                <span data-i18n="trackProduction.status.done">완료</span>
+                <span data-i18n="trackProduction.status.distributionPending">유통 대기</span>
+              </div>
+              <div class="status-tag status-distributing">
+                <div class="status-dot"></div>
+                <span data-i18n="trackProduction.status.distributing">유통중</span>
+              </div>
+              <div class="status-tag status-distributed">
+                <div class="status-dot"></div>
+                <span data-i18n="trackProduction.status.distributed">유통 완료</span>
               </div>
             </div>
           </div>
@@ -668,20 +686,9 @@
           
           <!-- 요청 목록 테이블 -->
           <div class="request-table-container">
-            <table class="request-table">
-              <thead>
-                <tr>
-                  <th data-i18n="trackProduction.table.trackTitle">트랙 제목</th>
-                  <th data-i18n="trackProduction.table.genre">장르</th>
-                  <th data-i18n="trackProduction.table.bpm">BPM</th>
-                  <th data-i18n="trackProduction.table.status">상태</th>
-                  <th data-i18n="trackProduction.table.requestDate">요청일</th>
-                </tr>
-              </thead>
-              <tbody id="request-list">
-                <!-- 요청 목록이 JavaScript에 의해 여기에 추가됩니다 -->
-              </tbody>
-            </table>
+            <div class="request-cards-wrapper" id="request-list">
+              <!-- 요청 목록이 JavaScript에 의해 여기에 추가됩니다 -->
+            </div>
           </div>
           
           <!-- 요청 없음 메시지 -->

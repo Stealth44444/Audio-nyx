@@ -1144,15 +1144,45 @@ body {
     animation: pulse-dot 2s infinite;
 }
 
-.status-pending .status-dot {
+/* 5단계 상태 색상 (헤더 뱃지용) */
+.status-payment-pending .status-dot {
     background: #ffc107;
 }
 
-.status-working .status-dot {
+.status-production .status-dot {
     background: #42a5f5;
 }
 
-.status-done .status-dot {
+.status-distribution-pending .status-dot {
+    background: #ff9800;
+}
+
+.status-distributing .status-dot {
+    background: #9c27b0;
+}
+
+.status-distributed .status-dot {
+    background: #28a745;
+}
+
+/* 5단계 상태 색상 (카드 뱃지용) */
+.status-badge-payment-pending .status-dot {
+    background: #ffc107;
+}
+
+.status-badge-production .status-dot {
+    background: #42a5f5;
+}
+
+.status-badge-distribution-pending .status-dot {
+    background: #ff9800;
+}
+
+.status-badge-distributing .status-dot {
+    background: #9c27b0;
+}
+
+.status-badge-distributed .status-dot {
     background: #28a745;
 }
 
@@ -1217,51 +1247,162 @@ body {
 }
 
 .request-table-container {
-    overflow-x: auto;
+    width: 100%;
+}
+
+/* 최신 카드 기반 레이아웃 */
+.request-cards-wrapper {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+}
+
+.request-card {
     background: var(--bg-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border: 1.5px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+    position: relative;
     overflow: hidden;
 }
 
-.request-table {
-    width: 100%;
-    border-collapse: collapse;
+.request-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.request-table th,
-.request-table td {
-    padding: 1rem 1.5rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-glass);
+.request-card:hover {
+    border-color: var(--glass-border-hover);
+    box-shadow: var(--shadow-glow-hover);
+    transform: translateY(-2px);
 }
 
-.request-table th {
-    background: rgba(62, 180, 137, 0.05);
-    color: var(--color-primary);
-    font-weight: 600;
+.request-card:hover::before {
+    opacity: 1;
+}
+
+.request-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.request-card-title-area {
+    flex: 1;
+    min-width: 0;
+}
+
+.request-card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.request-card-artist {
     font-size: 0.9rem;
+    color: var(--color-text-gray);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.request-card-artist svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--color-primary);
+}
+
+.request-card-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.request-card-status-badge .status-dot {
+    width: 10px;
+    height: 10px;
+}
+
+/* 5단계 상태별 뱃지 색상 */
+.status-badge-payment-pending {
+    background: rgba(255, 193, 7, 0.15);
+    border: 1.5px solid #ffc107;
+    color: #ffc107;
+}
+
+.status-badge-production {
+    background: rgba(66, 165, 245, 0.15);
+    border: 1.5px solid #42a5f5;
+    color: #42a5f5;
+}
+
+.status-badge-distribution-pending {
+    background: rgba(255, 152, 0, 0.15);
+    border: 1.5px solid #ff9800;
+    color: #ff9800;
+}
+
+.status-badge-distributing {
+    background: rgba(156, 39, 176, 0.15);
+    border: 1.5px solid #9c27b0;
+    color: #9c27b0;
+}
+
+.status-badge-distributed {
+    background: rgba(40, 167, 69, 0.15);
+    border: 1.5px solid #28a745;
+    color: #28a745;
+}
+
+.request-card-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-glass);
+}
+
+.request-card-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.request-card-meta-label {
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: var(--color-primary);
+    font-weight: 600;
 }
 
-.request-table td {
+.request-card-meta-value {
+    font-size: 0.95rem;
     color: var(--color-text-light);
-    font-size: 0.9rem;
-}
-
-.request-table tr {
-    transition: background-color 0.3s ease;
-}
-
-.request-table tr:hover {
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.request-table tr:last-child td {
-    border-bottom: none;
+    font-weight: 500;
 }
 
 /* === 토스트 메시지 === */
@@ -1401,6 +1542,44 @@ body {
     
     .notice-example {
         font-size: 0.8rem;
+    }
+    
+    /* 요청 카드 모바일 스타일 */
+    .request-card {
+        padding: 1.25rem;
+    }
+    
+    .request-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .request-card-title {
+        font-size: 1rem;
+    }
+    
+    .request-card-artist {
+        font-size: 0.85rem;
+    }
+    
+    .request-card-status-badge {
+        padding: 0.4rem 0.85rem;
+        font-size: 0.8rem;
+    }
+    
+    .request-card-body {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.85rem;
+        padding-top: 1rem;
+    }
+    
+    .request-card-meta-label {
+        font-size: 0.7rem;
+    }
+    
+    .request-card-meta-value {
+        font-size: 0.88rem;
     }
     
     /* 요청 현황 표시 바 모바일 스타일 */

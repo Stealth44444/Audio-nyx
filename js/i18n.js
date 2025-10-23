@@ -45,7 +45,7 @@ class SimpleI18n {
           navbar: { home: "홈", brand: "브랜드 소개", withdraw: "대시보드", findMusic: "음원 샘플", channel: "채널 관리", track: "음원 신청", login: "로그인", producer: "Audionyx 프로듀서", faq: "FAQ", logout: "로그아웃" },
           hero: { fixed: "FREE TRACKS + EARN", main: "쇼츠에 음원 수익을 더하세요.", desc: "유튜브가 저작권자에게 지급한 음악 라이선스 비용을 AUDIONYX가 크리에이터에게 제공하는 방식으로 음원 수익이 발생합니다.", cta: "지금 시작하기" },
           footer: { tagline: "쇼츠 음원 수익화 플랫폼", service: "서비스", company: "회사", contact: "연락처", copy: "© 2025 AUDIONYX Music, Inc. All rights reserved.", loc: "Seoul, Korea" },
-          mobile: { home: "홈", music: "음원", channel: "채널", withdraw: "정산", production: "제작" },
+          mobile: { home: "홈", music: "샘플", channel: "채널", withdraw: "대시보드", production: "신청" },
           brand: { title: "브랜드 소개", heroTitle: "브랜드 소개", heroSubtitle: "크리에이터를 위한 음원 수익화 플랫폼", heroCta: "Go Tracks", aboutTitle: "Audionyx란?", aboutHeadline: "음원 수익도, 영상 수익도<br>Audionyx 하나로 모두 가져가세요", whyTitle: "Why Audionyx?", whySubtitle: "Audionyx와 함께 시작하는 새로운 수익 창출의 3가지 핵심" }
         };
       } else if (lang === 'ja') {

@@ -594,7 +594,7 @@
       "titleExample": "Examples: \"[Channel Name] Vlog BGM\", \"[Channel Name] Opening Music\""
     },
     "requestList": { "title": "My Requests" },
-    "status": { "pending": "Pending", "working": "In Progress", "done": "Done" },
+    "status": { "paymentPending": "Awaiting Payment", "production": "In Production", "distributionPending": "Awaiting Distribution", "distributing": "Distributing", "distributed": "Distributed" },
     "loading": "Loading requests...",
     "noRequests": { "title": "No requests yet", "description": "Submit a custom track request using the form above." },
     "table": { "trackTitle": "Track Title", "genre": "Genre", "bpm": "BPM", "status": "Status", "requestDate": "Requested" }
@@ -603,6 +603,59 @@
     "title": "FAQ | Audionyx",
     "headline": "Frequently Asked Questions",
     "description": "Find answers about Audionyx services",
+    "page": {
+      "personal": {
+        "title": "Personal Track Requests",
+        "q1": "What kind of music do you make?",
+        "a1": "We produce 1:1 custom tracks tailored to your channel concept and usage context. From intros and BGM to theme songs, we design length/mood/tempo to fit the purpose, with a structure that remains fresh even with repeated use.",
+        "q2": "How can I apply?",
+        "a2": "Go to the ‘Request Music’ page in the top menu and submit a short brief (desired mood, reference links, usage, etc.). We'll get back to you within 1 business day.",
+        "q3": "How long does production take?",
+        "a3": "A draft is typically delivered within 7–14 days. The schedule may vary depending on request complexity and the number of feedback rounds."
+      },
+      "process": {
+        "title": "Production Process",
+        "q1": "What are the steps?",
+        "a1": "Briefing → Draft delivery → Feedback → Final delivery. Final files include WAV/MP3 plus short versions (e.g., 10s/30s) for broader use.",
+        "q2": "How many revisions are included?",
+        "a2": "Two revisions are included within reasonable scope. Changes in a completely different direction from the initial brief may incur additional costs."
+      },
+      "rights": {
+        "title": "Rights / Usage Scope",
+        "q1": "Who holds the rights to the music?",
+        "a1": "The right to use belongs entirely to the client within the contract scope. Copyright and other rights follow the service terms and individual agreements. Resale or redistribution of the audio itself may be restricted.",
+        "q2": "Can I use it together on other channels/brands?",
+        "a2": "Priority is given to the requesting channel. If joint use is needed, the scope can be expanded through prior consultation."
+      },
+      "revenue": {
+        "title": "Revenue · Settlement",
+        "q1": "How is revenue generated and when is it settled?",
+        "a1": "Settlement is based on performance across short‑form platforms like Shorts, Reels, TikTok and major streaming services. First settlement after 2–3 months, then monthly; dashboard updates weekly.",
+        "q2": "What is the distribution standard?",
+        "a2": "After a 12% fee deduction, 88% of royalties are paid based on performance. There is no minimum payout; even small amounts are settled monthly."
+      },
+      "pricing": {
+        "title": "Pricing · Contract",
+        "q1": "How are costs estimated?",
+        "a1": "Estimates vary by request scope (length, arrangement, whether vocals are included, etc.). The base package includes production, two revisions, and final files.",
+        "q2": "Is there a refund policy?",
+        "a2": "After work begins, refunds are difficult; we prioritize improvement and revision options for satisfaction. Additional quotes may occur if the scope exceeds the agreed range."
+      },
+      "distribution": {
+        "title": "Distribution · Platforms",
+        "q1": "Where is it distributed?",
+        "a1": "We distribute and settle across 300+ platforms with consistent standards, including global DSPs such as Spotify, Apple Music, Amazon Music, and major social platforms like YouTube, Instagram, and TikTok.",
+        "q2": "What if there’s a dispute or platform policy change?",
+        "a2": "Audionyx responds promptly on behalf of creators. We guide and act transparently to ensure creators are not disadvantaged."
+      },
+      "misc": {
+        "title": "Others",
+        "q1": "Do you support brand/sponsor collaborations?",
+        "a1": "Yes. We propose licensing and delivery options to suit campaign goals and durations.",
+        "q2": "How can I contact you?",
+        "a2": "Use ‘Contact Us’ in the page footer or email us; we respond within 1 business day."
+      }
+    },
     "sections": {
       "overview": "Overview",
       "signup": "Signup & Security",
@@ -823,6 +876,17 @@
       "accountTitle": "Account",
       "copyright": "© 2024 AUDIONYX. All rights reserved."
     }
+  }
+  ,
+  "terms": {
+    "pageTitle": "Terms of Service - AUDIONYX",
+    "title": "AUDIONYX Music Production & License Agreement",
+    "privacyHeading": "Article 10 (Personal Information Processing)",
+    "privacy": {
+      "title": "Privacy Policy",
+      "desc": "The user agrees to provide the minimum personal information (email, payment info, tax info) required for settlement. Details follow the company's Privacy Policy."
+    },
+    "body": "<article class=\"terms-article\">\n<h3>Article 1 (Purpose)</h3>\n<p>This agreement clarifies the rights and obligations between the creator (‘User’) and AUDIONYX (‘Company’) when the User requests the Company to produce a custom music track (‘Produced Track’) and uses it in short-form videos (YouTube Shorts, Instagram Reels, TikTok, etc.).</p>\n</article>\n<article class=\"terms-article\">\n<h3>Article 2 (Definitions)</h3>\n<ol>\n<li>‘Royalty’ means all monetary consideration generated by using the Produced Track, including YouTube Content ID revenues and other DSP/advertising revenues.</li>\n<li>‘Net Revenue’ means the Company’s actual receipt after deducting all fees (distribution, marketing, transaction fees, etc.) and withholding taxes from Gross Revenue received from third‑party distributors/platforms.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 3 (Agreement, Fees and Deposit)</h3>\n<ol>\n<li>The User shall pay the following costs for this agreement to take effect.</li>\n<li>The production fee per track is KRW 99,000 (VAT included).</li>\n<li>The User shall deposit KRW 50,000 as a performance deposit in addition to the production fee.</li>\n<li>The deposit may be used to compensate damages caused by the User’s breach. If the User unilaterally cancels before distribution, the deposit is forfeited as liquidated damages.</li>\n<li>Except for the above, the deposit is fully refunded upon lawful termination where no other breach exists.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 4 (Production, Copyright and License)</h3>\n<ol>\n<li>Process: (1) Request → (2) Draft within 14 business days → (3) One revision within 7 business days → (4) Final approval and distribution via third‑party distributor within ~10 business days. If the User neither approves nor requests revision within 5 business days after receiving the draft, it is deemed a withdrawal and the deposit is forfeited; no distribution occurs.</li>\n<li>Ownership: All copyrights (moral and economic rights) to the Produced Track belong exclusively to the Company.</li>\n<li>Rights: During the term, the User has usage rights within Article 5 and royalty sharing per Article 6.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 5 (Scope and Restrictions)</h3>\n<ol>\n<li>Scope: The User may insert the Produced Track as BGM in videos for posting and monetization on SNS/streaming platforms only.</li>\n<li>Content ID: The Company registers the Produced Track with YouTube Content ID. Unauthorized third‑party use is tracked and revenues are shared with the User per Article 6.</li>\n<li>Prohibited: (a) standalone redistribution/sale/streaming of the audio; (b) remix/remake or integrity‑harming edits for redistribution/profit; (c) use in illegal/hate/discriminatory/antisocial content; (d) commercial uses beyond the licensed scope.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 6 (Royalty Sharing, Payment and Tax)</h3>\n<ol>\n<li>Share: Net Revenue basis — User 88%, Company 12%.</li>\n<li>Withholding: Business income 3.3% or other income 6.6% withheld at payment time; classification determined reasonably by the Company per law.</li>\n<li>Filings: The Company files and pays withheld taxes within statutory deadlines; submits required statements.</li>\n<li>User filing: The User files annual income tax (May of following year) and cooperates with information requests.</li>\n<li>Cycle: Quarterly payments (Q1 by Jun 30, etc.). Delays from third parties shift payment up to 14 days after receipt. Under KRW 10,000 is carried forward.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 7 (User Warranty and Withholding)</h3>\n<ol>\n<li>The User warrants no infringement of portrait/publicity or other rights.</li>\n<li>Policy violations may cause payment withholding/refusal or license termination.</li>\n<li>No duplicate registration or direct Content ID claims outside the Company.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 8 (Disclaimer and Limitation)</h3>\n<ol>\n<li>No liability for revenue changes due to external platform policies or ad rates beyond control.</li>\n<li>The User indemnifies the Company for damages due to User breach or third‑party rights infringement.</li>\n<li>Without the Company’s willful misconduct or gross negligence, the Company is not liable for loss of opportunity/expected profits if usage becomes impossible due to platform policy changes or service suspension; lawful revenues up to that point are settled per Article 6.</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 9 (Term and Termination)</h3>\n<ol>\n<li>Effective upon payment completion; valid until either party terminates in writing.</li>\n<li>If the User materially breaches, the Company may terminate after a 14‑day cure period.</li>\n<li>After termination, revenue sharing under Article 6 remains only up to the first quarterly settlement following the termination month (except as per Article 7.2).</li>\n</ol>\n</article>\n<article class=\"terms-article\">\n<h3>Article 10 (Personal Information Processing)</h3>\n<p>The user agrees to provide minimum personal information (email, payment info, tax info) required for settlement. Details follow the Company's Privacy Policy.</p>\n</article>\n<article class=\"terms-article\">\n<h3>Article 11 (Governing Law and Dispute)</h3>\n<p>This agreement is governed by the laws of the Republic of Korea. Disputes are subject to the exclusive jurisdiction of the Seoul Central District Court.</p>\n</article>"
   }
 }
 

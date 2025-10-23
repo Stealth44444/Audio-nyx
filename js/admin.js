@@ -234,16 +234,16 @@ function initAdminAuth() {
       user.getIdTokenResult().then((res) => {
         const isAdmin = (!!res.claims.admin) || (user.email === 'audionyx369@gmail.com');
         badge.textContent = isAdmin ? 'ADMIN: ON' : 'ADMIN: OFF';
-        badge.style.background = isAdmin ? '#dcfce7' : '#fee2e2';
-        badge.style.color = isAdmin ? '#166534' : '#b91c1c';
+        badge.style.background = isAdmin ? 'rgba(48,209,88,0.15)' : 'rgba(255,69,58,0.15)';
+        badge.style.color = isAdmin ? '#30d158' : '#ff453a';
       });
       btnLogin.style.display = 'none';
       btnLogout.style.display = 'inline-block';
     } else {
       emailEl.textContent = '';
       badge.textContent = 'ADMIN: OFF';
-      badge.style.background = '#fee2e2';
-      badge.style.color = '#b91c1c';
+      badge.style.background = 'rgba(255,69,58,0.15)';
+      badge.style.color = '#ff453a';
       btnLogin.style.display = 'inline-block';
       btnLogout.style.display = 'none';
     }
@@ -646,14 +646,24 @@ async function loadTrackRequestsTable() {
 
     // 상단 카운트 배지 갱신
     const totalEl = document.getElementById('track-requests-count');
-    const inProdEl = document.getElementById('track-inprod-count');
-    const notProdEl = document.getElementById('track-notprod-count');
+    const ppEl = document.getElementById('track-payment-pending-count');
+    const prodEl = document.getElementById('track-production-count');
+    const dpEl = document.getElementById('track-distribution-pending-count');
+    const dingEl = document.getElementById('track-distributing-count');
+    const dedEl = document.getElementById('track-distributed-count');
     const totalCnt = requests.length;
-    const inProdCnt = requests.filter(r => (r.status === '제작중')).length;
-    const notProdCnt = requests.filter(r => (r.status === '미제작')).length;
+    const normalize = (s) => (s || '').toString().toLowerCase();
+    const ppCnt = requests.filter(r => ['payment-pending','미제작'].includes(r.status)).length;
+    const prodCnt = requests.filter(r => ['production','제작중'].includes(r.status)).length;
+    const dpCnt = requests.filter(r => ['distribution-pending','제작완료'].includes(r.status)).length;
+    const dingCnt = requests.filter(r => ['distributing'].includes(r.status)).length;
+    const dedCnt = requests.filter(r => ['distributed','완료'].includes(r.status)).length;
     if (totalEl) totalEl.textContent = String(totalCnt);
-    if (inProdEl) inProdEl.textContent = String(inProdCnt);
-    if (notProdEl) notProdEl.textContent = String(notProdCnt);
+    if (ppEl) ppEl.textContent = String(ppCnt);
+    if (prodEl) prodEl.textContent = String(prodCnt);
+    if (dpEl) dpEl.textContent = String(dpCnt);
+    if (dingEl) dingEl.textContent = String(dingCnt);
+    if (dedEl) dedEl.textContent = String(dedCnt);
 
     // 상태 필터 적용 (선택 시)
     const statusFilter = (document.getElementById('filter-track-requests-status')?.value || '').trim();
@@ -661,7 +671,15 @@ async function loadTrackRequestsTable() {
     let filtered = requests;
 
     if (statusFilter) {
-      filtered = filtered.filter(r => (r.status || '').toLowerCase() === statusFilter.toLowerCase());
+      const mapLegacy = {
+        'payment-pending': ['payment-pending','미제작'],
+        'production': ['production','제작중'],
+        'distribution-pending': ['distribution-pending','제작완료'],
+        'distributing': ['distributing'],
+        'distributed': ['distributed','완료']
+      };
+      const targets = mapLegacy[statusFilter] || [statusFilter];
+      filtered = filtered.filter(r => targets.includes(r.status));
     }
     if (keyword) {
       filtered = filtered.filter(r => {
@@ -688,17 +706,25 @@ async function loadTrackRequestsTable() {
       const row = document.createElement('tr');
       const createdAt = request.createdAt?.toDate?.() || null;
       const createdStr = formatDateYYMMDD(createdAt);
-      const normalized = request.status || 'pending';
-      let statusClass = `status-${normalized}`;
-      let statusContent = normalized;
-
-      if (normalized === '제작중') {
-        statusClass = 'status-제작중';
-        statusContent = '<span class="status-dot blue" title="제작중"></span>';
-      } else if (normalized === '미제작') {
-        statusClass = 'status-미제작';
-        statusContent = '<span class="status-dot yellow" title="미제작"></span>';
-      }
+      const normalized = request.status || 'payment-pending';
+      
+      // 5단계 상태 매핑
+      const statusMap = {
+        'payment-pending': { class: 'status-payment-pending', text: '입금 대기', color: '#ffc107' },
+        'production': { class: 'status-production', text: '제작중', color: '#42a5f5' },
+        'distribution-pending': { class: 'status-distribution-pending', text: '유통 대기', color: '#ff9800' },
+        'distributing': { class: 'status-distributing', text: '유통중', color: '#9c27b0' },
+        'distributed': { class: 'status-distributed', text: '유통 완료', color: '#28a745' },
+        // 구 버전 호환
+        '미제작': { class: 'status-payment-pending', text: '입금 대기', color: '#ffc107' },
+        '제작중': { class: 'status-production', text: '제작중', color: '#42a5f5' },
+        '제작완료': { class: 'status-distribution-pending', text: '유통 대기', color: '#ff9800' },
+        '완료': { class: 'status-distributed', text: '유통 완료', color: '#28a745' }
+      };
+      
+      const statusConfig = statusMap[normalized] || statusMap['payment-pending'];
+      const statusClass = statusConfig.class;
+      const statusContent = statusConfig.text;
       
       const refUrl = request.referenceUrl || request.refUrl || request.sampleUrl || '';
       const displayRef = refUrl ? (refUrl.length > 60 ? refUrl.slice(0,60)+'...' : refUrl) : '-';
@@ -708,63 +734,32 @@ async function loadTrackRequestsTable() {
       const mapped = uidToUser[request.uid] || {};
       const displayName = mapped.nickname || mapped.displayName || mapped.username || mapped.email || request.uid || '-';
       const displayEmail = request.email || request.userEmail || mapped.email || '-';
+      const coverUrl = request.coverUrl || request.cover || request.coverImage || request.coverArtUrl || request.imageUrl || request.image || '';
+      const hasCover = !!coverUrl;
       
       row.innerHTML = `
         <td>${displayName}</td>
         <td>${displayEmail}</td>
-        <td>${genre}</td>
-        <td></td>
-        <td></td>
-        <td>
-          <input type="text" 
-                 class="isrc-input" 
-                 value="${request.ISRC || ''}" 
-                 placeholder="ISRC 입력" 
-                 onchange="updateTrackRequestISRC('${request.id}', this.value)"
-                 style="width: 100%; padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px;">
-        </td>
         <td>${createdStr}</td>
         <td>
           <div class="table-actions">
-            <button title="제작중" class="btn-quick btn-p" onclick="updateTrackRequestStatus('${request.id}', '제작중')">P</button>
+            <button title="제작중" class="btn-quick btn-production" onclick="updateTrackRequestStatus('${request.id}', 'production')">제작중</button>
+            <button title="유통대기" class="btn-quick btn-dist-pending" onclick="updateTrackRequestStatus('${request.id}', 'distribution-pending')">유통대기</button>
+            <button title="유통중" class="btn-quick btn-distributing" onclick="updateTrackRequestStatus('${request.id}', 'distributing')">유통중</button>
+            <button title="유통완료" class="btn-quick btn-distributed" onclick="updateTrackRequestStatus('${request.id}', 'distributed')">완료</button>
+            <button title="삭제" class="btn-delete" onclick="deleteTrackRequestWithConfirm('${request.id}')">삭제</button>
           </div>
         </td>
-        <td><span class="status-badge ${statusClass}">${statusContent}</span></td>
+        <td>
+          <div style="display:flex; align-items:center; gap:10px; justify-content:space-between;">
+            <span class="status-badge ${statusClass}">${statusContent}</span>
+            <span class="muted" title="입금자명" style="font-size:12px; margin-left:auto; margin-right:8px;">${request.depositor || '-'}</span>
+            <button title="자세히 보기" class="btn-view-detail" onclick="viewTrackRequestDetail('${request.id}')">자세히</button>
+          </div>
+        </td>
       `;
 
-      const refCell = row.cells[3];
-      if (refUrl) {
-        const link = document.createElement('a');
-        link.href = refUrl;
-        link.target = '_blank';
-        link.textContent = displayRef;
-        link.style.color = '#3b82f6';
-        refCell.appendChild(link);
-
-        if (refUrl.length > 60) {
-            const ellipsisBtn = document.createElement('span');
-            ellipsisBtn.className = 'ellipsis-btn';
-            ellipsisBtn.textContent = '...';
-            ellipsisBtn.onclick = () => {
-                showModal(refUrl);
-            };
-            refCell.appendChild(ellipsisBtn);
-        }
-      } else {
-        refCell.textContent = '-';
-      }
-
-      const descCell = row.cells[4];
-      descCell.textContent = displayDesc;
-      if (desc.length > 60) {
-          const ellipsisBtn = document.createElement('span');
-          ellipsisBtn.className = 'ellipsis-btn';
-          ellipsisBtn.textContent = '...';
-          ellipsisBtn.onclick = () => {
-              showModal(desc);
-          };
-          descCell.appendChild(ellipsisBtn);
-      }
+      // 테이블에는 레퍼런스 URL/요청 내용 미표시. '자세히' 모달에서만 노출.
 
       tbody.appendChild(row);
     });
@@ -1943,6 +1938,13 @@ window.deleteTrackWithConfirm = deleteTrackWithConfirm;
 window.deleteAccountWithConfirm = deleteAccountWithConfirm;
 window.parseCDBabyReport = parseCDBabyReport;
 window.saveParsedCDBabyData = saveParsedCDBabyData;
+window.viewTrackRequestDetail = viewTrackRequestDetail;
+window.previewTrackRequestCover = previewTrackRequestCover;
+window.deleteTrackRequestWithConfirm = deleteTrackRequestWithConfirm;
+window.saveISRC = saveISRC;
+window.saveTrackTitle = saveTrackTitle;
+window.saveArtistName = saveArtistName;
+window.saveDepositor = saveDepositor;
 
 const modal = document.getElementById('content-modal');
 const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -1971,6 +1973,274 @@ function initModal() {
     if (modalCloseBtn) {
         modalCloseBtn.addEventListener('click', hideModal);
     }
+}
+
+// === 트랙 요청: ISRC 저장 ===
+async function saveISRC(requestId) {
+  try {
+    const input = document.getElementById('isrc-edit-input');
+    if (!input) {
+      alert('ISRC 입력 필드를 찾을 수 없습니다.');
+      return;
+    }
+    const newISRC = input.value.trim();
+    if (!newISRC) {
+      alert('ISRC를 입력해주세요.');
+      input.focus();
+      return;
+    }
+    
+    // Firestore 업데이트
+    const requestRef = doc(db, 'track_requests', requestId);
+    await updateDoc(requestRef, {
+      ISRC: newISRC,
+      updatedAt: new Date()
+    });
+    
+    alert(`✅ ISRC가 저장되었습니다: ${newISRC}`);
+    
+    // 테이블 새로고침
+    loadTrackRequestsTable();
+  } catch (err) {
+    console.error('ISRC 저장 오류:', err);
+    alert('ISRC 저장 중 오류가 발생했습니다: ' + (err.message || '알 수 없는 오류'));
+  }
+}
+
+// === 트랙 요청: 입금자명 저장 ===
+async function saveDepositor(requestId) {
+  try {
+    const input = document.getElementById('depositor-edit-input');
+    if (!input) {
+      alert('입금자 입력 필드를 찾을 수 없습니다.');
+      return;
+    }
+    const newDepositor = input.value.trim();
+    if (!newDepositor) {
+      alert('입금자 명을 입력해주세요.');
+      input.focus();
+      return;
+    }
+    const requestRef = doc(db, 'track_requests', requestId);
+    await updateDoc(requestRef, {
+      depositor: newDepositor,
+      updatedAt: new Date()
+    });
+    alert(`✅ 입금자 명이 저장되었습니다: ${newDepositor}`);
+    loadTrackRequestsTable();
+  } catch (err) {
+    console.error('입금자 저장 오류:', err);
+    alert('입금자 저장 중 오류가 발생했습니다: ' + (err.message || '알 수 없는 오류'));
+  }
+}
+// === 트랙 요청: 제목 저장 ===
+async function saveTrackTitle(requestId) {
+  try {
+    const input = document.getElementById('track-title-edit-input');
+    if (!input) {
+      alert('트랙 제목 입력 필드를 찾을 수 없습니다.');
+      return;
+    }
+    const newTitle = input.value.trim();
+    if (!newTitle) {
+      alert('트랙 제목을 입력해주세요.');
+      input.focus();
+      return;
+    }
+    const requestRef = doc(db, 'track_requests', requestId);
+    await updateDoc(requestRef, {
+      trackTitle: newTitle,
+      title: newTitle,
+      updatedAt: new Date()
+    });
+    alert(`✅ 트랙 제목이 저장되었습니다: ${newTitle}`);
+    loadTrackRequestsTable();
+  } catch (err) {
+    console.error('트랙 제목 저장 오류:', err);
+    alert('트랙 제목 저장 중 오류가 발생했습니다: ' + (err.message || '알 수 없는 오류'));
+  }
+}
+
+// === 트랙 요청: 아티스트 저장 ===
+async function saveArtistName(requestId) {
+  try {
+    const input = document.getElementById('artist-name-edit-input');
+    if (!input) {
+      alert('아티스트 입력 필드를 찾을 수 없습니다.');
+      return;
+    }
+    const newArtist = input.value.trim();
+    if (!newArtist) {
+      alert('아티스트명을 입력해주세요.');
+      input.focus();
+      return;
+    }
+    const requestRef = doc(db, 'track_requests', requestId);
+    await updateDoc(requestRef, {
+      artistName: newArtist,
+      artist: newArtist,
+      updatedAt: new Date()
+    });
+    alert(`✅ 아티스트명이 저장되었습니다: ${newArtist}`);
+    loadTrackRequestsTable();
+  } catch (err) {
+    console.error('아티스트 저장 오류:', err);
+    alert('아티스트 저장 중 오류가 발생했습니다: ' + (err.message || '알 수 없는 오류'));
+  }
+}
+// === 트랙 요청: 자세히 보기 ===
+async function viewTrackRequestDetail(requestId) {
+  try {
+    const requestRef = doc(db, 'track_requests', requestId);
+    const snap = await getDoc(requestRef);
+    if (!snap.exists()) {
+      alert('요청 문서를 찾을 수 없습니다.');
+      return;
+    }
+    const data = snap.data();
+    const ca = data.createdAt?.toDate ? data.createdAt.toDate() : (data.createdAt?.seconds ? new Date(data.createdAt.seconds * 1000) : (data.createdAt ? new Date(data.createdAt) : null));
+    const ua = data.updatedAt?.toDate ? data.updatedAt.toDate() : (data.updatedAt?.seconds ? new Date(data.updatedAt.seconds * 1000) : (data.updatedAt ? new Date(data.updatedAt) : null));
+    const fmt = (d) => (d && !isNaN(d)) ? d.toLocaleString('ko-KR') : '-';
+    const detailHtml = `
+<div style="display:grid; gap:16px;">
+  <div style="display:grid; grid-template-columns: 140px 1fr; gap:12px 16px;">
+    <div style="color:#86868b; font-weight:600; font-size:14px;">트랙 제목</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <input 
+        type="text" 
+        id="track-title-edit-input" 
+        value="${(data.trackTitle || data.title || '').toString()}" 
+        placeholder="트랙 제목"
+        style="flex:1; padding:8px 12px; border:1px solid #e8e8ed; border-radius:8px; font-size:14px; color:#1d1d1f; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif; transition:all 0.3s ease;"
+        onfocus="this.style.borderColor='#0071e3'; this.style.boxShadow='0 0 0 4px rgba(0,113,227,0.1)';"
+        onblur="this.style.borderColor='#e8e8ed'; this.style.boxShadow='none';"
+      />
+      <button 
+        onclick="saveTrackTitle('${requestId}')" 
+        style="padding:8px 16px; background:#0071e3; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; white-space:nowrap;"
+        onmouseover="this.style.background='#0077ed'; this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.background='#0071e3'; this.style.transform='translateY(0)'"
+      >저장</button>
+    </div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">아티스트</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <input 
+        type="text" 
+        id="artist-name-edit-input" 
+        value="${(data.artistName || data.artist || '').toString()}" 
+        placeholder="아티스트 명"
+        style="flex:1; padding:8px 12px; border:1px solid #e8e8ed; border-radius:8px; font-size:14px; color:#1d1d1f; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif; transition:all 0.3s ease;"
+        onfocus="this.style.borderColor='#0071e3'; this.style.boxShadow='0 0 0 4px rgba(0,113,227,0.1)';"
+        onblur="this.style.borderColor='#e8e8ed'; this.style.boxShadow='none';"
+      />
+      <button 
+        onclick="saveArtistName('${requestId}')" 
+        style="padding:8px 16px; background:#0071e3; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; white-space:nowrap;"
+        onmouseover="this.style.background='#0077ed'; this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.background='#0071e3'; this.style.transform='translateY(0)'"
+      >저장</button>
+    </div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">이메일</div>
+    <div style="color:#1d1d1f;">${data.email || data.userEmail || '-'}</div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">장르</div>
+    <div style="color:#1d1d1f;">${data.genre || data.category || '-'}</div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">레퍼런스 URL</div>
+    <div style="color:#1d1d1f; word-break:break-all;">${data.referenceUrl || data.refUrl || data.sampleUrl || '-'}</div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">ISRC</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <input 
+        type="text" 
+        id="isrc-edit-input" 
+        value="${data.ISRC || ''}" 
+        placeholder="ISRC 입력 (예: USRC17607839)"
+        style="flex:1; padding:8px 12px; border:1px solid #e8e8ed; border-radius:8px; font-size:14px; color:#1d1d1f; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif; transition:all 0.3s ease;"
+        onfocus="this.style.borderColor='#0071e3'; this.style.boxShadow='0 0 0 4px rgba(0,113,227,0.1)';"
+        onblur="this.style.borderColor='#e8e8ed'; this.style.boxShadow='none';"
+      />
+      <button 
+        onclick="saveISRC('${requestId}')" 
+        style="padding:8px 16px; background:#0071e3; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; white-space:nowrap;"
+        onmouseover="this.style.background='#0077ed'; this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.background='#0071e3'; this.style.transform='translateY(0)'"
+      >저장</button>
+    </div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">입금자 명</div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <input 
+        type="text" 
+        id="depositor-edit-input" 
+        value="${(data.depositor || '').toString()}" 
+        placeholder="입금자 명"
+        style="flex:1; padding:8px 12px; border:1px solid #e8e8ed; border-radius:8px; font-size:14px; color:#1d1d1f; font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif; transition:all 0.3s ease;"
+        onfocus="this.style.borderColor='#0071e3'; this.style.boxShadow='0 0 0 4px rgba(0,113,227,0.1)';"
+        onblur="this.style.borderColor='#e8e8ed'; this.style.boxShadow='none';"
+      />
+      <button 
+        onclick="saveDepositor('${requestId}')" 
+        style="padding:8px 16px; background:#0071e3; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.3s ease; white-space:nowrap;"
+        onmouseover="this.style.background='#0077ed'; this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.background='#0071e3'; this.style.transform='translateY(0)'"
+      >저장</button>
+    </div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">상태</div>
+    <div style="color:#1d1d1f;">${data.status || '-'}</div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">요청일</div>
+    <div style="color:#1d1d1f;">${fmt(ca)}</div>
+    <div style="color:#86868b; font-weight:600; font-size:14px;">갱신일</div>
+    <div style="color:#1d1d1f;">${fmt(ua)}</div>
+  </div>
+  <div style="height:1px; background:#e8e8ed; margin:8px 0;"></div>
+  <div>
+    <div style="color:#1d1d1f; font-weight:700; margin-bottom:10px; font-size:16px;">상세 요청 내용</div>
+    <div style="white-space:pre-wrap; line-height:1.7; color:#1d1d1f; font-size:15px;">${(data.description || data.request || '').toString() || '(내용 없음)'}</div>
+  </div>
+</div>`;
+    if (modal && document.getElementById('modal-body')) {
+      document.getElementById('modal-body').innerHTML = detailHtml;
+      modal.style.display = 'flex';
+    } else {
+      alert('모달 요소를 찾을 수 없습니다.');
+    }
+  } catch (err) {
+    console.error('자세히 보기 오류:', err);
+    alert('자세히 보기 중 오류가 발생했습니다.');
+  }
+}
+
+// === 트랙 요청: 커버 미리보기 ===
+async function previewTrackRequestCover(requestId) {
+  try {
+    const requestRef = doc(db, 'track_requests', requestId);
+    const snap = await getDoc(requestRef);
+    if (!snap.exists()) {
+      alert('요청 문서를 찾을 수 없습니다.');
+      return;
+    }
+    const data = snap.data();
+    const coverUrl = data.coverUrl || data.cover || data.coverImage || data.coverArtUrl || data.imageUrl || data.image || '';
+    if (!coverUrl) {
+      alert('커버 이미지가 없습니다.');
+      return;
+    }
+    // 새 탭으로 크게 보기
+    window.open(coverUrl, '_blank');
+  } catch (err) {
+    console.error('커버 미리보기 오류:', err);
+    alert('커버 미리보기 중 오류가 발생했습니다.');
+  }
+}
+
+// === 트랙 요청: 문서 삭제 ===
+async function deleteTrackRequestWithConfirm(requestId) {
+  try {
+    if (!confirm(`트랙 요청 삭제: ${requestId}\n정말 삭제하시겠습니까?`)) return;
+    await deleteDoc(doc(db, 'track_requests', requestId));
+    await loadTrackRequestsTable();
+    alert('트랙 요청이 삭제되었습니다.');
+  } catch (err) {
+    console.error('트랙 요청 삭제 오류:', err);
+    alert('삭제 중 오류가 발생했습니다.');
+  }
 }
 
 function main() {

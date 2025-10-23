@@ -457,8 +457,20 @@ function renderDashboardCharts(monthlyEarnings, earningsLabels, sourceBreakdown,
                         weight: '700'
                     },
                     callbacks: {
+                        title: function(context) {
+                            return context && context.length ? context[0].label : '';
+                        },
                         label: function(context) {
-                            return '₩' + context.parsed.y.toLocaleString();
+                            return '수익 ₩' + context.parsed.y.toLocaleString();
+                        },
+                        afterBody: function() {
+                            try {
+                                const el = document.querySelector('.card-last-updated .update-date');
+                                const txt = el && el.textContent ? el.textContent.trim() : '';
+                                return txt ? `데이터 갱신 ${txt}` : '';
+                            } catch (e) {
+                                return '';
+                            }
                         }
                     }
                 }

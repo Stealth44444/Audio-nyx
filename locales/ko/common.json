@@ -45,6 +45,16 @@
     "copy": "© 2025 AUDIONYX Music, Inc. All rights reserved.",
     "location": "Seoul, Korea"
   },
+  "terms": {
+    "pageTitle": "이용약관 - AUDIONYX",
+    "title": "AUDIONYX 음원 제작 및 라이선스 계약서",
+    "privacyHeading": "제10조(개인정보 처리)",
+    "privacy": {
+      "title": "개인정보 처리방침",
+      "desc": "사용자는 정산을 위해 필요한 최소한의 개인정보(이메일, 결제정보, 세무 신고 정보) 제공에 동의하며, 세부 사항은 회사의 개인정보처리방침에 따릅니다."
+    },
+    "body": ""
+  },
   "home": {
     "video": {"noSupport": "브라우저가 비디오 태그를 지원하지 않습니다."},
     "hero": {
@@ -488,9 +498,11 @@
       "title": "내 요청 목록"
     },
     "status": {
-      "pending": "대기중",
-      "working": "제작중",
-      "done": "완료"
+      "paymentPending": "입금 대기",
+      "production": "제작중",
+      "distributionPending": "유통 대기",
+      "distributing": "유통중",
+      "distributed": "유통 완료"
     },
     "loading": "요청 목록을 불러오는 중...",
     "noRequests": {

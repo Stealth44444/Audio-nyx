@@ -65,28 +65,26 @@ function showToast(message, type = 'success') {
   }, 3000);
 }
 
-// 상태 뱃지 렌더링 함수
-function renderStatusTag(status) {
+// 5단계 상태 뱃지 렌더링 함수
+function renderStatusBadge(status) {
   const statusMap = {
-    '미제작': 'status-pending',
-    '제작중': 'status-working', 
-    '제작완료': 'status-done',
-    '완료': 'status-done'
+    'payment-pending': { class: 'payment-pending', i18nKey: 'trackProduction.status.paymentPending', default: '입금 대기' },
+    'production': { class: 'production', i18nKey: 'trackProduction.status.production', default: '제작중' },
+    'distribution-pending': { class: 'distribution-pending', i18nKey: 'trackProduction.status.distributionPending', default: '유통 대기' },
+    'distributing': { class: 'distributing', i18nKey: 'trackProduction.status.distributing', default: '유통중' },
+    'distributed': { class: 'distributed', i18nKey: 'trackProduction.status.distributed', default: '유통 완료' },
+    // 구 버전 호환
+    '미제작': { class: 'payment-pending', i18nKey: 'trackProduction.status.paymentPending', default: '입금 대기' },
+    '제작중': { class: 'production', i18nKey: 'trackProduction.status.production', default: '제작중' },
+    '제작완료': { class: 'distribution-pending', i18nKey: 'trackProduction.status.distributionPending', default: '유통 대기' },
+    '완료': { class: 'distributed', i18nKey: 'trackProduction.status.distributed', default: '유통 완료' }
   };
   
-  const statusTextMap = {
-    '미제작': '대기중',
-    '제작중': '제작중',
-    '제작완료': '완료',
-    '완료': '완료'
-  };
+  const statusConfig = statusMap[status] || statusMap['payment-pending'];
   
-  const className = statusMap[status] || 'status-pending';
-  const displayText = statusTextMap[status] || status;
-  
-  return `<div class="status-tag ${className}">
+  return `<div class="request-card-status-badge status-badge-${statusConfig.class}">
     <div class="status-dot"></div>
-    ${displayText}
+    <span data-i18n="${statusConfig.i18nKey}">${statusConfig.default}</span>
   </div>`;
 }
 
@@ -107,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const descriptionInput = document.getElementById('track-description');
   const refUrlInput = document.getElementById('track-ref-url');
   const emailInput = document.getElementById('track-email');
+  const depositorInput = document.getElementById('track-depositor');
   const coverInput = document.getElementById('track-cover');
   const coverPreview = document.getElementById('cover-preview');
   const coverPreviewImg = document.getElementById('cover-preview-img');
@@ -132,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const urlError = document.getElementById('url-error');
   const emailError = document.getElementById('email-error');
   const coverError = document.getElementById('cover-error');
+  const depositorError = document.getElementById('depositor-error');
   
   // 커버 아트 파일 관리
   let selectedCoverFile = null;
@@ -301,10 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const description = descriptionInput.value.trim();
     const refUrl = refUrlInput.value.trim();
     const email = emailInput.value.trim();
+    const depositor = depositorInput ? depositorInput.value.trim() : '';
     
     // 입력 검증
     resetErrors();
-    if (!validateForm(title, artist, bpm, genre, description, refUrl, email)) {
+    if (!validateForm(title, artist, bpm, genre, description, refUrl, email, depositor)) {
       return;
     }
     
@@ -454,6 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
             refUrl: refUrl || null,
             status: '미제작',
             email,
+            depositor,
             coverArtUrl: coverArtUrl,
             coverArtMetadata: coverArtMetadata,
             hasCoverArt: !!selectedCoverFile,
@@ -507,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`${snapshot.size}개의 요청 데이터 수신 - User ID:`, userId);
         noRequestsEl.style.display = 'none';
         
-        // 목록 갱신
+        // 목록 갱신 - 최신 카드 형식
         requestList.innerHTML = '';
         snapshot.forEach((doc, index) => {
           const request = doc.data();
@@ -522,31 +524,61 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${year}-${month}-${day}`;
           };
           
-          // 테이블 행 생성
-          const row = document.createElement('tr');
-          // 애니메이션을 위한 인덱스 속성 추가
-          row.style.setProperty('--row-index', index);
+          // 카드 생성
+          const card = document.createElement('div');
+          card.className = 'request-card';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(10px)';
           
-          row.innerHTML = `
-            <td>${request.title}</td>
-            <td>${request.genre}</td>
-            <td>${request.bpm}</td>
-            <td>${renderStatusTag(request.status)}</td>
-            <td>${formatDate(createdAt)}</td>
+          card.innerHTML = `
+            <div class="request-card-header">
+              <div class="request-card-title-area">
+                <h3 class="request-card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M9 18V5l12-2v13" stroke-width="2"/>
+                    <circle cx="6" cy="18" r="3" stroke-width="2"/>
+                    <circle cx="18" cy="16" r="3" stroke-width="2"/>
+                  </svg>
+                  ${request.title || '제목 없음'}
+                </h3>
+                <div class="request-card-artist">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-width="2"/>
+                    <circle cx="12" cy="7" r="4" stroke-width="2"/>
+                  </svg>
+                  ${request.artist || '아티스트 미정'}
+                </div>
+              </div>
+              ${renderStatusBadge(request.status || 'payment-pending')}
+            </div>
+            <div class="request-card-body">
+              <div class="request-card-meta-item">
+                <div class="request-card-meta-label" data-i18n="trackProduction.table.genre">장르</div>
+                <div class="request-card-meta-value">${request.genre || '-'}</div>
+              </div>
+              <div class="request-card-meta-item">
+                <div class="request-card-meta-label" data-i18n="trackProduction.table.bpm">BPM</div>
+                <div class="request-card-meta-value">${request.bpm || '-'}</div>
+              </div>
+              <div class="request-card-meta-item">
+                <div class="request-card-meta-label" data-i18n="trackProduction.table.requestDate">요청일</div>
+                <div class="request-card-meta-value">${formatDate(createdAt)}</div>
+              </div>
+              <div class="request-card-meta-item">
+                <div class="request-card-meta-label">이메일</div>
+                <div class="request-card-meta-value" style="font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis;">${request.email || '-'}</div>
+              </div>
+            </div>
           `;
           
-          requestList.appendChild(row);
-        });
-        
-        // 다운로드 버튼 이벤트 핸들러 추가
-        // setupDownloadButtons(); // 더 이상 다운로드 버튼이 없으므로 주석 처리 또는 삭제
-        
-        // 각 행에 애니메이션 지연 클래스 추가
-        document.querySelectorAll('#request-list tr').forEach((row, index) => {
-          // 행 순서에 따라 애니메이션 지연 시간 설정
+          requestList.appendChild(card);
+          
+          // 애니메이션
           setTimeout(() => {
-            row.style.opacity = '1';
-          }, (index % 5) * 100);
+            card.style.transition = 'all 0.4s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, index * 80);
         });
       }, (error) => {
         console.error("요청 목록 조회 중 오류 - User ID:", userId, error);
@@ -589,7 +621,7 @@ document.addEventListener('DOMContentLoaded', () => {
   */
   
   // 입력 검증 함수
-  function validateForm(title, artist, bpm, genre, description, refUrl, email) {
+  function validateForm(title, artist, bpm, genre, description, refUrl, email, depositor) {
     let isValid = true;
     
     // 제목 검증
@@ -636,6 +668,12 @@ document.addEventListener('DOMContentLoaded', () => {
       showError(emailInput, emailError, '유효한 이메일 주소를 입력해주세요.');
       isValid = false;
     }
+
+    // 입금자명 검증
+    if (depositorInput && !depositor) {
+      showError(depositorInput, depositorError, '입금자 명을 입력해주세요.');
+      isValid = false;
+    }
     
     return isValid;
   }
@@ -680,6 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
     descriptionError.textContent = '';
     urlError.textContent = '';
     emailError.textContent = '';
+    if (depositorError) depositorError.textContent = '';
     
     titleInput.classList.remove('input-error');
     bpmInput.classList.remove('input-error');
@@ -687,6 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
     descriptionInput.classList.remove('input-error');
     refUrlInput.classList.remove('input-error');
     emailInput.classList.remove('input-error');
+    if (depositorInput) depositorInput.classList.remove('input-error');
   }
   
   // 폼 초기화

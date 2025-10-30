@@ -1551,11 +1551,12 @@ const PAGE_ACCESS_CONFIG = {
     '/index.html',
     '/pages/brand.html',
     '/pages/find-music.html',
-    '/pages/faq.html'
+    '/pages/faq.html',
+    '/pages/track-production.html'
   ],
   // 로그인이 필요한 페이지
         protectedPages: [
-          '/pages/track-production.html',    '/pages/withdraw.html'
+          '/pages/withdraw.html'
   ],
   // 페이지별 설명
         pageDescriptions: {
@@ -1571,8 +1572,8 @@ function requireAuthPage() {
   onAuthStateChanged(auth, (user) => {
     updateNavigationAccess(user);
     
-    // 보호된 페이지이고 로그인하지 않은 경우 홈으로 이동
-    if (PAGE_ACCESS_CONFIG.protectedPages.includes(path) && !user) {
+    // 보호된 페이지이고 로그인하지 않았거나 익명 인증인 경우 홈으로 이동
+    if (PAGE_ACCESS_CONFIG.protectedPages.includes(path) && (!user || (user && user.isAnonymous))) {
       // 카카오/네이버 로그인 상태도 확인
       const kakaoUser = localStorage.getItem('kakaoUser');
       const naverUser = localStorage.getItem('naverUser');
@@ -1608,7 +1609,7 @@ function updateNavigationAccess(user) {
     // 로그인 상태 확인 (Firebase + 소셜 로그인)
     const kakaoUser = localStorage.getItem('kakaoUser');
     const naverUser = localStorage.getItem('naverUser');
-    const isLoggedIn = user || kakaoUser || naverUser;
+    const isLoggedIn = (user && !user.isAnonymous) || kakaoUser || naverUser;
     
     // 보호된 페이지인지 확인
     const isProtectedPage = PAGE_ACCESS_CONFIG.protectedPages.some(protectedPath => 
@@ -1664,15 +1665,19 @@ function handleRestrictedNavClick(e) {
 // 로그인 시 네비게이션 접근 권한 업데이트
 function updateNavigationAccessOnLogin(user) {
   const menuItems = document.querySelectorAll('.menu-area ul li a, .mobile-nav-list .mobile-nav-link');
+  const isRealLogin = user && !user.isAnonymous;
   menuItems.forEach(item => {
-    // 로그인 후에는 모든 메뉴 접근 가능
-    item.removeAttribute('data-requires-auth');
-    item.removeEventListener('click', handleRestrictedNavClick);
-    
-    // 인증 뱃지 제거
-    const badge = item.querySelector('.auth-required-badge');
-    if (badge) {
-      badge.remove();
+    if (isRealLogin) {
+      // 실제 로그인(소셜/이메일) 후에는 모든 메뉴 접근 가능
+      item.removeAttribute('data-requires-auth');
+      item.removeEventListener('click', handleRestrictedNavClick);
+      const badge = item.querySelector('.auth-required-badge');
+      if (badge) {
+        badge.remove();
+      }
+    } else {
+      // 익명 인증은 비로그인과 동일하게 취급
+      // 아무 것도 하지 않음 (가드 유지)
     }
   });
 }

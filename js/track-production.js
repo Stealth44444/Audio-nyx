@@ -13,7 +13,8 @@ import {
 
 import { 
   getAuth,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signInAnonymously
 } from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js';
 
 import {
@@ -220,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 인증 상태 확인
   const auth = getAuth();
-  let currentUser = { uid: 'anonymous', isAnonymous: true }; // 기본값을 익명 사용자로 설정
+  let currentUser = null; // 인증 전
   // const MAX_REQUESTS = 2; // 최대 요청 횟수 - 제한 제거
   let userRequestCount = 0; // 사용자 현재 요청 횟수
   // if (maxRequestsCount) {
@@ -241,20 +242,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // 요청 카운트 단위 라벨은 HTML 내 data-i18n로 translate()가 처리
   };
   
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      currentUser = user; // 로그인된 사용자로 업데이트
-      console.log('로그인된 사용자:', user.uid);
+      currentUser = user; // 로그인 또는 익명 사용자
+      console.log('인증된 사용자:', user.uid, 'isAnonymous:', !!user.isAnonymous);
       setupRequestListener(user.uid);
     } else {
-      console.log('로그인되지 않은 상태, 익명 사용자로 진행합니다.');
-      // 익명 사용자의 경우에도 요청 목록을 표시 (자신이 방금 등록한 것만)
-      setupRequestListener(currentUser.uid); 
-      // 폼 비활성화 로직 제거 또는 주석 처리
-      // loadingEl.style.display = 'none';
-      // noRequestsEl.textContent = '트랙 제작 요청은 로그인 후 이용 가능합니다.';
-      // noRequestsEl.style.display = 'block';
-      // disableForm();
+      console.log('사용자 인증 없음 → 익명 인증 시도');
+      try {
+        await signInAnonymously(auth);
+        // onAuthStateChanged가 다시 호출되어 리스트너가 설정됩니다.
+      } catch (e) {
+        console.error('익명 인증 실패:', e);
+        // 안전장치: 인증 실패 시 임시 키로 빈 목록 표시
+        setupRequestListener('anonymous');
+      }
     }
   });
   
@@ -389,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (selectedCoverFile) {
             try {
               console.log('커버 아트 업로드 시작:', selectedCoverFile.name);
-              console.log('현재 사용자 UID:', currentUser.uid);
+              console.log('현재 사용자 UID:', (currentUser && currentUser.uid) || 'unknown');
               console.log('파일 크기:', selectedCoverFile.size, '바이트');
               console.log('파일 타입:', selectedCoverFile.type);
               
@@ -397,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const timestamp = Date.now();
               // 파일명에서 특수문자 제거
               const sanitizedFileName = selectedCoverFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-              const fileName = `cover_arts/${currentUser.uid}/${timestamp}_${sanitizedFileName}`;
+              const fileName = `cover_arts/${(currentUser && currentUser.uid) || 'anonymous'}/${timestamp}_${sanitizedFileName}`;
               const storageRef = ref(storage, fileName);
               
               console.log('업로드 경로:', fileName);
@@ -445,8 +447,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
 
+          const uidForWrite = (currentUser && currentUser.uid) || 'anonymous';
           const docRef = await addDoc(collection(db, 'track_requests'), {
-            uid: currentUser.uid,
+            uid: uidForWrite,
             title,
             artist,
             bpm,

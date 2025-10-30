@@ -343,6 +343,15 @@
                 </button>
                 <button 
                   type="button" 
+                  id="tpl-distribution-complete"
+                  class="audionyx-btn-secondary px-4 py-2 rounded-lg text-xs font-medium inline-flex items-center gap-2 transition-all"
+                  title="유통 완료 안내 템플릿 삽입"
+                >
+                  <span>🚀</span>
+                  유통 완료 안내
+                </button>
+                <button 
+                  type="button" 
                   id="tpl-final-confirmation"
                   class="audionyx-btn-secondary px-4 py-2 rounded-lg text-xs font-medium inline-flex items-center gap-2 transition-all"
                   title="개인 음원 최종 확인 안내 템플릿 생성"
@@ -483,6 +492,7 @@
     const tplBtnKrColdmail = document.getElementById("tpl-kr-coldmail");
     const tplBtnTrackSubmitted = document.getElementById("tpl-track-submitted");
     const tplBtnFinalConfirmation = document.getElementById("tpl-final-confirmation");
+    const tplBtnDistributionComplete = document.getElementById("tpl-distribution-complete");
 
     // 템플릿 정의 (향후 확장 가능 구조)
     const mailTemplates = [
@@ -829,6 +839,12 @@
       loadTemplateIntoEditor(
         "/track-request-submitted.html",
         "[customer] 고객님께, AUDIONYX 개인음원 신청 완료"
+      );
+    });
+    tplBtnDistributionComplete.addEventListener("click", () => {
+      loadTemplateIntoEditor(
+        "/track-distribution-complete.html",
+        "[유통 완료] 고객님 개인 음원 글로벌 플랫폼 배포 완료 안내"
       );
     });
 

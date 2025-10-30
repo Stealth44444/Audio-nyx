@@ -111,10 +111,12 @@ service cloud.firestore {
     /* ───────── ③ track_requests 컬렉션 ─────────
        음원 요청 */
     match /track_requests/{requestId} {
-      // 생성: 로그인 + uid 필드가 본인 UID와 일치
-      allow create: if isSignedIn() 
-                    && request.resource.data.uid == request.auth.uid
-                    && hasValidTrackRequestData();
+      // 생성: 로그인 사용자는 본인 UID로, 비로그인은 'anonymous' UID로만 허용
+      allow create: if hasValidTrackRequestData()
+                    && (
+                      (isSignedIn() && request.resource.data.uid == request.auth.uid) ||
+                      (!isSignedIn() && request.resource.data.uid == 'anonymous')
+                    );
 
       // 읽기: 관리자 또는 본인 요청만
       allow read: if isAdmin() || isOwner(resource.data.uid);
